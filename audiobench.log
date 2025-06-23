@@ -1,0 +1,928 @@
+2025-06-23 15:44:48,412 - __main__ - INFO - [main] Starting main function.
+2025-06-23 15:44:48,412 - __main__ - INFO - [_parse_args] Parsing command line arguments.
+2025-06-23 15:44:48,412 - __main__ - INFO - [_parse_args] Parsed args: cfg=test_config.yaml, num_samples=None
+2025-06-23 15:44:48,412 - __main__ - INFO - [main] Loading config file: test_config.yaml
+2025-06-23 15:44:48,414 - __main__ - INFO - [main] Config loaded: {'dataset_metric': ['(audiobench_wavcaps_qa_test, word_error_rate)', '(audiobench_alpaca_audio_test, word_error_rate)'], 'batch_size': 4, 'models': [{'name': 'audio_transcriptions_openai', 'info': {'inference_type': 'inference_server', 'url': 'https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1', 'delay': 100, 'retry_attempts': 8, 'timeout': 30, 'sync_client': False, 'postprocessor': [], 'model': 'whisper-3', 'auth_token': 'Bearer 8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q'}}]}
+2025-06-23 15:44:48,414 - __main__ - INFO - [main] Loading models...
+2025-06-23 15:44:48,414 - __main__ - INFO - [_load_models] Instantiating models from config: [{'name': 'audio_transcriptions_openai', 'info': {'inference_type': 'inference_server', 'url': 'https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1', 'delay': 100, 'retry_attempts': 8, 'timeout': 30, 'sync_client': False, 'postprocessor': [], 'model': 'whisper-3', 'auth_token': 'Bearer 8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q'}}]
+2025-06-23 15:44:48,414 - __main__ - INFO - [_load_models] Importing module: models.audio_transcriptions_openai
+2025-06-23 15:44:48,418 - __main__ - INFO - [_load_models] Instantiated model class: AudioTranscriptionsOpenAI
+2025-06-23 15:44:48,546 - __main__ - INFO - [_load_models] Successfully instantiated 1 model(s).
+2025-06-23 15:44:48,547 - __main__ - INFO - [main] Loading dataset 'audiobench_wavcaps_qa_test' with metric 'word_error_rate' ...
+2025-06-23 15:44:48,547 - __main__ - INFO - [_load_dataset] Loading dataset: audiobench_wavcaps_qa_test
+2025-06-23 15:44:48,552 - __main__ - INFO - [_load_dataset] Loading HuggingFace dataset repo: AudioLLMs/wavcaps_qa_test
+2025-06-23 15:44:51,995 - __main__ - INFO - [_load_dataset] Preprocessing dataset...
+2025-06-23 15:45:00,592 - __main__ - INFO - [_load_dataset] Dataset loaded and processed. Size: 304
+2025-06-23 15:45:00,593 - __main__ - INFO - [_load_metric] Loading metric: word_error_rate
+2025-06-23 15:45:01,005 - __main__ - INFO - [_load_metric] Metric loaded: WER
+2025-06-23 15:45:01,005 - __main__ - INFO - [main] Initializing Engine and running evaluation...
+2025-06-23 15:45:01,005 - __main__ - INFO - [Engine.__init__] Initializing Engine with 1 model(s), dataset size: 304, metric: WER, batch_size: 4
+2025-06-23 15:45:01,005 - __main__ - INFO - [Engine.run] Starting evaluation run.
+2025-06-23 15:45:01,005 - __main__ - INFO - [Engine._infer_all] Starting inference for all models: ['audio_transcriptions_openai']
+2025-06-23 15:45:01,005 - __main__ - INFO - [Engine._infer_single_model] Running model: audio_transcriptions_openai on dataset of size 304
+2025-06-23 15:45:01,621 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:01,648 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:01,718 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:01,738 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:02,111 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:02,148 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:02,179 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:02,248 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:02,539 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:02,618 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:02,710 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:02,775 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:02,874 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:02,965 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:03,106 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:03,182 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:03,243 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:03,313 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:03,460 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:03,548 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:03,629 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:03,692 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:03,812 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:03,913 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:03,971 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:04,063 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:04,165 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:04,253 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:04,325 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:45:04,449 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:25,043 - __main__ - INFO - [main] Starting main function.
+2025-06-23 15:48:25,044 - __main__ - INFO - [_parse_args] Parsing command line arguments.
+2025-06-23 15:48:25,044 - __main__ - INFO - [_parse_args] Parsed args: cfg=test_config.yaml, num_samples=None
+2025-06-23 15:48:25,044 - __main__ - INFO - [main] Loading config file: test_config.yaml
+2025-06-23 15:48:25,045 - __main__ - INFO - [main] Config loaded: {'dataset_metric': ['(audiobench_wavcaps_qa_test, word_error_rate)', '(audiobench_alpaca_audio_test, word_error_rate)'], 'batch_size': 4, 'models': [{'name': 'audio_transcriptions_openai', 'info': {'inference_type': 'inference_server', 'url': 'https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1', 'delay': 100, 'retry_attempts': 8, 'timeout': 30, 'sync_client': False, 'postprocessor': [], 'model': 'whisper-3', 'auth_token': 'Bearer 8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q'}}]}
+2025-06-23 15:48:25,046 - __main__ - INFO - [main] Loading models...
+2025-06-23 15:48:25,046 - __main__ - INFO - [_load_models] Instantiating models from config: [{'name': 'audio_transcriptions_openai', 'info': {'inference_type': 'inference_server', 'url': 'https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1', 'delay': 100, 'retry_attempts': 8, 'timeout': 30, 'sync_client': False, 'postprocessor': [], 'model': 'whisper-3', 'auth_token': 'Bearer 8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q'}}]
+2025-06-23 15:48:25,046 - __main__ - INFO - [_load_models] Importing module: models.audio_transcriptions_openai
+2025-06-23 15:48:25,046 - __main__ - INFO - [_load_models] Instantiated model class: AudioTranscriptionsOpenAI
+2025-06-23 15:48:25,072 - __main__ - INFO - [_load_models] Successfully instantiated 1 model(s).
+2025-06-23 15:48:25,072 - __main__ - INFO - [main] Loading dataset 'audiobench_wavcaps_qa_test' with metric 'word_error_rate' ...
+2025-06-23 15:48:25,072 - __main__ - INFO - [_load_dataset] Loading dataset: audiobench_wavcaps_qa_test
+2025-06-23 15:48:25,074 - __main__ - INFO - [_load_dataset] Loading HuggingFace dataset repo: AudioLLMs/wavcaps_qa_test
+2025-06-23 15:48:28,223 - __main__ - INFO - [_load_dataset] Preprocessing dataset...
+2025-06-23 15:48:30,288 - __main__ - INFO - [_load_dataset] Dataset loaded and processed. Size: 304
+2025-06-23 15:48:30,288 - __main__ - INFO - [_load_metric] Loading metric: word_error_rate
+2025-06-23 15:48:30,533 - __main__ - INFO - [_load_metric] Metric loaded: WER
+2025-06-23 15:48:30,533 - __main__ - INFO - [main] Initializing Engine and running evaluation...
+2025-06-23 15:48:30,533 - __main__ - INFO - [Engine.__init__] Initializing Engine with 1 model(s), dataset size: 304, metric: WER, batch_size: 4
+2025-06-23 15:48:30,533 - __main__ - INFO - [Engine.run] Starting evaluation run.
+2025-06-23 15:48:30,533 - __main__ - INFO - [Engine._infer_all] Starting inference for all models: ['audio_transcriptions_openai']
+2025-06-23 15:48:30,534 - __main__ - INFO - [Engine._infer_single_model] Running model: audio_transcriptions_openai on dataset of size 304
+2025-06-23 15:48:30,538 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:30,548 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:30,549 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:30,550 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:31,109 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:31,133 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:31,167 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:31,179 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:31,180 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:31,185 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:31,300 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:31,357 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:31,466 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:31,489 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:31,510 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:31,516 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:31,567 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:31,588 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:31,776 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:31,798 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:31,867 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:31,926 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:31,941 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:31,965 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:32,009 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:32,032 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:32,142 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:32,163 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:32,263 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:32,284 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:32,346 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:32,370 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:32,408 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:32,431 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:32,508 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:32,532 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:32,620 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:32,648 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:32,715 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:32,740 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:32,796 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:32,831 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:32,856 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:32,898 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:32,960 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:33,000 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:33,043 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:33,121 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:33,168 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:33,176 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:33,228 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:33,242 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:33,297 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:33,339 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:33,436 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:33,492 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:33,532 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:33,564 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:33,595 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:33,650 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:33,670 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:33,691 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:33,792 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:33,850 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:33,868 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:33,894 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:33,937 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:33,960 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:34,026 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:34,043 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:34,133 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:34,153 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:34,205 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:34,229 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:34,411 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:34,434 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:34,495 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:34,499 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:34,500 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:34,519 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:34,560 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:34,601 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:34,808 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:34,830 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:34,879 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:34,886 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:34,955 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:34,966 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:35,030 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:35,051 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:35,132 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:35,153 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:35,204 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:35,221 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:35,304 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:35,312 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:35,411 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:35,433 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:48:35,483 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:48:35,487 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1
+2025-06-23 15:50:28,545 - __main__ - INFO - [main] Starting main function.
+2025-06-23 15:50:28,546 - __main__ - INFO - [_parse_args] Parsing command line arguments.
+2025-06-23 15:50:28,546 - __main__ - INFO - [_parse_args] Parsed args: cfg=test_config.yaml, num_samples=None
+2025-06-23 15:50:28,546 - __main__ - INFO - [main] Loading config file: test_config.yaml
+2025-06-23 15:50:28,548 - __main__ - INFO - [main] Config loaded: {'dataset_metric': ['(audiobench_wavcaps_qa_test, word_error_rate)', '(audiobench_alpaca_audio_test, word_error_rate)'], 'batch_size': 4, 'models': [{'name': 'audio_transcriptions_openai', 'info': {'inference_type': 'inference_server', 'url': 'https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1', 'delay': 100, 'retry_attempts': 8, 'timeout': 30, 'sync_client': False, 'postprocessor': [], 'model': 'whisper-3', 'auth_token': 'Bearer 8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q'}}]}
+2025-06-23 15:50:28,548 - __main__ - INFO - [main] Loading models...
+2025-06-23 15:50:28,548 - __main__ - INFO - [_load_models] Instantiating models from config: [{'name': 'audio_transcriptions_openai', 'info': {'inference_type': 'inference_server', 'url': 'https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1', 'delay': 100, 'retry_attempts': 8, 'timeout': 30, 'sync_client': False, 'postprocessor': [], 'model': 'whisper-3', 'auth_token': 'Bearer 8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q'}}]
+2025-06-23 15:50:28,548 - __main__ - INFO - [_load_models] Importing module: models.audio_transcriptions_openai
+2025-06-23 15:50:28,549 - __main__ - INFO - [_load_models] Instantiated model class: AudioTranscriptionsOpenAI
+2025-06-23 15:50:28,578 - __main__ - INFO - [_load_models] Successfully instantiated 1 model(s).
+2025-06-23 15:50:28,578 - __main__ - INFO - [main] Loading dataset 'audiobench_wavcaps_qa_test' with metric 'word_error_rate' ...
+2025-06-23 15:50:28,578 - __main__ - INFO - [_load_dataset] Loading dataset: audiobench_wavcaps_qa_test
+2025-06-23 15:50:28,579 - __main__ - INFO - [_load_dataset] Loading HuggingFace dataset repo: AudioLLMs/wavcaps_qa_test
+2025-06-23 15:50:32,133 - __main__ - INFO - [_load_dataset] Preprocessing dataset...
+2025-06-23 15:50:34,278 - __main__ - INFO - [_load_dataset] Dataset loaded and processed. Size: 304
+2025-06-23 15:50:34,279 - __main__ - INFO - [_load_metric] Loading metric: word_error_rate
+2025-06-23 15:50:34,517 - __main__ - INFO - [_load_metric] Metric loaded: WER
+2025-06-23 15:50:34,517 - __main__ - INFO - [main] Initializing Engine and running evaluation...
+2025-06-23 15:50:34,517 - __main__ - INFO - [Engine.__init__] Initializing Engine with 1 model(s), dataset size: 304, metric: WER, batch_size: 4
+2025-06-23 15:50:34,517 - __main__ - INFO - [Engine.run] Starting evaluation run.
+2025-06-23 15:50:34,517 - __main__ - INFO - [Engine._infer_all] Starting inference for all models: ['audio_transcriptions_openai']
+2025-06-23 15:50:34,517 - __main__ - INFO - [Engine._infer_single_model] Running model: audio_transcriptions_openai on dataset of size 304
+2025-06-23 15:50:34,525 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:34,530 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:34,531 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:34,532 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:34,947 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"26cb834f8bc3a4626416a945614e71bd"}
+
+2025-06-23 15:50:35,027 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:35,029 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"2bc9bde80b123acdda7703ddf523cd73"}
+
+2025-06-23 15:50:35,033 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"20ee9a964ac3c16ad86e4999968704bc"}
+
+2025-06-23 15:50:35,045 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:35,046 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:35,046 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"7ac15e339bab4a6e61f4c090f006291f"}
+
+2025-06-23 15:50:35,068 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:35,243 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"c41fc8e1666d43929fefea4deb6036ff"}
+
+2025-06-23 15:50:35,275 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:35,304 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"ed495394521b882b214d9e35714b4891"}
+
+2025-06-23 15:50:35,312 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:35,468 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"4fd6b56a5319c704b290469389f93aeb"}
+
+2025-06-23 15:50:35,505 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:35,507 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"065b4f1d1cd986acac94302309ac0342"}
+
+2025-06-23 15:50:35,532 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"e87c6a4dd9ad149d4d6f2bab3251b054"}
+
+2025-06-23 15:50:35,554 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:35,555 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:35,557 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"d7f7f9facf631104e4567f1df59d9e63"}
+
+2025-06-23 15:50:35,612 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:35,750 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"5a076e87cf4831295b12c52c7a063642"}
+
+2025-06-23 15:50:35,780 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:36,062 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"8797c3572127037a8311f3e0ee6b52d9"}
+
+2025-06-23 15:50:36,100 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:36,137 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"cf3eb227d762ec3f178598c68cb170c0"}
+
+2025-06-23 15:50:36,166 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:36,167 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"a114088588d3089f6b582d2684d64fc5"}
+
+2025-06-23 15:50:36,190 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:36,244 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"83329e218d37955a94ff7341c6e3d3f5"}
+
+2025-06-23 15:50:36,269 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:36,538 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"d394f7a67fe1e29c708f750509aef962"}
+
+2025-06-23 15:50:36,579 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:36,580 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"909a60ed4d573e3984a23a0a7ad7bd37"}
+
+2025-06-23 15:50:36,607 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:36,647 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"d1570a3a72d9929fed98bcedf01acdfe"}
+
+2025-06-23 15:50:36,673 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:36,749 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"f5ce7ccec15050415fbccc038a7b86ed"}
+
+2025-06-23 15:50:36,792 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:37,031 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"6f782a51c95adc00e8977c119054f841"}
+
+2025-06-23 15:50:37,108 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:37,109 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"394a89b5bb0696caec42b7cde11ae227"}
+
+2025-06-23 15:50:37,131 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:37,132 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"ddfbd44fef30cd8c2fb14591f98ad701"}
+
+2025-06-23 15:50:37,201 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:37,210 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"1e8ef20a2ea70304e241fbf74b36f878"}
+
+2025-06-23 15:50:37,227 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:37,403 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"849464006affe5ff03de05df85f1142f"}
+
+2025-06-23 15:50:37,444 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:37,611 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"6755e61b0d768c115b4ae64894fee639"}
+
+2025-06-23 15:50:37,668 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:37,669 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"7a7fd96c26825a960e1be831b39d0ffc"}
+
+2025-06-23 15:50:37,683 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:37,742 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"25382afa4fea61d1f2350337e2377590"}
+
+2025-06-23 15:50:37,800 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:37,872 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"8efd8badac3218233125e7d49216d102"}
+
+2025-06-23 15:50:37,927 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:37,928 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"641e9de89d52a8767bf2c12be4a719d9"}
+
+2025-06-23 15:50:37,984 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:38,172 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"0f4c2499d9e214eb0cf3a6695aaf6712"}
+
+2025-06-23 15:50:38,208 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:38,305 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"faf5b07a95f988d0f8d6678721708e24"}
+
+2025-06-23 15:50:38,338 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:38,562 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"d9e428386de05d15caed0886657b545b"}
+
+2025-06-23 15:50:38,595 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:38,616 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"f3a49a46554727aef33d67d28fd6fc76"}
+
+2025-06-23 15:50:38,643 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:38,644 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"abff109049e40a13800ce6910d4d4cea"}
+
+2025-06-23 15:50:38,664 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:38,792 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"63f1d8638d86ba145994464a50a2a7bc"}
+
+2025-06-23 15:50:38,816 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:38,838 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"d2ef35f50936469e1ee1fc95eced484e"}
+
+2025-06-23 15:50:38,864 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:38,865 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"d2934c833ebda990e659ce71973b6c1a"}
+
+2025-06-23 15:50:38,870 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:39,003 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"5c7faaa0314a054488d5c985ce93a762"}
+
+2025-06-23 15:50:39,061 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:39,063 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"a758226080c4c1fc96f23b29dc6bf9ce"}
+
+2025-06-23 15:50:39,070 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:39,120 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"c1263368abe85ef1f5b0c14047ed6cda"}
+
+2025-06-23 15:50:39,144 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:39,286 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"03fc664e80ab789c50b82720a808f843"}
+
+2025-06-23 15:50:39,317 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:39,319 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"c8855884d6003c3860cb97c7486a7086"}
+
+2025-06-23 15:50:39,331 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"a6051d5a48e47a793160555a735291f9"}
+
+2025-06-23 15:50:39,356 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:39,358 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:39,531 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"597344ba85e3a02d8ba2f8a940f1b798"}
+
+2025-06-23 15:50:39,541 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:50:39,622 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"error":{"status":"Not Found","code":404,"type":"not found","message":"not found: job: 05aa71dc-ad9e-4611-b26f-f72ba114f1de"},"requestID":"795b250bbf3b642d0f6bb9275519301c"}
+
+2025-06-23 15:50:39,650 - models.request_resp_handler - INFO - URL: https://05aa71dc-ad9e-4611-b26f-f72ba114f1de-8000.job.console.elementai.com/v1
+2025-06-23 15:57:31,540 - __main__ - INFO - [main] Starting main function.
+2025-06-23 15:57:31,540 - __main__ - INFO - [_parse_args] Parsing command line arguments.
+2025-06-23 15:57:31,540 - __main__ - INFO - [_parse_args] Parsed args: cfg=test_config.yaml, num_samples=None
+2025-06-23 15:57:31,540 - __main__ - INFO - [main] Loading config file: test_config.yaml
+2025-06-23 15:57:31,542 - __main__ - INFO - [main] Config loaded: {'dataset_metric': ['(audiobench_wavcaps_qa_test, word_error_rate)', '(audiobench_alpaca_audio_test, word_error_rate)'], 'batch_size': 4, 'models': [{'name': 'audio_transcriptions_openai', 'info': {'inference_type': 'inference_server', 'url': 'https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com', 'delay': 100, 'retry_attempts': 8, 'timeout': 30, 'sync_client': False, 'postprocessor': [], 'model': 'whisper-3', 'auth_token': 'Bearer 8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q'}}]}
+2025-06-23 15:57:31,542 - __main__ - INFO - [main] Loading models...
+2025-06-23 15:57:31,542 - __main__ - INFO - [_load_models] Instantiating models from config: [{'name': 'audio_transcriptions_openai', 'info': {'inference_type': 'inference_server', 'url': 'https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com', 'delay': 100, 'retry_attempts': 8, 'timeout': 30, 'sync_client': False, 'postprocessor': [], 'model': 'whisper-3', 'auth_token': 'Bearer 8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q'}}]
+2025-06-23 15:57:31,542 - __main__ - INFO - [_load_models] Importing module: models.audio_transcriptions_openai
+2025-06-23 15:57:31,543 - __main__ - INFO - [_load_models] Instantiated model class: AudioTranscriptionsOpenAI
+2025-06-23 15:57:31,661 - __main__ - INFO - [_load_models] Successfully instantiated 1 model(s).
+2025-06-23 15:57:31,661 - __main__ - INFO - [main] Loading dataset 'audiobench_wavcaps_qa_test' with metric 'word_error_rate' ...
+2025-06-23 15:57:31,661 - __main__ - INFO - [_load_dataset] Loading dataset: audiobench_wavcaps_qa_test
+2025-06-23 15:57:31,663 - __main__ - INFO - [_load_dataset] Loading HuggingFace dataset repo: AudioLLMs/wavcaps_qa_test
+2025-06-23 15:57:35,200 - __main__ - INFO - [_load_dataset] Preprocessing dataset...
+2025-06-23 15:57:45,026 - __main__ - INFO - [_load_dataset] Dataset loaded and processed. Size: 304
+2025-06-23 15:57:45,028 - __main__ - INFO - [_load_metric] Loading metric: word_error_rate
+2025-06-23 15:57:45,509 - __main__ - INFO - [_load_metric] Metric loaded: WER
+2025-06-23 15:57:45,509 - __main__ - INFO - [main] Initializing Engine and running evaluation...
+2025-06-23 15:57:45,510 - __main__ - INFO - [Engine.__init__] Initializing Engine with 1 model(s), dataset size: 304, metric: WER, batch_size: 4
+2025-06-23 15:57:45,510 - __main__ - INFO - [Engine.run] Starting evaluation run.
+2025-06-23 15:57:45,510 - __main__ - INFO - [Engine._infer_all] Starting inference for all models: ['audio_transcriptions_openai']
+2025-06-23 15:57:45,510 - __main__ - INFO - [Engine._infer_single_model] Running model: audio_transcriptions_openai on dataset of size 304
+2025-06-23 15:57:45,515 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:45,532 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:45,533 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:45,535 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:46,112 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:46,120 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:46,157 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:46,216 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:46,217 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:46,228 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:46,248 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:46,250 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:46,461 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:46,486 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:46,573 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:46,600 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:46,654 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:46,658 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:46,784 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:46,805 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:46,806 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:46,831 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:46,889 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:46,950 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:46,970 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:46,991 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:47,148 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:47,174 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:47,215 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:47,238 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:47,301 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:47,325 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:47,363 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:47,394 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:47,508 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:47,533 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:47,583 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:47,610 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:47,682 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:47,715 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:47,759 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:47,795 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:47,836 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:47,878 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:48,004 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:48,028 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:48,057 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:48,120 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:48,121 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:48,128 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:48,189 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:48,205 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:48,321 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:48,363 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:48,435 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:48,492 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:48,529 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:48,560 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:48,603 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:48,654 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:48,681 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:48,702 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:48,782 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:48,846 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:48,867 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:48,889 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:48,952 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:48,968 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:49,028 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:49,045 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:49,155 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:49,176 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:49,238 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:49,261 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:49,390 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:49,411 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:49,474 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:49,478 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:49,518 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:49,536 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:49,609 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:49,651 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:49,737 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:49,759 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:49,826 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:49,834 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:49,901 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:49,912 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:50,004 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:50,026 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:50,100 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:50,122 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:50,189 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:50,207 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:50,273 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:50,277 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:50,336 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:50,358 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:50,436 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:50,440 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:50,520 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:50,567 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:50,606 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:50,627 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:50,700 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:50,712 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:50,764 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:50,776 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:50,910 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:50,931 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:50,968 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:50,990 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:51,043 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:51,052 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:51,125 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:51,142 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:51,222 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:51,231 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:51,333 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:51,350 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:51,393 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:51,415 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:51,483 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:51,507 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:51,582 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:51,601 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:51,686 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:51,711 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:51,745 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:51,749 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:51,810 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:51,833 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:51,888 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:51,915 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:52,023 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:52,047 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:52,108 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:52,118 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:52,177 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:52,201 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:52,253 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:52,294 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:52,441 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:52,447 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:52,510 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:52,545 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:52,581 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:52,604 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:52,624 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:52,634 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:52,769 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:52,794 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:52,872 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:52,896 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:52,949 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:52,971 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:53,030 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:53,052 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:53,100 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:53,124 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:53,189 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:53,213 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:53,307 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:53,313 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:53,384 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:53,404 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:53,447 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:53,463 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:53,529 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:53,556 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:53,613 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:53,637 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:53,741 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:53,768 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:53,792 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:53,797 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:53,872 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:53,896 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:53,948 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:53,987 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:54,075 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:54,086 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:54,141 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:54,156 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:54,219 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:54,224 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:54,295 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:54,310 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:54,395 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:54,410 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:54,469 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:54,521 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:54,541 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:54,552 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:54,599 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:54,621 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:54,751 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:54,773 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:54,853 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:54,875 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:54,914 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:54,931 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:54,988 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:55,000 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:55,061 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:55,087 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:55,195 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:55,251 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:55,267 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:55,271 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:55,320 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:55,343 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:55,407 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:55,464 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:55,590 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:55,622 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:55,667 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:55,687 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:55,757 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:55,771 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:55,832 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:55,858 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:55,909 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:55,959 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:56,016 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:56,039 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:56,088 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:56,112 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:56,162 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:56,183 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:56,242 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:56,262 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:56,357 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:56,379 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:56,431 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:56,444 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:56,505 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:56,518 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:56,585 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:56,627 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:56,778 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:56,836 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:56,837 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:56,859 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:56,915 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:56,935 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:56,998 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:57,015 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:57,172 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:57,193 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:57,239 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:57,252 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:57,357 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:57,376 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:57,424 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:57,435 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:57,486 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:57,503 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:57,570 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:57,604 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:57,687 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:57,697 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:57,763 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:57,791 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:57,833 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:57,880 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:57,922 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:57,948 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:58,020 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:58,057 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:58,135 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:58,161 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:58,224 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:58,278 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:58,302 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:58,327 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:58,360 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:58,389 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:58,493 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:58,526 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:58,587 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:58,625 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:58,670 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:58,693 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:58,747 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:58,752 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:58,835 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:58,860 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:58,966 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:59,005 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:59,041 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:59,064 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:59,132 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:59,143 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:59,200 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:59,208 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:59,337 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:59,347 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:59,393 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:59,407 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:59,481 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:59,506 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:59,556 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:59,569 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:59,664 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:59,679 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:59,716 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:59,732 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:59,817 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:59,841 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:59,899 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:57:59,929 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:57:59,969 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:00,000 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:00,062 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:00,086 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:00,152 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:00,174 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:00,236 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:00,245 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:00,292 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:00,298 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:00,439 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:00,474 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:00,521 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:00,546 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:00,598 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:00,621 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:00,675 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:00,699 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:00,756 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:00,818 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:00,834 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:00,856 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:00,961 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:00,976 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:01,036 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:01,063 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:01,140 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:01,160 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:01,217 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:01,239 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:01,279 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:01,300 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:01,376 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:01,401 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:01,510 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:01,538 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:01,591 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:01,609 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:01,672 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:01,681 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:01,744 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:01,758 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:01,823 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:01,852 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:01,939 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:01,966 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:02,019 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:02,026 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:02,091 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:02,122 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:02,158 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:02,210 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:02,342 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:02,371 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:02,413 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:02,440 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:02,497 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:02,530 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:02,564 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:02,626 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:02,658 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:02,675 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:02,758 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:02,793 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:02,820 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:02,842 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:02,953 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:02,988 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:03,025 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:03,082 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:03,118 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:03,141 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:03,187 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:03,209 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:03,336 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:03,364 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:03,409 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:03,455 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:03,492 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:03,514 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:03,561 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:03,576 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:03,704 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:03,736 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:03,762 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:03,771 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:03,841 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:03,868 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:03,930 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:03,960 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:04,047 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:04,075 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:04,121 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:04,134 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:04,248 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:04,316 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:04,317 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:04,352 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:04,388 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:04,393 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:04,462 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:04,478 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:04,678 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:04,715 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:04,742 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:04,782 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:04,820 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:04,827 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:04,890 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:04,926 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:05,062 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:05,111 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:05,138 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:05,182 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:05,221 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:05,242 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:05,300 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:05,317 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:05,406 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:05,434 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:05,484 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:05,516 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:05,563 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:05,588 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:05,625 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:05,649 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:05,738 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:05,766 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:05,829 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:05,850 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:05,899 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:05,924 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:05,961 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:05,990 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:06,061 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:06,081 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:06,174 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:06,197 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:06,253 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:06,280 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:06,335 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:06,358 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:06,397 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:06,413 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:06,514 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:06,543 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:06,568 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:06,599 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:06,663 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:06,668 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:06,721 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:06,789 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:06,830 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:06,835 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:06,915 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:06,943 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:06,993 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:07,015 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:07,113 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:07,166 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:07,181 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:07,196 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:07,294 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:07,349 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:07,361 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:07,366 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:07,471 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:07,486 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:07,534 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:07,567 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:07,671 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:07,693 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:07,746 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:07,775 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:07,820 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:07,840 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:07,889 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:07,917 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:07,982 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:08,007 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:08,068 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:08,113 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:08,132 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:08,154 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:08,212 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:08,236 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:08,321 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:08,348 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:08,426 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:08,453 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:08,504 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:08,521 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:08,560 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:08,593 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:08,658 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:08,698 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:08,788 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:08,814 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:08,860 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:08,886 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:08,936 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:08,979 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:09,026 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:09,050 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:09,132 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:09,165 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:09,221 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:09,249 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:09,297 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:09,315 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:09,383 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:09,426 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:09,462 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:09,472 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:09,565 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:09,592 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:09,629 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:09,647 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:09,785 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:09,833 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:09,867 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:09,889 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:09,947 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:09,971 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:10,025 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:10,050 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:10,182 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:10,206 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:10,246 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:10,253 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:10,311 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:10,340 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:10,376 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:10,384 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:10,515 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:10,541 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:10,587 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:10,609 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:10,672 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:10,696 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:10,741 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:10,752 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:10,832 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:10,846 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:10,924 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:10,957 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:11,019 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:11,074 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:11,182 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:11,205 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:11,268 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:11,299 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:11,341 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:11,362 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:11,431 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:11,469 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:11,508 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}
+2025-06-23 15:58:11,531 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com
+2025-06-23 15:58:11,652 - models.request_resp_handler - ERROR - Failed Response with code 404 and message {"detail":"Not Found"}

@@ -1,0 +1,32 @@
+# Core numerical & data libraries
+numpy
+
+# Data loading
+huggingface_hub
+datasets
+
+# Model-/service-side SDKs
+openai
+httpx
+requests
+
+# Audio I/O
+soundfile   # depends on system libsndfile
+
+# Evaluation / metrics
+sacrebleu
+nltk
+
+# Misc utilities
+PyYAML
+pydantic
+tenacity
+tqdm
+
+pillow
+logger
+jinja2
+librosa
+jiwer
+num2words
+jaconv
