@@ -1,10 +1,9 @@
 import asyncio
-import importlib
-import importlib.util
+import tempfile
 import re
-import time
-from abc import ABC, abstractmethod
-from http import HTTPStatus
+import soundfile as sf
+import os
+from abc import ABC
 
 from tenacity import (
     AsyncRetrying,
@@ -29,7 +28,6 @@ from models.request_resp_handler import RequestRespHandler
 from utils import constants
 from utils.input_builder import InputBuilder
 
-
 class Model(ABC):
     """TODO: Need SME to add."""
 
@@ -42,23 +40,25 @@ class Model(ABC):
         
         self.model_info = model_info
         self._name = model_info.get("name")
-
+        self.model = model_info["model"]
+        self.api_key = model_info.get("auth_token", "")
+        self.model_url = model_info.get("url", "")
+        self.inference_type = model_info["inference_type"]
+        self.batch_size = model_info.get("batch_size", 1)
         # sleep before every call - in ms
         self.delay = model_info.get("delay", 100)
+        self.timeout = model_info.get("timeout", 30)
         # max_wait for 8 attempts = 2^(8-1) = 128 secs
         self.retry_attempts = model_info.get("retry_attempts", 8)
-
         # some flow does not work with async client like internal private network
         self.postprocessor_path = model_info.get("postprocessor", [])
         #model_name = model_info.get("model", model_info.get("alias", self.name()))
         self.req_resp_hndlr = RequestRespHandler(
             self.inference_type,
             self.model_info,
+            timeout=self.timeout,
         )
         self.input_builder = InputBuilder(self.name())
-
-        #self.weighted_params = self._create_weighted_elements(model_info, model_name)
-
         # prevent data races when updating self.errors asynchronously
         self.errors_lock = asyncio.Lock()
         self.errors = ErrorTracker()
@@ -190,56 +190,53 @@ class Model(ABC):
         It implements model query by building message header and body with the help of Request Response Handler.
 
         Args:
-            message: input for inference
+            messages: inputs for inference
             model_params: model parameter json
             run_params: params for the run
 
         Returns:
             Response and http return code
         """
+        # Build temp wav if needed then delegate to RequestRespHandler so that all requests flow through common path
         if isinstance(message, list):
-            raise ValueError("_generate_text expects a single sample (dict or str), not a list.")
-        if isinstance(message, dict):
-            formatted_message = self.apply_formatter([message], run_params)
+            raise ValueError("_generate_text expects a single dict or str, not a list.")
+        if not isinstance(message, dict):
+            raise ValueError("_generate_text expects a dict input for audio transcription.")
+        #print(message.keys())
+        audio_array = message["array"]
+        sampling_rate = message["sampling_rate"]
+        audio_file_path = message.get("path")
+
+        fp = None
+        if not self.is_path_supported(audio_file_path):
+            fp = tempfile.NamedTemporaryFile(suffix=".wav")
+            sf.write(fp, audio_array, sampling_rate)
+            audio_file_path = fp.name
+
+        # Build message body for request handler in correct format for HTTP file upload
+        files = None
+        if audio_file_path:
+            f = open(audio_file_path, "rb")
+            files = {"file": (os.path.basename(audio_file_path), f, "audio/wav")}
         else:
-            logger.warning(
-                f"Input message is already a string. The formatter will not be applied."
-                f"Make sure the message is already formatted according to {self.name()}. Received {message}"
+            raise ValueError("audio_file_path must be provided for OpenAI transcription")
+
+        try:
+            model_response: ModelResponse = await self.req_resp_hndlr.request_server(
+                url=self.model_url,
+                auth=self.api_key,
+                msg_body=files,
+                formatted_messages=message,
             )
-            formatted_message = message
-        if isinstance(formatted_message, str):
-            formatted_message = self._preprocess_text(formatted_message, run_params)
-        msg_body = self.req_resp_hndlr.get_input_msg(formatted_message, model_params, run_params)
-        logger.debug(f"{self.name()} input message body: {msg_body}")
-
-        current_url_index = self.weighted_params.get_random_index()
-        endpoint_in_use = self.weighted_params.listing[current_url_index]
-        model_response: ModelResponse = await self.req_resp_hndlr.request_server(
-            url=endpoint_in_use["url"],
-            auth=endpoint_in_use["auth"],
-
-            msg_body=msg_body,
-            formatted_messages=formatted_messages,
+        finally:
+            if f:
+                f.close()
+        return model_response
+    @staticmethod
+    def is_path_supported(audio_file_path) -> bool:
+        """Check if the audio file path can directly be used with the OpenAI API."""
+        return (
+            audio_file_path
+            and any(audio_file_path.endswith(sound_format) for sound_format in OPENAI_SUPPORTED_SOUND_FORMAT)
+            and audio_file_path.startswith("/tmp")
         )
-        model_response.model_parameters = model_params
-        if model_response.response_code == 200:
-            #logger.debug(f"{self.name()} model response: {str(model_response.raw_response)}")
-            text_resp = self.req_resp_hndlr.get_response_text(model_response.llm_response)
-            if text_resp.strip() != "":
-                model_response.response_code = 200
-
-            text_resp = self.postprocess(self.postprocessor_path, text_resp, run_params.get("response_format", ""))
-            model_response.llm_response = text_resp if len(text_resp) > 0 else " "
-            return model_response
-        else:
-            logger.error(f"Error: error in the request. Code: {model_response.response_code}.")
-            model_response.llm_response = " "
-            return model_response
-
-    def postprocess(self, postprocessor_path: list[str], text: str, response_format: str):
-        """Postprocess the text using the postprocessor."""
-        for path in postprocessor_path:
-            module, class_name = path.rsplit(".", 1)
-            postprocessor = getattr(importlib.import_module(module), class_name)
-            text = postprocessor().postprocess(text, response_format)
-        return text

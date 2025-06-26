@@ -92,8 +92,10 @@ class WERMetrics(Metrics):
                     incorrect_per_attr[attr_value] += _incorrect
                     total_per_attr[attr_value] += _total
 
-            for (attr, _incorrect), _total in zip(incorrect_per_attr.items(), total_per_attr.values()):
-                results[f"wer_{attribute}_{attr}"] = _incorrect / _total
+            for attr in incorrect_per_attr:
+                total_attr = total_per_attr.get(attr, 0)
+                if total_attr:
+                    results[f"wer_{attribute}_{attr}"] = incorrect_per_attr[attr] / total_attr
         return results
 
     def get_score(self, candidates, references) -> dict:

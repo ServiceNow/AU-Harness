@@ -84,11 +84,12 @@ class _BaseLLMJudge(Metrics):
 # ---------------------------------------------------------------------------
 
 class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
-    def __call__(self, candidates, references):
-        return self.compute_record_level_scores(candidates, references)
     name: str = "llm_judge_binary"
     _prompt_key: str = "binary_judge_prompt"
 
+    def __call__(self, candidates, references):
+        # Binary judge returns a 0/1 style score list, we expose record-level directly
+        return self.compute_record_level_scores(candidates, references)
     def compute_record_level_scores(self, candidates: list, references: list):
         raw_scores = asyncio.run(self._judge_all(candidates, references))
         # Expect {"score": number, "explanation": str}
@@ -101,11 +102,12 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
 # ---------------------------------------------------------------------------
 
 class DetailedLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
-    def __call__(self, candidates, references):
-        return self.compute_record_level_scores(candidates, references)
     name: str = "llm_judge_detailed"
     _prompt_key: str = "detailed_judge_prompt"
 
+    def __call__(self, candidates, references):
+        # Detailed judge returns 0-10 score list with explanations
+        return self.compute_record_level_scores(candidates, references)
     def compute_record_level_scores(self, candidates: list, references: list):
         raw_scores = asyncio.run(self._judge_all(candidates, references))
         # Expect {"score": number, "explanation": str}

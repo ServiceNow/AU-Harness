@@ -177,6 +177,7 @@ INFERENCE_SERVER_AZURE_AI = "azure_ai"  # adding new flow for azure ai inference
 INFERENCE_SERVER_HF = "hf"
 INFERENCE_SERVER_API = "api"
 INFERENCE_SERVER = "inference_server"
+INFERENCE_SERVER_OPENAI = "openai"
 
 # Redteaming constants
 THRESHOLD_JAILBREAK = 2

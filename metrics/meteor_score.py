@@ -1,5 +1,5 @@
 import nltk
-from nltk import word_tokenize
+
 from nltk.translate.meteor_score import single_meteor_score
 
 from metrics.metrics import Metrics
@@ -34,7 +34,7 @@ class MeteorScore(Metrics):
             # default preprocess is str.lower()
             # default stemmer is PorterStemmer()
             # default wordnet is nltk.corpus.wordnet
-            score = self.scorer(word_tokenize(references[i]), word_tokenize(candidates[i]))
+            score = self.scorer(references[i], candidates[i])
             score = util.smart_round(score)
             score_list.append(score)
 
