@@ -1,167 +1,149 @@
-2025-06-26 11:32:39,514 - __main__ - INFO - [main] Starting main function.
-2025-06-26 11:32:39,514 - __main__ - INFO - [main] Loading config file: test_config.yaml
-2025-06-26 11:32:39,517 - __main__ - INFO - [main] Config loaded: {'dataset_metric': ['(audiobench_wavcaps_qa_test, llm_judge_binary)', '(audiobench_alpaca_audio_test, llm_judge_detailed)'], 'batch_size': 4, 'num_samples': 2, 'judge_concurrency': 4, 'judge_model': 'gpt-4o-mini', 'models': [{'name': 'audio_transcriptions_openai_1', 'info': {'inference_type': 'inference_server', 'url': 'https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions', 'delay': 100, 'retry_attempts': 8, 'timeout': 30, 'sync_client': False, 'postprocessor': [], 'model': 'whisper-3', 'auth_token': 'Bearer 8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q', 'target': 'audio_transcriptions_openai'}}, {'name': 'audio_transcriptions_openai_2', 'info': {'inference_type': 'inference_server', 'url': 'https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions', 'delay': 100, 'retry_attempts': 8, 'timeout': 30, 'sync_client': False, 'postprocessor': [], 'model': 'whisper-3', 'auth_token': 'Bearer 8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q', 'target': 'audio_transcriptions_openai'}}]}
-2025-06-26 11:32:39,517 - __main__ - INFO - [main] Loading models...
-2025-06-26 11:32:39,517 - __main__ - INFO - [_load_models] Instantiating models from config: [{'name': 'audio_transcriptions_openai_1', 'info': {'inference_type': 'inference_server', 'url': 'https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions', 'delay': 100, 'retry_attempts': 8, 'timeout': 30, 'sync_client': False, 'postprocessor': [], 'model': 'whisper-3', 'auth_token': 'Bearer 8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q', 'target': 'audio_transcriptions_openai'}}, {'name': 'audio_transcriptions_openai_2', 'info': {'inference_type': 'inference_server', 'url': 'https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions', 'delay': 100, 'retry_attempts': 8, 'timeout': 30, 'sync_client': False, 'postprocessor': [], 'model': 'whisper-3', 'auth_token': 'Bearer 8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q', 'target': 'audio_transcriptions_openai'}}]
-2025-06-26 11:32:39,517 - __main__ - INFO - [_load_models] Instantiating model: audio_transcriptions_openai_1
-2025-06-26 11:32:39,517 - __main__ - INFO - [_load_models] Importing module: models.audio_transcriptions_openai
-2025-06-26 11:32:39,519 - __main__ - INFO - [_load_models] Instantiated model class: AudioTranscriptionsOpenAI
-2025-06-26 11:32:39,587 - __main__ - INFO - [_load_models] Instantiating model: audio_transcriptions_openai_2
-2025-06-26 11:32:39,587 - __main__ - INFO - [_load_models] Importing module: models.audio_transcriptions_openai
-2025-06-26 11:32:39,587 - __main__ - INFO - [_load_models] Instantiated model class: AudioTranscriptionsOpenAI
-2025-06-26 11:32:39,601 - __main__ - INFO - Loaded audio_transcriptions_openai_1
-2025-06-26 11:32:39,601 - __main__ - INFO - Loaded audio_transcriptions_openai_2
-2025-06-26 11:32:39,601 - __main__ - INFO - [_load_models] Successfully instantiated 2 model(s).
-2025-06-26 11:32:39,601 - __main__ - INFO - [main] Loading dataset 'audiobench_wavcaps_qa_test' with metric 'llm_judge_binary' ...
-2025-06-26 11:32:39,601 - __main__ - INFO - [_load_dataset] Loading dataset: audiobench_wavcaps_qa_test
-2025-06-26 11:32:39,602 - __main__ - INFO - [_load_dataset] Loading HuggingFace dataset repo: AudioLLMs/wavcaps_qa_test
-2025-06-26 11:32:42,909 - __main__ - INFO - [_load_dataset] Truncating dataset to first 2 samples.
-2025-06-26 11:32:44,463 - __main__ - INFO - [_load_dataset] Preprocessing dataset...
-2025-06-26 11:32:44,463 - preprocessors.audio_preprocessor - INFO - In [AudioBenchPreprocessor] Processing dataset...
-2025-06-26 11:32:44,463 - preprocessors.audio_preprocessor - INFO - Dataset keys: ['context', 'instruction', 'answer'], num_samples: 2
-2025-06-26 11:32:44,468 - preprocessors.audio_preprocessor - INFO - Dataset is 0.01 hours long
-2025-06-26 11:32:44,472 - __main__ - INFO - [_load_dataset] Dataset loaded and processed. Size: 2
-2025-06-26 11:32:44,472 - __main__ - INFO - [_load_metric] Loading metric: llm_judge_binary (judge_concurrency=4, judge_model=gpt-4o-mini)
-2025-06-26 11:32:44,492 - __main__ - INFO - [_load_metric] Metric loaded: llm_judge_binary
-2025-06-26 11:32:44,492 - __main__ - INFO - [main] Initializing Engine and running evaluation...
-2025-06-26 11:32:44,492 - __main__ - INFO - [Engine.__init__] Initializing Engine with 2 model(s), dataset size: 2, metric: llm_judge_binary, batch_size: 4
-2025-06-26 11:32:44,492 - __main__ - INFO - [Engine.run] Starting evaluation run.
-2025-06-26 11:32:44,492 - __main__ - INFO - Running on batch size 4
-2025-06-26 11:32:44,493 - __main__ - INFO - [Engine._infer_all] Starting inference for all models: ['audio_transcriptions_openai_1', 'audio_transcriptions_openai_2']
-2025-06-26 11:32:44,493 - __main__ - INFO - [Engine._infer_single_model] Running model: audio_transcriptions_openai_1 on dataset of size 2
-2025-06-26 11:32:44,493 - __main__ - INFO - [Engine._infer_single_model] Running model: audio_transcriptions_openai_2 on dataset of size 2
-2025-06-26 11:32:44,496 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
-2025-06-26 11:32:44,503 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
-2025-06-26 11:32:44,507 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
-2025-06-26 11:32:44,508 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
-2025-06-26 11:32:45,311 - httpx - INFO - HTTP Request: POST https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
-2025-06-26 11:32:45,312 - models.request_resp_handler - INFO - Successful Response
-2025-06-26 11:32:45,324 - models.model - INFO - audio_transcriptions_openai_1 model response: {"text":" Bye."}
-2025-06-26 11:32:45,325 - httpx - INFO - HTTP Request: POST https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
-2025-06-26 11:32:45,325 - models.request_resp_handler - INFO - Successful Response
-2025-06-26 11:32:45,336 - models.model - INFO - audio_transcriptions_openai_2 model response: {"text":" Bye."}
-2025-06-26 11:32:59,695 - httpx - INFO - HTTP Request: POST https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
-2025-06-26 11:32:59,697 - models.request_resp_handler - INFO - Successful Response
-2025-06-26 11:32:59,755 - models.model - INFO - audio_transcriptions_openai_2 model response: {"text":" *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell*"}
-2025-06-26 11:32:59,756 - httpx - INFO - HTTP Request: POST https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
-2025-06-26 11:32:59,756 - __main__ - INFO - [Engine._infer_single_model] Model audio_transcriptions_openai_2 finished inference.
-2025-06-26 11:32:59,756 - models.request_resp_handler - INFO - Successful Response
-2025-06-26 11:32:59,809 - models.model - INFO - audio_transcriptions_openai_1 model response: {"text":" *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell*"}
-2025-06-26 11:32:59,809 - __main__ - INFO - [Engine._infer_single_model] Model audio_transcriptions_openai_1 finished inference.
-2025-06-26 11:32:59,809 - __main__ - INFO - [Engine._infer_all] All models finished inference.
-2025-06-26 11:32:59,809 - __main__ - INFO - [Engine._infer_all] Results: {'audio_transcriptions_openai_1': [' *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell*', ' Bye.'], 'audio_transcriptions_openai_2': [' *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell*', ' Bye.']}
-2025-06-26 11:32:59,810 - __main__ - INFO - prediction type: <class 'dict'>
-2025-06-26 11:32:59,810 - __main__ - INFO - predictions: {'audio_transcriptions_openai_1': [' *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell*', ' Bye.'], 'audio_transcriptions_openai_2': [' *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell*', ' Bye.']}
-2025-06-26 11:32:59,810 - __main__ - INFO - [Engine.run] prediction length: 2
-2025-06-26 11:32:59,810 - __main__ - INFO - [Engine.run] Predictions complete. Calculating scores...
-2025-06-26 11:32:59,810 - __main__ - INFO - [Engine.run] Model targets: ['Yes, it might be doing certain cleaning job.', 'Sound of a machine gun firing can be heard in the audio.']
-2025-06-26 11:32:59,810 - __main__ - INFO - [Engine.run] Scoring model: audio_transcriptions_openai_1
-2025-06-26 11:32:59,810 - __main__ - INFO - [Engine.run] Outs type: <class 'list'>
-2025-06-26 11:32:59,810 - __main__ - INFO - [Engine.run] Outs: [' *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell*', ' Bye.']
-2025-06-26 11:33:06,628 - httpx - INFO - HTTP Request: POST https://corelmm-gpt-4t.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2025-01-01-preview "HTTP/1.1 200 OK"
-2025-06-26 11:33:08,276 - httpx - INFO - HTTP Request: POST https://corelmm-gpt-4t.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2025-01-01-preview "HTTP/1.1 200 OK"
-2025-06-26 11:33:08,279 - __main__ - INFO - [Engine.run] Scoring model: audio_transcriptions_openai_2
-2025-06-26 11:33:08,280 - __main__ - INFO - [Engine.run] Outs type: <class 'list'>
-2025-06-26 11:33:08,280 - __main__ - INFO - [Engine.run] Outs: [' *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell*', ' Bye.']
-2025-06-26 11:33:08,283 - openai._base_client - INFO - Retrying request to /chat/completions in 0.385657 seconds
-2025-06-26 11:33:08,284 - openai._base_client - INFO - Retrying request to /chat/completions in 0.455645 seconds
-2025-06-26 11:33:14,585 - httpx - INFO - HTTP Request: POST https://corelmm-gpt-4t.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2025-01-01-preview "HTTP/1.1 200 OK"
-2025-06-26 11:33:14,803 - httpx - INFO - HTTP Request: POST https://corelmm-gpt-4t.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2025-01-01-preview "HTTP/1.1 200 OK"
-2025-06-26 11:33:14,810 - __main__ - INFO - [Engine.run] Evaluation complete. Returning scoresz.
-2025-06-26 11:33:14,810 - __main__ - INFO - [main] Loading dataset 'audiobench_alpaca_audio_test' with metric 'llm_judge_detailed' ...
-2025-06-26 11:33:14,810 - __main__ - INFO - [_load_dataset] Loading dataset: audiobench_alpaca_audio_test
-2025-06-26 11:33:14,812 - __main__ - INFO - [_load_dataset] Loading HuggingFace dataset repo: AudioLLMs/alpaca_audio_test
-2025-06-26 11:33:18,681 - __main__ - INFO - [_load_dataset] Truncating dataset to first 2 samples.
-2025-06-26 11:33:18,682 - __main__ - INFO - [_load_dataset] Preprocessing dataset...
-2025-06-26 11:33:18,682 - preprocessors.audio_preprocessor - INFO - In [AudioBenchPreprocessor] Processing dataset...
-2025-06-26 11:33:18,682 - preprocessors.audio_preprocessor - INFO - Dataset keys: ['context', 'instruction', 'speech_instruction', 'answer'], num_samples: 2
-2025-06-26 11:33:18,683 - preprocessors.audio_preprocessor - INFO - Dataset is 0.00 hours long
-2025-06-26 11:33:18,683 - __main__ - INFO - [_load_dataset] Dataset loaded and processed. Size: 2
-2025-06-26 11:33:18,683 - __main__ - INFO - [_load_metric] Loading metric: llm_judge_detailed (judge_concurrency=4, judge_model=gpt-4o-mini)
-2025-06-26 11:33:18,699 - __main__ - INFO - [_load_metric] Metric loaded: llm_judge_detailed
-2025-06-26 11:33:18,699 - __main__ - INFO - [main] Initializing Engine and running evaluation...
-2025-06-26 11:33:18,699 - __main__ - INFO - [Engine.__init__] Initializing Engine with 2 model(s), dataset size: 2, metric: llm_judge_detailed, batch_size: 4
-2025-06-26 11:33:18,699 - __main__ - INFO - [Engine.run] Starting evaluation run.
-2025-06-26 11:33:18,699 - __main__ - INFO - Running on batch size 4
-2025-06-26 11:33:18,699 - __main__ - INFO - [Engine._infer_all] Starting inference for all models: ['audio_transcriptions_openai_1', 'audio_transcriptions_openai_2']
-2025-06-26 11:33:18,699 - __main__ - INFO - [Engine._infer_single_model] Running model: audio_transcriptions_openai_1 on dataset of size 2
-2025-06-26 11:33:18,699 - __main__ - INFO - [Engine._infer_single_model] Running model: audio_transcriptions_openai_2 on dataset of size 2
-2025-06-26 11:33:18,700 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
-2025-06-26 11:33:18,701 - models.request_resp_handler - ERROR - audio_raw_response=Event loop is closed
-2025-06-26 11:33:18,707 - models.model - INFO - audio_transcriptions_openai_1 model response: Event loop is closed
-2025-06-26 11:33:18,707 - models.model - WARNING - [audio_transcriptions_openai_1] Retrying the request in 0.32325774125082796 seconds as it returned 500 code in attempt 1
-2025-06-26 11:33:18,708 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
-2025-06-26 11:33:18,709 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
-2025-06-26 11:33:18,709 - models.request_resp_handler - ERROR - audio_raw_response=Event loop is closed
-2025-06-26 11:33:18,715 - models.model - INFO - audio_transcriptions_openai_2 model response: Event loop is closed
-2025-06-26 11:33:18,715 - models.model - WARNING - [audio_transcriptions_openai_2] Retrying the request in 0.6558124269745154 seconds as it returned 500 code in attempt 1
-2025-06-26 11:33:18,716 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
-2025-06-26 11:33:19,037 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
-2025-06-26 11:33:19,376 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
-2025-06-26 11:33:19,852 - httpx - INFO - HTTP Request: POST https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
-2025-06-26 11:33:19,852 - httpx - INFO - HTTP Request: POST https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
-2025-06-26 11:33:19,852 - models.request_resp_handler - INFO - Successful Response
-2025-06-26 11:33:19,861 - models.model - INFO - audio_transcriptions_openai_2 model response: {"text":" Suggest ways to reduce daily water use by households."}
-2025-06-26 11:33:19,861 - models.request_resp_handler - INFO - Successful Response
-2025-06-26 11:33:19,868 - models.model - INFO - audio_transcriptions_openai_1 model response: {"text":" Suggest ways to reduce daily water use by households."}
-2025-06-26 11:33:20,009 - httpx - INFO - HTTP Request: POST https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
-2025-06-26 11:33:20,011 - models.request_resp_handler - INFO - Successful Response
-2025-06-26 11:33:20,018 - models.model - INFO - audio_transcriptions_openai_1 model response: {"text":" Telling me about the movie Star Wars."}
-2025-06-26 11:33:20,018 - __main__ - INFO - [Engine._infer_single_model] Model audio_transcriptions_openai_1 finished inference.
-2025-06-26 11:33:20,380 - httpx - INFO - HTTP Request: POST https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
-2025-06-26 11:33:20,381 - models.request_resp_handler - INFO - Successful Response
-2025-06-26 11:33:20,390 - models.model - INFO - audio_transcriptions_openai_2 model response: {"text":" Telling me about the movie Star Wars."}
-2025-06-26 11:33:20,390 - __main__ - INFO - [Engine._infer_single_model] Model audio_transcriptions_openai_2 finished inference.
-2025-06-26 11:33:20,391 - __main__ - INFO - [Engine._infer_all] All models finished inference.
-2025-06-26 11:33:20,391 - __main__ - INFO - [Engine._infer_all] Results: {'audio_transcriptions_openai_1': [' Telling me about the movie Star Wars.', ' Suggest ways to reduce daily water use by households.'], 'audio_transcriptions_openai_2': [' Telling me about the movie Star Wars.', ' Suggest ways to reduce daily water use by households.']}
-2025-06-26 11:33:20,391 - __main__ - INFO - prediction type: <class 'dict'>
-2025-06-26 11:33:20,391 - __main__ - INFO - predictions: {'audio_transcriptions_openai_1': [' Telling me about the movie Star Wars.', ' Suggest ways to reduce daily water use by households.'], 'audio_transcriptions_openai_2': [' Telling me about the movie Star Wars.', ' Suggest ways to reduce daily water use by households.']}
-2025-06-26 11:33:20,391 - __main__ - INFO - [Engine.run] prediction length: 2
-2025-06-26 11:33:20,391 - __main__ - INFO - [Engine.run] Predictions complete. Calculating scores...
-2025-06-26 11:33:20,391 - __main__ - INFO - [Engine.run] Model targets: ['Star Wars is a science fiction franchise that follows the adventures of various characters "a long time ago in a galaxy far, far away." The original trilogy, created by George Lucas, focuses on the Rebel Alliance\'s struggle against the tyrannical Galactic Empire and the journey of Luke Skywalker to become a Jedi. The franchise has since expanded to include prequels, sequels, spin-offs, books, and TV series.', '1. Fix leaks promptly.\n2. Install low-flow fixtures.\n3. Take shorter showers.\n4. Turn off water when brushing teeth or shaving.\n5. Run dishwashers and washing machines with full loads.\n6. Use a broom instead of a hose to clean driveways and sidewalks.\n7. Collect rainwater for gardening.']
-2025-06-26 11:33:20,391 - __main__ - INFO - [Engine.run] Scoring model: audio_transcriptions_openai_1
-2025-06-26 11:33:20,391 - __main__ - INFO - [Engine.run] Outs type: <class 'list'>
-2025-06-26 11:33:20,391 - __main__ - INFO - [Engine.run] Outs: [' Telling me about the movie Star Wars.', ' Suggest ways to reduce daily water use by households.']
-2025-06-26 11:33:28,921 - httpx - INFO - HTTP Request: POST https://corelmm-gpt-4t.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2025-01-01-preview "HTTP/1.1 200 OK"
-2025-06-26 11:33:29,296 - httpx - INFO - HTTP Request: POST https://corelmm-gpt-4t.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2025-01-01-preview "HTTP/1.1 200 OK"
-2025-06-26 11:33:29,299 - __main__ - INFO - [Engine.run] Scoring model: audio_transcriptions_openai_2
-2025-06-26 11:33:29,299 - __main__ - INFO - [Engine.run] Outs type: <class 'list'>
-2025-06-26 11:33:29,299 - __main__ - INFO - [Engine.run] Outs: [' Telling me about the movie Star Wars.', ' Suggest ways to reduce daily water use by households.']
-2025-06-26 11:33:29,302 - openai._base_client - INFO - Retrying request to /chat/completions in 0.487346 seconds
-2025-06-26 11:33:29,302 - openai._base_client - INFO - Retrying request to /chat/completions in 0.396187 seconds
-2025-06-26 11:33:34,874 - httpx - INFO - HTTP Request: POST https://corelmm-gpt-4t.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2025-01-01-preview "HTTP/1.1 200 OK"
-2025-06-26 11:33:37,891 - httpx - INFO - HTTP Request: POST https://corelmm-gpt-4t.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2025-01-01-preview "HTTP/1.1 200 OK"
-2025-06-26 11:33:37,893 - __main__ - INFO - [Engine.run] Evaluation complete. Returning scoresz.
-2025-06-26 11:33:37,893 - __main__ - INFO - [main] Evaluation scores:
-2025-06-26 11:33:37,893 - __main__ - INFO - {
+2025-06-26 11:45:47,130 - __main__ - INFO - [main] Starting main function.
+2025-06-26 11:45:47,130 - __main__ - INFO - [main] Loading config file: test_config.yaml
+2025-06-26 11:45:47,134 - __main__ - INFO - [main] Config loaded: {'dataset_metric': ['(audiobench_wavcaps_qa_test, bleu)', '(audiobench_alpaca_audio_test, meteor)'], 'batch_size': 4, 'num_samples': 2, 'judge_concurrency': 4, 'judge_model': 'gpt-4o-mini', 'models': [{'name': 'audio_transcriptions_openai_1', 'info': {'inference_type': 'inference_server', 'url': 'https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions', 'delay': 100, 'retry_attempts': 8, 'timeout': 30, 'sync_client': False, 'postprocessor': [], 'model': 'whisper-3', 'auth_token': 'Bearer 8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q', 'target': 'audio_transcriptions_openai'}}, {'name': 'audio_transcriptions_openai_2', 'info': {'inference_type': 'inference_server', 'url': 'https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions', 'delay': 100, 'retry_attempts': 8, 'timeout': 30, 'sync_client': False, 'postprocessor': [], 'model': 'whisper-3', 'auth_token': 'Bearer 8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q', 'target': 'audio_transcriptions_openai'}}]}
+2025-06-26 11:45:47,134 - __main__ - INFO - [main] Loading models...
+2025-06-26 11:45:47,134 - __main__ - INFO - [_load_models] Instantiating models from config: [{'name': 'audio_transcriptions_openai_1', 'info': {'inference_type': 'inference_server', 'url': 'https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions', 'delay': 100, 'retry_attempts': 8, 'timeout': 30, 'sync_client': False, 'postprocessor': [], 'model': 'whisper-3', 'auth_token': 'Bearer 8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q', 'target': 'audio_transcriptions_openai'}}, {'name': 'audio_transcriptions_openai_2', 'info': {'inference_type': 'inference_server', 'url': 'https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions', 'delay': 100, 'retry_attempts': 8, 'timeout': 30, 'sync_client': False, 'postprocessor': [], 'model': 'whisper-3', 'auth_token': 'Bearer 8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q', 'target': 'audio_transcriptions_openai'}}]
+2025-06-26 11:45:47,134 - __main__ - INFO - [_load_models] Instantiating model: audio_transcriptions_openai_1
+2025-06-26 11:45:47,134 - __main__ - INFO - [_load_models] Importing module: models.audio_transcriptions_openai
+2025-06-26 11:45:47,146 - __main__ - INFO - [_load_models] Instantiated model class: AudioTranscriptionsOpenAI
+2025-06-26 11:45:47,240 - __main__ - INFO - [_load_models] Instantiating model: audio_transcriptions_openai_2
+2025-06-26 11:45:47,241 - __main__ - INFO - [_load_models] Importing module: models.audio_transcriptions_openai
+2025-06-26 11:45:47,241 - __main__ - INFO - [_load_models] Instantiated model class: AudioTranscriptionsOpenAI
+2025-06-26 11:45:47,254 - __main__ - INFO - Loaded audio_transcriptions_openai_1
+2025-06-26 11:45:47,254 - __main__ - INFO - Loaded audio_transcriptions_openai_2
+2025-06-26 11:45:47,254 - __main__ - INFO - [_load_models] Successfully instantiated 2 model(s).
+2025-06-26 11:45:47,254 - __main__ - INFO - [main] Loading dataset 'audiobench_wavcaps_qa_test' with metric 'bleu' ...
+2025-06-26 11:45:47,254 - __main__ - INFO - [_load_dataset] Loading dataset: audiobench_wavcaps_qa_test
+2025-06-26 11:45:47,255 - __main__ - INFO - [_load_dataset] Loading HuggingFace dataset repo: AudioLLMs/wavcaps_qa_test
+2025-06-26 11:45:50,470 - __main__ - INFO - [_load_dataset] Truncating dataset to first 2 samples.
+2025-06-26 11:45:52,009 - __main__ - INFO - [_load_dataset] Preprocessing dataset...
+2025-06-26 11:45:52,009 - preprocessors.audio_preprocessor - INFO - In [AudioBenchPreprocessor] Processing dataset...
+2025-06-26 11:45:52,009 - preprocessors.audio_preprocessor - INFO - Dataset keys: ['context', 'instruction', 'answer'], num_samples: 2
+2025-06-26 11:45:52,014 - preprocessors.audio_preprocessor - INFO - Dataset is 0.01 hours long
+2025-06-26 11:45:52,014 - __main__ - INFO - [_load_dataset] Dataset loaded and processed. Size: 2
+2025-06-26 11:45:52,014 - __main__ - INFO - [_load_metric] Loading metric: bleu (judge_concurrency=4, judge_model=gpt-4o-mini)
+2025-06-26 11:45:52,067 - __main__ - INFO - [_load_metric] Metric loaded: BLEU
+2025-06-26 11:45:52,067 - __main__ - INFO - [main] Initializing Engine and running evaluation...
+2025-06-26 11:45:52,067 - __main__ - INFO - [Engine.__init__] Initializing Engine with 2 model(s), dataset size: 2, metric: BLEU, batch_size: 4
+2025-06-26 11:45:52,067 - __main__ - INFO - [Engine.run] Starting evaluation run.
+2025-06-26 11:45:52,068 - __main__ - INFO - Running on batch size 4
+2025-06-26 11:45:52,068 - __main__ - INFO - [Engine._infer_all] Starting inference for all models: ['audio_transcriptions_openai_1', 'audio_transcriptions_openai_2']
+2025-06-26 11:45:52,068 - __main__ - INFO - [Engine._infer_single_model] Running model: audio_transcriptions_openai_1 on dataset of size 2
+2025-06-26 11:45:52,068 - __main__ - INFO - [Engine._infer_single_model] Running model: audio_transcriptions_openai_2 on dataset of size 2
+2025-06-26 11:45:52,071 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
+2025-06-26 11:45:52,075 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
+2025-06-26 11:45:52,079 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
+2025-06-26 11:45:52,082 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
+2025-06-26 11:45:52,887 - httpx - INFO - HTTP Request: POST https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-06-26 11:45:52,888 - models.request_resp_handler - INFO - Successful Response
+2025-06-26 11:45:52,900 - models.model - INFO - audio_transcriptions_openai_1 model response: {"text":" Bye."}
+2025-06-26 11:45:52,927 - httpx - INFO - HTTP Request: POST https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-06-26 11:45:52,928 - models.request_resp_handler - INFO - Successful Response
+2025-06-26 11:45:52,939 - models.model - INFO - audio_transcriptions_openai_2 model response: {"text":" Bye."}
+2025-06-26 11:46:07,320 - httpx - INFO - HTTP Request: POST https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-06-26 11:46:07,322 - models.request_resp_handler - INFO - Successful Response
+2025-06-26 11:46:07,381 - models.model - INFO - audio_transcriptions_openai_1 model response: {"text":" *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell*"}
+2025-06-26 11:46:07,382 - __main__ - INFO - [Engine._infer_single_model] Model audio_transcriptions_openai_1 finished inference.
+2025-06-26 11:46:07,382 - httpx - INFO - HTTP Request: POST https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-06-26 11:46:07,382 - models.request_resp_handler - INFO - Successful Response
+2025-06-26 11:46:07,435 - models.model - INFO - audio_transcriptions_openai_2 model response: {"text":" *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell*"}
+2025-06-26 11:46:07,436 - __main__ - INFO - [Engine._infer_single_model] Model audio_transcriptions_openai_2 finished inference.
+2025-06-26 11:46:07,436 - __main__ - INFO - [Engine._infer_all] All models finished inference.
+2025-06-26 11:46:07,436 - __main__ - INFO - [Engine._infer_all] Results: {'audio_transcriptions_openai_1': [' *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell*', ' Bye.'], 'audio_transcriptions_openai_2': [' *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell*', ' Bye.']}
+2025-06-26 11:46:07,436 - __main__ - INFO - prediction type: <class 'dict'>
+2025-06-26 11:46:07,436 - __main__ - INFO - predictions: {'audio_transcriptions_openai_1': [' *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell*', ' Bye.'], 'audio_transcriptions_openai_2': [' *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell*', ' Bye.']}
+2025-06-26 11:46:07,436 - __main__ - INFO - [Engine.run] prediction length: 2
+2025-06-26 11:46:07,437 - __main__ - INFO - [Engine.run] Predictions complete. Calculating scores...
+2025-06-26 11:46:07,437 - __main__ - INFO - [Engine.run] Model targets: ['Yes, it might be doing certain cleaning job.', 'Sound of a machine gun firing can be heard in the audio.']
+2025-06-26 11:46:07,437 - __main__ - INFO - [Engine.run] Scoring model: audio_transcriptions_openai_1
+2025-06-26 11:46:07,437 - __main__ - INFO - [Engine.run] Outs type: <class 'list'>
+2025-06-26 11:46:07,437 - __main__ - INFO - [Engine.run] Outs: [' *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell*', ' Bye.']
+2025-06-26 11:46:07,439 - __main__ - INFO - [Engine.run] Scoring model: audio_transcriptions_openai_2
+2025-06-26 11:46:07,439 - __main__ - INFO - [Engine.run] Outs type: <class 'list'>
+2025-06-26 11:46:07,439 - __main__ - INFO - [Engine.run] Outs: [' *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* *doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell* * Doorbell*', ' Bye.']
+2025-06-26 11:46:07,440 - __main__ - INFO - [Engine.run] Evaluation complete. Returning scoresz.
+2025-06-26 11:46:07,440 - __main__ - INFO - [main] Loading dataset 'audiobench_alpaca_audio_test' with metric 'meteor' ...
+2025-06-26 11:46:07,440 - __main__ - INFO - [_load_dataset] Loading dataset: audiobench_alpaca_audio_test
+2025-06-26 11:46:07,440 - __main__ - INFO - [_load_dataset] Loading HuggingFace dataset repo: AudioLLMs/alpaca_audio_test
+2025-06-26 11:46:10,194 - __main__ - INFO - [_load_dataset] Truncating dataset to first 2 samples.
+2025-06-26 11:46:10,195 - __main__ - INFO - [_load_dataset] Preprocessing dataset...
+2025-06-26 11:46:10,195 - preprocessors.audio_preprocessor - INFO - In [AudioBenchPreprocessor] Processing dataset...
+2025-06-26 11:46:10,195 - preprocessors.audio_preprocessor - INFO - Dataset keys: ['context', 'instruction', 'speech_instruction', 'answer'], num_samples: 2
+2025-06-26 11:46:10,196 - preprocessors.audio_preprocessor - INFO - Dataset is 0.00 hours long
+2025-06-26 11:46:10,196 - __main__ - INFO - [_load_dataset] Dataset loaded and processed. Size: 2
+2025-06-26 11:46:10,197 - __main__ - INFO - [_load_metric] Loading metric: meteor (judge_concurrency=4, judge_model=gpt-4o-mini)
+2025-06-26 11:46:12,329 - __main__ - INFO - [_load_metric] Metric loaded: meteor
+2025-06-26 11:46:12,329 - __main__ - INFO - [main] Initializing Engine and running evaluation...
+2025-06-26 11:46:12,329 - __main__ - INFO - [Engine.__init__] Initializing Engine with 2 model(s), dataset size: 2, metric: meteor, batch_size: 4
+2025-06-26 11:46:12,329 - __main__ - INFO - [Engine.run] Starting evaluation run.
+2025-06-26 11:46:12,329 - __main__ - INFO - Running on batch size 4
+2025-06-26 11:46:12,329 - __main__ - INFO - [Engine._infer_all] Starting inference for all models: ['audio_transcriptions_openai_1', 'audio_transcriptions_openai_2']
+2025-06-26 11:46:12,329 - __main__ - INFO - [Engine._infer_single_model] Running model: audio_transcriptions_openai_1 on dataset of size 2
+2025-06-26 11:46:12,329 - __main__ - INFO - [Engine._infer_single_model] Running model: audio_transcriptions_openai_2 on dataset of size 2
+2025-06-26 11:46:12,336 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
+2025-06-26 11:46:12,337 - models.request_resp_handler - ERROR - audio_raw_response=Event loop is closed
+2025-06-26 11:46:12,343 - models.model - INFO - audio_transcriptions_openai_1 model response: Event loop is closed
+2025-06-26 11:46:12,343 - models.model - WARNING - [audio_transcriptions_openai_1] Retrying the request in 0.8874984061249015 seconds as it returned 500 code in attempt 1
+2025-06-26 11:46:12,345 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
+2025-06-26 11:46:12,346 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
+2025-06-26 11:46:12,347 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
+2025-06-26 11:46:12,348 - models.request_resp_handler - ERROR - audio_raw_response=Event loop is closed
+2025-06-26 11:46:12,354 - models.model - INFO - audio_transcriptions_openai_2 model response: Event loop is closed
+2025-06-26 11:46:12,354 - models.model - WARNING - [audio_transcriptions_openai_2] Retrying the request in 0.7328798355932257 seconds as it returned 500 code in attempt 1
+2025-06-26 11:46:13,096 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
+2025-06-26 11:46:13,234 - models.request_resp_handler - INFO - URL: https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions
+2025-06-26 11:46:13,347 - httpx - INFO - HTTP Request: POST https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-06-26 11:46:13,348 - models.request_resp_handler - INFO - Successful Response
+2025-06-26 11:46:13,364 - models.model - INFO - audio_transcriptions_openai_2 model response: {"text":" Suggest ways to reduce daily water use by households."}
+2025-06-26 11:46:13,365 - httpx - INFO - HTTP Request: POST https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-06-26 11:46:13,366 - models.request_resp_handler - INFO - Successful Response
+2025-06-26 11:46:13,374 - models.model - INFO - audio_transcriptions_openai_1 model response: {"text":" Suggest ways to reduce daily water use by households."}
+2025-06-26 11:46:14,023 - httpx - INFO - HTTP Request: POST https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-06-26 11:46:14,024 - models.request_resp_handler - INFO - Successful Response
+2025-06-26 11:46:14,031 - models.model - INFO - audio_transcriptions_openai_2 model response: {"text":" Telling me about the movie Star Wars."}
+2025-06-26 11:46:14,031 - __main__ - INFO - [Engine._infer_single_model] Model audio_transcriptions_openai_2 finished inference.
+2025-06-26 11:46:14,156 - httpx - INFO - HTTP Request: POST https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-06-26 11:46:14,158 - models.request_resp_handler - INFO - Successful Response
+2025-06-26 11:46:14,168 - models.model - INFO - audio_transcriptions_openai_1 model response: {"text":" Telling me about the movie Star Wars."}
+2025-06-26 11:46:14,168 - __main__ - INFO - [Engine._infer_single_model] Model audio_transcriptions_openai_1 finished inference.
+2025-06-26 11:46:14,169 - __main__ - INFO - [Engine._infer_all] All models finished inference.
+2025-06-26 11:46:14,169 - __main__ - INFO - [Engine._infer_all] Results: {'audio_transcriptions_openai_1': [' Telling me about the movie Star Wars.', ' Suggest ways to reduce daily water use by households.'], 'audio_transcriptions_openai_2': [' Telling me about the movie Star Wars.', ' Suggest ways to reduce daily water use by households.']}
+2025-06-26 11:46:14,169 - __main__ - INFO - prediction type: <class 'dict'>
+2025-06-26 11:46:14,169 - __main__ - INFO - predictions: {'audio_transcriptions_openai_1': [' Telling me about the movie Star Wars.', ' Suggest ways to reduce daily water use by households.'], 'audio_transcriptions_openai_2': [' Telling me about the movie Star Wars.', ' Suggest ways to reduce daily water use by households.']}
+2025-06-26 11:46:14,169 - __main__ - INFO - [Engine.run] prediction length: 2
+2025-06-26 11:46:14,169 - __main__ - INFO - [Engine.run] Predictions complete. Calculating scores...
+2025-06-26 11:46:14,169 - __main__ - INFO - [Engine.run] Model targets: ['Star Wars is a science fiction franchise that follows the adventures of various characters "a long time ago in a galaxy far, far away." The original trilogy, created by George Lucas, focuses on the Rebel Alliance\'s struggle against the tyrannical Galactic Empire and the journey of Luke Skywalker to become a Jedi. The franchise has since expanded to include prequels, sequels, spin-offs, books, and TV series.', '1. Fix leaks promptly.\n2. Install low-flow fixtures.\n3. Take shorter showers.\n4. Turn off water when brushing teeth or shaving.\n5. Run dishwashers and washing machines with full loads.\n6. Use a broom instead of a hose to clean driveways and sidewalks.\n7. Collect rainwater for gardening.']
+2025-06-26 11:46:14,169 - __main__ - INFO - [Engine.run] Scoring model: audio_transcriptions_openai_1
+2025-06-26 11:46:14,169 - __main__ - INFO - [Engine.run] Outs type: <class 'list'>
+2025-06-26 11:46:14,169 - __main__ - INFO - [Engine.run] Outs: [' Telling me about the movie Star Wars.', ' Suggest ways to reduce daily water use by households.']
+2025-06-26 11:46:15,326 - __main__ - INFO - [Engine.run] Scoring model: audio_transcriptions_openai_2
+2025-06-26 11:46:15,327 - __main__ - INFO - [Engine.run] Outs type: <class 'list'>
+2025-06-26 11:46:15,327 - __main__ - INFO - [Engine.run] Outs: [' Telling me about the movie Star Wars.', ' Suggest ways to reduce daily water use by households.']
+2025-06-26 11:46:15,328 - __main__ - INFO - [Engine.run] Evaluation complete. Returning scoresz.
+2025-06-26 11:46:15,328 - __main__ - INFO - [main] Evaluation scores:
+2025-06-26 11:46:15,328 - __main__ - INFO - {
   "audiobench_wavcaps_qa_test": {
-    "llm_judge_binary": {
+    "BLEU": {
       "audio_transcriptions_openai_1": {
-        "llm_judge_binary": [
-          0.0,
-          0.0
-        ]
+        "BLEU": 0.1064136311718832
       },
       "audio_transcriptions_openai_2": {
-        "llm_judge_binary": [
-          0.0,
-          0.0
-        ]
+        "BLEU": 0.1064136311718832
       }
     }
   },
   "audiobench_alpaca_audio_test": {
-    "llm_judge_detailed": {
+    "meteor": {
       "audio_transcriptions_openai_1": {
-        "llm_judge_detailed": [
-          0.0,
-          0.0
+        "meteor": [
+          0.044,
+          0.035
         ]
       },
       "audio_transcriptions_openai_2": {
-        "llm_judge_detailed": [
-          0.0,
-          0.0
+        "meteor": [
+          0.044,
+          0.035
         ]
       }
     }

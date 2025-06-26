@@ -16,6 +16,8 @@ class MeteorScore(Metrics):
         self.name = "meteor"
         self.scorer = single_meteor_score
         nltk.download("wordnet")
+        nltk.download('punkt')
+        nltk.download('punkt_tab')
 
     def compute_record_level_scores(self, candidates: list, references: list) -> dict[str, list | None]:
         """Compute the scores that should be saved in the record level file.

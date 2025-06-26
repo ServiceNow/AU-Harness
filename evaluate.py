@@ -134,8 +134,8 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
         from metrics.word_error_rate_metrics import WERMetrics
         metric = WERMetrics(language=language)
     elif name == "bleu":
-        from metrics.bleu_metrics import BLEUMetrics
-        metric = BLEUMetrics()
+        from metrics.bleu_metrics import BleuMetrics
+        metric = BleuMetrics()
     elif name == "llm_judge_binary":
         from metrics.llm_judge import BinaryLLMJudgeMetric
         metric = BinaryLLMJudgeMetric(max_concurrency=judge_concurrency, model=judge_model)

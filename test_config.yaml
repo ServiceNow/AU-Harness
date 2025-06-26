@@ -1,7 +1,7 @@
 
 dataset_metric:
-  - "(audiobench_wavcaps_qa_test, llm_judge_binary)"
-  - "(audiobench_alpaca_audio_test, llm_judge_detailed)"
+  - "(audiobench_wavcaps_qa_test, bleu)"
+  - "(audiobench_alpaca_audio_test, meteor)"
 batch_size: 4
 num_samples: 2
 judge_concurrency: 4
