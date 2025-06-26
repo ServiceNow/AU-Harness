@@ -154,8 +154,15 @@ class WERMetrics(Metrics):
                     else {}
                 )
                 measures = process_words(references_clean[-1], candidates_clean[-1], **kwargs)
-                incorrect_scores.append(measures["substitutions"] + measures["deletions"] + measures["insertions"])
-                total_scores.append(measures["substitutions"] + measures["deletions"] + measures["hits"])
+
+                # Newer jiwer returns a dataclass-like object with attributes
+                substitutions = measures.substitutions
+                deletions = measures.deletions
+                insertions = measures.insertions
+                hits = measures.hits
+
+                incorrect_scores.append(substitutions + deletions + insertions)
+                total_scores.append(substitutions + deletions + hits)
             scores.append(incorrect_scores[-1] / total_scores[-1])
 
         results = {

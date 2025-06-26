@@ -3,6 +3,7 @@ from pathlib import Path
 import asyncio
 import importlib
 from datasets import load_dataset
+from postprocessors.audio_postprocessor import AudiobenchPostprocessor
 from preprocessors.audio_preprocessor import AudioBenchPreprocessor
 import yaml
 # Central logging setup
@@ -59,14 +60,14 @@ class Engine:
 
         logger.info(f"[Engine.run] Predictions complete. Calculating scores...")
         scores = {}
+        model_targets = AudiobenchPostprocessor().extract_model_targets(dataset = self.dataset)
+        logger.info(f"[Engine.run] Model targets: {model_targets}")
         for model_name, outs in predictions.items():
             logger.info(f"[Engine.run] Scoring model: {model_name}")
             logger.info(f"[Engine.run] Outs type: {type(outs)}")
             logger.info(f"[Engine.run] Outs: {outs}")
-            logger.info(f"[Engine.run] Dataset type: {type(self.dataset)}")
-            logger.info(f"[Engine.run] Dataset: {self.dataset}")
-            scores[model_name] = self.metric(outs, self.dataset)
-        logger.info(f"[Engine.run] Evaluation complete. Returning scores.")
+            scores[model_name] = self.metric(outs, model_targets)
+        logger.info(f"[Engine.run] Evaluation complete. Returning scoresz.")
         return {self.metric.name: scores}
 
 
