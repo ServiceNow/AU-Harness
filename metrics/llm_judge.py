@@ -68,6 +68,8 @@ class _BaseLLMJudge(Metrics):
 # ---------------------------------------------------------------------------
 
 class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
+    def __call__(self, candidates, references):
+        return self.compute_record_level_scores(candidates, references)
     name: str = "llm_judge_binary"
     _prompt_key: str = "binary_judge_prompt"
 
@@ -83,6 +85,8 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
 # ---------------------------------------------------------------------------
 
 class DetailedLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
+    def __call__(self, candidates, references):
+        return self.compute_record_level_scores(candidates, references)
     name: str = "llm_judge_detailed"
     _prompt_key: str = "detailed_judge_prompt"
 

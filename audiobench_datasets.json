@@ -3,102 +3,119 @@
     "hf_repo": "AudioLLMs/alpaca_audio_test",
     "chain": "chains/audio_intelligence/audiobench_chain.yaml",
     "preprocessor": "custom.preprocessor.audiobench_preprocessor.AudioBenchPreprocessor",
-    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor"
+    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor",
+    "language": "english"
   },
   "audiobench_audiocaps_qa_test": {
     "hf_repo": "AudioLLMs/audiocaps_qa_test",
     "chain": "chains/audio_intelligence/audiobench_chain.yaml",
     "preprocessor": "custom.preprocessor.audiobench_preprocessor.AudioBenchPreprocessor",
-    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor"
+    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor",
+    "language": "english"
   },
   "audiobench_audiocaps_test": {
     "hf_repo": "AudioLLMs/audiocaps_test",
     "chain": "chains/audio_intelligence/audiobench_chain.yaml",
     "preprocessor": "custom.preprocessor.audiobench_preprocessor.AudioBenchPreprocessor",
-    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor"
+    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor",
+    "language": "english"
   },
   "audiobench_clotho_aqa_test": {
     "hf_repo": "AudioLLMs/clotho_aqa_test",
     "chain": "chains/audio_intelligence/audiobench_chain.yaml",
     "preprocessor": "custom.preprocessor.audiobench_preprocessor.AudioBenchPreprocessor",
-    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor"
+    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor",
+    "language": "english"
   },
   "audiobench_cn_college_listen_mcq_test": {
     "hf_repo": "AudioLLMs/cn_college_listen_mcq_test",
     "chain": "chains/audio_intelligence/audiobench_chain.yaml",
     "preprocessor": "custom.preprocessor.audiobench_preprocessor.AudioBenchPreprocessor",
-    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor"
+    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor",
+    "language": "english"
   },
   "audiobench_dream_tts_mcq_test": {
     "hf_repo": "AudioLLMs/dream_tts_mcq_test",
     "chain": "chains/audio_intelligence/audiobench_chain.yaml",
     "preprocessor": "custom.preprocessor.audiobench_preprocessor.AudioBenchPreprocessor",
-    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor"
+    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor",
+    "language": "english"
   },
   "audiobench_iemocap_emotion_recognition": {
     "hf_repo": "AudioLLMs/iemocap_emotion_recognition",
     "chain": "chains/audio_intelligence/audiobench_chain.yaml",
     "preprocessor": "custom.preprocessor.audiobench_preprocessor.AudioBenchPreprocessor",
-    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor"
+    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor",
+    "language": "english"
   },
   "audiobench_iemocap_gender_recognition": {
     "hf_repo": "AudioLLMs/iemocap_gender_recognition",
     "chain": "chains/audio_intelligence/audiobench_chain.yaml",
     "preprocessor": "custom.preprocessor.audiobench_preprocessor.AudioBenchPreprocessor",
-    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor"
+    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor",
+    "language": "english"
   },
   "audiobench_meld_emotion_test": {
     "hf_repo": "AudioLLMs/meld_emotion_test",
     "chain": "chains/audio_intelligence/audiobench_chain.yaml",
     "preprocessor": "custom.preprocessor.audiobench_preprocessor.AudioBenchPreprocessor",
-    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor"
+    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor",
+    "language": "english"
   },
   "audiobench_meld_sentiment_test": {
     "hf_repo": "AudioLLMs/meld_sentiment_test",
     "chain": "chains/audio_intelligence/audiobench_chain.yaml",
     "preprocessor": "custom.preprocessor.audiobench_preprocessor.AudioBenchPreprocessor",
-    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor"
+    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor",
+    "language": "english"
   },
   "audiobench_openhermes_instruction_test": {
     "hf_repo": "AudioLLMs/openhermes_instruction_test",
     "chain": "chains/audio_intelligence/audiobench_chain.yaml",
     "preprocessor": "custom.preprocessor.audiobench_preprocessor.AudioBenchPreprocessor",
-    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor"
+    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor",
+    "language": "english"
   },
   "audiobench_public_sg_speech_qa_test": {
     "hf_repo": "AudioLLMs/public_sg_speech_qa_test",
     "chain": "chains/audio_intelligence/audiobench_chain.yaml",
     "preprocessor": "custom.preprocessor.audiobench_preprocessor.AudioBenchPreprocessor",
-    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor"
+    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor",
+    "language": "english"
   },
   "audiobench_slue_p2_sqa5_test": {
     "hf_repo": "AudioLLMs/slue_p2_sqa5_test",
     "chain": "chains/audio_intelligence/audiobench_chain.yaml",
     "preprocessor": "custom.preprocessor.audiobench_preprocessor.AudioBenchPreprocessor",
-    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor"
+    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor",
+    "language": "english"
   },
   "audiobench_voxceleb_accent_test": {
     "hf_repo": "AudioLLMs/voxceleb_accent_test",
     "chain": "chains/audio_intelligence/audiobench_chain.yaml",
     "preprocessor": "custom.preprocessor.audiobench_preprocessor.AudioBenchPreprocessor",
-    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor"
+    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor",
+    "language": "english"
   },
   "audiobench_voxceleb_gender_test": {
     "hf_repo": "AudioLLMs/voxceleb_gender_test",
     "chain": "chains/audio_intelligence/audiobench_chain.yaml",
     "preprocessor": "custom.preprocessor.audiobench_preprocessor.AudioBenchPreprocessor",
-    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor"
+    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor",
+    "language": "english"
   },
   "audiobench_wavcaps_qa_test": {
     "hf_repo": "AudioLLMs/wavcaps_qa_test",
     "chain": "chains/audio_intelligence/audiobench_chain.yaml",
     "preprocessor": "custom.preprocessor.audiobench_preprocessor.AudioBenchPreprocessor",
-    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor"
+    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor",
+    "language": "english"
   },
   "audiobench_wavcaps_test": {
     "hf_repo": "AudioLLMs/wavcaps_test",
     "chain": "chains/audio_intelligence/audiobench_chain.yaml",
     "preprocessor": "custom.preprocessor.audiobench_preprocessor.AudioBenchPreprocessor",
-    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor"
+    "postprocessor": "custom.postprocessor.audiobench_postprocessor.AudioBenchPostprocessor",
+    "language": "english"
   }
 }

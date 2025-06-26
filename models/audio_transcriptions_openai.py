@@ -25,8 +25,8 @@ class AudioTranscriptionsOpenAI(Model):
     """Model Class for transcription models that use the transcriptions OpenAI API."""
 
     def name(self):
-        """Return the name of the model."""
-        return constants.MODEL_TRANSCRIPTIONS_OPENAI
+        """Return the configured name for this model instance."""
+        return getattr(self, "_name")
 
     def __init__(self, model_info):
         # Force inference type for audio model
@@ -67,7 +67,6 @@ class AudioTranscriptionsOpenAI(Model):
         #print(message.keys())
         audio_array = message["array"]
         sampling_rate = message["sampling_rate"]
-        language = message.get("language")
         audio_file_path = message.get("path")
 
         fp = None
@@ -77,7 +76,6 @@ class AudioTranscriptionsOpenAI(Model):
             audio_file_path = fp.name
 
         # Build message body for request handler in correct format for HTTP file upload
-        params = {"model": self.model, "language": language}
         files = None
         if audio_file_path:
             f = open(audio_file_path, "rb")
@@ -85,12 +83,10 @@ class AudioTranscriptionsOpenAI(Model):
         else:
             raise ValueError("audio_file_path must be provided for OpenAI transcription")
 
-        current_index = self.weighted_params.get_random_index()
-        endpoint = self.weighted_params.listing[current_index]
         try:
             model_response: ModelResponse = await self.req_resp_hndlr.request_server(
-                url=endpoint["url"],
-                auth=endpoint["auth"],
+                url=self.model_url,
+                auth=self.api_key,
                 msg_body=files,
                 formatted_messages=message,
             )
@@ -99,10 +95,4 @@ class AudioTranscriptionsOpenAI(Model):
                 f.close()
         return model_response
 
-    def test(self) -> bool:
-        """Call the model to test if it is available."""
-        # Create dummy audio file
-        resp_text, resp_code = self.generate_text(
-            [{"array": np.random.rand(1000), "sampling_rate": 16000}], {}, {}, call_id="Test"
-        )
-        return resp_code == 200
+

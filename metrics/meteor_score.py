@@ -7,6 +7,8 @@ from utils import util
 
 
 class MeteorScore(Metrics):
+    def __call__(self, candidates, references):
+        return self.compute_record_level_scores(candidates, references)
     """MeteorScore using nltk tokenizer."""
 
     def __init__(self):

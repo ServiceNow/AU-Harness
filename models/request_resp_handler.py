@@ -4,13 +4,7 @@ from openai import AsyncOpenAI, OpenAI
 from models.model_response import ModelResponse
 from utils import constants
 import logging
-logger = logging.getLogger(__name__)
-if not logger.handlers:
-    _fh = logging.FileHandler("audiobench.log")
-    _fh.setLevel(logging.INFO)
-    _fh.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
-    logger.addHandler(_fh)
-logger.propagate = True
+logger = logging.getLogger(__name__)  # handlers configured in logger_setup.py
 
 class RequestRespHandler:
     """Class responsible for creating request and processing response for each type of inference server."""
@@ -28,10 +22,6 @@ class RequestRespHandler:
             constants.INFERENCE_SERVER_VLLM_COMPLETIONS,
         ] and self.auth.startswith("Bearer"):
             self.auth = self.auth.replace("Bearer ", "")
-
-    def get_auth(self) -> str:
-        """Get updated authorization token with or without bearer key based on inference server type."""
-        return self.auth
 
     def set_client(self, verify_ssl: bool, timeout: int):
         """Create HTTP/vLLM client for audio-to-text APIs."""

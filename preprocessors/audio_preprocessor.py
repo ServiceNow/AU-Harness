@@ -6,12 +6,17 @@ from utils.multimodal import encode_audio_array_base64  # noqa: E402
 class AudioBenchPreprocessor():
     """Preprocessor for Audio benchmarks from AudioBench on HF."""
 
-    def process(self, dataset: list[dict], properties: dict | None) -> list[dict]:
-        """Process the dataset and flatten audio/context structure."""
+    def process(self, dataset: dict, properties: dict | None) -> list[dict]:
+        """Process the dataset and flatten audio/context structure (expects dict-of-lists)."""
+        logger.info("In [AudioBenchPreprocessor] Processing dataset...")
         total_duration = 0
         new_dataset = []
-        for data in dataset:
-            record = dict(data)  # shallow copy
+        keys = list(dataset.keys())
+        num_samples = len(dataset[keys[0]]) if keys else 0
+        logger.info(f"Dataset keys: {keys}, num_samples: {num_samples}")
+        for i in range(num_samples):
+            record = {k: dataset[k][i] for k in keys}
+            logger.debug(f"Processing sample {i}: {record}")
             if "audio" in record:
                 record["array"] = record["audio"]["array"]
                 record["sampling_rate"] = record["audio"]["sampling_rate"]

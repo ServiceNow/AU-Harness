@@ -3,16 +3,30 @@ dataset_metric:
   - "(audiobench_wavcaps_qa_test, word_error_rate)"
   - "(audiobench_alpaca_audio_test, word_error_rate)"
 batch_size: 4
+num_samples: 2
 
 models:
-  - name: "audio_transcriptions_openai"
+  - name: "audio_transcriptions_openai_1"
     info:
       inference_type: "inference_server"
-      url: "${AUDIOBENCH_MODEL_URL}"
+      url: "https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions"
       delay: 100
       retry_attempts: 8
       timeout: 30
       sync_client: false
       postprocessor: []
       model: "whisper-3"
-      auth_token: "${AUDIOBENCH_AUTH_TOKEN}"
+      auth_token: "Bearer 8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q"
+      target: "audio_transcriptions_openai"
+  - name: "audio_transcriptions_openai_2"
+    info:
+      inference_type: "inference_server"
+      url: "https://844b3c14-08c9-4de3-8c0b-79c84ef528ca-8000.job.console.elementai.com/v1/audio/transcriptions"
+      delay: 100
+      retry_attempts: 8
+      timeout: 30
+      sync_client: false
+      postprocessor: []
+      model: "whisper-3"
+      auth_token: "Bearer 8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q"
+      target: "audio_transcriptions_openai"
