@@ -4,6 +4,8 @@ dataset_metric:
   - "(audiobench_alpaca_audio_test, word_error_rate)"
 batch_size: 4
 num_samples: 100
+judge_concurrency: 8
+judge_model: "gpt-4o-mini"
 
 models:
   - name: "audio_transcriptions_openai"

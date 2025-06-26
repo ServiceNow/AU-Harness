@@ -128,14 +128,20 @@ def _load_models(cfg_list: list[dict]) -> list[Model]:
     logger.info(f"[_load_models] Successfully instantiated {len(models)} model(s).")
     return models
 
-def _load_metric(name: str, language: str = "en"):
-    logger.info(f"[_load_metric] Loading metric: {name}")
+def _load_metric(name: str, language: str = "en", judge_concurrency: int | None = None, judge_model: str | None = None):
+    logger.info(f"[_load_metric] Loading metric: {name} (judge_concurrency={judge_concurrency}, judge_model={judge_model})")
     if name == "word_error_rate":
         from metrics.word_error_rate_metrics import WERMetrics
         metric = WERMetrics(language=language)
     elif name == "bleu":
         from metrics.bleu_metrics import BLEUMetrics
         metric = BLEUMetrics()
+    elif name == "llm_judge_binary":
+        from metrics.llm_judge import BinaryLLMJudgeMetric
+        metric = BinaryLLMJudgeMetric(max_concurrency=judge_concurrency, model=judge_model)
+    elif name == "llm_judge_detailed":
+        from metrics.llm_judge import DetailedLLMJudgeMetric
+        metric = DetailedLLMJudgeMetric(max_concurrency=judge_concurrency, model=judge_model)
     elif name == "llm_judge":
         from metrics.llm_judge import LLMJudgeMetric
         metric = LLMJudgeMetric()
@@ -158,6 +164,8 @@ def main(cfg_path='test_config.yaml'):
 
     batch_size = cfg.get("batch_size", 4)
     num_samples = cfg.get("num_samples", None)
+    judge_concurrency = cfg.get("judge_concurrency", None)
+    judge_model = cfg.get("judge_model", None)
 
     # --- Build (dataset, metric) pairs ---
     raw_pairs_seq = cfg["dataset_metric"]
@@ -183,7 +191,7 @@ def main(cfg_path='test_config.yaml'):
     for dname, metric_name in dataset_metric_pairs:
         logger.info(f"[main] Loading dataset '{dname}' with metric '{metric_name}' ...")
         dataset, language = _load_dataset(dname, num_samples=num_samples)
-        metric = _load_metric(metric_name, language=language)
+        metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
 
         logger.info("[main] Initializing Engine and running evaluation...")
         result = Engine(models, dataset, metric, batch_size=batch_size).run()
