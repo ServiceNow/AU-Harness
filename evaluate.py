@@ -47,7 +47,7 @@ class Engine:
         logger.info(f"[Engine.run] Predictions complete. Calculating scores...")
         scores = {}
         model_targets = self.postprocessor.extract_model_targets(dataset=self.dataset)
-        for model_name, outs in tqdm(predictions.items(), desc="Scoring models"):
+        for model_name, outs in predictions.items():
             logger.info(f"[Engine.run] Scoring model: {model_name}")
             scores[model_name] = self.metric(outs, model_targets)
         logger.info(f"[Engine.run] Evaluation complete. Returning scoresz.")
@@ -73,11 +73,11 @@ def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="Audiob
     # If 'subset' or 'data_dir' is specified, pass as second arg or kwarg
     if subset:
         logger.info(f"[_load_dataset] Loading subset: {subset}")
-        dset = load_dataset(repo, subset, split="test" if "test" in load_dataset(repo, subset).keys() else None)
+        dset = load_dataset(repo, subset, split="test" if "test" in load_dataset(repo, subset).keys() else "train") # edge case for MNSC datasets, some are test but split is labeled train
         if dset is None:
             raise ValueError(f"Test subset '{subset}' not found in dataset '{repo}'.")
     else:
-        dset = load_dataset(repo, split="test" if "test" in load_dataset(repo).keys() else None)
+        dset = load_dataset(repo, split="test" if "test" in load_dataset(repo).keys() else "train")
     if num_samples is not None:
         logger.info(f"[_load_dataset] Truncating dataset to first {num_samples} samples.")
         dset = dset[:num_samples]

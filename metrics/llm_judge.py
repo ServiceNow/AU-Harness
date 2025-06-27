@@ -4,6 +4,7 @@ import asyncio, json, yaml, os
 from pathlib import Path
 
 from openai import AsyncAzureOpenAI
+from tqdm import tqdm  # progress bar
 
 from metrics.metrics import Metrics
 
@@ -77,7 +78,14 @@ class _BaseLLMJudge(Metrics):
             async with sem:
                 return await self._score_once("", user_prompt)  # no base system prompt
 
-        return await asyncio.gather(*[_run(c, r) for c, r in zip(candidates, references)])
+        # Create tasks for all candidate-reference pairs
+        tasks = [_run(c, r) for c, r in zip(candidates, references)]
+        results = []
+        # Use tqdm to monitor progress across asynchronous completions
+        for coro in tqdm(asyncio.as_completed(tasks), total=len(tasks), desc=f"LLM Judge ({self._prompt_key})"):
+            result = await coro
+            results.append(result)
+        return results
 
 # ---------------------------------------------------------------------------
 # Binary (yes/no) judge
@@ -98,7 +106,7 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
         return {self.name: scores}
 
 # ---------------------------------------------------------------------------
-# Detailed judge – returns a 0-10 score and rationale
+# Detailed judge – returns a 0-5 score and rationale
 # ---------------------------------------------------------------------------
 
 class DetailedLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
@@ -106,7 +114,7 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
     _prompt_key: str = "detailed_judge_prompt"
 
     def __call__(self, candidates, references):
-        # Detailed judge returns 0-10 score list with explanations
+        # Detailed judge returns 0-5 score list with explanations
         return self.compute_record_level_scores(candidates, references)
     def compute_record_level_scores(self, candidates: list, references: list):
         raw_scores = asyncio.run(self._judge_all(candidates, references))

@@ -31,7 +31,7 @@ class AudiobenchPreprocessor():
 
             encoded_url = encode_audio_array_base64(record["array"], record["sampling_rate"])
             instruction = (
-                "Question:\n" + record["instruction"] + "\n Choices:\n" + choices
+                "Question:\n" + record["instruction"] + "\n Choices:\n" + str(choices)
                 if (choices := record.get("choices"))
                 else record["instruction"]
             )

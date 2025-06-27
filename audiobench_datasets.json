@@ -102,22 +102,22 @@
     "postprocessor": "AudiobenchPostprocessor"
   },
   "gigaspeech2_id_test": {
-    "hf_repo": "AudioLLMs/gigaspeech2_test",
-    "subset": "id_test",
+    "hf_repo": "AudioLLMs/gigaspeech2-test",
+    "subset": "id-test",
     "language": "indonesian",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "gigaspeech2_th_test": {
-    "hf_repo": "AudioLLMs/gigaspeech2_test",
-    "subset": "th_test",
+    "hf_repo": "AudioLLMs/gigaspeech2-test",
+    "subset": "th-test",
     "language": "thai",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "gigaspeech2_vi_test": {
-    "hf_repo": "AudioLLMs/gigaspeech2_test",
-    "subset": "vi_test",
+    "hf_repo": "AudioLLMs/gigaspeech2-test",
+    "subset": "vi-test",
     "language": "vietnamese",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
@@ -159,132 +159,125 @@
     "postprocessor": "AudiobenchPostprocessor"
   },
   "mmau_mini": {
-    "hf_repo": "AudioLLMs/MMAU_mini",
+    "hf_repo": "AudioLLMs/MMAU-mini",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_asr_part1_test": {
-    "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "ASR-PART1-Test",
     "language": "",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_asr_part2_test": {
-    "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "ASR-PART2-Test",
     "language": "",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_asr_part3_test": {
-    "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "ASR-PART3-Test",
     "language": "",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_asr_part4_test": {
-    "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "ASR-PART4-Test",
     "language": "",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_asr_part5_test": {
-    "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "ASR-PART5-Test",
     "language": "",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_asr_part6_test": {
-    "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "ASR-PART6-Test",
     "language": "",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_pqa_ar_dialogue_test": {
-    "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "PQA-AR-Dialogue-Test",
     "language": "",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_pqa_ar_sentence_test": {
-    "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "PQA-AR-Sentence-Test",
     "language": "",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_pqa_gr_dialogue_test": {
-    "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "PQA-GR-Dialogue-Test",
     "language": "",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_pqa_gr_sentence_test": {
-    "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "PQA-GR-Sentence-Test",
     "language": "",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_sds_part3_test": {
-    "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SDS-PART3-Test",
     "language": "",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_sds_part4_test": {
-    "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SDS-PART4-Test",
     "language": "",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_sds_part5_test": {
-    "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SDS-PART5-Test",
     "language": "",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
-  "mnsc_sds_part6_test": {
-    "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
-    "subset": "SDS-PART6-Test",
-    "language": "",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
-  },
   "mnsc_sqa_part3_test": {
-    "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SQA-PART3-Test",
     "language": "",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_sqa_part4_test": {
-    "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SQA-PART4-Test",
     "language": "",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_sqa_part5_test": {
-    "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SQA-PART5-Test",
     "language": "",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_sqa_part6_test": {
-    "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SQA-PART6-Test",
     "language": "",
     "preprocessor": "AudiobenchPreprocessor",
@@ -316,7 +309,9 @@
   },
   "seame_dev_sge": {
     "hf_repo": "AudioLLMs/seame_dev_sge",
-    "language": "chinese/english"
+    "language": "chinese/english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "slue_p2_sqa5_test": {
     "hf_repo": "AudioLLMs/slue_p2_sqa5_test",
