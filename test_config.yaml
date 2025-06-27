@@ -2,7 +2,7 @@ dataset_metric:
   - "(earnings21_test, word_error_rate)"
 judge_concurrency: 4
 judge_model: "gpt-4o-mini"
-num_samples: 5
+num_samples: 1
 models:
   - info:
       name: "audio_transcriptions_openai_1"
@@ -14,4 +14,5 @@ models:
       postprocessor: []
       model: "whisper-3"
       auth_token: "Bearer 8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q"
-      batch_size: 5
+      batch_size: 50
+      chunk_size: 30

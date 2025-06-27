@@ -51,6 +51,8 @@ class Model(ABC):
         self.timeout = model_info.get("timeout", 30)
         # max_wait for 8 attempts = 2^(8-1) = 128 secs
         self.retry_attempts = model_info.get("retry_attempts", 8)
+        # chunk_size in seconds (default 30)
+        self.chunk_size = model_info.get("chunk_size", 30)
         # some flow does not work with async client like internal private network
         self.postprocessor_path = model_info.get("postprocessor", [])
         #model_name = model_info.get("model", model_info.get("alias", self.name()))
@@ -207,47 +209,73 @@ class Model(ABC):
         audio_array = message["array"]
         sampling_rate = message["sampling_rate"]
 
-        # --- Enforce maximum duration of 30 seconds for any audio clip ---
-        MAX_AUDIO_DURATION_SEC = 30
+        # Use model's chunk_size for max duration
+        MAX_AUDIO_DURATION_SEC = self.chunk_size
         max_samples = int(sampling_rate * MAX_AUDIO_DURATION_SEC)
-        if len(audio_array) > max_samples:
-            original_duration = len(audio_array) / sampling_rate
-            logger.warning(
-                f"[{self.name()}] Input audio duration {original_duration:.2f}s exceeds {MAX_AUDIO_DURATION_SEC}s. Truncating to {MAX_AUDIO_DURATION_SEC}s."
-            )
-            audio_array = audio_array[:max_samples]
-            # ensure we don't mistakenly re-use a long on-disk file
-            audio_file_path = None
+        total_samples = len(audio_array)
 
-        audio_file_path = message.get("path")
+        # If audio is within limit, proceed as before
+        if total_samples <= max_samples:
+            audio_file_path = message.get("path")
+            fp = None
+            if not self.is_path_supported(audio_file_path):
+                fp = tempfile.NamedTemporaryFile(suffix=".wav")
+                sf.write(fp, audio_array, sampling_rate)
+                audio_file_path = fp.name
 
-        fp = None
-        if not self.is_path_supported(audio_file_path):
-            fp = tempfile.NamedTemporaryFile(suffix=".wav")
-            sf.write(fp, audio_array, sampling_rate)
-            audio_file_path = fp.name
+            files = None
+            if audio_file_path:
+                f = open(audio_file_path, "rb")
+                files = {"file": (os.path.basename(audio_file_path), f, "audio/wav")}
+            else:
+                raise ValueError("audio_file_path must be provided for OpenAI transcription")
+            try:
+                model_response: ModelResponse = await self.req_resp_hndlr.request_server(
+                    url=self.model_url,
+                    auth=self.api_key,
+                    msg_body=files,
+                    formatted_messages=message,
+                )
+            finally:
+                if f:
+                    f.close()
+            return model_response
 
-        # Build message body for request handler in correct format for HTTP file upload
-        files = None
-        if audio_file_path:
-            f = open(audio_file_path, "rb")
-            #logger.info(f"[{self.name()}] Input audio file path: {audio_file_path}")
-
-            files = {"file": (os.path.basename(audio_file_path), f, "audio/wav")}
+        # If audio is over 30 seconds, chunk and process each
         else:
-            raise ValueError("audio_file_path must be provided for OpenAI transcription")
+            num_chunks = (total_samples + max_samples - 1) // max_samples
+            concatenated_text = ""
+            responses = []
+            for i in range(num_chunks):
+                start = i * max_samples
+                end = min((i + 1) * max_samples, total_samples)
+                chunk_array = audio_array[start:end]
+                chunk_message = dict(message)  # shallow copy
+                chunk_message["array"] = chunk_array
+                chunk_message["path"] = None  # force file creation for each chunk
+                fp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
+                sf.write(fp, chunk_array, sampling_rate)
+                audio_file_path = fp.name
+                fp.close()
+                f = open(audio_file_path, "rb")
+                files = {"file": (os.path.basename(audio_file_path), f, "audio/wav")}
+                try:
+                    model_response: ModelResponse = await self.req_resp_hndlr.request_server(
+                        url=self.model_url,
+                        auth=self.api_key,
+                        msg_body=files,
+                        formatted_messages=chunk_message,
+                    )
+                finally:
+                    f.close()
+                    os.remove(audio_file_path)
+                concatenated_text += model_response.llm_response or ""
+                responses.append(model_response)
+            # Return a ModelResponse with concatenated text and info from last chunk
+            final_response = responses[-1]
+            final_response.llm_response = concatenated_text
+            return final_response
 
-        try:
-            model_response: ModelResponse = await self.req_resp_hndlr.request_server(
-                url=self.model_url,
-                auth=self.api_key,
-                msg_body=files,
-                formatted_messages=message,
-            )
-        finally:
-            if f:
-                f.close()
-        return model_response
     @staticmethod
     def is_path_supported(audio_file_path) -> bool:
         """Check if the audio file path can directly be used with the OpenAI API."""

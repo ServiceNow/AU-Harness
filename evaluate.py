@@ -5,6 +5,7 @@ from datasets import load_dataset
 from postprocessors.audio_postprocessor import AudiobenchPostprocessor
 from preprocessors.audio_preprocessor import AudioBenchPreprocessor
 import yaml
+from tqdm import tqdm
 # Central logging setup
 import logger_setup
 import logging
@@ -27,10 +28,11 @@ class Engine:
             async with sem:
                 resp = await model._generate_text_with_retry(sample, {}, {})
                 return resp.llm_response if resp else ""
-        tasks = [
-            _call(ex) for ex in self.dataset
-        ]
-        results = await asyncio.gather(*tasks)
+        tasks = [_call(ex) for ex in self.dataset]
+        results = []
+        for coro in tqdm(asyncio.as_completed(tasks), total=len(tasks), desc=f"Inference ({model.name()})"):
+            result = await coro
+            results.append(result)
         logger.info(f"[Engine._infer_single_model] Model {model.name()} finished inference.")
         return results
     async def _infer_all(self):
@@ -43,20 +45,15 @@ class Engine:
     def run(self):
         logger.info("[Engine.run] Starting evaluation run.")
         predictions = asyncio.run(self._infer_all())
-        #logger.info(f"prediction type: {type(predictions)}")
-        #logger.info(f"predictions: {predictions}")
-        #logger.info(f"[Engine.run] prediction length: {len(predictions)}")
         logger.info(f"[Engine.run] Predictions complete. Calculating scores...")
         scores = {}
         model_targets = AudiobenchPostprocessor().extract_model_targets(dataset = self.dataset)
-        #logger.info(f"[Engine.run] Model targets: {model_targets}")
-        for model_name, outs in predictions.items():
+        for model_name, outs in tqdm(predictions.items(), desc="Scoring models"):
             logger.info(f"[Engine.run] Scoring model: {model_name}")
-            #logger.info(f"[Engine.run] Outs type: {type(outs)}")
-            #logger.info(f"[Engine.run] Outs: {outs}")
             scores[model_name] = self.metric(outs, model_targets)
         logger.info(f"[Engine.run] Evaluation complete. Returning scoresz.")
         return {self.metric.name: scores}
+
 
 
 
@@ -89,6 +86,7 @@ def _load_models(cfg_list: list[dict]) -> list[Model]:
     logger.info(f"[_load_models] Instantiating models from config: {cfg_list}")
     models = []
     for cfg in cfg_list:
+        # chunk_size is now supported as an info attribute for each model (default 30s if not specified)
         model_name = cfg["info"].get("name")
         logger.info(f"[_load_models] Instantiating model for {model_name}")
         model_obj = Model(cfg["info"])
