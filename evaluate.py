@@ -67,20 +67,21 @@ def _load_dataset(name: str, num_samples=None):
     if name not in db:
         raise ValueError(f"Dataset '{name}' not found in {cfg_path}.")
     repo = db[name]["hf_repo"]
+    subset = db[name].get("subset")
     logger.info(f"[_load_dataset] Loading HuggingFace dataset repo: {repo}")
-    dset = load_dataset(repo, split="test" if "test" in load_dataset(repo).keys() else None)
+    # If 'subset' or 'data_dir' is specified, pass as second arg or kwarg
+    if subset:
+        logger.info(f"[_load_dataset] Loading subset: {subset}")
+        dset = load_dataset(repo, subset, split="test" if "test" in load_dataset(repo, subset).keys() else None)
+        if dset is None:
+            raise ValueError(f"Test subset '{subset}' not found in dataset '{repo}'.")
+    else:
+        dset = load_dataset(repo, split="test" if "test" in load_dataset(repo).keys() else None)
     if num_samples is not None:
         logger.info(f"[_load_dataset] Truncating dataset to first {num_samples} samples.")
         dset = dset[:num_samples]
     logger.info(f"[_load_dataset] Preprocessing dataset...")
-    #logger.info(f"[_load_dataset] Dataset keys: {dset.keys()}")
-    #logger.info(f"[_load_dataset] Dataset length: {len(dset)}")
-    #logger.info(f"[_load_dataset] Dataset keys: {dset.keys()}")
-    #for key in dset.keys():
-    #    logger.info(f"Key: {key}, Value: {dset[key]}")
-    #logger.info(f"dataset type: {type(dset)}")
     processed = AudioBenchPreprocessor().process(dset, {})
-    
     logger.info(f"[_load_dataset] Dataset loaded and processed. Size: {len(processed)}")
     return processed, db[name].get("language", "en")
 

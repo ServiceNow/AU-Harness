@@ -67,7 +67,6 @@ class RequestRespHandler:
                 constants.INFERENCE_SERVER_OPENAI,
             ]:
                 logger.info("vLLM xpath")
-                # NOTE: `self.client` is an (A)syncOpenAI instance created in `set_client`.
                 prediction = await self.client.chat.completions.create(
                     model=model_name, messages=messages, **params
                 )

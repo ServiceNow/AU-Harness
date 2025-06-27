@@ -3,6 +3,7 @@ import tempfile
 import re
 import soundfile as sf
 import os
+import io
 from abc import ABC
 
 from tenacity import (
@@ -205,6 +206,19 @@ class Model(ABC):
         #print(message.keys())
         audio_array = message["array"]
         sampling_rate = message["sampling_rate"]
+
+        # --- Enforce maximum duration of 30 seconds for any audio clip ---
+        MAX_AUDIO_DURATION_SEC = 30
+        max_samples = int(sampling_rate * MAX_AUDIO_DURATION_SEC)
+        if len(audio_array) > max_samples:
+            original_duration = len(audio_array) / sampling_rate
+            logger.warning(
+                f"[{self.name()}] Input audio duration {original_duration:.2f}s exceeds {MAX_AUDIO_DURATION_SEC}s. Truncating to {MAX_AUDIO_DURATION_SEC}s."
+            )
+            audio_array = audio_array[:max_samples]
+            # ensure we don't mistakenly re-use a long on-disk file
+            audio_file_path = None
+
         audio_file_path = message.get("path")
 
         fp = None
@@ -217,6 +231,8 @@ class Model(ABC):
         files = None
         if audio_file_path:
             f = open(audio_file_path, "rb")
+            #logger.info(f"[{self.name()}] Input audio file path: {audio_file_path}")
+
             files = {"file": (os.path.basename(audio_file_path), f, "audio/wav")}
         else:
             raise ValueError("audio_file_path must be provided for OpenAI transcription")

@@ -61,7 +61,7 @@ def normalize_text(text: str, language: str) -> str:
         language: language code
     """
     normalizer = NORMALIZERS.get(language, DEFAULT_NORMALIZER)
-    logger.info(f"[normalize_text] Normalizing text: {text}")
+    #logger.info(f"[normalize_text] Normalizing text: {text}")
     text = convert_unicode_to_characters(text)
     text = convert_digits_to_words(text, language)
     return BASIC_TRANSFORMATIONS([normalizer(text)])[0]
@@ -165,6 +165,7 @@ class WERMetrics(Metrics):
 
                 incorrect_scores.append(substitutions + deletions + insertions)
                 total_scores.append(substitutions + deletions + hits)
+            logger.info(f"For sample {i}: reference={reference} candidate={candidate}")
             scores.append(incorrect_scores[-1] / total_scores[-1])
 
         results = {
