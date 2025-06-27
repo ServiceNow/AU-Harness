@@ -10,9 +10,8 @@ import re
 from fractions import Fraction
 from collections.abc import Iterator
 from typing import Match
-
 from .basic import remove_symbols_and_diacritics
-
+from more_itertools import windowed
 
 class EnglishNumberNormalizer:
     """Convert any spelled-out numbers into arabic numbers, while handling:
