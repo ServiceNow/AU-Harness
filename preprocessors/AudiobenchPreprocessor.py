@@ -3,12 +3,12 @@ logger = logging.getLogger(__name__)
 from utils.multimodal import encode_audio_array_base64  # noqa: E402
 
 
-class AudioBenchPreprocessor():
+class AudiobenchPreprocessor():
     """Preprocessor for Audio benchmarks from AudioBench on HF."""
 
     def process(self, dataset: dict, properties: dict | None) -> list[dict]:
         """Process the dataset and flatten audio/context structure (expects dict-of-lists)."""
-        logger.info("In [AudioBenchPreprocessor] Processing dataset...")
+        logger.info("In [AudiobenchPreprocessor] Processing dataset...")
         total_duration = 0
         new_dataset = []
         keys = list(dataset.keys())

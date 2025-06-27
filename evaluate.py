@@ -2,8 +2,6 @@ import json
 from pathlib import Path
 import asyncio
 from datasets import load_dataset
-from postprocessors.audio_postprocessor import AudiobenchPostprocessor
-from preprocessors.audio_preprocessor import AudioBenchPreprocessor
 import yaml
 from tqdm import tqdm
 # Central logging setup
@@ -15,11 +13,12 @@ from metrics.metrics import Metrics
 
 class Engine:
     """Evaluate one or many models over the same dataset concurrently."""
-    def __init__(self, models: list[Model], dataset: list[dict], metric: Metrics):
+    def __init__(self, models: list[Model], dataset: list[dict], metric: Metrics, postprocessor):
         logger.info(f"[Engine.__init__] Initializing Engine with {len(models)} model(s), dataset size: {len(dataset)}, metric: {metric.name}")
         self.models = models
         self.dataset = dataset
         self.metric = metric
+        self.postprocessor = postprocessor
     # ---------------- internal helpers ----------------
     async def _infer_single_model(self, model: Model) -> list[str]:
         logger.info(f"[Engine._infer_single_model] Running model: {model.name()} on dataset of size {len(self.dataset)}")
@@ -47,7 +46,7 @@ class Engine:
         predictions = asyncio.run(self._infer_all())
         logger.info(f"[Engine.run] Predictions complete. Calculating scores...")
         scores = {}
-        model_targets = AudiobenchPostprocessor().extract_model_targets(dataset = self.dataset)
+        model_targets = self.postprocessor.extract_model_targets(dataset=self.dataset)
         for model_name, outs in tqdm(predictions.items(), desc="Scoring models"):
             logger.info(f"[Engine.run] Scoring model: {model_name}")
             scores[model_name] = self.metric(outs, model_targets)
@@ -57,14 +56,19 @@ class Engine:
 
 
 
-def _load_dataset(name: str, num_samples=None):
-    logger.info(f"[_load_dataset] Loading dataset: {name}")
-    cfg_path = Path(__file__).with_name("audiobench_datasets.json")
-    db = json.loads(cfg_path.read_text())
-    if name not in db:
-        raise ValueError(f"Dataset '{name}' not found in {cfg_path}.")
-    repo = db[name]["hf_repo"]
-    subset = db[name].get("subset")
+import importlib
+
+import importlib
+
+def get_class_from_module(module_prefix, module_name):
+    try:
+        module = importlib.import_module(f"{module_prefix}.{module_name}")
+        return getattr(module, module_name)
+    except Exception as e:
+        return None
+
+
+def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor"):
     logger.info(f"[_load_dataset] Loading HuggingFace dataset repo: {repo}")
     # If 'subset' or 'data_dir' is specified, pass as second arg or kwarg
     if subset:
@@ -77,10 +81,13 @@ def _load_dataset(name: str, num_samples=None):
     if num_samples is not None:
         logger.info(f"[_load_dataset] Truncating dataset to first {num_samples} samples.")
         dset = dset[:num_samples]
-    logger.info(f"[_load_dataset] Preprocessing dataset...")
-    processed = AudioBenchPreprocessor().process(dset, {})
+    logger.info(f"[_load_dataset] Preprocessing dataset using {preprocessor_name}...")
+    PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
+    if PreprocessorClass is None:
+        PreprocessorClass = AudiobenchPreprocessor
+    processed = PreprocessorClass().process(dset, {})
     logger.info(f"[_load_dataset] Dataset loaded and processed. Size: {len(processed)}")
-    return processed, db[name].get("language", "en")
+    return processed
 
 def _load_models(cfg_list: list[dict]) -> list[Model]:
     logger.info(f"[_load_models] Instantiating models from config: {cfg_list}")
@@ -120,7 +127,7 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
     logger.info(f"[_load_metric] Metric loaded: {metric.name}")
     return metric
 
-def main(cfg_path='test_config.yaml'):
+def main(cfg_path='config.yaml'):
     logger.info("[main] Starting main function.")
     cfg_path = Path(cfg_path)
     logger.info(f"[main] Loading config file: {cfg_path}")
@@ -149,12 +156,26 @@ def main(cfg_path='test_config.yaml'):
     logger.info("[main] Loading models...")
     models = _load_models(cfg["models"])
     all_scores = {}
+    cfg_path = Path(__file__).with_name("audiobench_datasets.json")
+    db = json.loads(cfg_path.read_text())
     for dname, metric_name in dataset_metric_pairs:
         logger.info(f"[main] Loading dataset '{dname}' with metric '{metric_name}' ...")
-        dataset, language = _load_dataset(dname, num_samples=num_samples)
+        if dname not in db:
+            raise ValueError(f"Dataset '{dname}' not found in {cfg_path}.")
+        repo = db[dname]["hf_repo"]
+        subset = db[dname].get("subset", "")
+        language = db[dname].get("language", "en")
+        preprocessor_name = db[dname]["preprocessor"]
+        postprocessor_name = db[dname]["postprocessor"]
+        dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name)
         metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
+        # Dynamically import postprocessor class
+        PostprocessorClass = get_class_from_module('postprocessors', postprocessor_name)
+        if PostprocessorClass is None:
+            PostprocessorClass = AudiobenchPostprocessor
+        postprocessor = PostprocessorClass()
         logger.info("[main] Initializing Engine and running evaluation...")
-        result = Engine(models, dataset, metric).run()
+        result = Engine(models, dataset, metric, postprocessor).run()
         all_scores[dname] = result
     logger.info("[main] Evaluation scores:")
     logger.info(json.dumps(all_scores, indent=2))

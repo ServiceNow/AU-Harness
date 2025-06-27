@@ -1,220 +1,318 @@
 {
   "alpaca_audio_test": {
     "hf_repo": "AudioLLMs/alpaca_audio_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "aishell_1_test": {
     "hf_repo": "AudioLLMs/aishell_1_zh_test",
-    "language": "chinese"
+    "language": "chinese",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "audiocaps_qa_test": {
     "hf_repo": "AudioLLMs/audiocaps_qa_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "audiocaps_test": {
     "hf_repo": "AudioLLMs/audiocaps_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "clotho_aqa_test": {
     "hf_repo": "AudioLLMs/clotho_aqa_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "cn_college_listen_mcq_test": {
     "hf_repo": "AudioLLMs/cn_college_listen_mcq_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "common_voice_15_en_test": {
     "hf_repo": "AudioLLMs/common_voice_15_en_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "covost2_ta_en_test": {
     "hf_repo": "AudioLLMs/covost2_ta_en_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "covost2_zh_en_test": {
     "hf_repo": "AudioLLMs/covost2_zh_en_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "covost2_id_en_test": {
     "hf_repo": "AudioLLMs/covost2_id_en_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "covost2_en_ta_test": {
     "hf_repo": "AudioLLMs/covost2_en_ta_test",
-    "language": "tamil"
+    "language": "tamil",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "covost2_en_zh_test": {
     "hf_repo": "AudioLLMs/covost2_en_zh_test",
-    "language": "chinese"
+    "language": "chinese",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "covost2_en_id_test": {
     "hf_repo": "AudioLLMs/covost2_en_id_test",
-    "language": "indonesian"
+    "language": "indonesian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "dream_tts_mcq_test": {
     "hf_repo": "AudioLLMs/dream_tts_mcq_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "earnings21_test": {
     "hf_repo": "AudioLLMs/earnings21_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "earnings22_test": {
     "hf_repo": "AudioLLMs/earnings22_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "gigaspeech_test": {
     "hf_repo": "AudioLLMs/gigaspeech_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "gigaspeech2_id_test": {
     "hf_repo": "AudioLLMs/gigaspeech2_test",
     "subset": "id_test",
-    "language": "indonesian"
+    "language": "indonesian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "gigaspeech2_th_test": {
     "hf_repo": "AudioLLMs/gigaspeech2_test",
     "subset": "th_test",
-    "language": "thai"
+    "language": "thai",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "gigaspeech2_vi_test": {
     "hf_repo": "AudioLLMs/gigaspeech2_test",
     "subset": "vi_test",
-    "language": "vietnamese"
+    "language": "vietnamese",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "iemocap_emotion_recognition": {
     "hf_repo": "AudioLLMs/iemocap_emotion_recognition",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "iemocap_gender_recognition": {
     "hf_repo": "AudioLLMs/iemocap_gender_recognition",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "librispeech_test_clean": {
     "hf_repo": "AudioLLMs/librispeech_test_clean",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "librispeech_test_other": {
     "hf_repo": "AudioLLMs/librispeech_test_other",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "meld_emotion_test": {
     "hf_repo": "AudioLLMs/meld_emotion_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "meld_sentiment_test": {
     "hf_repo": "AudioLLMs/meld_sentiment_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mmau_mini": {
     "hf_repo": "AudioLLMs/MMAU_mini",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_asr_part1_test": {
     "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
     "subset": "ASR-PART1-Test",
-    "language": ""
+    "language": "",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_asr_part2_test": {
     "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
     "subset": "ASR-PART2-Test",
-    "language": ""
+    "language": "",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_asr_part3_test": {
     "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
     "subset": "ASR-PART3-Test",
-    "language": ""
+    "language": "",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_asr_part4_test": {
     "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
     "subset": "ASR-PART4-Test",
-    "language": ""
+    "language": "",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_asr_part5_test": {
     "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
     "subset": "ASR-PART5-Test",
-    "language": ""
+    "language": "",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_asr_part6_test": {
     "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
     "subset": "ASR-PART6-Test",
-    "language": ""
+    "language": "",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_pqa_ar_dialogue_test": {
     "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
     "subset": "PQA-AR-Dialogue-Test",
-    "language": ""
+    "language": "",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_pqa_ar_sentence_test": {
     "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
     "subset": "PQA-AR-Sentence-Test",
-    "language": ""
+    "language": "",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_pqa_gr_dialogue_test": {
     "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
     "subset": "PQA-GR-Dialogue-Test",
-    "language": ""
+    "language": "",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_pqa_gr_sentence_test": {
     "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
     "subset": "PQA-GR-Sentence-Test",
-    "language": ""
+    "language": "",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_sds_part3_test": {
     "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
     "subset": "SDS-PART3-Test",
-    "language": ""
+    "language": "",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_sds_part4_test": {
     "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
     "subset": "SDS-PART4-Test",
-    "language": ""
+    "language": "",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_sds_part5_test": {
     "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
     "subset": "SDS-PART5-Test",
-    "language": ""
+    "language": "",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_sds_part6_test": {
     "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
     "subset": "SDS-PART6-Test",
-    "language": ""
+    "language": "",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_sqa_part3_test": {
     "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
     "subset": "SQA-PART3-Test",
-    "language": ""
+    "language": "",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_sqa_part4_test": {
     "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
     "subset": "SQA-PART4-Test",
-    "language": ""
+    "language": "",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_sqa_part5_test": {
     "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
     "subset": "SQA-PART5-Test",
-    "language": ""
+    "language": "",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mnsc_sqa_part6_test": {
     "hf_repo": "AudioLLMs/Multitask-Speech-Corpus-v1-extend",
     "subset": "SQA-PART6-Test",
-    "language": ""
+    "language": "",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "mu_chomusic_test": {
     "hf_repo": "AudioLLMs/mu_chomusic_test",
-    "language": ""
+    "language": "",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "openhermes_instruction_test": {
     "hf_repo": "AudioLLMs/openhermes_instruction_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "peoples_speech_test": {
     "hf_repo": "AudioLLMs/peoples_speech_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "public_sg_speech_qa_test": {
     "hf_repo": "AudioLLMs/public_sg_speech_qa_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "seame_dev_sge": {
     "hf_repo": "AudioLLMs/seame_dev_sge",
@@ -222,34 +320,50 @@
   },
   "slue_p2_sqa5_test": {
     "hf_repo": "AudioLLMs/slue_p2_sqa5_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "spoken_squad_test": {
     "hf_repo": "AudioLLMs/spoken_squad_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "tedlium3_test": {
     "hf_repo": "AudioLLMs/tedlium3_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "tedlium3_long_form_test": {
     "hf_repo": "AudioLLMs/tedlium3_long_form_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "voxceleb_accent_test": {
     "hf_repo": "AudioLLMs/voxceleb_accent_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "voxceleb_gender_test": {
     "hf_repo": "AudioLLMs/voxceleb_gender_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "wavcaps_qa_test": {
     "hf_repo": "AudioLLMs/wavcaps_qa_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "wavcaps_test": {
     "hf_repo": "AudioLLMs/wavcaps_test",
-    "language": "english"
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   }
 }

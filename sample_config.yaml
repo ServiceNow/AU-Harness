@@ -18,3 +18,4 @@ models:
       model: "whisper-3" #only needed for vllm
       auth_token: "${AUTH_TOKEN}" 
       batch_size: 4 #batch eval size
+      chunk_size: 45 #max audio length in seconds fed to model
