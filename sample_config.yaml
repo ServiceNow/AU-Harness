@@ -1,0 +1,20 @@
+
+dataset_metric: #tuple of dataset, metric
+  - "(audiobench_wavcaps_qa_test, word_error_rate)"
+  - "(audiobench_alpaca_audio_test, word_error_rate)"
+num_samples: 100 #number of samples to run(remove for all)
+judge_concurrency: 8 #judge call(optional)
+judge_model: "gpt-4o-mini" #optional(only supported model right no2)
+
+models:
+  - info:
+      name: "audio_transcriptions_openai" 
+      inference_type: "inference_server" #this is general http endpoint, you can also use vllm, vllm-endpoint, or openai(these not working yet, need byte format)
+      url: "${ENDPOINT_URL}" - #endpoint url
+      delay: 100
+      retry_attempts: 8
+      timeout: 30
+      postprocessor: [] #unneeded for now - will remove
+      model: "whisper-3" #only needed for vllm
+      auth_token: "${AUTH_TOKEN}" 
+      batch_size: 4 #batch eval size

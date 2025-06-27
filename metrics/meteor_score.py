@@ -1,5 +1,5 @@
 import nltk
-from nltk import word_tokenize
+
 from nltk.translate.meteor_score import single_meteor_score
 
 from metrics.metrics import Metrics
@@ -7,6 +7,8 @@ from utils import util
 
 
 class MeteorScore(Metrics):
+    def __call__(self, candidates, references):
+        return self.compute_record_level_scores(candidates, references)
     """MeteorScore using nltk tokenizer."""
 
     def __init__(self):
@@ -14,6 +16,8 @@ class MeteorScore(Metrics):
         self.name = "meteor"
         self.scorer = single_meteor_score
         nltk.download("wordnet")
+        nltk.download('punkt')
+        nltk.download('punkt_tab')
 
     def compute_record_level_scores(self, candidates: list, references: list) -> dict[str, list | None]:
         """Compute the scores that should be saved in the record level file.
@@ -30,7 +34,7 @@ class MeteorScore(Metrics):
             # default preprocess is str.lower()
             # default stemmer is PorterStemmer()
             # default wordnet is nltk.corpus.wordnet
-            score = self.scorer(word_tokenize(references[i]), word_tokenize(candidates[i]))
+            score = self.scorer(references[i], candidates[i])
             score = util.smart_round(score)
             score_list.append(score)
 

@@ -3,6 +3,8 @@ from sacrebleu.metrics import BLEU
 from metrics.metrics import Metrics
 
 class BleuMetrics(Metrics):
+    def __call__(self, candidates, references):
+        return self.get_score(candidates, references)
     """TODO: Need SME to add."""
 
     def __init__(self, max_ngram_order=4):

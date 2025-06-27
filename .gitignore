@@ -1,1 +1,13 @@
-CLAE-lite
+#env
+lite
+
+
+#config files
+test_config.yaml
+
+#log files
+*.log
+
+# python cache files
+__pycache__/
+*.py[cod]

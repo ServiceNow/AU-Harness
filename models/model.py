@@ -1,10 +1,9 @@
 import asyncio
-import importlib
-import importlib.util
+import tempfile
 import re
-import time
-from abc import ABC, abstractmethod
-from http import HTTPStatus
+import soundfile as sf
+import os
+from abc import ABC
 
 from tenacity import (
     AsyncRetrying,
@@ -26,12 +25,8 @@ logging.basicConfig(level=logging.INFO)
 logger.propagate = True
 from models.model_response import ErrorTracker, ModelResponse
 from models.request_resp_handler import RequestRespHandler
-from utils import constants, util
+from utils import constants
 from utils.input_builder import InputBuilder
-from utils.measurement_stats import MeasurementStats
-from utils.model_perf_stats import PerfStats
-from utils.weighted_map import WeightedMap, WeightedValue
-
 
 class Model(ABC):
     """TODO: Need SME to add."""
@@ -42,176 +37,34 @@ class Model(ABC):
         Args:
             model_info: model configuration dictionary
         """
+        
         self.model_info = model_info
+        self._name = model_info.get("name")
+        self.model = model_info["model"]
+        self.api_key = model_info.get("auth_token", "")
+        self.model_url = model_info.get("url", "")
+        self.inference_type = model_info["inference_type"]
+        self.batch_size = model_info.get("batch_size", 1)
         # sleep before every call - in ms
         self.delay = model_info.get("delay", 100)
+        self.timeout = model_info.get("timeout", 30)
         # max_wait for 8 attempts = 2^(8-1) = 128 secs
         self.retry_attempts = model_info.get("retry_attempts", 8)
-
         # some flow does not work with async client like internal private network
         self.postprocessor_path = model_info.get("postprocessor", [])
-        model_name = model_info.get("model", model_info.get("alias", self.name()))
+        #model_name = model_info.get("model", model_info.get("alias", self.name()))
         self.req_resp_hndlr = RequestRespHandler(
             self.inference_type,
             self.model_info,
+            timeout=self.timeout,
         )
         self.input_builder = InputBuilder(self.name())
-
-        self.weighted_params = self._create_weighted_elements(model_info, model_name)
-
         # prevent data races when updating self.errors asynchronously
         self.errors_lock = asyncio.Lock()
         self.errors = ErrorTracker()
 
-    
-
-    def _create_weighted_elements(self, model_info: dict, model_name: str) -> WeightedMap:
-        """Creates mapping of endpoint info to support multiple endpoints. Backwards compatible."""
-        endpoint_lst = self._get_endpoints(model_info, model_name)
-
-        weighted_elements = []
-        for endpoint in endpoint_lst:
-            param = {
-                "url": endpoint.get("url", ""),
-                "auth": endpoint.get("auth_token", ""),
-                "timeout": self.model_info.get("timeout", 30),
-                "max_retries": 0,
-            }
-
-            weighted_elements.append(WeightedValue(value=param, weight=endpoint["weight"]))
-        return WeightedMap(weighted_elements)
-
-    def _get_endpoints(self, model_info: dict, model_name: str) -> list[dict]:
-        """Retries endpoint info and assigns uniform weights if no weight specified."""
-        if "," in model_info.get("url", ""):
-            raise Exception("Separate URLs with | instead of with a comma.")
-        if "," in model_info.get("auth_token", ""):
-            raise Exception("Separate tokens with | instead of with a comma.")
-
-        urls = model_info.get("url", "").split("|")
-        auth_tokens = model_info.get("auth_token", "").split("|")
-        weights = []
-
-        ## Not possible to provide both model_path and a endpoint. Must be one or the other
-        ## For localhost, there is no need for authorization tokens. Supplying auth tokens or token types leads to 404 error
-        ## Check if localhost in any
-        ## Edge Case: Model Endpoint URL does have "localhost:" in which case this would fail.
-        ## Sure fire way is to see if model path is provided.
-        found_localhost = any("localhost" in url for url in urls)
-        auth_tokens = [""] * len(urls) if found_localhost else auth_tokens
-
-        if model_info.get("weights"):
-            if "," in model_info["weights"]:
-                raise Exception("Separate weights with | instead of with a comma.")
-            weights = model_info["weights"].split("|")
-
-        if len(urls) != len(auth_tokens):
-            raise Exception(f"Number of URLs does not match number of tokens for model {model_name}")
-
-        if weights:
-            if len(urls) != len(weights):
-                raise Exception(f"Number of URLs does not match number of weights for model {model_name}")
-        else:
-            weights = [1 / len(urls) for _ in range(len(urls))]
-
-        if cache_url := model_info.get("cache_url"):
-            urls = [util.add_cache_url(cache_url=cache_url, url=url) for url in urls]
-
-        endpoint_info = [{"url": urls[i], "auth_token": auth_tokens[i], "weight": weights[i]} for i in range(len(urls))]
-        return endpoint_info
-
-    @abstractmethod
     def name(self):
-        """TODO: Need SME to add."""
-        pass
-
-    def aliased_name(self) -> str:
-        """TODO: Need SME to add."""
-        alias = self.model_info.get("alias", None)
-        return alias if alias else self.name()
-
-    @staticmethod
-    def _get_seed_from_replica_id(record_id: str) -> dict[str, int]:
-        """Get seed from replica id.
-
-        Args:
-            record_id: The record id.
-
-        Returns:
-            A `dict` to override the model params. If `record_id` contains a replica id, the returned `dict` contains a
-            `seed` with the replica id. Otherwise, the returned `dict` is empty.
-        """
-        _, _, replica = record_id.partition(constants.REPLICA)
-        return {constants.SEED: int(replica)} if replica else {}
-
-    def generate_text(
-        self,
-        messages: list[dict] | str,
-        run_params: dict,
-        model_params: dict[str, object],
-        call_id: str,
-    ) -> tuple[str, int]:
-        """Generates inference against a single text. Run params are defined in runspec, model params are what is passed to model.
-
-        Args:
-            messages: List of role based messages for model (or a formatted string)
-            run_params: Params to be used for specific run
-            model_params: Params defined for the model
-            call_id: Unique ID to define the step the model is being called for for a given runspec
-
-        Returns: Model response and response code.
-        """
-        model_params = model_params or {}
-        inference_type = getattr(self, "inference_type", None)
-        for var in model_params:
-            if var in constants.MODEL_PARAMS_TO_KEEP_IN_RUN_PARAMS:
-                run_params[var] = model_params[var]
-        mapped_params = util.model_param_mapper(self.name(), model_params, inference_type)
-        model_name = str(self.__class__.__name__)
-        model_name = f"{model_name}_{call_id}"
-        start = time.time()
-        # Directly generate text without reasoning-budget wrapper for audio models
-        final_model_response = asyncio.run(
-            self._generate_text_with_retry(messages, mapped_params, run_params)
-        )
-
-        # Set after all errors are tracked
-        final_model_response.error_tracker = self.errors
-
-        inference_type = getattr(self, "inference_type", "")
-        if call_id != constants.CALL_ID_TEST:
-            ps = PerfStats()
-            ps.add_all_stats(run_params.get("runspec_name"), model_name, final_model_response)
-            ps.add(
-                run_params.get("runspec_name"),
-                model_name,
-                "total_time",
-                float(final_model_response.performance.latency)
-                if final_model_response.performance
-                else time.time() - start,
-            )
-            MeasurementStats().add_all_stats(
-                run_params.get("runspec_name"), model_name, final_model_response, inference_type
-            )
-        return final_model_response.llm_response, final_model_response.response_code
-
-
-    
-
-    def _log_performance(self, model_response, model_name, rec_id, run_params, start):
-        ps = PerfStats()
-        latency = model_response.performance.latency if model_response.performance else (time.time() - start)
-        ps.add(run_params.get("runspec_name"), model_name, "id", rec_id)
-        ps.add_all_stats(run_params.get("runspec_name"), model_name, model_response)
-        ps.add(run_params.get("runspec_name"), model_name, "total_time", latency)
-
-    def _log_measurement(self, model_response, model_name, rec_id, run_params):
-        ms = MeasurementStats()
-        ms.add(run_params.get("runspec_name"), model_name, "id", rec_id)
-        ms.add_all_stats(
-            run_params.get("runspec_name"), model_name, model_response, getattr(self, "inference_type", "")
-        )
-
+        return self._name
 
     def _is_retryable_error(self, result: ModelResponse):
         """Check if the error is a rate limit error by checking response code."""
@@ -291,6 +144,7 @@ class Model(ABC):
                 with attempt:
                     # initial delay for each call (in ms)
                     result: ModelResponse = await self._generate_text(message, model_params, run_params)
+                    logger.info(f"{self.name()} model response: {str(result.raw_response)}")
                     await self._mark_errors(result)
 
                     if (
@@ -330,103 +184,59 @@ class Model(ABC):
         """Applies formatting according to representative input builder instance."""
         return self.input_builder.build_conversation(messages, run_params)
 
-    def _process_text(self, text: str, run_params: dict) -> str:
-        return text
-
     async def _generate_text(self, message: dict | str, model_params: dict, run_params: dict) -> ModelResponse:
         """Generic implementation in this class, override if needed.
 
         It implements model query by building message header and body with the help of Request Response Handler.
 
         Args:
-            message: input for inference
+            messages: inputs for inference
             model_params: model parameter json
             run_params: params for the run
 
         Returns:
             Response and http return code
         """
+        # Build temp wav if needed then delegate to RequestRespHandler so that all requests flow through common path
         if isinstance(message, list):
-            raise ValueError("_generate_text expects a single sample (dict or str), not a list.")
-        if isinstance(message, dict):
-            formatted_message = self.apply_formatter([message], run_params)
+            raise ValueError("_generate_text expects a single dict or str, not a list.")
+        if not isinstance(message, dict):
+            raise ValueError("_generate_text expects a dict input for audio transcription.")
+        #print(message.keys())
+        audio_array = message["array"]
+        sampling_rate = message["sampling_rate"]
+        audio_file_path = message.get("path")
+
+        fp = None
+        if not self.is_path_supported(audio_file_path):
+            fp = tempfile.NamedTemporaryFile(suffix=".wav")
+            sf.write(fp, audio_array, sampling_rate)
+            audio_file_path = fp.name
+
+        # Build message body for request handler in correct format for HTTP file upload
+        files = None
+        if audio_file_path:
+            f = open(audio_file_path, "rb")
+            files = {"file": (os.path.basename(audio_file_path), f, "audio/wav")}
         else:
-            logger.warning(
-                f"Input message is already a string. The formatter will not be applied."
-                f"Make sure the message is already formatted according to {self.name()}. Received {message}"
+            raise ValueError("audio_file_path must be provided for OpenAI transcription")
+
+        try:
+            model_response: ModelResponse = await self.req_resp_hndlr.request_server(
+                url=self.model_url,
+                auth=self.api_key,
+                msg_body=files,
+                formatted_messages=message,
             )
-            formatted_message = message
-        if isinstance(formatted_message, str):
-            formatted_message = self._preprocess_text(formatted_message, run_params)
-        msg_body = self.req_resp_hndlr.get_input_msg(formatted_message, model_params, run_params)
-        logger.debug(f"{self.name()} input message body: {msg_body}")
-
-        current_url_index = self.weighted_params.get_random_index()
-        endpoint_in_use = self.weighted_params.listing[current_url_index]
-        model_response: ModelResponse = await self.req_resp_hndlr.request_server(
-            url=endpoint_in_use["url"],
-            auth=endpoint_in_use["auth"],
-
-            msg_body=msg_body,
-            formatted_messages=formatted_messages,
+        finally:
+            if f:
+                f.close()
+        return model_response
+    @staticmethod
+    def is_path_supported(audio_file_path) -> bool:
+        """Check if the audio file path can directly be used with the OpenAI API."""
+        return (
+            audio_file_path
+            and any(audio_file_path.endswith(sound_format) for sound_format in OPENAI_SUPPORTED_SOUND_FORMAT)
+            and audio_file_path.startswith("/tmp")
         )
-        model_response.model_parameters = model_params
-        if model_response.response_code == 200:
-            #logger.debug(f"{self.name()} model response: {str(model_response.raw_response)}")
-            text_resp = self.req_resp_hndlr.get_response_text(model_response.llm_response)
-            if text_resp.strip() != "":
-                model_response.response_code = 200
-
-            text_resp = self.postprocess(self.postprocessor_path, text_resp, run_params.get("response_format", ""))
-            model_response.llm_response = text_resp if len(text_resp) > 0 else " "
-            return model_response
-        else:
-            logger.error(f"Error: error in the request. Code: {model_response.response_code}.")
-            model_response.llm_response = " "
-            return model_response
-
-    def _test(self) -> bool:
-        """This method is used to ping test the model before running a runspec.
-
-        Returns:
-            Returns true if it is able to connect
-        """
-        resp_text, resp_code = self.generate_text(
-            constants.MESSAGES_TEST_AVAILABILITY,
-            model_params={"max_tokens": 1},
-            run_params={},
-            call_id=constants.CALL_ID_TEST,
-        )
-        return resp_code == 200
-
-    def get_model_info(self):
-        """Get model info for this model.
-
-        Returns:
-            Model info json
-        """
-        return self.model_info
-
-    def validate_error_code_message(self, response: str, code: int) -> bool:
-        """Validates if the response is an error or not. If the API call is successful or if it is OpenAI ResponsibleAIPolicyViolation then it is not considered an error.
-
-        Args:
-            response: response from the API request
-            code: response code from the API request
-
-        Returns:
-            True for valid error cases and False for invalid error cases.
-        """
-        if (code == 200) or (
-            constants.OPENAI_VIOLATION_SUBSTRING.lower() in response.lower() and code == HTTPStatus.UNAUTHORIZED
-        ):
-            return False
-        return True
-
-    def postprocess(self, postprocessor_path: list[str], text: str, response_format: str):
-        """Postprocess the text using the postprocessor."""
-        for path in postprocessor_path:
-            module, class_name = path.rsplit(".", 1)
-            postprocessor = getattr(importlib.import_module(module), class_name)
-            text = postprocessor().postprocess(text, response_format)
-        return text

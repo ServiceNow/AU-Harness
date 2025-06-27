@@ -4,24 +4,19 @@ from openai import AsyncOpenAI, OpenAI
 from models.model_response import ModelResponse
 from utils import constants
 import logging
-logger = logging.getLogger(__name__)
-if not logger.handlers:
-    _fh = logging.FileHandler("audiobench.log")
-    _fh.setLevel(logging.INFO)
-    _fh.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
-    logger.addHandler(_fh)
-logger.propagate = True
+logger = logging.getLogger(__name__)  # handlers configured in logger_setup.py
 
 class RequestRespHandler:
     """Class responsible for creating request and processing response for each type of inference server."""
 
-    def __init__(self, inference_type: str, model_info: dict):
+    def __init__(self, inference_type: str, model_info: dict, timeout: int = 30):
         self.inference_type = inference_type
         self.model_info = model_info
-        self.api = model_info.get("url", "")
+        self.api = model_info.get("url")
         self.auth = model_info.get("auth_token", "")
         self.client = None
-        self.set_client(verify_ssl=True, timeout=30)
+        self.timeout = timeout
+        self.set_client(verify_ssl=True, timeout=self.timeout)
         # Remove Bearer if present for vllm/openai
         if self.inference_type in [
             constants.INFERENCE_SERVER_VLLM,
@@ -29,19 +24,13 @@ class RequestRespHandler:
         ] and self.auth.startswith("Bearer"):
             self.auth = self.auth.replace("Bearer ", "")
 
-    def get_auth(self) -> str:
-        """Get updated authorization token with or without bearer key based on inference server type."""
-        return self.auth
-
     def set_client(self, verify_ssl: bool, timeout: int):
         """Create HTTP/vLLM client for audio-to-text APIs."""
         if self.inference_type in [
             constants.INFERENCE_SERVER_VLLM,
             constants.INFERENCE_SERVER_VLLM_COMPLETIONS,
+            constants.INFERENCE_SERVER_OPENAI,
         ]:
-            # Ensure API URL ends with /v1
-            if not self.api.rstrip("/").endswith("v1"):
-                self.api = self.api.rstrip("/") + "/v1"
             self.client = (
                 AsyncOpenAI(
                     base_url=self.api,
@@ -75,8 +64,9 @@ class RequestRespHandler:
             if self.inference_type in [
                 constants.INFERENCE_SERVER_VLLM,
                 constants.INFERENCE_SERVER_VLLM_COMPLETIONS,
+                constants.INFERENCE_SERVER_OPENAI,
             ]:
-                logger.info("vLLM path")
+                logger.info("vLLM xpath")
                 # NOTE: `self.client` is an (A)syncOpenAI instance created in `set_client`.
                 prediction = await self.client.chat.completions.create(
                     model=model_name, messages=messages, **params
@@ -98,12 +88,7 @@ class RequestRespHandler:
                 llm_response = self.get_response_text(raw_response)
                 response_code = resp.status_code
             else:
-                #logger.info("Generic HTTP path")
-                headers = {"Authorization": auth, "Connection": "close"} if auth else {"Connection": "close"}
-                resp = await self.client.post(url, headers=headers, json=msg_body)
-                raw_response: str = resp.text
-                llm_response: str = self.get_response_text(raw_response)
-                response_code: int = resp.status_code
+                raise ValueError(f"Invalid inference type: {self.inference_type}")
 
             elapsed_time: float = time.time() - start_time
             if response_code == 200:

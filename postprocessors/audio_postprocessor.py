@@ -11,7 +11,17 @@ class ReportingMetrics(dict):
 
 class AudiobenchPostprocessor():
     """Postprocessor class to calculate the model scores for the model predictions."""
+    def extract_model_targets(self, dataset: list[dict]) -> list:
+        """Return a list of `model_target` strings, preserving dataset order.
 
+        Args:
+            dataset: A list where each element is the sample dictionary produced
+                     by the pre-processor (must contain the key ``"model_target"``).
+
+        Returns:
+            List of ``model_target`` values in the same order as ``dataset``.
+        """
+        return [record["model_target"] for record in dataset if "model_target" in record]
     def process(self, results: list[dict]) -> dict[str, float | list]:
         """Process the results to calculate.
 
@@ -20,11 +30,9 @@ class AudiobenchPostprocessor():
         by pattern.
 
         Args:
-        ----
             results: results of the model predictions
 
         Returns:
-        -------
             output: dictionary containing the correctness score
 
         """

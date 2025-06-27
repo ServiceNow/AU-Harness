@@ -61,19 +61,24 @@ def normalize_text(text: str, language: str) -> str:
         language: language code
     """
     normalizer = NORMALIZERS.get(language, DEFAULT_NORMALIZER)
+    logger.info(f"[normalize_text] Normalizing text: {text}")
     text = convert_unicode_to_characters(text)
     text = convert_digits_to_words(text, language)
     return BASIC_TRANSFORMATIONS([normalizer(text)])[0]
 
 
 class WERMetrics(Metrics):
+    def __call__(self, candidates, references):
+        logger.info(f"[WERMetrics.__call__] Calculating WER for {len(candidates)} samples.")
+        return self.get_score(candidates, references)
     """Word Error Rate metric class, used for transcription tasks."""
 
-    def __init__(self):
+    def __init__(self, language="en"):
         super().__init__()
         self.name = "WER"
         self.display_name = "Word Error Rate"
         self.description = "The proportion of words that are incorrectly predicted, when compared to the reference text. The dataset is considered as one big conversation."
+        self.language = language
 
     def compute_attributes(self, incorrect: list[int | float], total: list[int | float], attributes: list[str]) -> dict:
         """Compute the attributes (e.g., accent, gender) that should be saved in the record level file for analysis."""
@@ -87,8 +92,10 @@ class WERMetrics(Metrics):
                     incorrect_per_attr[attr_value] += _incorrect
                     total_per_attr[attr_value] += _total
 
-            for (attr, _incorrect), _total in zip(incorrect_per_attr.items(), total_per_attr.values()):
-                results[f"wer_{attribute}_{attr}"] = _incorrect / _total
+            for attr in incorrect_per_attr:
+                total_attr = total_per_attr.get(attr, 0)
+                if total_attr:
+                    results[f"wer_{attribute}_{attr}"] = incorrect_per_attr[attr] / total_attr
         return results
 
     def get_score(self, candidates, references) -> dict:
@@ -133,7 +140,7 @@ class WERMetrics(Metrics):
         candidates_clean = []
 
         for i, (reference, candidate) in enumerate(zip(references, candidates)):
-            lang_code = self.contexts[i]["inputs_pretokenized"][0]["language"]
+            lang_code = getattr(self, 'language', 'en')
             references_clean.append(normalize_text(reference, lang_code))
             candidates_clean.append(normalize_text(candidate, lang_code))
             if references_clean[-1].strip() == "":
@@ -149,8 +156,15 @@ class WERMetrics(Metrics):
                     else {}
                 )
                 measures = process_words(references_clean[-1], candidates_clean[-1], **kwargs)
-                incorrect_scores.append(measures["substitutions"] + measures["deletions"] + measures["insertions"])
-                total_scores.append(measures["substitutions"] + measures["deletions"] + measures["hits"])
+
+                # Newer jiwer returns a dataclass-like object with attributes
+                substitutions = measures.substitutions
+                deletions = measures.deletions
+                insertions = measures.insertions
+                hits = measures.hits
+
+                incorrect_scores.append(substitutions + deletions + insertions)
+                total_scores.append(substitutions + deletions + hits)
             scores.append(incorrect_scores[-1] / total_scores[-1])
 
         results = {
