@@ -1,5 +1,6 @@
 import logging
 logger = logging.getLogger(__name__)
+from tqdm import tqdm
 from utils.multimodal import encode_audio_array_base64  # noqa: E402
 
 
@@ -9,12 +10,13 @@ class AudiobenchPreprocessor():
     def process(self, dataset: dict, properties: dict | None) -> list[dict]:
         """Process the dataset and flatten audio/context structure (expects dict-of-lists)."""
         logger.info("In [AudiobenchPreprocessor] Processing dataset...")
+        #logger.info(dataset)
         total_duration = 0
         new_dataset = []
         keys = list(dataset.keys())
         num_samples = len(dataset[keys[0]]) if keys else 0
         logger.info(f"Dataset keys: {keys}, num_samples: {num_samples}")
-        for i in range(num_samples):
+        for i in tqdm(range(num_samples), desc="Preprocessing"):
             record = {k: dataset[k][i] for k in keys}
             logger.debug(f"Processing sample {i}: {record}")
             if "audio" in record:
@@ -42,8 +44,8 @@ class AudiobenchPreprocessor():
                     "content": [
                         {"type": "text", "text": instruction},
                         {
-                            "type": "audio_url",
-                            "audio_url": {"url": encoded_url},
+                            "type": "audio_base64",
+                            "audio_base64": encoded_url,
                         },
                     ],
                 }

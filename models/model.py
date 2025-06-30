@@ -147,7 +147,7 @@ class Model(ABC):
                 with attempt:
                     # initial delay for each call (in ms)
                     result: ModelResponse = await self._generate_text(message, model_params, run_params)
-                    logger.info(f"{self.name()} model response: {str(result.raw_response)}")
+                    #logger.info(f"{self.name()} model response: {str(result.response_code)}")
                     await self._mark_errors(result)
 
                     if (

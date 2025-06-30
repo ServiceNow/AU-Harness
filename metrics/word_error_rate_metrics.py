@@ -135,13 +135,14 @@ class WERMetrics(Metrics):
         Returns:
             Scores for each record. The keys should be the column names that will be saved in the record level file.
         """
+        from tqdm import tqdm
         incorrect_scores = []
         total_scores = []
         scores = []
         references_clean = []
         candidates_clean = []
 
-        for i, (reference, candidate) in enumerate(zip(references, candidates)):
+        for i, (reference, candidate) in enumerate(tqdm(zip(references, candidates), desc="WER", total=len(references))):
             lang_code = getattr(self, 'language', 'en')
             references_clean.append(normalize_text(reference, lang_code))
             candidates_clean.append(normalize_text(candidate, lang_code))
@@ -167,7 +168,7 @@ class WERMetrics(Metrics):
 
                 incorrect_scores.append(substitutions + deletions + insertions)
                 total_scores.append(substitutions + deletions + hits)
-            logger.info(f"For sample {i}: reference={reference} candidate={candidate}")
+            #logger.info(f"For sample {i}: reference={reference} candidate={candidate}")
             scores.append(incorrect_scores[-1] / total_scores[-1])
 
         results = {

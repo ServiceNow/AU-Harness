@@ -23,15 +23,17 @@ class Engine:
     async def _infer_single_model(self, model: Model) -> list[str]:
         logger.info(f"[Engine._infer_single_model] Running model: {model.name()} on dataset of size {len(self.dataset)}")
         sem = asyncio.Semaphore(model.batch_size)  # Use per-model batch size
-        async def _call(sample):
+        async def _call(idx: int, sample):
             async with sem:
                 resp = await model._generate_text_with_retry(sample, {}, {})
-                return resp.llm_response if resp else ""
-        tasks = [_call(ex) for ex in self.dataset]
-        results = []
+                return idx, (resp.llm_response if resp else "")
+        # Create tasks paired with their original index
+        tasks = [_call(i, ex) for i, ex in enumerate(self.dataset)]
+        results: list[str | None] = [None] * len(tasks)
+        # Use tqdm for progress while filling results in the correct order
         for coro in tqdm(asyncio.as_completed(tasks), total=len(tasks), desc=f"Inference ({model.name()})"):
-            result = await coro
-            results.append(result)
+            idx, text = await coro
+            results[idx] = text
         logger.info(f"[Engine._infer_single_model] Model {model.name()} finished inference.")
         return results
     async def _infer_all(self):
@@ -49,6 +51,12 @@ class Engine:
         model_targets = self.postprocessor.extract_model_targets(dataset=self.dataset)
         for model_name, outs in predictions.items():
             logger.info(f"[Engine.run] Scoring model: {model_name}")
+            # Log first 5 prediction/target pairs for quick sanity-check
+            n_log = min(5, len(outs), len(model_targets))
+            for i in range(n_log):
+                logger.info(
+                    f"[Engine.run] Example {i}: Prediction = {outs[i]!r} | Target = {model_targets[i]!r}"
+                )
             scores[model_name] = self.metric(outs, model_targets)
         logger.info(f"[Engine.run] Evaluation complete. Returning scoresz.")
         return {self.metric.name: scores}
@@ -73,14 +81,20 @@ def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="Audiob
     # If 'subset' or 'data_dir' is specified, pass as second arg or kwarg
     if subset:
         logger.info(f"[_load_dataset] Loading subset: {subset}")
-        dset = load_dataset(repo, subset, split="test" if "test" in load_dataset(repo, subset).keys() else "train") # edge case for MNSC datasets, some are test but split is labeled train
+        dset = load_dataset(repo, subset, split="test" if "test" in load_dataset(repo, subset).keys() else "data" if "data" in load_dataset(repo, subset).keys() else "train") # edge case for CallHome and MNSC datasets
         if dset is None:
             raise ValueError(f"Test subset '{subset}' not found in dataset '{repo}'.")
     else:
-        dset = load_dataset(repo, split="test" if "test" in load_dataset(repo).keys() else "train")
+        dset = load_dataset(repo, split="test" if "test" in load_dataset(repo).keys() else "data" if "data" in load_dataset(repo).keys() else "train") # edge case for CallHome and MNSC datasets
+        #logger.info(f"[_load_dataset] Dataset loaded: {dset}")
     if num_samples is not None:
         logger.info(f"[_load_dataset] Truncating dataset to first {num_samples} samples.")
         dset = dset[:num_samples]
+    #Added to convert to dict
+    else:
+        logger.info(f"[_load_dataset] num_samples not provided; using full dataset length.")
+        dset = dset[:len(dset)]
+    #logger.info(f"[_load_dataset] Dataset loaded after truncation: {dset}")
     logger.info(f"[_load_dataset] Preprocessing dataset using {preprocessor_name}...")
     PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
     if PreprocessorClass is None:

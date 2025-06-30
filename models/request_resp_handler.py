@@ -77,7 +77,7 @@ class RequestRespHandler:
             # -------- Generic HTTP path -----------------------------------------
             elif self.inference_type == constants.INFERENCE_SERVER:
                 #logger.info("audio http")
-                logger.info(f"URL: {url}")
+                #logger.info(f"URL: {url}")
                 #logger.info(f"Message body: {msg_body}")
                 headers = {"Authorization": auth} if auth else {}
                 #logger.info(f"Headers: {headers}")
