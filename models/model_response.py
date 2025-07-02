@@ -59,7 +59,6 @@ class ModelResponse(BaseModel):
     performance: Performance | None
     wait_time: int | float | None = None
     error_tracker: ErrorTracker | None = None
-    model_parameters: dict[str, Any] | list
 
     def __init__(self, **data):
         super().__init__(**data)

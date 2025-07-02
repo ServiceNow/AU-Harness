@@ -4,8 +4,10 @@ import asyncio
 from datasets import load_dataset
 import yaml
 from tqdm import tqdm
+import importlib
 # Central logging setup
 import logger_setup
+logger_setup.configure()
 import logging
 logger = logging.getLogger(__name__)
 from models.model import Model
@@ -19,15 +21,19 @@ class Engine:
         self.dataset = dataset
         self.metric = metric
         self.postprocessor = postprocessor
-    # ---------------- internal helpers ----------------
+
+
+    # ---------------- internal helpers ----------------x
+    #infer by batch size, calling generate text with retry for each sample
     async def _infer_single_model(self, model: Model) -> list[str]:
         logger.info(f"[Engine._infer_single_model] Running model: {model.name()} on dataset of size {len(self.dataset)}")
         sem = asyncio.Semaphore(model.batch_size)  # Use per-model batch size
         async def _call(idx: int, sample):
             async with sem:
-                resp = await model._generate_text_with_retry(sample, {}, {})
+                #logger.info(f"{sample.keys()}")
+                resp = await model._generate_text_with_retry(sample, {"chunk_size": model.chunk_size})
                 return idx, (resp.llm_response if resp else "")
-        # Create tasks paired with their original index
+        # Create tasks paired with their original indexx
         tasks = [_call(i, ex) for i, ex in enumerate(self.dataset)]
         results: list[str | None] = [None] * len(tasks)
         # Use tqdm for progress while filling results in the correct order
@@ -36,6 +42,8 @@ class Engine:
             results[idx] = text
         logger.info(f"[Engine._infer_single_model] Model {model.name()} finished inference.")
         return results
+
+    #infer all models concurrently
     async def _infer_all(self):
         logger.info(f"[Engine._infer_all] Starting inference for all models: {[m.name() for m in self.models]}")
         tasks = {m.name(): asyncio.create_task(self._infer_single_model(m)) for m in self.models}
@@ -43,6 +51,8 @@ class Engine:
         logger.info(f"[Engine._infer_all] All models finished inference.")
         #logger.info(f"[Engine._infer_all] Results: {results}")
         return results
+
+    #main engine runner
     def run(self):
         logger.info("[Engine.run] Starting evaluation run.")
         predictions = asyncio.run(self._infer_all())
@@ -52,11 +62,13 @@ class Engine:
         for model_name, outs in predictions.items():
             logger.info(f"[Engine.run] Scoring model: {model_name}")
             # Log first 5 prediction/target pairs for quick sanity-check
-            n_log = min(5, len(outs), len(model_targets))
+            n_log = min(10, len(outs), len(model_targets))
+            logger.info(f"[Engine.run] Logging first {n_log} prediction-target pairs for sanity-check\n\n")
             for i in range(n_log):
                 logger.info(
                     f"[Engine.run] Example {i}: Prediction = {outs[i]!r} | Target = {model_targets[i]!r}"
                 )
+            logger.info("\n")
             scores[model_name] = self.metric(outs, model_targets)
         logger.info(f"[Engine.run] Evaluation complete. Returning scoresz.")
         return {self.metric.name: scores}
@@ -64,10 +76,8 @@ class Engine:
 
 
 
-import importlib
 
-import importlib
-
+#pre/post helper getter
 def get_class_from_module(module_prefix, module_name):
     try:
         module = importlib.import_module(f"{module_prefix}.{module_name}")
@@ -75,7 +85,7 @@ def get_class_from_module(module_prefix, module_name):
     except Exception as e:
         return None
 
-
+#load an preprocess(dataset specific)
 def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor"):
     logger.info(f"[_load_dataset] Loading HuggingFace dataset repo: {repo}")
     # If 'subset' or 'data_dir' is specified, pass as second arg or kwarg
@@ -103,6 +113,7 @@ def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="Audiob
     logger.info(f"[_load_dataset] Dataset loaded and processed. Size: {len(processed)}")
     return processed
 
+#load models from config
 def _load_models(cfg_list: list[dict]) -> list[Model]:
     logger.info(f"[_load_models] Instantiating models from config: {cfg_list}")
     models = []
@@ -119,6 +130,8 @@ def _load_models(cfg_list: list[dict]) -> list[Model]:
         logger.info(f"Loaded {model.name()}")
     logger.info(f"[_load_models] Successfully instantiated {len(models)} model(s).")
     return models
+
+#load metric from name
 def _load_metric(name: str, language: str = "en", judge_concurrency: int | None = None, judge_model: str | None = None):
     logger.info(f"[_load_metric] Loading metric: {name} (judge_concurrency={judge_concurrency}, judge_model={judge_model})")
     if name == "word_error_rate":
@@ -141,12 +154,20 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
     logger.info(f"[_load_metric] Metric loaded: {metric.name}")
     return metric
 
+#hardcoded cfg path - need to implement command line override, add common configs, group by task type
+#main that runs
 def main(cfg_path='config.yaml'):
     logger.info("[main] Starting main function.")
     cfg_path = Path(cfg_path)
     logger.info(f"[main] Loading config file: {cfg_path}")
     cfg = yaml.safe_load(cfg_path.read_text())
     logger.info(f"[main] Config loaded: {cfg}")
+
+    # Reconfigure log file if provided
+    log_file_path = cfg.get("log_file")
+    if log_file_path:
+        logger_setup.configure(log_file_path)
+        logger.info(f"[main] Reconfigured logging to file: {log_file_path}")
     batch_size = cfg.get("batch_size", 4)
     num_samples = cfg.get("num_samples", None)
     judge_concurrency = cfg.get("judge_concurrency", None)
