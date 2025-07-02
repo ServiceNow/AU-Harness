@@ -1,11 +1,7 @@
 import asyncio
-import tempfile
 import re
-import soundfile as sf
-import os
-import io
 from abc import ABC
-
+import os
 from tenacity import (
     AsyncRetrying,
     RetryError,
@@ -26,8 +22,9 @@ logging.basicConfig(level=logging.INFO)
 logger.propagate = True
 from models.model_response import ErrorTracker, ModelResponse
 from models.request_resp_handler import RequestRespHandler
+from copy import deepcopy
 from utils import constants
-from utils.input_builder import InputBuilder
+from utils.multimodal import encode_audio_array_base64, audio_array_to_wav_file
 
 class Model(ABC):
     """TODO: Need SME to add."""
@@ -38,7 +35,6 @@ class Model(ABC):
         Args:
             model_info: model configuration dictionary
         """
-        
         self.model_info = model_info
         self._name = model_info.get("name")
         self.model = model_info["model"]
@@ -61,7 +57,6 @@ class Model(ABC):
             self.model_info,
             timeout=self.timeout,
         )
-        self.input_builder = InputBuilder(self.name())
         # prevent data races when updating self.errors asynchronously
         self.errors_lock = asyncio.Lock()
         self.errors = ErrorTracker()
@@ -112,175 +107,178 @@ class Model(ABC):
             async with self.errors_lock:
                 self.errors.increment(result.response_code)
 
-    def _parse_token_error_message(self, error_message: str) -> tuple[int | None, int | None]:
-        """Parse the error message to extract the maximum context length and the number of tokens in the messages.
 
-        Args:
-            error_message: The error message string.
-
-        Returns:
-            A tuple containing the maximum context length and the number of tokens in the messages.
-        """
-        pattern = r"maximum context length is (\d+).*?\((\d+) in the messages"
-        match = re.search(pattern, error_message)
-        if match:
-            try:
-                max_context_length = int(match.group(1))
-                tokens_in_messages = int(match.group(2))
-                return max_context_length, tokens_in_messages
-            except ValueError:
-                pass
-        return None, None
-
+    #pure retry and exception logic
     async def _generate_text_with_retry(
-        self, message: dict | str, model_params: dict, run_params: dict
+        self, message: dict | str, run_params: dict
     ) -> ModelResponse:
-        max_tokens_adjusted = False
+        result = None
         try:
             async for attempt in AsyncRetrying(
                 retry=retry_if_result(self._is_retryable_error),
-                # reset wait times based on error condition
                 wait=wait_random_exponential(multiplier=1, max=300),
                 stop=stop_after_attempt(self.retry_attempts),
                 before_sleep=self._log_before_retry,
             ):
                 with attempt:
-                    # initial delay for each call (in ms)
-                    result: ModelResponse = await self._generate_text(message, model_params, run_params)
-                    #logger.info(f"{self.name()} model response: {str(result.response_code)}")
-                    await self._mark_errors(result)
-
-                    if (
-                        result.response_code == 500
-                        and hasattr(self, "inference_type")
-                        and self.inference_type
-                        in [constants.INFERENCE_SERVER_VLLM_COMPLETIONS, constants.INFERENCE_SERVER_VLLM]
-                        and "maximum context length" in result.raw_response
-                        and not max_tokens_adjusted
-                    ):
-                        max_context_length, tokens_in_messages = self._parse_token_error_message(result.raw_response)
-                        if max_context_length and tokens_in_messages:
-                            new_max_tokens = (
-                                max_context_length - tokens_in_messages - constants.VLLM_MAX_TOKEN_RETRY_BUFFER
-                            )
-                            if new_max_tokens > 0:
-                                # set response code to custom error for this case, so it is retryable with wait 0
-                                result.response_code = 450
-                                if self.inference_type == constants.INFERENCE_SERVER_VLLM_COMPLETIONS:
-                                    model_params["max_tokens"] = new_max_tokens
-                                else:
-                                    model_params["max_completion_tokens"] = new_max_tokens
-                                # use flag to only retry once when max tokens is adjusted
-                                max_tokens_adjusted = True
-                                logger.warning(f"Adjusted max_tokens to {new_max_tokens} due to context length error.")
-
-                if not attempt.retry_state.outcome.failed:
-                    attempt.retry_state.set_result(result)
+                    try:
+                        # All data prep is now in _generate_text
+                        #logger.info(f"[{self.name()}] Generating text for input: {message}")
+                        result: ModelResponse = await self._generate_text(message, run_params)
+                        await self._mark_errors(result)
+                    except Exception as e:
+                        logger.error(f"Exception during text generation: {e}")
+                        result = ModelResponse(
+                            input_prompt=str(message),
+                            llm_response="",
+                            raw_response=str(e),
+                            response_code=500,
+                            performance=None,
+                            wait_time=0,
+                        )
+                attempt.retry_state.set_result(result)
+                # Set backoff for next retry based on current result
                 self._set_max_backoff(attempt)
+                if not self._is_retryable_error(result):
+                    break
+        except KeyError as e:
+            logger.error(f"Missing key while building model_inputs on the fly: {e}")
+            result = ModelResponse(
+                input_prompt=message,
+                llm_response="",
+                raw_response=f"Missing key: {e}",
+                response_code=500,
+                performance=None,
+                wait_time=0,
+            )
         except RetryError:
             logger.error(
                 f"[{self.name()}] Request failed after {self.retry_attempts} attempts for input: {message}..."
             )
+            result = ModelResponse(
+                input_prompt=message,
+                llm_response="",
+                raw_response="RetryError: Request failed after max attempts",
+                response_code=500,
+                performance=None,
+                wait_time=0,
+            )
+        except Exception as e:
+            logger.error(f"Unexpected error in _generate_text_with_retry: {e}")
+            result = ModelResponse(
+                input_prompt=message,
+                llm_response="",
+                raw_response=str(e),
+                response_code=500,
+                performance=None,
+                wait_time=0,
+            ) 
         return result
 
-    def apply_formatter(self, messages: list[dict], run_params: dict) -> list[dict] | str:
-        """Applies formatting according to representative input builder instance."""
-        return self.input_builder.build_conversation(messages, run_params)
 
-    async def _generate_text(self, message: dict | str, model_params: dict, run_params: dict) -> ModelResponse:
-        """Generic implementation in this class, override if needed.
 
-        It implements model query by building message header and body with the help of Request Response Handler.
 
+
+
+    async def _generate_text(self, message: dict, run_params: dict) -> ModelResponse:
+        """
+        Implements model query by building message header and body with the help of Request Response Handler.
         Args:
-            messages: inputs for inference
-            model_params: model parameter json
+            message: inputs for inference
             run_params: params for the run
-
         Returns:
             Response and http return code
         """
-        # Build temp wav if needed then delegate to RequestRespHandler so that all requests flow through common path
-        if isinstance(message, list):
-            raise ValueError("_generate_text expects a single dict or str, not a list.")
-        if not isinstance(message, dict):
-            raise ValueError("_generate_text expects a dict input for audio transcription.")
-        #print(message.keys())
-        audio_array = message["array"]
-        sampling_rate = message["sampling_rate"]
 
-        # Use model's chunk_size for max duration
-        MAX_AUDIO_DURATION_SEC = self.chunk_size
-        max_samples = int(sampling_rate * MAX_AUDIO_DURATION_SEC)
-        total_samples = len(audio_array)
 
-        # If audio is within limit, proceed as before
-        if total_samples <= max_samples:
-            audio_file_path = message.get("path")
-            fp = None
-            if not self.is_path_supported(audio_file_path):
-                fp = tempfile.NamedTemporaryFile(suffix=".wav")
-                sf.write(fp, audio_array, sampling_rate)
-                audio_file_path = fp.name
 
-            files = None
-            if audio_file_path:
-                f = open(audio_file_path, "rb")
-                files = {"file": (os.path.basename(audio_file_path), f, "audio/wav")}
-            else:
-                raise ValueError("audio_file_path must be provided for OpenAI transcription")
-            try:
-                model_response: ModelResponse = await self.req_resp_hndlr.request_server(
-                    url=self.model_url,
-                    auth=self.api_key,
-                    msg_body=files,
-                    formatted_messages=message,
-                )
-            finally:
-                if f:
-                    f.close()
-            return model_response
+        #getting attributes
+        audio_array = message.get("array")
+        sampling_rate = message.get("sampling_rate")
+        chunk_seconds: int = int(run_params.get("chunk_size", 30))  # default to 30s
+        max_samples: int = int(chunk_seconds * sampling_rate) if sampling_rate else 0
+        total_samples: int = len(audio_array) if audio_array is not None else 0
+        instruction = message.get("instruction")
 
-        # If audio is over 30 seconds, chunk and process each
-        else:
+
+
+        # --- CHUNKING LOGIC FIRST ---
+        if total_samples > max_samples:
+            concatenated_text: str = ""
+            responses: list[ModelResponse] = []
             num_chunks = (total_samples + max_samples - 1) // max_samples
-            concatenated_text = ""
-            responses = []
-            for i in range(num_chunks):
-                start = i * max_samples
-                end = min((i + 1) * max_samples, total_samples)
-                chunk_array = audio_array[start:end]
-                chunk_message = dict(message)  # shallow copy
-                chunk_message["array"] = chunk_array
-                chunk_message["path"] = None  # force file creation for each chunk
-                fp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
-                sf.write(fp, chunk_array, sampling_rate)
-                audio_file_path = fp.name
-                fp.close()
-                f = open(audio_file_path, "rb")
-                files = {"file": (os.path.basename(audio_file_path), f, "audio/wav")}
-                try:
-                    model_response: ModelResponse = await self.req_resp_hndlr.request_server(
-                        url=self.model_url,
-                        auth=self.api_key,
-                        msg_body=files,
-                        formatted_messages=chunk_message,
-                    )
-                finally:
-                    f.close()
-                    os.remove(audio_file_path)
-                concatenated_text += model_response.llm_response or ""
-                responses.append(model_response)
-            # Return a ModelResponse with concatenated text and info from last chunk
-            final_response = responses[-1]
-            final_response.llm_response = concatenated_text
-            return final_response
 
-    @staticmethod
-    def is_path_supported(audio_file_path) -> bool:
-        """Check if the audio file path can directly be used with the OpenAI API."""
-        return (
-            audio_file_path
-            and any(audio_file_path.endswith(sound_format) for sound_format in OPENAI_SUPPORTED_SOUND_FORMAT)
-            and audio_file_path.startswith("/tmp")
-        )
+            #chat completion
+            if self.inference_type in (
+                constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION,
+                constants.OPENAI_CHAT_COMPLETION,
+            ):
+                # Cut to first 30s, then process as chat completion
+                chunk_array = audio_array[:max_samples]
+                encoded = encode_audio_array_base64(chunk_array, sampling_rate)
+                audio_block = {"type": "input_audio", "input_audio": {"data": encoded, "format": "wav"}}
+                message["model_inputs"] = [
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "text", "text": instruction},
+                            audio_block,
+                        ],
+                    }
+                ]
+                return await self.req_resp_hndlr.request_server(message["model_inputs"])
+
+            #audio transcription - append values
+            elif self.inference_type in (
+                constants.INFERENCE_SERVER_VLLM_TRANSCRIPTION,
+                constants.OPENAI_TRANSCRIPTION,
+            ):
+                for i in range(num_chunks):
+                    start = i * max_samples
+                    end = min((i + 1) * max_samples, total_samples)
+                    chunk_array = audio_array[start:end]
+                    wav_path = audio_array_to_wav_file(chunk_array, sampling_rate)
+                    # Pass closed file (file path) to request_server
+                    resp = await self.req_resp_hndlr.request_server(wav_path)
+                    concatenated_text += resp.llm_response or ""
+                    responses.append(resp)
+                # ---------- Merge chunk responses ------------------
+                final_resp = responses[-1]
+                final_resp.llm_response = concatenated_text
+                return final_resp
+            else:
+                raise ValueError("Unsupported inference type")
+
+
+
+
+        # --- SINGLE-CHUNK LOGIC ---
+        #chat completion
+        if self.inference_type in (
+            constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION,
+            constants.OPENAI_CHAT_COMPLETION,
+        ):
+            encoded = encode_audio_array_base64(audio_array, sampling_rate)
+            audio_block = {"type": "input_audio", "input_audio": {"data": encoded, "format": "wav"}}
+            message["model_inputs"] = [
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": instruction},
+                        audio_block,
+                    ],
+                }
+            ]
+            return await self.req_resp_hndlr.request_server(message["model_inputs"])
+
+        #transcription
+        elif self.inference_type in (
+            constants.INFERENCE_SERVER_VLLM_TRANSCRIPTION,
+            constants.OPENAI_TRANSCRIPTION,
+        ):
+            wav_path = audio_array_to_wav_file(audio_array, sampling_rate)
+            # Pass closed file (file path) to request_server
+            resp = await self.req_resp_hndlr.request_server(wav_path)
+            return resp
+        else:
+            raise ValueError("Unsupported inference type")

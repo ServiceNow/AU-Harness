@@ -1,34 +1,38 @@
 import base64
 from copy import deepcopy
 from io import BytesIO
-
+import librosa
 import soundfile as sf
-from PIL import Image
 
 TRUNCATION_SUFFIX = "... (truncated)"
 TRUNCATION_LENGTH = 60
 
-
-
-def extract_base64_type_and_data(item: dict) -> list[str]:
-    """Extract the type and data from a base64 string."""
-    for typ in ["image_url", "audio_url"]:
-        if typ in item:
-            data = item[typ]["url"].removeprefix("data:").split(";")
-            data[1] = data[1].split(",")[1]
-            return data
-    raise ValueError("Invalid base64 datatype.")
-
-
+#normalize to 16000
 def encode_audio_array_base64(audio_array, sampling_rate):
-    """Encode audio array into base64 without creating a file."""
-    buffer = BytesIO()
-    sf.write(buffer, audio_array, sampling_rate, format="WAV")
-    buffer.seek(0)
-    audio_b64 = base64.b64encode(buffer.getvalue()).decode("ascii")
-    return f"data:audio/wav;base64,{audio_b64}"
+    try:
+        audio_array = librosa.resample(audio_array, orig_sr=sampling_rate, target_sr=16000)
+        sampling_rate = 16000
 
+        buffer = BytesIO()
+        sf.write(buffer, audio_array, sampling_rate, format='WAV')
+        buffer.seek(0)
+        audio_base64 = base64.b64encode(buffer.read()).decode('utf-8')
+        return audio_base64
+    except Exception as e:
+        raise RuntimeError(f"Failed to encode audio: {e}")
 
+def audio_array_to_wav_file(audio_array, sampling_rate):
+    """Resample to 16kHz and write audio_array to a temporary .wav file. Returns file path."""
+    import tempfile
+    try:
+        audio_array = librosa.resample(audio_array, orig_sr=sampling_rate, target_sr=16000)
+        sampling_rate = 16000
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_wav:
+            sf.write(tmp_wav, audio_array, sampling_rate, format='WAV')
+            wav_path = tmp_wav.name
+        return wav_path
+    except Exception as e:
+        raise RuntimeError(f"Failed to write audio to wav file: {e}")
 
 def truncate_values_for_saving(formatted_messages: list[dict] | str) -> list[dict] | str:
     """Recursively truncate all string fields in formatted messages.

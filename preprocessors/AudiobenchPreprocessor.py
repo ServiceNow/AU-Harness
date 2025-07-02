@@ -1,7 +1,6 @@
 import logging
 logger = logging.getLogger(__name__)
 from tqdm import tqdm
-from utils.multimodal import encode_audio_array_base64  # noqa: E402
 
 
 class AudiobenchPreprocessor():
@@ -29,27 +28,9 @@ class AudiobenchPreprocessor():
                 record.pop("context")
             else:
                 raise KeyError("Neither 'audio' nor 'context' keys found in data")
+
             total_duration += len(record["array"]) / record["sampling_rate"]
 
-            encoded_url = encode_audio_array_base64(record["array"], record["sampling_rate"])
-            instruction = (
-                "Question:\n" + record["instruction"] + "\n Choices:\n" + str(choices)
-                if (choices := record.get("choices"))
-                else record["instruction"]
-            )
-
-            record["model_inputs"] = [
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": instruction},
-                        {
-                            "type": "audio_base64",
-                            "audio_base64": encoded_url,
-                        },
-                    ],
-                }
-            ]
             if "reference" in record:
                 record["model_target"] = record["reference"]
             elif "answer" in record:
@@ -57,10 +38,10 @@ class AudiobenchPreprocessor():
             else:
                 record["model_target"] = "no reference - use your judgement"
 
-            record["question"] = record["instruction"]
+            record["instruction"] = record["instruction"] if "instruction" in record else record["question"] if "question" in record else "no instruction - use your judgement"
             record["judge_type"] = properties.get("judge_type", "detailed")
             new_dataset.append(record)
 
         logger.info(f"Dataset is {total_duration / 3600:.2f} hours long")
-        print("DEBUG: Flattened record keys:", new_dataset[0].keys())
+        #print("DEBUG: Flattened record keys:", new_dataset[0].keys())
         return new_dataset
