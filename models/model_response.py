@@ -54,7 +54,7 @@ class ModelResponse(BaseModel):
 
     input_prompt: str | list | dict
     llm_response: str
-    raw_response: str
+    raw_response: Any
     response_code: int
     performance: Performance | None
     wait_time: int | float | None = None

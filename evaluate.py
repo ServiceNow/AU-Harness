@@ -86,7 +86,7 @@ def get_class_from_module(module_prefix, module_name):
         return None
 
 #load an preprocess(dataset specific)
-def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor"):
+def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = []):
     logger.info(f"[_load_dataset] Loading HuggingFace dataset repo: {repo}")
     # If 'subset' or 'data_dir' is specified, pass as second arg or kwarg
     if subset:
@@ -109,7 +109,7 @@ def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="Audiob
     PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
     if PreprocessorClass is None:
         PreprocessorClass = AudiobenchPreprocessor
-    processed = PreprocessorClass().process(dset, {})
+    processed = PreprocessorClass().process(dset, {"user_prompt_add_ons": user_prompt_add_ons})
     logger.info(f"[_load_dataset] Dataset loaded and processed. Size: {len(processed)}")
     return processed
 
@@ -172,6 +172,8 @@ def main(cfg_path='config.yaml'):
     num_samples = cfg.get("num_samples", None)
     judge_concurrency = cfg.get("judge_concurrency", None)
     judge_model = cfg.get("judge_model", None)
+    user_prompt_add_ons: list[str] = cfg.get("user_prompt_add_ons", []) or []
+    
     # --- Build (dataset, metric) pairs ---
     raw_pairs_seq = cfg["dataset_metric"]
     if not isinstance(raw_pairs_seq, list):
@@ -202,7 +204,7 @@ def main(cfg_path='config.yaml'):
         language = db[dname].get("language", "en")
         preprocessor_name = db[dname]["preprocessor"]
         postprocessor_name = db[dname]["postprocessor"]
-        dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name)
+        dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, user_prompt_add_ons=user_prompt_add_ons)
         metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
         # Dynamically import postprocessor class
         PostprocessorClass = get_class_from_module('postprocessors', postprocessor_name)
