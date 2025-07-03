@@ -7,7 +7,8 @@ from openai import AsyncAzureOpenAI
 from tqdm import tqdm  # progress bar
 
 from metrics.metrics import Metrics
-
+import logging
+logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 # Helper to load prompt templates shipped with the package
 # ---------------------------------------------------------------------------
@@ -96,8 +97,12 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
     _prompt_key: str = "binary_judge_prompt"
 
     def __call__(self, candidates, references):
-        # Binary judge returns a 0/1 style score list, we expose record-level directly
-        return self.compute_record_level_scores(candidates, references)
+        """Return (overall_score_dict, record_level_dict)."""
+        record_level = self.compute_record_level_scores(candidates, references)
+        scores = record_level.get(self.name, [])
+        overall = {self.name: sum(scores)/len(scores) if scores else 0.0}
+        logger.info("Record level scores: ", record_level)
+        return overall
     def compute_record_level_scores(self, candidates: list, references: list):
         raw_scores = asyncio.run(self._judge_all(candidates, references))
         # Expect {"score": number, "explanation": str}
@@ -114,13 +119,17 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
     _prompt_key: str = "detailed_judge_prompt"
 
     def __call__(self, candidates, references):
-        # Detailed judge returns 0-5 score list with explanations
-        return self.compute_record_level_scores(candidates, references)
+        """Return (overall_score_dict, record_level_dict)."""
+        record_level = self.compute_record_level_scores(candidates, references)
+        scores = record_level.get(self.name, [])
+        overall = {self.name: sum(scores)/len(scores) if scores else 0.0}
+        logger.info("Record level scores: ", record_level)
+        return overall
+
     def compute_record_level_scores(self, candidates: list, references: list):
         raw_scores = asyncio.run(self._judge_all(candidates, references))
         # Expect {"score": number, "explanation": str}
         scores = [float(r.get("score", 0)) if isinstance(r, dict) else 0.0 for r in raw_scores]
-        self.explanations = [r.get("explanation", "") if isinstance(r, dict) else "" for r in raw_scores]
         return {self.name: scores}
 
 # ---------------------------------------------------------------------------
@@ -135,3 +144,37 @@ class LLMJudgeMetric(Metrics):  # noqa: D401
 
     def __call__(self, ref: str, hyp: str) -> float:
         return float(ref.strip() == hyp.strip())
+
+# ---------------------------------------------------------------------------
+# Utility: aggregate model-level means from the deeply nested result dict
+# ---------------------------------------------------------------------------
+
+def llm_process(result_tree: dict) -> dict:
+    """Collapse raw record-level scores into per-model averages.
+
+    Input schema (simplified) – as produced by ``Engine.run()``::
+
+        {
+            "<dataset>": {
+                "<metric>": {
+                    "<model>": {
+                        "<metric>": [score, score, ...]
+                    }
+                }
+            }
+        }
+
+    Returns a dict keyed *dataset → metric → {model: avg_score}*.
+    """
+    final: dict = {}
+    for dset, metric_dict in result_tree.items():
+        dset_out: dict = {}
+        for metric_name, model_dict in metric_dict.items():
+            metric_out: dict = {}
+            for model_name, inner in model_dict.items():
+                # inner is another dict keyed by same metric_name → list[float]
+                scores = next(iter(inner.values()), [])
+                metric_out[model_name] = sum(scores) / len(scores) if scores else 0.0
+            dset_out[metric_name] = metric_out
+        final[dset] = dset_out
+    return final

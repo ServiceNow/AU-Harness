@@ -108,12 +108,14 @@ class RequestRespHandler:
 
             #openai chat completions, vllm chat completions
             elif self.inference_type in [constants.OPENAI_CHAT_COMPLETION, constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION]:
+                logger.info(f"incoming message body {msg_body}")
                 prediction = await self.client.chat.completions.create(
                     model=model_name, messages=msg_body
                 )
                 response_data = prediction.model_dump()
                 raw_response: str = response_data
                 llm_response: str = response_data['choices'][0]['message']['content'] or " "
+                logger.info(f"llm response{llm_response}")
                 response_code: int = 200
                 logger.info(f"Successful post request: {response_code}")
                 elapsed_time: float = time.time() - start_time

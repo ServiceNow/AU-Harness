@@ -365,35 +365,35 @@
     "hf_repo": "talkbank/callhome",
     "subset": "eng",
     "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
+    "preprocessor": "CallHomePreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "callhome_deu": {
     "hf_repo": "talkbank/callhome",
     "subset": "deu",
     "language": "german",
-    "preprocessor": "AudiobenchPreprocessor",
+    "preprocessor": "CallHomePreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "callhome_jpn": {
     "hf_repo": "talkbank/callhome",
     "subset": "jpn",
     "language": "japanese",
-    "preprocessor": "AudiobenchPreprocessor",
+    "preprocessor": "CallHomePreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "callhome_spa": {
     "hf_repo": "talkbank/callhome",
     "subset": "spa",
     "language": "spanish",
-    "preprocessor": "AudiobenchPreprocessor",
+    "preprocessor": "CallHomePreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
   "callhome_zho": {
     "hf_repo": "talkbank/callhome",
     "subset": "zho",
     "language": "chinese",
-    "preprocessor": "AudiobenchPreprocessor",
+    "preprocessor": "CallHomePreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   }
 }
