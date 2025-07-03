@@ -26,14 +26,18 @@ class RequestRespHandler:
         if self.inference_type in [
             constants.OPENAI_TRANSCRIPTION,
             constants.OPENAI_CHAT_COMPLETION,
+            constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION,
         ] and self.auth.startswith("Bearer "):
             self.auth = self.auth.replace("Bearer ", "")
         self.set_client(verify_ssl=True, timeout=self.timeout)
 
     def set_client(self, verify_ssl: bool, timeout: int):
+        #use python client wrapper
+        #vllm chat completions compatibility
         if self.inference_type in [
             constants.OPENAI_CHAT_COMPLETION,
             constants.OPENAI_TRANSCRIPTION, 
+            constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION,
         ]:
 
             self.client = (
@@ -46,8 +50,8 @@ class RequestRespHandler:
                     http_client=httpx.AsyncClient(verify=verify_ssl),
                 )
             )
+        #basic post
         elif self.inference_type in [
-            constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION,
             constants.INFERENCE_SERVER_VLLM_TRANSCRIPTION,
         ]:
             self.client = httpx.AsyncClient(timeout=timeout, verify=verify_ssl)
@@ -70,47 +74,9 @@ class RequestRespHandler:
 
         #same input, different calls
         try:
-            # -------- vLLM path --------------------------------------------------
-            #vllm chat completions
-            if self.inference_type in [
-                constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION,
-            ]:
-                if self.auth:
-                    header = {'Content-Type': 'application/json', 'Authorization': f'{self.auth}'}
-                else:
-                    header = {'Content-Type': 'application/json'}
-                payload = {
-                        "model": model_name,
-                        "messages": msg_body,
-                        "temperature": 0,
-                        "max_tokens": 8192,
-                        "seed": 0
-                    }   
-                #logger.info(f"payload: {payload}")
-                #logger.info(f"header: {header}")
-                #logger.info(f"api: {self.api}")
-
-                prediction = requests.post(self.api, headers=header, data=json.dumps(payload))
-                logger.info(f"prediction: {prediction}")
-                prediction.raise_for_status()
-                response_data = prediction.json()
-                raw_response: str = response_data
-                llm_response: str = response_data['choices'][0]['message']['content'] or " "
-                response_code: int = 200
-                logger.info(f"Successful post request: {response_code}")
-                elapsed_time: float = time.time() - start_time
-
-                return ModelResponse (
-                input_prompt=msg_body,
-                llm_response=llm_response if llm_response else " ",
-                raw_response=raw_response,
-                response_code=response_code,
-                performance=None,
-                wait_time=elapsed_time,
-                )
             # -------- vLLM transcription path --------------------------------------------------
             #vllm transcription
-            elif self.inference_type == constants.INFERENCE_SERVER_VLLM_TRANSCRIPTION:
+            if self.inference_type == constants.INFERENCE_SERVER_VLLM_TRANSCRIPTION:
 
                 # Ensure 'Bearer' prefix for VLLM
                 if self.auth and not self.auth.startswith("Bearer "):
@@ -132,24 +98,20 @@ class RequestRespHandler:
                 elapsed_time: float = time.time() - start_time
                 logger.info(f"Successful post request: {response_code}")
                 return ModelResponse (
-                input_prompt=msg_body,
+                input_prompt=str(msg_body),
                 llm_response=llm_response if llm_response else " ",
                 raw_response=raw_response,
                 response_code=response_code,
                 performance=None,
                 wait_time=elapsed_time,
                 )
-            # -------- OpenAI path --------------------------------------------------
-            #openai chat completions
-            elif self.inference_type == constants.OPENAI_CHAT_COMPLETION:
-                logger.info(f"[OpenAI] Starting chat completion request...")
-                logger.info(f"[OpenAI] Request body: {msg_body}")
-                logger.info(f"[OpenAI] Model: {model_name}")
+
+            #openai chat completions, vllm chat completions
+            elif self.inference_type in [constants.OPENAI_CHAT_COMPLETION, constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION]:
                 prediction = await self.client.chat.completions.create(
                     model=model_name, messages=msg_body
                 )
-                prediction.raise_for_status()
-                response_data = prediction.model_dump_json()
+                response_data = prediction.model_dump()
                 raw_response: str = response_data
                 llm_response: str = response_data['choices'][0]['message']['content'] or " "
                 response_code: int = 200
@@ -157,7 +119,7 @@ class RequestRespHandler:
                 elapsed_time: float = time.time() - start_time
 
                 return ModelResponse (
-                input_prompt=msg_body,
+                input_prompt=str(msg_body[0]["content"][0]["text"]),
                 llm_response=llm_response if llm_response else " ",
                 raw_response=raw_response,
                 response_code=response_code,
@@ -178,7 +140,7 @@ class RequestRespHandler:
                 elapsed_time: float = time.time() - start_time
 
                 return ModelResponse (
-                input_prompt=msg_body,
+                input_prompt=str(msg_body),
                 llm_response=llm_response if llm_response else " ",
                 raw_response=raw_response,
                 response_code=response_code,

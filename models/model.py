@@ -216,13 +216,19 @@ class Model(ABC):
                 # Cut to first 30s, then process as chat completion
                 chunk_array = audio_array[:max_samples]
                 encoded = encode_audio_array_base64(chunk_array, sampling_rate)
-                audio_block = {"type": "input_audio", "input_audio": {"data": encoded, "format": "wav"}}
+
                 message["model_inputs"] = [
                     {
                         "role": "user",
                         "content": [
                             {"type": "text", "text": instruction},
-                            audio_block,
+                            {
+                                "type": "input_audio",
+                                "input_audio": {
+                                    "data": encoded,
+                                    "format": "wav",
+                                },
+                            },
                         ],
                     }
                 ]
@@ -258,14 +264,22 @@ class Model(ABC):
             constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION,
             constants.OPENAI_CHAT_COMPLETION,
         ):
-            encoded = encode_audio_array_base64(audio_array, sampling_rate)
-            audio_block = {"type": "input_audio", "input_audio": {"data": encoded, "format": "wav"}}
+            # Cut to first 30s, then process as chat completion
+            chunk_array = audio_array[:max_samples]
+            encoded = encode_audio_array_base64(chunk_array, sampling_rate)
+
             message["model_inputs"] = [
                 {
                     "role": "user",
                     "content": [
                         {"type": "text", "text": instruction},
-                        audio_block,
+                        {
+                            "type": "input_audio",
+                            "input_audio": {
+                                "data": encoded,
+                                "format": "wav",
+                            },
+                        }
                     ],
                 }
             ]
