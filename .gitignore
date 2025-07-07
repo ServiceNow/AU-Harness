@@ -6,7 +6,8 @@ lite
 #config.yaml
 
 #log files
-#*.log
+*.log
+*.out
 
 # python cache files
 __pycache__/
