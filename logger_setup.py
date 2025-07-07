@@ -45,6 +45,9 @@ def configure(log_file: Optional[str] = None):
     global _configured
     if _configured:
         return
-    path = Path(log_file) if log_file else Path(__file__).with_name(_DEFAULT_NAME)
+    if log_file:
+        path = Path(log_file)
+    else:
+        path = Path(__file__).with_name(_DEFAULT_NAME)
     _install_handlers(path)
     _configured = True

@@ -5,6 +5,8 @@ from pathlib import Path
 
 from openai import AsyncAzureOpenAI
 from tqdm import tqdm  # progress bar
+import logging
+logger = logging.getLogger(__name__)
 
 from metrics.metrics import Metrics
 
@@ -45,6 +47,8 @@ class _BaseLLMJudge(Metrics):
         )
 
     async def _score_once(self, system_prompt: str, user_prompt: str) -> float | dict:
+        #logger.info(f"system_prompt: {system_prompt}")
+        #logger.info(f"user_prompt: {user_prompt}")
         resp = await self._client.chat.completions.create(
             model=self._model,
             messages=[
@@ -54,6 +58,7 @@ class _BaseLLMJudge(Metrics):
             temperature=0.1,
         )
         content = resp.choices[0].message.content.strip()
+        #logger.info(f"content: {content}")
         try:
             return json.loads(content)
         except Exception:
@@ -99,6 +104,9 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
         """Return overall average dict and record-level details."""
         #self.record_level_scores = self.compute_record_level_scores(candidates, references)
         overall = super().get_score(candidates, references)
+        # Scale final overall score to 0–100
+        if self.name in overall:
+            overall[self.name] *= (100 if self.name == "llm_judge_binary" else 20)
         return overall
     def compute_record_level_scores(self, candidates: list, references: list):
         raw_scores = asyncio.run(self._judge_all(candidates, references))
@@ -119,6 +127,9 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
         """Return overall average dict and record-level details."""
         #self.record_level_scores = self.compute_record_level_scores(candidates, references)
         overall = super().get_score(candidates, references)
+        # Scale final overall score to 0–100
+        if self.name in overall:
+            overall[self.name] *= (100 if self.name == "llm_judge_binary" else 20)
         return overall
     def compute_record_level_scores(self, candidates: list, references: list):
         raw_scores = asyncio.run(self._judge_all(candidates, references))

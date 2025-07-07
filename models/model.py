@@ -11,14 +11,10 @@ from tenacity import (
     wait_random_exponential,
 )
 
+import logger_setup
+logger_setup.configure()
 import logging
 logger = logging.getLogger(__name__)
-if not logger.handlers:
-    fh = logging.FileHandler("audiobench.log")
-    fh.setLevel(logging.INFO)
-    fh.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
-    logger.addHandler(fh)
-logging.basicConfig(level=logging.INFO)
 logger.propagate = True
 from models.model_response import ErrorTracker, ModelResponse
 from models.request_resp_handler import RequestRespHandler
@@ -196,9 +192,16 @@ class Model(ABC):
         audio_array = message.get("array")
         sampling_rate = message.get("sampling_rate")
         chunk_seconds: int = int(run_params.get("chunk_size", 30))  # default to 30s
+        metric_name: str | None = run_params.get("metric")
         max_samples: int = int(chunk_seconds * sampling_rate) if sampling_rate else 0
         total_samples: int = len(audio_array) if audio_array is not None else 0
         instruction = message.get("instruction")
+
+        # If metric is judge types, only use first chunk (30s) regardless of length
+        judge_metrics = {"llm_judge_binary", "llm_judge_detailed"}
+        if metric_name in judge_metrics:
+            total_samples = max_samples  # force single chunk
+
 
 
 
@@ -208,31 +211,39 @@ class Model(ABC):
             responses: list[ModelResponse] = []
             num_chunks = (total_samples + max_samples - 1) // max_samples
 
-            #chat completion
+            # chat completion – process each chunk and concatenate
             if self.inference_type in (
                 constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION,
                 constants.OPENAI_CHAT_COMPLETION,
             ):
-                # Cut to first 30s, then process as chat completion
-                chunk_array = audio_array[:max_samples]
-                encoded = encode_audio_array_base64(chunk_array, sampling_rate)
+                for i in range(num_chunks):
+                    start = i * max_samples
+                    end = min((i + 1) * max_samples, total_samples)
+                    chunk_array = audio_array[start:end]
+                    encoded = encode_audio_array_base64(chunk_array, sampling_rate)
 
-                message["model_inputs"] = [
-                    {
-                        "role": "user",
-                        "content": [
-                            {"type": "text", "text": instruction},
-                            {
-                                "type": "input_audio",
-                                "input_audio": {
-                                    "data": encoded,
-                                    "format": "wav",
+                    message["model_inputs"] = [
+                        {
+                            "role": "user",
+                            "content": [
+                                {"type": "text", "text": instruction},
+                                {
+                                    "type": "input_audio",
+                                    "input_audio": {
+                                        "data": encoded,
+                                        "format": "wav",
+                                    },
                                 },
-                            },
-                        ],
-                    }
-                ]
-                return await self.req_resp_hndlr.request_server(message["model_inputs"])
+                            ],
+                        }
+                    ]
+                    resp = await self.req_resp_hndlr.request_server(message["model_inputs"])
+                    concatenated_text += resp.llm_response or ""
+                    responses.append(resp)
+                # Merge responses
+                final_resp = responses[-1]
+                final_resp.llm_response = concatenated_text
+                return final_resp
 
             #audio transcription - append values
             elif self.inference_type in (

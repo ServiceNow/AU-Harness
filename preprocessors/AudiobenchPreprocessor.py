@@ -26,7 +26,7 @@ class AudiobenchPreprocessor():
         new_dataset = []
         keys = list(dataset.keys())
         num_samples = len(dataset[keys[0]]) if keys else 0
-        logger.info(f"Dataset keys: {keys}, num_samples: {num_samples}")
+        #logger.info(f"Dataset keys: {keys}, num_samples: {num_samples}")
         for i in tqdm(range(num_samples), desc="Preprocessing"):
             record = {k: dataset[k][i] for k in keys}
             logger.debug(f"Processing sample {i}: {record}")

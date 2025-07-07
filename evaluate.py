@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 import asyncio
-from datasets import load_dataset
+from datasets import load_dataset, DownloadConfig
 import yaml
 from tqdm import tqdm
 import importlib
@@ -31,7 +31,7 @@ class Engine:
         async def _call(idx: int, sample):
             async with sem:
                 #logger.info(f"{sample.keys()}")
-                resp = await model._generate_text_with_retry(sample, {"chunk_size": model.chunk_size})
+                resp = await model._generate_text_with_retry(sample, {"chunk_size": model.chunk_size, "metric": self.metric.name})
                 return idx, (resp.llm_response if resp else "")
         # Create tasks paired with their original indexx
         tasks = [_call(i, ex) for i, ex in enumerate(self.dataset)]
@@ -70,7 +70,8 @@ class Engine:
                 )
             logger.info("\n")
             scores[model_name] = self.metric(outs, model_targets)
-        logger.info(f"[Engine.run] Evaluation complete. Returning scoresz.")
+        logger.info(f"[Engine.run] Evaluation complete. Returning scores.")
+        logger.info(f"[Engine.run] Scores: {scores}")
         return {self.metric.name: scores}
 
 
@@ -86,16 +87,64 @@ def get_class_from_module(module_prefix, module_name):
         return None
 
 #load an preprocess(dataset specific)
-def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = []):
+def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = [], zip=False):
+    if zip:
+        try:
+            import tempfile, requests, zipfile, os, glob
+            logger.info(f"[_load_dataset] ZIP flag set. Downloading archive from {repo}")
+            tmpdir = tempfile.mkdtemp(prefix="ab_zip_")
+            local_zip = os.path.join(tmpdir, "dataset.zip")
+            # Stream download to avoid large memory usage
+            with requests.get(repo, stream=True, timeout=60) as r:
+                r.raise_for_status()
+                with open(local_zip, "wb") as f:
+                    for chunk in r.iter_content(chunk_size=1024 * 1024):
+                        if chunk:
+                            f.write(chunk)
+            logger.info(f"[_load_dataset] Extracting archive {local_zip} …")
+            with zipfile.ZipFile(local_zip) as zf:
+                zf.extractall(tmpdir)
+            # Attempt to locate all JSON files inside extraction for automatic dataset loading
+            json_files = glob.glob(os.path.join(tmpdir, "**", "*.json"), recursive=True)
+            if not json_files:
+                raise RuntimeError("No JSON files discovered inside ZIP; cannot build dataset automatically.")
+            logger.info(f"[_load_dataset] Found {len(json_files)} JSON file(s); building HF dataset from them…")
+            dset = load_dataset("json", data_files=json_files, split="train")
+            # Apply any sampling/truncation logic
+            if num_samples is not None:
+                logger.info(f"[_load_dataset] Truncating dataset to first {num_samples} samples.")
+                dset = dset[:num_samples]
+            else:
+                dset = dset[:len(dset)]
+            # Preprocess
+            PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
+            processed = PreprocessorClass().process(dset, {"user_prompt_add_ons": user_prompt_add_ons})
+            logger.info(f"[_load_dataset] Dataset loaded & processed from ZIP. Size: {len(processed)}")
+            return processed
+        except Exception as e:
+            logger.exception(f"[_load_dataset] Failed to load dataset from ZIP: {e}")
+            raise
+
     logger.info(f"[_load_dataset] Loading HuggingFace dataset repo: {repo}")
     # If 'subset' or 'data_dir' is specified, pass as second arg or kwarg
+    # ----- robust split handling -----
+    def _select_split(ds):
+        """Return desired split name or None if *ds* is already a Dataset."""
+        if isinstance(ds, dict):  # HuggingFace DatasetDict
+            for cand in ("test", "data", "train"):
+                if cand in ds:
+                    return cand
+        return None  # single-split Dataset
+
     if subset:
         logger.info(f"[_load_dataset] Loading subset: {subset}")
-        dset = load_dataset(repo, subset, split="test" if "test" in load_dataset(repo, subset).keys() else "data" if "data" in load_dataset(repo, subset).keys() else "train") # edge case for CallHome and MNSC datasets
-        if dset is None:
-            raise ValueError(f"Test subset '{subset}' not found in dataset '{repo}'.")
+        ds_builder = load_dataset(repo, subset)
     else:
-        dset = load_dataset(repo, split="test" if "test" in load_dataset(repo).keys() else "data" if "data" in load_dataset(repo).keys() else "train") # edge case for CallHome and MNSC datasets
+        ds_builder = load_dataset(repo)
+
+    chosen_split = _select_split(ds_builder)
+    dset = ds_builder if chosen_split is None else ds_builder[chosen_split]
+    logger.info(f"[_load_dataset] Using split: {chosen_split or 'single-dataset'}  |  Size before trunc: {len(dset)}")
         #logger.info(f"[_load_dataset] Dataset loaded: {dset}")
     if num_samples is not None:
         logger.info(f"[_load_dataset] Truncating dataset to first {num_samples} samples.")
@@ -107,8 +156,6 @@ def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="Audiob
     #logger.info(f"[_load_dataset] Dataset loaded after truncation: {dset}")
     logger.info(f"[_load_dataset] Preprocessing dataset using {preprocessor_name}...")
     PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
-    if PreprocessorClass is None:
-        PreprocessorClass = AudiobenchPreprocessor
     processed = PreprocessorClass().process(dset, {"user_prompt_add_ons": user_prompt_add_ons})
     logger.info(f"[_load_dataset] Dataset loaded and processed. Size: {len(processed)}")
     return processed

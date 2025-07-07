@@ -52,7 +52,10 @@ def convert_digits_to_words(text: str, language: str):
     if language is "":
         return text
     """Convert numbers to words (e.g., "3" to "three")."""
-    return re.sub(r"\d+", lambda m: num2words(int(m.group()), lang=language), text)
+    try:
+        return re.sub(r"\d+", lambda m: num2words(int(m.group()), lang=language), text)
+    except ValueError:
+        return text
 
 
 def normalize_text(text: str, language: str) -> str:
