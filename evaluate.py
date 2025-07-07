@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 import asyncio
-from datasets import load_dataset, DownloadConfig
+from datasets import load_dataset
 import yaml
 from tqdm import tqdm
 import importlib
@@ -87,43 +87,13 @@ def get_class_from_module(module_prefix, module_name):
         return None
 
 #load an preprocess(dataset specific)
-def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = [], zip=False):
-    if zip:
-        try:
-            import tempfile, requests, zipfile, os, glob
-            logger.info(f"[_load_dataset] ZIP flag set. Downloading archive from {repo}")
-            tmpdir = tempfile.mkdtemp(prefix="ab_zip_")
-            local_zip = os.path.join(tmpdir, "dataset.zip")
-            # Stream download to avoid large memory usage
-            with requests.get(repo, stream=True, timeout=60) as r:
-                r.raise_for_status()
-                with open(local_zip, "wb") as f:
-                    for chunk in r.iter_content(chunk_size=1024 * 1024):
-                        if chunk:
-                            f.write(chunk)
-            logger.info(f"[_load_dataset] Extracting archive {local_zip} …")
-            with zipfile.ZipFile(local_zip) as zf:
-                zf.extractall(tmpdir)
-            # Attempt to locate all JSON files inside extraction for automatic dataset loading
-            json_files = glob.glob(os.path.join(tmpdir, "**", "*.json"), recursive=True)
-            if not json_files:
-                raise RuntimeError("No JSON files discovered inside ZIP; cannot build dataset automatically.")
-            logger.info(f"[_load_dataset] Found {len(json_files)} JSON file(s); building HF dataset from them…")
-            dset = load_dataset("json", data_files=json_files, split="train")
-            # Apply any sampling/truncation logic
-            if num_samples is not None:
-                logger.info(f"[_load_dataset] Truncating dataset to first {num_samples} samples.")
-                dset = dset[:num_samples]
-            else:
-                dset = dset[:len(dset)]
-            # Preprocess
-            PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
-            processed = PreprocessorClass().process(dset, {"user_prompt_add_ons": user_prompt_add_ons})
-            logger.info(f"[_load_dataset] Dataset loaded & processed from ZIP. Size: {len(processed)}")
-            return processed
-        except Exception as e:
-            logger.exception(f"[_load_dataset] Failed to load dataset from ZIP: {e}")
-            raise
+from preprocessors.CallHomePreprocessor import CallHomePreprocessor
+
+def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = [], zip=False, dataset_config=None):
+    # CallHome special download
+    if (isinstance(repo, str) and repo.lower() == "callhome") or (dataset_config and dataset_config.get("name", "").lower() == "callhome"):
+        logger.info("[_load_dataset] Detected CallHome dataset. Downloading media files...")
+        CallHomePreprocessor().download_media(dataset=None, properties=dataset_config or {})
 
     logger.info(f"[_load_dataset] Loading HuggingFace dataset repo: {repo}")
     # If 'subset' or 'data_dir' is specified, pass as second arg or kwarg

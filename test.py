@@ -1,85 +1,60 @@
-import base64
-from io import BytesIO
-import soundfile as sf
-import librosa
+# pip install transformers peft librosa
+
+import transformers
 import numpy as np
-import json
-import requests
-from tqdm import tqdm
-from datasets import load_from_disk
+import librosa
 import os
-import argparse
-import concurrent.futures
+from datasets import load_dataset
+import librosa
 
-class Inferencer:
-    def __init__(self, url_path: str, model_name: str, generation_params: dict = None):
-        self.url = url_path
-        self.model_name = model_name
-        self.generation_params = generation_params if generation_params is not None else {
-        }
-        self.headers = {'Content-Type': 'application/json'}
+def data_load(path = "hf", hf_token="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", local_dir="./data/enterprise-audio"):
+    """
+    Load audio data. If path == 'hf', download from Hugging Face repo using the provided token to a local folder.
+    Otherwise, treat path as a local file and load with librosa.
+    Returns:
+        - If path == 'hf': List of local file paths to downloaded audio files.
+        - Else: tuple (audio, sr) from librosa.load
+    """
+    if path == 'hf':
+        dataset = load_dataset(
+            "ServiceNow-AI/enterprise-audio",
+            split="rows_with_audio",
+            token=hf_token,
+            cache_dir=local_dir,
+            verification_mode="no_checks"  # skip missing-split verification that fails for rows_with_transcript
+        )
+        # Show available columns in this split
+        print("Columns in 'rows_with_audio' split:", dataset.column_names)
+        # Extract local file paths from the returned split
+        audio_paths = []
+        for item in dataset:
+            # The field name for audio may vary; try common ones
+            if 'audio' in item and isinstance(item['audio'], dict) and 'path' in item['audio']:
+                audio_paths.append(item['audio']['path'])
+            elif 'file' in item:
+                audio_paths.append(item['file'])
+        return audio_paths
 
-    def _encode_audio(self, audio_array: np.ndarray, sampling_rate: int) -> str:
-        try:
-            audio_array = librosa.resample(audio_array, orig_sr=sampling_rate, target_sr=16000)
-            sampling_rate = 16000
+def infer_on_dataset(audio_paths):
+    import transformers
+    import librosa
+    pipe = transformers.pipeline(model='fixie-ai/ultravox-v0_6-llama-3_1-8b', trust_remote_code=True)
+    system_turn = [{
+        "role": "system",
+        "content": "You are a friendly and helpful character. You love to answer questions for people. You must provide a pure transcription, with no additional text or formatting based on the audio sample."
+    }]
+    for path in audio_paths:
+        print(f"\n--- Inference for: {path} ---")
+        audio, sr = librosa.load(path, sr=16000)
+        result = pipe({
+            'audio': audio,
+            'turns': system_turn,
+            'sampling_rate': sr
+        }, max_new_tokens=30)
+        print("Model output:", result)
 
-            buffer = BytesIO()
-            sf.write(buffer, audio_array, sampling_rate, format='WAV')
-            buffer.seek(0)
-            audio_base64 = base64.b64encode(buffer.read()).decode('utf-8')
-            return audio_base64
-        except Exception as e:
-            raise RuntimeError(f"Failed to encode audio: {e}")
 
-    def infer_single(self, question: str, audio_array: np.ndarray, sampling_rate: int) -> str:
-        try:
-            audio_base64 = self._encode_audio(audio_array, sampling_rate)
-        except Exception as e:
-            return f"Error during audio encoding: {e}"
-
-        chat_input = [
-            {
-                "role": "system",
-                "content": "You are Apriel, a thoughtful and systematic AI assistant built by ServiceNow Language Models (SLAM) lab."
-            },
-            {
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": question},
-                    {
-                        "type": "input_audio",
-                        "input_audio": {
-                            "data": audio_base64,
-                            "format": "wav"
-                        }
-                    }
-                ]
-            }
-        ]
-
-        payload = {
-            "model": self.model_name,
-            "messages": chat_input,
-            "temperature": 0,
-            "max_tokens": 8192,
-            "seed": 0
-        }
-
-        try:
-            response = requests.post(self.url, headers=self.headers, data=json.dumps(payload))
-            response.raise_for_status()
-            response_data = response.json()
-
-            if 'choices' in response_data and len(response_data['choices']) > 0 and \
-               'message' in response_data['choices'][0] and 'content' in response_data['choices'][0]['message']:
-                return response_data['choices'][0]['message']['content'].strip()
-            else:
-                return f"Error: Unexpected response structure. Response: {response_data}"
-
-        except requests.exceptions.RequestException as e:
-            return f"HTTP Error: {e}"
-        except json.JSONDecodeError:
-            return f"Error: Invalid JSON response. Response text: {response.text if response else 'N/A'}"
-        except Exception as e:
-            return f"Unexpected Error: {e}"
+def main():
+    audio_paths = data_load()
+    # For a quick test, just run on the first audio file
+    infer_on_dataset(audio_paths[:1])

@@ -2,7 +2,7 @@
 lite
 
 #config files
-config.yaml
+#config.yaml
 
 #log files
 *.log
@@ -12,3 +12,6 @@ config.yaml
 __pycache__/
 **/__pycache__/
 *.py[cod]
+
+#datasets
+#private_datasets/

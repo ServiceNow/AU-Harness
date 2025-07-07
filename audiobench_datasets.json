@@ -361,39 +361,43 @@
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
+
+
+
   "callhome_eng": {
-    "hf_repo": "talkbank/callhome",
-    "subset": "eng",
+
     "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "CallHomePreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "private": true,
+    "path": "/path/to/callhome_eng"
   },
   "callhome_deu": {
-    "hf_repo": "talkbank/callhome",
-    "subset": "deu",
     "language": "german",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "CallHomePreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "private": true,
+    "path": "/path/to/callhome_deu"
   },
   "callhome_jpn": {
-    "hf_repo": "talkbank/callhome",
-    "subset": "jpn",
     "language": "japanese",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "CallHomePreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "private": true,
+    "path": "/path/to/callhome_jpn"
   },
   "callhome_spa": {
-    "hf_repo": "talkbank/callhome",
-    "subset": "spa",
     "language": "spanish",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "CallHomePreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "private": true,
+    "path": "/path/to/callhome_spa"
   },
   "callhome_zho": {
-    "hf_repo": "talkbank/callhome",
-    "subset": "zho",
     "language": "chinese",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "CallHomwPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "private": true,
+    "path": "/path/to/callhome_zho"
   }
 }

@@ -1,7 +1,63 @@
 import logging
+logger = logging.getLogger(__name__)
+
 import random
+import requests
+from bs4 import BeautifulSoup
+import os
 
 class CallHomePreprocessor:
+    def download_media(self, dataset, properties=None):
+        """
+        Downloads the CallHome dataset or required files for preprocessing.
+        Args:
+            dataset: str or dict, information about the dataset or its location.
+            properties: dict, optional, additional download properties (e.g., destination path).
+        Returns:
+            list: List of paths to the downloaded files.
+        """
+
+        if properties is None:
+            properties = {}
+
+        # Example: set default download URL and destination
+        username = properties.get('username', 'default_username')
+        password = properties.get('password', 'default_password')
+        base_url = properties.get('base_url', 'https://example.com/callhome-dataset/')
+        # Always use private_datasets for downloaded media
+        dest_dir = properties.get('dest_dir', './private_datasets/callhome_media')
+        os.makedirs(dest_dir, exist_ok=True)
+
+        auth = (username, password)
+        response = requests.get(base_url, auth=auth)
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        downloaded_files = []
+        for link in soup.find_all('a'):
+            href = link.get('href')
+            if href.endswith('.mp3'):
+                file_url = base_url + href
+                file_path = os.path.join(dest_dir, href)
+                if os.path.exists(file_path):
+                    logger.info(f"File already exists at {file_path}. Skipping download.")
+                    downloaded_files.append(file_path)
+                    continue
+                try:
+                    logger.info(f"Downloading {file_url} to {file_path}...")
+                    response = requests.get(file_url, auth=auth, stream=True)
+                    response.raise_for_status()
+                    with open(file_path, 'wb') as f:
+                        for chunk in response.iter_content(chunk_size=8192):
+                            if chunk:
+                                f.write(chunk)
+                    logger.info(f"Download completed: {file_path}")
+                    downloaded_files.append(file_path)
+                except Exception as e:
+                    logger.error(f"Failed to download file: {e}")
+                    raise
+
+        return downloaded_files
+
     def process(self, dataset, properties=None):
         """
         Processes a dataset for CallHome speaker diarization.
