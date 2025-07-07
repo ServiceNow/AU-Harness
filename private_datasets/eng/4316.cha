@@ -1,0 +1,665 @@
+@UTF8
+@PID:	11312/a-00004939-1
+@Begin
+@Languages:	eng
+@Participants:	A Subject, B Subject
+@Options:	bullets
+@ID:	eng|eng|A|||||Subject|||
+@ID:	eng|eng|B|||||Subject|||
+@Media:	4316, audio
+*B:	and the same . 399970_400760
+%mor:	coord|and det:art|the adj|same .
+%gra:	1|3|LINK 2|3|DET 3|0|INCROOT 4|3|PUNCT
+*B:	he's he's not &+s . 401200_402360
+%mor:	pro:sub|he~aux|be&3S pro:sub|he~aux|be&3S neg|not .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|SUBJ 4|2|PRED 5|4|NEG 6|2|PUNCT
+*A:	0 &=channel_noise . 402080_402560
+*B:	eating at the table . 402430_403780
+%mor:	part|eat-PRESP prep|at det:art|the n|table .
+%gra:	1|0|INCROOT 2|1|JCT 3|4|DET 4|2|POBJ 5|1|PUNCT
+*B:	because when he sits at the table he has to kind of lean forward
+	+/. 404350_407590
+%mor:	conj|because conj|when pro:sub|he v|sit-3S prep|at det:art|the
+	n|table pro:sub|he aux|have&3S prep|to n|kind prep|of adj|lean
+	adv|forward +/.
+%gra:	1|4|LINK 2|4|LINK 3|4|SUBJ 4|9|CJCT 5|4|JCT 6|7|DET 7|5|POBJ
+	8|9|SUBJ 9|0|ROOT 10|9|JCT 11|10|POBJ 12|11|NJCT 13|12|POBJ
+	14|13|JCT 15|9|PUNCT
+*A:	yeah &=channel_noise . 407400_408130
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	+, to the plates &=channel_noise . 408030_409020
+%mor:	prep|to det:art|the n|plate-PL .
+%gra:	1|0|INCROOT 2|3|DET 3|1|POBJ 4|1|PUNCT
+*A:	yeah &-mm . 408140_409340
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and I said that's a no no . 409400_411010
+%mor:	coord|and pro:sub|I v|say&PAST pro:dem|that~cop|be&3S det:art|a
+	qn|no co|no .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|5|SUBJ 5|3|COMP 6|7|DET 7|8|QUANT
+	8|5|PRED 9|3|PUNCT
+*A:	mhm &=channel_noise . 411140_412440
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and so and yet he said he can go out for dinner . 412370_415340
+%mor:	coord|and adv|so coord|and adv|yet pro:sub|he v|say&PAST pro:sub|he
+	mod|can v|go adv|out prep|for n|dinner .
+%gra:	1|6|LINK 2|6|JCT 3|2|CONJ 4|3|COORD 5|6|SUBJ 6|0|ROOT 7|9|SUBJ
+	8|9|AUX 9|6|COMP 10|9|JCT 11|9|JCT 12|11|POBJ 13|6|PUNCT
+*A:	&=channel_noise you're not xxx . 412710_413820
+%mor:	pro:per|you~aux|be&PRES neg|not .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|NEG 4|2|PUNCT
+*A:	yeah because &=channel_noise you're not you're not supposed to
+	&=channel_noise have that at a ninety degree angle . 416490_420340
+%mor:	co|yeah conj|because pro:per|you~cop|be&PRES neg|not
+	pro:per|you~aux|be&PRES neg|not part|suppose-PASTP inf|to v|have
+	pro:dem|that prep|at det:art|a det:num|ninety n|degree n|angle .
+%gra:	1|4|COM 2|4|LINK 3|4|SUBJ 4|0|ROOT 5|4|NEG 6|9|SUBJ 7|9|AUX 8|7|NEG
+	9|4|PRED 10|11|INF 11|9|COMP 12|11|OBJ 13|11|JCT 14|17|DET
+	15|16|QUANT 16|17|MOD 17|13|POBJ 18|4|PUNCT
+*B:	what . 417140_417300
+%mor:	pro:int|what .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	you're not supposed to have it more than a ninety degree angle . 420730_424300
+%mor:	pro:per|you~aux|be&PRES neg|not part|suppose-PASTP inf|to v|have
+	pro:per|it qn|more prep|than det:art|a det:num|ninety n|degree
+	n|angle .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|6|INF 6|4|COMP 7|6|OBJ
+	8|9|QUANT 9|6|JCT 10|13|DET 11|12|QUANT 12|13|MOD 13|9|POBJ
+	14|4|PUNCT
+*A:	&=breathes &=channel_noise oh . 421820_424470
+%mor:	co|oh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	more than ninety degree . 424860_426750
+%mor:	qn|more prep|than det:num|ninety n|degree .
+%gra:	1|0|INCROOT 2|1|JCT 3|4|QUANT 4|2|POBJ 5|1|PUNCT
+*A:	so I always had something you know a pillow under there or
+	something &=channel_noise . 426370_430120
+%mor:	co|so pro:sub|I adv|always v|have&PAST pro:indef|something
+	pro:per|you v|know det:art|a n|pillow adv|under adv|there coord|or
+	pro:indef|something .
+%gra:	1|4|COM 2|4|SUBJ 3|4|JCT 4|0|ROOT 5|4|OBJ 6|7|SUBJ 7|4|COMP 8|9|DET
+	9|7|OBJ 10|11|JCT 11|7|JCT 12|11|CONJ 13|12|COORD 14|4|PUNCT
+*B:	right right &=breathes and you know people think we're nuts
+	&=channel_noise . 429300_433600
+%mor:	adv|right adv|right coord|and pro:per|you v|know n|person&PL
+	v|think pro:sub|we~aux|be&PRES adj|nuts .
+%gra:	1|2|JCT 2|3|JCT 3|5|LINK 4|5|SUBJ 5|0|ROOT 6|7|SUBJ 7|5|COMP
+	8|9|SUBJ 9|5|COMP 10|9|PRED 11|5|PUNCT
+*A:	&=channel_noise . 432100_432520
+*B:	you know people come to visit and I say &=breathes you can sit here
+	there and there but you can't sit in those two chairs because those
+	are the chairs that Allie sit in &=breathes . 433710_441500
+%mor:	pro:per|you v|know n|person&PL v|come prep|to v|visit coord|and
+	pro:sub|I v|say pro:per|you mod|can v|sit adv|here adv|there
+	coord|and adv|there conj|but pro:per|you mod|can~neg|not v|sit
+	prep|in pro:dem|those det:num|two n|chair-PL conj|because
+	pro:dem|those cop|be&PRES det:art|the n|chair-PL pro:rel|that
+	n:prop|Allie v|sit adv|in .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|6|INF 6|4|COMP 7|9|LINK
+	8|9|SUBJ 9|6|CJCT 10|12|SUBJ 11|12|AUX 12|9|COMP 13|12|JCT 14|12|JCT
+	15|12|CONJ 16|21|SUBJ 17|21|LINK 18|21|SUBJ 19|21|AUX 20|19|NEG
+	21|15|COORD 22|21|JCT 23|25|DET 24|25|QUANT 25|22|POBJ 26|28|LINK
+	27|28|SUBJ 28|9|CJCT 29|30|DET 30|28|PRED 31|33|LINK 32|33|SUBJ
+	33|30|CMOD 34|33|JCT 35|2|PUNCT
+*A:	&=channel_noise . 437610_438260
+*A:	yeah . 441070_441530
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and they look at me like well what difference does it make . 441550_444440
+%mor:	coord|and pro:sub|they cop|look prep|at pro:obj|me prep|like n|well
+	pro:int|what n|difference mod|do&3S pro:per|it v|make .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|JCT 5|4|POBJ 6|3|JCT 7|6|POBJ
+	8|9|MOD 9|12|SUBJ 10|12|AUX 11|12|SUBJ 12|7|CMOD 13|3|PUNCT
+*A:	&=channel_noise . 441930_443290
+*B:	you know &=breathes it makes a lot of difference +/. 444710_446820
+%mor:	pro:per|you v|know pro:per|it v|make-3S det:art|a n|lot prep|of
+	n|difference +/.
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|6|DET 6|4|OBJ 7|6|NJCT
+	8|7|POBJ 9|2|PUNCT
+*A:	oh . 444820_444990
+%mor:	co|oh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&-mm &=channel_noise . 446630_447250
+*B:	+, the chair he's in &=channel_noise . 447080_448390
+%mor:	det:art|the n|chair pro:sub|he~aux|be&3S adv|in .
+%gra:	1|2|DET 2|0|INCROOT 3|4|SUBJ 4|2|CMOD 5|4|JCT 6|2|PUNCT
+*A:	sure &=channel_noise yeah . 447410_448520
+%mor:	co|sure co|yeah .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*B:	and then I'll say to him put your leg down +/. 448800_451860
+%mor:	coord|and adv:tem|then pro:sub|I~mod|will v|say prep|to pro:obj|him
+	v|put&ZERO det:poss|your n|leg adv|down +/.
+%gra:	1|5|LINK 2|5|JCT 3|5|SUBJ 4|5|AUX 5|0|ROOT 6|5|JCT 7|6|POBJ
+	8|5|COMP 9|10|MOD 10|8|OBJ 11|8|JCT 12|5|PUNCT
+*A:	&=channel_noise . 451820_452540
+*B:	+, you know &=breathes +/. 452450_453310
+%mor:	pro:per|you v|know +/.
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PUNCT
+*A:	&=channel_noise . 453090_453340
+*B:	+, and they think what is she badgering him for . 453400_456100
+%mor:	coord|and pro:sub|they v|think pro:int|what cop|be&3S pro:sub|she
+	part|badger-PRESP pro:obj|him prep|for .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|5|SUBJ 5|3|COMP 6|5|PRED 7|6|XMOD
+	8|7|OBJ 9|7|JCT 10|3|PUNCT
+*A:	&=channel_noise . 456060_456440
+*B:	but he forgets and he pulls that leg up &=channel_noise . 456260_459000
+%mor:	conj|but pro:sub|he v|forget-3S coord|and pro:sub|he v|pull-3S
+	pro:rel|that n|leg adv|up .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|6|LINK 5|6|SUBJ 6|3|CJCT 7|6|OBJ
+	8|7|POBJ 9|8|NJCT 10|3|PUNCT
+*A:	&-mm . 458860_459310
+*B:	and it is supposed to be extended +/. 459320_461310
+%mor:	coord|and pro:per|it aux|be&3S part|suppose-PASTP inf|to aux|be
+	part|extend-PASTP +/.
+%gra:	1|4|LINK 2|4|SUBJ 3|4|AUX 4|0|ROOT 5|7|INF 6|7|AUX 7|4|COMP
+	8|4|PUNCT
+*A:	yeah . 461420_461740
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	+, a little bit you know . 461850_462940
+%mor:	det:art|a adj|little n|bit pro:per|you v|know .
+%gra:	1|3|DET 2|3|MOD 3|0|INCROOT 4|5|SUBJ 5|3|CMOD 6|3|PUNCT
+*A:	&-mm yeah . 462230_463600
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	&=channel_noise he's a wonderful patient though . 463060_465250
+%mor:	pro:sub|he~cop|be&3S det:art|a adj|wonder-FULL n|patient adv|though
+	.
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|DET 4|5|MOD 5|2|PRED 6|5|NJCT 7|2|PUNCT
+*A:	yeah sure . 465080_466100
+%mor:	co|yeah adj|sure .
+%gra:	1|2|COM 2|0|ROOT 3|2|PUNCT
+*B:	you know &=breathes and . 465580_467350
+%mor:	pro:per|you v|know coord|and .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|CONJ 4|2|PUNCT
+*A:	&=channel_noise . 467250_467570
+*B:	he he &+j . 467470_468050
+%mor:	pro:sub|he pro:sub|he .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PUNCT
+*A:	&=channel_noise and it's very early yet Toni my god . 467710_470670
+%mor:	coord|and pro:per|it~cop|be&3S adv|very adv|early adv|yet
+	n:prop|Toni det:poss|my n|god .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|5|JCT 5|3|JCT 6|7|JCT 7|3|PRED 8|9|MOD
+	9|7|OBJ 10|3|PUNCT
+*B:	well that's what I'm saying you know &=breathes I . 470070_472770
+%mor:	co|well pro:dem|that~cop|be&3S pro:int|what pro:sub|I~aux|be&1S
+	part|say-PRESP pro:per|you v|know pro:sub|I .
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|7|LINK 5|7|SUBJ 6|7|AUX 7|3|PRED
+	8|9|SUBJ 9|7|COMP 10|9|OBJ 11|3|PUNCT
+*A:	&=channel_noise this is only a week . 471970_473740
+%mor:	pro:dem|this cop|be&3S adv|only det:art|a n|week .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|JCT 4|5|DET 5|2|PRED 6|2|PUNCT
+*B:	I said to Brent you know he was operated on friday and home monday
+	and . 473660_478810
+%mor:	pro:sub|I v|say&PAST prep|to n:prop|Brent pro:per|you v|know
+	pro:sub|he aux|be&PAST&13S part|operate-PASTP prep|on n|friday
+	coord|and n|home n|monday coord|and .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|JCT 4|3|POBJ 5|6|SUBJ 6|2|CJCT 7|9|SUBJ
+	8|9|AUX 9|6|COMP 10|9|JCT 11|14|MOD 12|11|CONJ 13|12|COORD
+	14|10|POBJ 15|14|COORD 16|2|PUNCT
+*A:	&=channel_noise yeah . 477660_479170
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	he said I didn't realize that &=breathes . 478850_480970
+%mor:	pro:sub|he v|say&PAST pro:sub|I mod|do&PAST~neg|not v|realize
+	pro:dem|that .
+%gra:	1|2|SUBJ 2|0|ROOT 3|6|SUBJ 4|6|AUX 5|4|NEG 6|2|COMP 7|6|OBJ
+	8|2|PUNCT
+*B:	he said that's a little soon I said you bet your bippie &=laughs .
+	481160_484530
+%mor:	pro:sub|he v|say&PAST pro:dem|that~cop|be&3S det:art|a adj|little
+	adv|soon pro:sub|I v|say&PAST pro:per|you v|bet&ZERO det:poss|your
+	n|bip-DIM .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|6|DET 6|4|PRED 7|9|JCT
+	8|9|SUBJ 9|6|CMOD 10|11|SUBJ 11|9|COMP 12|13|MOD 13|11|OBJ
+	14|2|PUNCT
+*A:	and and it's not nice for you either +/. 484710_486440
+%mor:	coord|and coord|and pro:per|it~cop|be&3S neg|not adj|nice prep|for
+	pro:per|you adv|either +/.
+%gra:	1|4|LINK 2|4|LINK 3|4|SUBJ 4|0|ROOT 5|4|NEG 6|4|PRED 7|6|JCT
+	8|7|POBJ 9|8|JCT 10|4|PUNCT
+*B:	&=channel_noise . 484760_485080
+*B:	no no &=breathes I've never been so frightened . 486620_489780
+%mor:	co|no co|no pro:sub|I~aux|have adv|never cop|be&PASTP adv|so
+	part|frighten-PASTP .
+%gra:	1|6|COM 2|6|COM 3|6|SUBJ 4|6|AUX 5|6|JCT 6|0|ROOT 7|8|JCT 8|6|PRED
+	9|6|PUNCT
+*A:	+, &=channel_noise because &=channel_noise . 487060_488520
+%mor:	conj|because .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=channel_noise . 490320_490620
+*B:	you know &=breathes when he fell . 490670_492970
+%mor:	pro:per|you v|know conj|when pro:sub|he v|fall&PAST .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|LINK 4|5|SUBJ 5|2|CJCT 6|2|PUNCT
+*A:	yeah . 491160_491720
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=channel_noise oh . 492930_494200
+%mor:	co|oh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	that did something to my confidence . 493300_495630
+%mor:	pro:rel|that v|do&PAST pro:indef|something prep|to det:poss|my
+	n|confidence .
+%gra:	1|2|LINK 2|0|ROOT 3|2|OBJ 4|2|JCT 5|6|MOD 6|4|POBJ 7|2|PUNCT
+*A:	I'm sure . 495810_496530
+%mor:	pro:sub|I~cop|be&1S adj|sure .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|2|PUNCT
+*B:	you know I mean I'm pretty confident and I've been around sick +/.
+	496660_499610
+%mor:	pro:per|you v|know pro:sub|I v|mean pro:sub|I~aux|be&1S adv|pretty
+	adj|confident coord|and pro:sub|I~aux|have cop|be&PASTP prep|around
+	adj|sick +/.
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|8|SUBJ 6|8|AUX 7|8|JCT
+	8|2|COMP 9|12|LINK 10|12|SUBJ 11|12|AUX 12|8|CMOD 13|14|JCT
+	14|12|PRED 15|2|PUNCT
+*A:	&=channel_noise &-mm . 497510_499000
+*B:	+, people and you know my mother had her hip +/. 499680_501970
+%mor:	n|person&PL coord|and pro:per|you v|know det:poss|my n|mother
+	v|have&PAST det:poss|her adj|hip +/.
+%gra:	1|0|INCROOT 2|4|LINK 3|4|SUBJ 4|1|CMOD 5|6|MOD 6|7|SUBJ 7|4|COMP
+	8|9|MOD 9|7|OBJ 10|1|PUNCT
+*A:	&-mm . 500810_500980
+*B:	+, and &=breathes &-uh you know I'm I . 502080_504530
+%mor:	coord|and pro:per|you v|know pro:sub|I~aux|be&1S pro:sub|I .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|6|SUBJ 5|6|AUX 6|3|COMP 7|3|PUNCT
+*A:	&=channel_noise . 502190_503630
+*B:	&+c and certainly I work with the fragile +/. 505080_507410
+%mor:	coord|and adv|certain&dadj-LY pro:sub|I v|work prep|with
+	det:art|the adj|fragile +/.
+%gra:	1|4|LINK 2|4|JCT 3|4|SUBJ 4|0|ROOT 5|4|JCT 6|7|DET 7|5|POBJ
+	8|4|PUNCT
+*A:	&=channel_noise mhm . 507490_508160
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	+, in special Ed you know . 507700_509170
+%mor:	prep|in n|special n:prop|Ed pro:per|you v|know .
+%gra:	1|0|INCROOT 2|1|POBJ 3|1|ENUM 4|5|SUBJ 5|3|CMOD 6|1|PUNCT
+*A:	&-mm . 509220_509770
+*B:	&=channel_noise and I've never &=channel_noise . 509930_511610
+%mor:	coord|and pro:sub|I~aux|have adv|never .
+%gra:	1|4|LINK 2|4|SUBJ 3|4|AUX 4|0|ROOT 5|4|PUNCT
+*B:	&-eh been so nervous as I was that night . 511920_514460
+%mor:	cop|be&PASTP adv|so adj|nervous prep|as pro:sub|I cop|be&PAST&13S
+	pro:dem|that n|night .
+%gra:	1|0|ROOT 2|3|JCT 3|1|PRED 4|6|LINK 5|6|SUBJ 6|1|CJCT 7|8|DET
+	8|6|PRED 9|1|PUNCT
+*A:	well that's enough &=channel_noise to scare the &=channel_noise
+	life out of you to +/. 514930_516890
+%mor:	co|well pro:dem|that~cop|be&3S adv|enough inf|to v|scare
+	det:art|the n|life adv|out prep|of pro:per|you prep|to +/.
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|3|JCT 5|6|INF 6|3|XJCT 7|8|DET 8|6|OBJ
+	9|6|JCT 10|9|JCT 11|10|POBJ 12|6|JCT 13|3|PUNCT
+*B:	uhhuh . 516630_517110
+%mor:	co|uhhuh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	+, bring him home and have him fall &=channel_noise . 516940_518650
+%mor:	v|bring pro:obj|him n|home coord|and v|have pro:obj|him v|fall .
+%gra:	1|0|ROOT 2|1|OBJ 3|1|JCT 4|1|CONJ 5|4|COORD 6|5|OBJ 7|5|COMP
+	8|1|PUNCT
+*B:	right you know &=breathes and then all I could think of is if he
+	+/. 518490_522010
+%mor:	adv|right pro:per|you v|know coord|and adv:tem|then pro:indef|all
+	pro:sub|I mod|could v|think prep|of cop|be&3S conj|if pro:sub|he +/.
+%gra:	1|3|JCT 2|3|SUBJ 3|0|ROOT 4|3|CONJ 5|4|COORD 6|9|LINK 7|9|SUBJ
+	8|9|AUX 9|5|COMP 10|9|JCT 11|10|POBJ 12|9|JCT 13|12|INCROOT
+	14|13|PUNCT
+*A:	&=channel_noise . 522180_523500
+*B:	+, pops something it was my fault . 522280_524510
+%mor:	v|pop-3S pro:indef|something pro:per|it cop|be&PAST&13S det:poss|my
+	n|fault .
+%gra:	1|0|ROOT 2|1|OBJ 3|4|SUBJ 4|2|CMOD 5|6|MOD 6|4|PRED 7|1|PUNCT
+*A:	yeah . 524530_525390
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	you know &=breathes . 525300_526020
+%mor:	pro:per|you v|know .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PUNCT
+*A:	&=channel_noise . 525750_525880
+*B:	really wasn't my fault but that's how I felt . 526110_528650
+%mor:	adv|real&dadj-LY cop|be&PAST&13S~neg|not det:poss|my n|fault
+	conj|but pro:dem|that~cop|be&3S adv:int|how pro:sub|I v|feel&PAST .
+%gra:	1|2|JCT 2|0|ROOT 3|2|NEG 4|5|MOD 5|2|PRED 6|8|LINK 7|8|SUBJ
+	8|2|CJCT 9|11|LINK 10|11|SUBJ 11|8|PRED 12|2|PUNCT
+*A:	&=channel_noise &-hm . 527960_529100
+*B:	you know &=breathes and then somebody else was saying well you need
+	to laugh more &=laughs and I thought, laugh more I'll smack you
+	&=laughs . 528960_537360
+%mor:	pro:per|you v|know coord|and adv:tem|then pro:indef|somebody
+	post|else aux|be&PAST&13S part|say-PRESP adv|well pro:per|you v|need
+	prep|to n|laugh adv|more coord|and pro:sub|I v|think&PAST cm|cm
+	n|laugh adv|more pro:sub|I~mod|will v|smack pro:per|you .
+%gra:	1|2|SUBJ 2|0|ROOT 3|8|LINK 4|8|JCT 5|8|SUBJ 6|5|PQ 7|8|AUX
+	8|11|XJCT 9|8|JCT 10|11|SUBJ 11|2|COMP 12|11|JCT 13|12|POBJ
+	14|11|JCT 15|17|LINK 16|17|SUBJ 17|2|CJCT 18|17|LP 19|23|SUBJ
+	20|23|JCT 21|23|SUBJ 22|23|AUX 23|17|COMP 24|23|OBJ 25|2|PUNCT
+*B:	&=laughs yeah you know so &=breathes &=laughs &+whe when I'm not
+	laughing or Allie's not laughing there's something wrong you know .
+	539290_547210
+%mor:	co|yeah pro:per|you v|know conj|so conj|when pro:sub|I~cop|be&1S
+	neg|not part|laugh-PRESP coord|or n:prop|Allie~aux|be&3S neg|not
+	n:gerund|laugh-PRESP pro:exist|there~cop|be&3S pro:indef|something
+	adj|wrong pro:per|you v|know .
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|3|OBJ 5|9|LINK 6|9|SUBJ 7|9|AUX 8|7|NEG
+	9|4|CPOBJ 10|9|CONJ 11|14|SUBJ 12|14|AUX 13|12|NEG 14|10|COORD
+	15|16|SUBJ 16|14|COMP 17|16|PRED 18|17|POSTMOD 19|20|SUBJ 20|18|CMOD
+	21|3|PUNCT
+*A:	yes because you do very well in that area too xxx yeah
+	&=channel_noise . 537710_542960
+%mor:	co|yes conj|because pro:per|you v|do adv|very adv|well prep|in
+	pro:dem|that n|area post|too co|yeah .
+%gra:	1|4|COM 2|4|LINK 3|4|SUBJ 4|0|ROOT 5|6|JCT 6|4|JCT 7|4|JCT 8|9|DET
+	9|7|POBJ 10|4|JCT 11|4|COM 12|4|PUNCT
+*A:	yeah yeah &=channel_noise . 546360_549000
+%mor:	co|yeah co|yeah .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*B:	and &-uh then somebody else said well you need to get out more Toni
+	. 547750_551580
+%mor:	coord|and adv:tem|then pro:indef|somebody post|else v|say&PAST
+	adv|well pro:per|you v|need inf|to v|get adv|out adv|more
+	n:prop|Toni .
+%gra:	1|5|LINK 2|5|JCT 3|5|SUBJ 4|3|PQ 5|0|ROOT 6|8|JCT 7|8|SUBJ 8|5|COMP
+	9|10|INF 10|8|COMP 11|10|JCT 12|10|JCT 13|12|POBJ 14|5|PUNCT
+*B:	and I thought why . 552310_553440
+%mor:	coord|and pro:sub|I v|think&PAST adv:int|why .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|OBJ 5|3|PUNCT
+*A:	&=channel_noise . 552690_553940
+*B:	I want to be with Allie . 553870_555210
+%mor:	pro:sub|I v|want inf|to cop|be prep|with n:prop|Allie .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|INF 4|2|COMP 5|4|JCT 6|5|POBJ 7|2|PUNCT
+*A:	yeah sure . 555080_555990
+%mor:	co|yeah adj|sure .
+%gra:	1|2|COM 2|0|ROOT 3|2|PUNCT
+*B:	you know I have no desire I wouldn't care if I ever went out again
+	you know . 555790_559450
+%mor:	pro:per|you v|know pro:sub|I aux|have qn|no n|desire pro:sub|I
+	mod|will&COND~neg|not n|care conj|if pro:sub|I adv|ever v|go&PAST
+	adv|out adv|again pro:per|you v|know .
+%gra:	1|2|SUBJ 2|0|ROOT 3|6|SUBJ 4|6|AUX 5|6|QUANT 6|2|COMP 7|10|SUBJ
+	8|10|AUX 9|8|NEG 10|2|COMP 11|14|LINK 12|14|SUBJ 13|14|JCT
+	14|18|CJCT 15|14|JCT 16|14|JCT 17|18|SUBJ 18|10|CMOD 19|2|PUNCT
+*A:	&=channel_noise &-mm &-mm . 557730_560300
+*B:	and she said oh you need to get out and you know be among people
+	and everything and . 560050_564620
+%mor:	coord|and pro:sub|she v|say&PAST co|oh pro:per|you v|need inf|to
+	v|get adv|out coord|and pro:per|you v|know cop|be prep|among
+	n|person&PL coord|and pro:indef|everything coord|and .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|6|COM 5|6|SUBJ 6|3|COMP 7|8|INF
+	8|6|COMP 9|8|JCT 10|8|CONJ 11|12|SUBJ 12|10|COORD 13|12|COMP
+	14|13|JCT 15|14|POBJ 16|15|CONJ 17|16|COORD 18|15|COORD 19|3|PUNCT
+*A:	&=channel_noise . 562680_564990
+*B:	that's because she needs that she could this person can never stay
+	home five minutes . 565120_569790
+%mor:	pro:dem|that~cop|be&3S conj|because pro:sub|she v|need-3S
+	pro:rel|that pro:sub|she mod|could pro:dem|this n|person mod|can
+	adv|never cop|stay n|home det:num|five n|minute-PL .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|LINK 4|5|SUBJ 5|2|CJCT 6|10|LINK 7|10|SUBJ
+	8|10|AUX 9|10|DET 10|13|SUBJ 11|13|AUX 12|13|JCT 13|5|COMP 14|13|JCT
+	15|16|QUANT 16|13|PRED 17|2|PUNCT
+*A:	&-uh . 569810_570100
+*B:	but I don't need that I can't tell you the last time I've been in a
+	department store . 570940_575330
+%mor:	conj|but pro:sub|I mod|do~neg|not v|need pro:dem|that pro:sub|I
+	mod|can~neg|not v|tell pro:per|you det:art|the adj|last n|time
+	pro:sub|I~aux|have cop|be&PASTP prep|in det:art|a n|department
+	n|store .
+%gra:	1|5|LINK 2|5|SUBJ 3|5|AUX 4|3|NEG 5|10|CJCT 6|5|OBJ 7|10|SUBJ
+	8|10|AUX 9|8|NEG 10|0|ROOT 11|10|OBJ2 12|14|DET 13|14|MOD 14|10|OBJ
+	15|17|SUBJ 16|17|AUX 17|14|CMOD 18|17|JCT 19|21|DET 20|21|MOD
+	21|18|POBJ 22|10|PUNCT
+*A:	and I'm sure he doesn't want to go out &=channel_noise . 574780_576660
+%mor:	coord|and pro:sub|I~aux|be&1S adv|sure pro:sub|he mod|do&3S~neg|not
+	v|want inf|to v|go adv|out .
+%gra:	1|4|LINK 2|4|SUBJ 3|4|AUX 4|8|JCT 5|8|SUBJ 6|8|AUX 7|6|NEG 8|0|ROOT
+	9|10|INF 10|8|COMP 11|10|JCT 12|8|PUNCT
+*B:	oh no &=laughs he was terrified at the doctor's today because
+	&=breathes . 576550_581320
+%mor:	co|oh co|no pro:sub|he aux|be&PAST&13S part|terrify-PASTP prep|at
+	det:art|the n|doctor~poss|s adv:tem|today conj|because .
+%gra:	1|5|COM 2|5|COM 3|5|SUBJ 4|5|AUX 5|0|ROOT 6|5|JCT 7|8|DET 8|6|POBJ
+	9|8|POSS 10|5|PUNCT 11|10|INCROOT 12|11|PUNCT
+*A:	&=channel_noise oh yeah . 577830_581030
+%mor:	co|oh co|yeah .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*B:	little kids were running around and the mothers weren't watching .
+	581400_584590
+%mor:	adj|little n|kid-PL aux|be&PAST part|run-PRESP adv|around coord|and
+	det:art|the n|mother-PL cop|be&PAST~neg|not part|watch-PRESP .
+%gra:	1|2|MOD 2|4|SUBJ 3|4|AUX 4|0|ROOT 5|4|JCT 6|9|LINK 7|8|DET 8|9|SUBJ
+	9|4|CJCT 10|9|NEG 11|9|PRED 12|4|PUNCT
+*A:	&=channel_noise is he using the walker or the crutches . 582990_585410
+%mor:	cop|be&3S pro:sub|he part|use-PRESP det:art|the n|walk&dv-AGT
+	coord|or det:art|the n|crutch-PL .
+%gra:	1|0|ROOT 2|1|PRED 3|2|XMOD 4|5|DET 5|3|OBJ 6|5|CONJ 7|8|DET
+	8|6|COORD 9|1|PUNCT
+*B:	&=smacks:lips &=breathes &-uh he was using the walker and . 585110_588880
+%mor:	pro:sub|he aux|be&PAST&13S part|use-PRESP det:art|the n|walk&dv-AGT
+	coord|and .
+%gra:	1|3|SUBJ 2|3|AUX 3|0|ROOT 4|5|DET 5|3|OBJ 6|3|CONJ 7|3|PUNCT
+*A:	&=channel_noise . 588230_589220
+*B:	&-uh then &-uh monday the nurse &+encou the therapist encouraged
+	him to try the +/. 589050_594500
+%mor:	adv:tem|then n|monday det:art|the n|nurse det:art|the n|therapist
+	v|encourage-PAST pro:obj|him inf|to v|try det:art|the +/.
+%gra:	1|7|JCT 2|7|SUBJ 3|4|DET 4|7|JCT 5|6|DET 6|7|SUBJ 7|0|ROOT 8|7|OBJ
+	9|10|INF 10|7|COMP 11|12|DET 12|10|OBJ
+*A:	&=channel_noise . 593120_593940
+*B:	+, crutches . 594640_595210
+%mor:	n|crutch-PL .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	uhhuh . 595250_595610
+%mor:	co|uhhuh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and so today he used the crutches going to the doctor's office +/.
+	596010_600140
+%mor:	coord|and adv|so adv:tem|today pro:sub|he v|use-PAST det:art|the
+	n|crutch-PL part|go-PRESP prep|to det:art|the n|doctor~poss|s
+	n|office +/.
+%gra:	1|5|LINK 2|3|JCT 3|5|JCT 4|5|SUBJ 5|0|ROOT 6|7|DET 7|5|OBJ 8|7|XMOD
+	9|8|JCT 10|11|DET 11|13|MOD 12|11|POSS 13|9|POBJ 14|5|PUNCT
+*A:	&=channel_noise . 598510_599490
+*B:	+, because it was easier &=channel_noise . 600290_601770
+%mor:	conj|because pro:per|it cop|be&PAST&13S adj|ease&dn-Y-CP .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|PRED 5|3|PUNCT
+*A:	&-mm . 601600_602040
+*B:	the doctor's office no matter where you park +/. 602160_604880
+%mor:	det:art|the n|doctor~poss|s n|office qn|no n|matter pro:rel|where
+	pro:per|you v|park +/.
+%gra:	1|2|DET 2|4|MOD 3|2|POSS 4|0|ROOT 5|6|QUANT 6|4|OBJ 7|9|LINK
+	8|9|SUBJ 9|6|CMOD 10|4|PUNCT
+*A:	&=channel_noise . 603190_605420
+*B:	+, you have a long walk . 605520_608000
+%mor:	pro:per|you v|have det:art|a adj|long n|walk .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|DET 4|5|MOD 5|2|OBJ 6|2|PUNCT
+*A:	&=breathes &=channel_noise . 607870_608720
+*B:	to the door &=breathes +/. 608290_609500
+%mor:	prep|to det:art|the n|door +/.
+%gra:	1|0|INCROOT 2|3|DET 3|1|POBJ 4|1|PUNCT
+*A:	&=channel_noise &-mm . 609100_610050
+*B:	+, because they have like a courtyard +/. 609770_611960
+%mor:	conj|because pro:sub|they v|have prep|like det:art|a n|courtyard
+	+/.
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|JCT 5|6|DET 6|4|POBJ 7|3|PUNCT
+*A:	yeah . 612300_612660
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	+, instead of having handicap +/. 612690_614060
+%mor:	adv|instead prep|of n:gerund|have-PRESP n|handicap +/.
+%gra:	1|0|INCROOT 2|1|JCT 3|4|MOD 4|2|POBJ 5|1|PUNCT
+*A:	&=channel_noise . 613220_614260
+*B:	+, parking &=channel_noise . 614160_615100
+%mor:	part|park-PRESP .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=channel_noise &-mm . 614870_615530
+*B:	and the area that you have to walk on +/. 615690_618110
+%mor:	coord|and det:art|the n|area pro:rel|that pro:per|you v|have inf|to
+	v|walk adv|on +/.
+%gra:	1|0|INCROOT 2|3|DET 3|1|COORD 4|6|LINK 5|6|SUBJ 6|3|CMOD 7|8|INF
+	8|6|COMP 9|8|JCT 10|1|PUNCT
+*A:	&=channel_noise . 618240_619410
+*B:	+, half of it is &-uh like fake stonework . 618580_623500
+%mor:	n|half prep|of pro:per|it cop|be&3S co|like adj|fake
+	n|+n|stone+n|work .
+%gra:	1|4|SUBJ 2|1|NJCT 3|2|POBJ 4|0|ROOT 5|7|COM 6|7|MOD 7|4|PRED
+	8|4|PUNCT
+*A:	&=channel_noise oh boy yeah . 623240_624710
+%mor:	co|oh co|boy co|yeah .
+%gra:	1|3|COM 2|3|COM 3|0|INCROOT 4|3|PUNCT
+*B:	they're crazy . 624880_625820
+%mor:	pro:sub|they~aux|be&PRES adj|craze&dv-Y .
+%gra:	1|3|SUBJ 2|3|AUX 3|0|ROOT 4|3|PUNCT
+*B:	this is for an orthopedic group &=breathes &=laughs . 626540_628650
+%mor:	pro:dem|this cop|be&3S prep|for det:art|a adj|orthopedic n|group .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|JCT 4|6|DET 5|6|MOD 6|3|POBJ 7|2|PUNCT
+*A:	&-mm . 626700_627060
+*A:	&-mm &=breathes . 628430_629210
+*B:	you know . 628850_629590
+%mor:	pro:per|you v|know .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PUNCT
+*A:	&=channel_noise . 629900_629990
+*B:	they're nuts &=breathes . 629970_631010
+%mor:	pro:sub|they~aux|be&PRES adj|nuts .
+%gra:	1|3|SUBJ 2|3|AUX 3|0|ROOT 4|3|PUNCT
+*A:	yeah . 630780_631200
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and &-um and then when we went to +/. 631340_634110
+%mor:	coord|and coord|and adv:tem|then conj|when pro:sub|we v|go&PAST
+	prep|to +/.
+%gra:	1|6|LINK 2|1|CONJ 3|2|COORD 4|6|LINK 5|6|SUBJ 6|0|ROOT 7|6|JCT
+	8|6|PUNCT
+*A:	&=channel_noise . 633490_634860
+*B:	+, pull into the parking place some dude . 634360_636870
+%mor:	v|pull prep|into det:art|the n:gerund|park-PRESP n|place qn|some
+	n|dude .
+%gra:	1|0|ROOT 2|1|JCT 3|5|DET 4|5|MOD 5|2|POBJ 6|7|QUANT 7|5|OBJ
+	8|1|PUNCT
+*B:	&+a in you know in the handicap parking place he had taken up two .
+	637670_640870
+%mor:	prep|in pro:per|you v|know prep|in det:art|the n|handicap
+	part|park-PRESP n|place pro:sub|he aux|have&PAST part|take&PASTP
+	prep|up det:num|two .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|JCT 5|6|DET 6|4|POBJ 7|8|MOD
+	8|3|ENUM 9|11|SUBJ 10|11|AUX 11|8|CMOD 12|11|JCT 13|12|POBJ
+	14|3|PUNCT
+*A:	&=channel_noise . 638860_639680
+*B:	+, places where the ramp was . 641320_643010
+%mor:	n|place-PL adv:int|where det:art|the n|ramp cop|be&PAST&13S .
+%gra:	1|0|INCROOT 2|5|LINK 3|4|DET 4|5|SUBJ 5|1|COMP 6|1|PUNCT
+*A:	&=channel_noise &-mm . 643300_644100
+*B:	a young kid . 643910_644780
+%mor:	det:art|a adj|young n|kid .
+%gra:	1|3|DET 2|3|MOD 3|0|INCROOT 4|3|PUNCT
+*B:	and I said to Allie boy I hope he gets in that car when I'm out
+	here because I'm going to give him a piece of my mind &=breathes . 646020_651910
+%mor:	coord|and pro:sub|I v|say&PAST prep|to n:prop|Allie n|boy pro:sub|I
+	v|hope pro:sub|he v|get-3S prep|in pro:dem|that n|car conj|when
+	pro:sub|I~cop|be&1S adv|out adv|here conj|because
+	pro:sub|I~aux|be&1S part|go-PRESP inf|to v|give pro:obj|him
+	det:art|a n|piece prep|of det:poss|my n|mind .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|JCT 5|6|MOD 6|4|POBJ 7|8|SUBJ
+	8|3|CJCT 9|10|SUBJ 10|8|COMP 11|10|JCT 12|13|DET 13|11|POBJ
+	14|16|LINK 15|16|SUBJ 16|8|CJCT 17|16|JCT 18|16|JCT 19|22|LINK
+	20|22|SUBJ 21|22|AUX 22|16|CJCT 23|24|INF 24|22|COMP 25|24|OBJ
+	26|27|DET 27|24|OBJ 28|27|NJCT 29|30|MOD 30|28|POBJ 31|3|PUNCT
+*A:	&=channel_noise . 648630_649710
+*A:	&-mm . 651750_652240
+*B:	but I was parking the car when he got in and took off you know so I
+	didn't get my opportunity . 652130_657210
+%mor:	conj|but pro:sub|I aux|be&PAST&13S part|park-PRESP det:art|the
+	n|car conj|when pro:sub|he v|get&PAST adv|in coord|and v|take&PAST
+	prep|off pro:per|you v|know co|so pro:sub|I mod|do&PAST~neg|not
+	v|get det:poss|my n|opportunity .
+%gra:	1|4|LINK 2|4|SUBJ 3|4|AUX 4|15|XJCT 5|6|DET 6|4|OBJ 7|9|LINK
+	8|9|SUBJ 9|4|CJCT 10|4|JCT 11|4|CONJ 12|11|COORD 13|12|JCT
+	14|13|POBJ 15|0|ROOT 16|20|COM 17|20|SUBJ 18|20|AUX 19|18|NEG
+	20|15|COMP 21|22|MOD 22|20|OBJ 23|15|PUNCT
+*A:	&=channel_noise . 654250_654820
+*A:	&-mm . 657320_658030
+*B:	but anyway he used the crutches going and coming I had the walker
+	with me but &=breathes he . 658590_663660
+%mor:	conj|but co|anyway pro:sub|he v|use-PAST det:art|the n|crutch-PL
+	part|go-PRESP coord|and part|come-PRESP pro:sub|I v|have&PAST
+	det:art|the n|walk&dv-AGT prep|with pro:obj|me conj|but pro:sub|he .
+%gra:	1|4|LINK 2|4|COM 3|4|SUBJ 4|0|ROOT 5|6|DET 6|4|OBJ 7|6|XMOD
+	8|7|CONJ 9|8|COORD 10|11|SUBJ 11|9|COMP 12|13|DET 13|11|OBJ
+	14|11|JCT 15|14|POBJ 16|4|CONJ 17|16|COORD 18|4|PUNCT
+*A:	&=channel_noise &=clears:throat . 658990_659820
+*A:	see I never use the &+cru I'd I never &+u I would be afraid to use
+	&+cru . 663240_666520
+%mor:	v|see pro:sub|I adv|never v|use det:art|the pro:sub|I~mod|genmod
+	pro:sub|I adv|never pro:sub|I mod|will&COND cop|be adj|afraid
+	prep|to n|use .
+%gra:	1|4|LINK 2|4|SUBJ 3|4|JCT 4|0|ROOT 5|8|DET 6|8|SUBJ 7|8|AUX
+	8|12|SUBJ 9|12|JCT 10|12|SUBJ 11|12|AUX 12|4|COMP 13|12|PRED
+	14|13|JCT 15|14|POBJ 16|4|PUNCT
+*B:	yeah he &+wa he was quite comfortable with the crutches . 666040_669020
+%mor:	co|yeah pro:sub|he pro:sub|he cop|be&PAST&13S adv|quite
+	adj|comfort&dv-ABLE prep|with det:art|the n|crutch-PL .
+%gra:	1|4|COM 2|4|SUBJ 3|4|SUBJ 4|0|ROOT 5|6|JCT 6|4|PRED 7|4|JCT 8|9|DET
+	9|7|POBJ 10|4|PUNCT
+*A:	&-mm &=channel_noise I think they're newer . 668830_670560
+%mor:	pro:sub|I v|think pro:sub|they~aux|be&PRES adj|new-CP .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|SUBJ 4|5|AUX 5|2|JCT 6|2|PUNCT
+*B:	and but he can't use them for any length of time because he gets
+	tired . 669560_674110
+%mor:	coord|and conj|but pro:sub|he mod|can~neg|not v|use pro:obj|them
+	prep|for qn|any n|length prep|of n|time conj|because pro:sub|he
+	v|get-3S part|tire-PASTP .
+%gra:	1|6|LINK 2|6|LINK 3|6|SUBJ 4|6|AUX 5|4|NEG 6|0|ROOT 7|6|OBJ 8|6|JCT
+	9|10|QUANT 10|8|POBJ 11|10|NJCT 12|11|POBJ 13|15|LINK 14|15|SUBJ
+	15|6|CJCT 16|15|OBJ 17|6|PUNCT
+*A:	&=channel_noise yeah . 673650_675260
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and so let's see what else so &=breathes . 675130_678020
+%mor:	coord|and co|so v|let~pro:obj|us v|see pro:int|what post|else
+	adv|so .
+%gra:	1|3|LINK 2|3|COM 3|0|ROOT 4|5|SUBJ 5|3|COMP 6|5|OBJ 7|6|PQ 8|5|JCT
+	9|3|PUNCT
+*B:	the swelling has now pretty well gone down but he said to wear the
+	sock for another week +/. 678140_683240
+%mor:	det:art|the part|swell-PRESP aux|have&3S adv|now adj|pretty
+	adv|well part|go&PASTP adv|down conj|but pro:sub|he v|say&PAST
+	inf|to v|wear det:art|the n|sock prep|for qn|another n|week +/.
+%gra:	1|2|DET 2|7|SUBJ 3|7|AUX 4|3|JCT 5|7|JCT 6|7|JCT 7|0|ROOT 8|7|JCT
+	9|11|LINK 10|11|SUBJ 11|7|CJCT 12|13|INF 13|11|COMP 14|15|DET
+	15|13|OBJ 16|13|JCT 17|18|QUANT 18|16|POBJ 19|7|PUNCT
+*A:	&=channel_noise . 679110_680330
+*A:	&=channel_noise . 683640_685080
+*B:	+, during the day . 683880_684880
+%mor:	prep|during det:art|the n|day .
+%gra:	1|0|INCROOT 2|3|DET 3|1|POBJ 4|1|PUNCT
+*B:	he told me to get vitamin e@l and break it open and put it on the
+	incision . 685400_690090
+%mor:	pro:sub|he v|tell&PAST pro:obj|me inf|to v|get n|vitamin n:let|e
+	coord|and v|break pro:per|it adj|open coord|and v|put&ZERO
+	pro:per|it prep|on det:art|the n|incision .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|OBJ 4|5|INF 5|2|COMP 6|5|OBJ 7|6|POSTMOD
+	8|5|CONJ 9|8|COORD 10|9|OBJ 11|9|JCT 12|11|CONJ 13|12|COORD
+	14|13|OBJ 15|9|JCT 16|17|DET 17|15|POBJ 18|2|PUNCT
+*A:	&=channel_noise &-hm &=channel_noise . 689130_691300
+*B:	that helps in the healing of the incision . 691200_693400
+%mor:	pro:dem|that n|help-PL prep|in det:art|the part|heal-PRESP prep|of
+	det:art|the n|incision .
+%gra:	1|2|DET 2|0|INCROOT 3|2|NJCT 4|5|DET 5|3|POBJ 6|5|JCT 7|8|DET
+	8|6|POBJ 9|2|PUNCT
+*A:	mhm &=channel_noise . 693460_694600
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	&=smacks:lips and &-um &=breathes . 693930_696220
+%mor:	coord|and .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	you know and to put peroxide on the incision and that . 697580_700390
+%mor:	pro:per|you v|know coord|and prep|to v|put&ZERO n|peroxide prep|on
+	det:art|the n|incision coord|and pro:dem|that .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|CONJ 4|5|JCT 5|3|COORD 6|5|OBJ 7|5|JCT
+	8|9|DET 9|7|POBJ 10|5|CONJ 11|10|COORD 12|2|PUNCT
+*A:	&=channel_noise . 699910_700590
+*B:	and then, one question we didn't ask . 701060_703360
+%mor:	coord|and adv:tem|then cm|cm det:num|one n|question pro:sub|we
+	mod|do&PAST~neg|not v|ask .
+%gra:	1|0|INCROOT 2|1|COORD 3|2|LP 4|5|QUANT 5|2|APP 6|9|SUBJ 7|9|AUX
+	8|7|NEG 9|5|CMOD 10|1|PUNCT
+@End

@@ -1,0 +1,160 @@
+en_4289 audit-done
+en_4289 ntalkers=2 nfemale=2 nmale=0
+en_4289 siA difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4289 siA ntalkers=1 nfemale=1 nmale=0
+en_4289 siB difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4289 siB ntalkers=1 nfemale=1 nmale=0
+en_4289 taA sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_4289 taB sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_4290 audit-done
+en_4290 ntalkers=2 nfemale=1 nmale=1
+en_4290 siA difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4290 siA ntalkers=1 nfemale=1 nmale=0
+en_4290 siB difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4290 siB ntalkers=1 nfemale=0 nmale=1
+en_4290 taA sex=female age=none rate=none artic=none acc_pron=none dial_wds=none accent=standard 
+en_4290 taB sex=male age=none rate=none artic=none acc_pron=none dial_wds=none accent=standard 
+en_4316 audit-done
+en_4316 ntalkers=2 nfemale=2 nmale=0
+en_4316 siA difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4316 siA ntalkers=1 nfemale=1 nmale=0
+en_4316 siB difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4316 siB ntalkers=1 nfemale=1 nmale=0
+en_4316 taA sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_4316 taB sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_4522 audit-done
+en_4522 ntalkers=2 nfemale=2 nmale=0
+en_4522 siA difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4522 siA ntalkers=1 nfemale=1 nmale=0
+en_4522 siB difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4522 siB ntalkers=1 nfemale=1 nmale=0
+en_4522 taA sex=female age=elderly rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_4522 taB sex=female age=elderly rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_4726 audit-done
+en_4726 ntalkers=2 nfemale=0 nmale=2
+en_4726 siA difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4726 siA ntalkers=1 nfemale=0 nmale=1
+en_4726 siB difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4726 siB ntalkers=1 nfemale=0 nmale=1
+en_4726 taA sex=male age=none rate=none artic=none acc_pron=none dial_wds=none accent=standard 
+en_4726 taB sex=male age=none rate=none artic=none acc_pron=none dial_wds=none accent=standard 
+en_4753 audit-done
+en_4753 ntalkers=2 nfemale=2 nmale=0
+en_4753 siA difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4753 siA ntalkers=1 nfemale=1 nmale=0
+en_4753 siB difficulty=1 bgnoise=1 chnoise=2 distortion=2 crosstalk=1
+en_4753 siB ntalkers=1 nfemale=1 nmale=0
+en_4753 taA sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_4753 taB sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_4790 audit-done
+en_4790 ntalkers=2 nfemale=2 nmale=0
+en_4790 siA difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4790 siA ntalkers=1 nfemale=1 nmale=0
+en_4790 siB difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4790 siB ntalkers=1 nfemale=1 nmale=0
+en_4790 taA sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_4790 taB sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_4802 audit-done
+en_4802 ntalkers=2 nfemale=2 nmale=0
+en_4802 siA difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4802 siA ntalkers=1 nfemale=1 nmale=0
+en_4802 siB difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4802 siB ntalkers=1 nfemale=1 nmale=0
+en_4802 taA sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_4802 taB sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_4824 audit-done
+en_4824 ntalkers=2 nfemale=2 nmale=0
+en_4824 siA difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4824 siA ntalkers=1 nfemale=1 nmale=0
+en_4824 siB difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4824 siB ntalkers=1 nfemale=1 nmale=0
+en_4824 taA sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_4824 taB sex=female age=elderly rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_4875 audit-done
+en_4875 ntalkers=2 nfemale=2 nmale=0
+en_4875 siA difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4875 siA ntalkers=1 nfemale=1 nmale=0
+en_4875 siB difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4875 siB ntalkers=1 nfemale=1 nmale=0
+en_4875 taA sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_4875 taB sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_4902 audit-done
+en_4902 ntalkers=2 nfemale=2 nmale=0
+en_4902 siA difficulty=3 bgnoise=3 chnoise=1 distortion=1 crosstalk=1
+en_4902 siA ntalkers=1 nfemale=1 nmale=0
+en_4902 siB difficulty=2 bgnoise=3 chnoise=1 distortion=1 crosstalk=1
+en_4902 siB ntalkers=1 nfemale=1 nmale=0
+en_4902 taA sex=female age=adult rate=normal artic=clear acc_pron=1 dial_wds=1 accent=standard 
+en_4902 taB sex=female age=adult rate=normal artic=clear acc_pron=1 dial_wds=1 accent=standard 
+en_4908 audit-done
+en_4908 ntalkers=2 nfemale=1 nmale=1
+en_4908 siA difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4908 siA ntalkers=1 nfemale=1 nmale=0
+en_4908 siB difficulty=1 bgnoise=1 chnoise=1 distortion=2 crosstalk=1
+en_4908 siB ntalkers=1 nfemale=0 nmale=1
+en_4908 taA sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_4908 taB sex=male age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_4968 audit-done
+en_4968 ntalkers=2 nfemale=2 nmale=0
+en_4968 siA difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4968 siA ntalkers=1 nfemale=1 nmale=0
+en_4968 siB difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_4968 siB ntalkers=1 nfemale=1 nmale=0
+en_4968 taA sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_4968 taB sex=female age=none rate=none artic=none acc_pron=none dial_wds=none accent=standard 
+en_5020 audit-done
+en_5020 ntalkers=2 nfemale=1 nmale=1
+en_5020 siA difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_5020 siA ntalkers=1 nfemale=1 nmale=0
+en_5020 siB difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_5020 siB ntalkers=1 nfemale=0 nmale=1
+en_5020 taA sex=female age=adult rate=normal artic=clear acc_pron=1 dial_wds=1 accent=standard 
+en_5020 taB sex=male age=adult rate=normal artic=clear acc_pron=1 dial_wds=1 accent=standard 
+en_5023 audit-done
+en_5023 ntalkers=2 nfemale=2 nmale=0
+en_5023 siA difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_5023 siA ntalkers=1 nfemale=1 nmale=0
+en_5023 siB difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_5023 siB ntalkers=1 nfemale=1 nmale=0
+en_5023 taA sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_5023 taB sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_6130 audit-done
+en_6130 ntalkers=2 nfemale=2 nmale=0
+en_6130 siA difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_6130 siA ntalkers=1 nfemale=1 nmale=0
+en_6130 siB difficulty=2 bgnoise=2 chnoise=1 distortion=1 crosstalk=1
+en_6130 siB ntalkers=1 nfemale=1 nmale=0
+en_6130 taA sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_6130 taB sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 
+en_6165 audit-done
+en_6165 ntalkers=2 nfemale=2 nmale=0
+en_6165 siA difficulty=1 bgnoise=1 chnoise=2 distortion=1 crosstalk=1
+en_6165 siA ntalkers=1 nfemale=1 nmale=0
+en_6165 siB difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_6165 siB ntalkers=1 nfemale=1 nmale=0
+en_6165 taA sex=female age=juvenile rate=normal artic=clear acc_pron=1 dial_wds=1 accent=standard 
+en_6165 taB sex=female age=adult rate=normal artic=clear acc_pron=1 dial_wds=1 accent=standard 
+en_6217 audit-done
+en_6217 ntalkers=2 nfemale=2 nmale=0
+en_6217 siA difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_6217 siA ntalkers=1 nfemale=0 nmale=0
+en_6217 siB difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_6217 siB ntalkers=1 nfemale=1 nmale=0
+en_6217 taA sex=female age=none rate=none artic=none acc_pron=none dial_wds=none accent=standard 
+en_6217 taB sex=female age=none rate=none artic=none acc_pron=none dial_wds=none accent=standard 
+en_6474 audit-done
+en_6474 ntalkers=2 nfemale=2 nmale=0
+en_6474 siA difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_6474 siA ntalkers=1 nfemale=1 nmale=0
+en_6474 siB difficulty=1 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_6474 siB ntalkers=1 nfemale=1 nmale=0
+en_6474 taA sex=female age=none rate=none artic=none acc_pron=none dial_wds=none accent=standard 
+en_6474 taB sex=female age=none rate=none artic=none acc_pron=none dial_wds=none accent=standard 
+en_6880 audit-done
+en_6880 ntalkers=2 nfemale=1 nmale=1
+en_6880 siA difficulty=2 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_6880 siA ntalkers=1 nfemale=0 nmale=1
+en_6880 siB difficulty=2 bgnoise=1 chnoise=1 distortion=1 crosstalk=1
+en_6880 siB ntalkers=1 nfemale=1 nmale=0
+en_6880 taA sex=male age=adult rate=normal artic=clear acc_pron=none dial_wds=1 accent=standard 
+en_6880 taB sex=female age=adult rate=normal artic=clear acc_pron=none dial_wds=none accent=standard 

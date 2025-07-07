@@ -1,0 +1,57 @@
+# This is an FTP publication.  At the top level of the distribution there
+# is an index.html file and transcr and doc subdirectories.  The contents
+# of the distribution are listed below.  The total filesize is 363 Kbytes
+# uncompressed.
+#
+doc/ch_eng.doc
+doc/che-callinfo.txt
+doc/che-callinfo.tbl
+doc/file.tbl
+doc/swb-callinfo.tbl
+doc/swb-callinfo.txt
+doc/swb-callstat.tbl
+doc/swb-callstat.txt
+doc/swb-spkrinfo.tbl
+doc/swb-spkrinfo.txt
+doc/swbinfo.txt
+index.html
+transcr/en_4289.txt
+transcr/en_4290.txt
+transcr/en_4316.txt
+transcr/en_4522.txt
+transcr/en_4726.txt
+transcr/en_4753.txt
+transcr/en_4790.txt
+transcr/en_4802.txt
+transcr/en_4824.txt
+transcr/en_4875.txt
+transcr/en_4902.txt
+transcr/en_4908.txt
+transcr/en_4968.txt
+transcr/en_5020.txt
+transcr/en_5023.txt
+transcr/en_6130.txt
+transcr/en_6165.txt
+transcr/en_6217.txt
+transcr/en_6474.txt
+transcr/en_6880.txt
+transcr/sw_20017.txt
+transcr/sw_20136.txt
+transcr/sw_20189.txt
+transcr/sw_20388.txt
+transcr/sw_20414.txt
+transcr/sw_20663.txt
+transcr/sw_21004.txt
+transcr/sw_21060.txt
+transcr/sw_21498.txt
+transcr/sw_21538.txt
+transcr/sw_21545.txt
+transcr/sw_21567.txt
+transcr/sw_22228.txt
+transcr/sw_22554.txt
+transcr/sw_22901.txt
+transcr/sw_22944.txt
+transcr/sw_23490.txt
+transcr/sw_23686.txt
+transcr/sw_24378.txt
+transcr/sw_24507.txt

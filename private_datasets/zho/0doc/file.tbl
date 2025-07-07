@@ -1,0 +1,30 @@
+# This is an FTP publication.  At the top level of the distribution there
+# is an index.html file and transcr and doc subdirectories.  The contents
+# of the distribution are listed below.  The total filesize is 204 Kbytes
+# uncompressed.
+#
+doc/callinfo.doc
+doc/callinfo.tbl
+doc/ch_mandr.doc
+doc/file.tbl
+index.html
+transcr/ma_0809.txt
+transcr/ma_0866.txt
+transcr/ma_0908.txt
+transcr/ma_1071.txt
+transcr/ma_1127.txt
+transcr/ma_1158.txt
+transcr/ma_1214.txt
+transcr/ma_1397.txt
+transcr/ma_1477.txt
+transcr/ma_1701.txt
+transcr/ma_1739.txt
+transcr/ma_2197.txt
+transcr/ma_2200.txt
+transcr/ma_4025.txt
+transcr/ma_4052.txt
+transcr/ma_4064.txt
+transcr/ma_4083.txt
+transcr/ma_4090.txt
+transcr/ma_4208.txt
+transcr/ma_4232.txt

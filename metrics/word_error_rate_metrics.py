@@ -54,7 +54,8 @@ def convert_digits_to_words(text: str, language: str):
     """Convert numbers to words (e.g., "3" to "three")."""
     try:
         return re.sub(r"\d+", lambda m: num2words(int(m.group()), lang=language), text)
-    except ValueError:
+    except Exception as e:
+        logger.info(f"Failed to convert digits to words for language {language} - continuing...")
         return text
 
 

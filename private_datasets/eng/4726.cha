@@ -1,0 +1,790 @@
+@UTF8
+@PID:	11312/a-00004941-1
+@Begin
+@Languages:	eng
+@Participants:	A Subject, B Subject, B1 Subject
+@Options:	bullets
+@ID:	eng|eng|A|||||Subject|||
+@ID:	eng|eng|B|||||Subject|||
+@ID:	eng|eng|B1|||||Subject|||
+@Media:	4726, audio
+*B:	yeah so . 251160_251880
+%mor:	co|yeah co|so .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*B:	&-um and now I'm &+s I'm still trying to find somebody to . 252320_255290
+%mor:	coord|and adv|now pro:sub|I~aux|be&1S pro:sub|I~cop|be&1S adv|still
+	part|try-PRESP inf|to v|find pro:indef|somebody inf|to .
+%gra:	1|4|LINK 2|4|JCT 3|4|SUBJ 4|0|ROOT 5|8|SUBJ 6|8|AUX 7|6|JCT
+	8|4|PRED 9|10|INF 10|8|COMP 11|10|OBJ 12|11|OM 13|4|PUNCT
+*B:	to to finishing teaching me . 255460_256900
+%mor:	inf|to prep|to n:gerund|finish-PRESP n:gerund|teach-PRESP
+	pro:obj|me .
+%gra:	1|0|INCROOT 2|1|JCT 3|2|POBJ 4|3|OBJ 5|4|OBJ 6|1|PUNCT
+*B:	rolling I I I started to learn rolls last year and then . 257220_260510
+%mor:	part|roll-PRESP pro:sub|I pro:sub|I pro:sub|I v|start-PAST inf|to
+	v|learn n|roll-PL adv|last n|year coord|and adv:tem|then .
+%gra:	1|5|LINK 2|5|SUBJ 3|5|SUBJ 4|5|SUBJ 5|0|ROOT 6|7|INF 7|5|COMP
+	8|7|OBJ 9|10|JCT 10|7|OBJ 11|10|CONJ 12|11|COORD 13|5|PUNCT
+*B:	&-uh we ran out of weather before I could really get it . 260950_263400
+%mor:	pro:sub|we v|run&PAST adv|out prep|of n|weather conj|before
+	pro:sub|I mod|could adv|real&dadj-LY v|get pro:per|it .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|JCT 4|3|JCT 5|4|POBJ 6|10|LINK 7|10|SUBJ
+	8|10|AUX 9|10|JCT 10|2|CJCT 11|10|OBJ 12|2|PUNCT
+*B:	and this year I have . 263920_264620
+%mor:	coord|and pro:dem|this n|year pro:sub|I v|have .
+%gra:	1|3|LINK 2|3|DET 3|0|INCROOT 4|5|SUBJ 5|3|CMOD 6|3|PUNCT
+*A:	well rolling in a sea kayak . 264080_266170
+%mor:	co|well part|roll-PRESP prep|in det:art|a n|sea n|kayak .
+%gra:	1|2|COM 2|0|ROOT 3|2|JCT 4|6|DET 5|6|MOD 6|3|POBJ 7|2|PUNCT
+*A:	I don't even know anybody around here that rolls in sea kayak . 266440_269400
+%mor:	pro:sub|I mod|do~neg|not adv|even v|know pro:indef|anybody
+	prep|around adv|here pro:rel|that n|roll-PL prep|in n|sea n|kayak .
+%gra:	1|5|SUBJ 2|5|AUX 3|2|NEG 4|5|JCT 5|0|ROOT 6|5|OBJ 7|5|JCT 8|7|JCT
+	9|10|LINK 10|8|POBJ 11|10|NJCT 12|13|MOD 13|11|POBJ 14|5|PUNCT
+*B:	oh yeah everybody I know rolls in sea kayaks [=! laughing] . 269240_271710
+%mor:	co|oh co|yeah pro:indef|everybody pro:sub|I v|know n|roll-PL
+	prep|in n|sea n|kayak-PL .
+%gra:	1|5|COM 2|5|COM 3|5|JCT 4|5|SUBJ 5|0|ROOT 6|5|OBJ 7|5|JCT 8|9|MOD
+	9|7|POBJ 10|5|PUNCT
+*A:	really . 271530_271910
+%mor:	adv|real&dadj-LY .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	well no I shouldn't say that but . 271760_272910
+%mor:	co|well co|no pro:sub|I mod|should~neg|not v|say pro:rel|that
+	conj|but .
+%gra:	1|6|COM 2|6|COM 3|6|SUBJ 4|6|AUX 5|4|NEG 6|0|ROOT 7|8|LINK 8|6|COMP
+	9|6|PUNCT
+*B:	yeah I mean sea kayaking rolling in a sea kayak makes a lot of
+	sense because . 273260_277180
+%mor:	co|yeah pro:sub|I adj|mean n|sea part|kayak-PRESP part|roll-PRESP
+	prep|in det:art|a n|sea n|kayak v|make-3S det:art|a n|lot prep|of
+	n|sense conj|because .
+%gra:	1|16|COM 2|16|SUBJ 3|16|MOD 4|5|MOD 5|3|XMOD 6|5|OBJ 7|11|LINK
+	8|10|DET 9|10|MOD 10|11|SUBJ 11|5|CJCT 12|13|DET 13|11|OBJ
+	14|13|NJCT 15|14|POBJ 16|0|ROOT 17|16|PUNCT
+*A:	&-eh &-eh . 274040_274360
+*B:	it's a hell of a lot more convenient to be able to roll your kayak
+	back up again . 277640_281920
+%mor:	pro:per|it~cop|be&3S det:art|a n|hell prep|of det:art|a n|lot
+	adv|more adj|convenient inf|to cop|be adj|able inf|to v|roll
+	det:poss|your n|kayak adv|back adv|up adv|again .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|DET 4|2|PRED 5|4|NJCT 6|7|DET 7|5|POBJ
+	8|9|JCT 9|4|POSTMOD 10|11|INF 11|9|XMOD 12|11|PRED 13|14|INF
+	14|12|COMP 15|16|MOD 16|14|OBJ 17|14|JCT 18|14|JCT 19|18|JCT
+	20|2|PUNCT
+*A:	oh yeah . 282220_282940
+%mor:	co|oh co|yeah .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*B:	than it is . 282300_282780
+%mor:	prep|than pro:per|it cop|be&3S .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|PUNCT
+*B:	to to have to get out and reenter . 282940_284780
+%mor:	inf|to inf|to v|have inf|to v|get adv|out coord|and re#v|enter .
+%gra:	1|3|INF 2|3|INF 3|0|ROOT 4|5|INF 5|3|COMP 6|5|JCT 7|5|CONJ
+	8|7|COORD 9|3|PUNCT
+*A:	than get out and then get back in in the cold water . 283670_286260
+%mor:	prep|than v|get adv|out coord|and adv:tem|then v|get adj|back
+	adv|in prep|in det:art|the adj|cold n|water .
+%gra:	1|2|LINK 2|0|ROOT 3|2|JCT 4|2|CONJ 5|6|JCT 6|4|COORD 7|6|PRED
+	8|6|JCT 9|6|JCT 10|12|DET 11|12|MOD 12|9|POBJ 13|2|PUNCT
+*B:	yeah . 285490_285810
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	yeah so that's why I want to be able to do it I mean it's just . 286140_288520
+%mor:	co|yeah co|so pro:dem|that~cop|be&3S adv:int|why pro:sub|I v|want
+	inf|to cop|be adj|able inf|to v|do pro:per|it pro:sub|I v|mean
+	pro:per|it~cop|be&3S adj|just .
+%gra:	1|4|COM 2|4|COM 3|4|SUBJ 4|0|ROOT 5|7|LINK 6|7|SUBJ 7|4|PRED
+	8|9|INF 9|7|COMP 10|9|PRED 11|12|INF 12|15|XJCT 13|12|OBJ 14|15|SUBJ
+	15|10|CMOD 16|17|SUBJ 17|15|COMP 18|17|PRED 19|4|PUNCT
+*B:	it's it's sort of knack you know you learn it in a couple of hours
+	and then you got it . 288960_292020
+%mor:	pro:per|it~aux|be&3S pro:per|it~cop|be&3S n|sort prep|of n|knack
+	pro:per|you v|know pro:per|you v|learn pro:per|it prep|in det:art|a
+	n|couple prep|of n|hour-PL coord|and adv:tem|then pro:per|you
+	v|get&PAST pro:per|it .
+%gra:	1|4|SUBJ 2|4|AUX 3|4|SUBJ 4|9|JCT 5|4|PRED 6|5|NJCT 7|6|POBJ
+	8|9|SUBJ 9|0|ROOT 10|11|SUBJ 11|9|COMP 12|11|OBJ 13|11|JCT 14|15|DET
+	15|13|POBJ 16|15|NJCT 17|16|POBJ 18|21|LINK 19|21|JCT 20|21|SUBJ
+	21|9|CJCT 22|21|OBJ 23|9|PUNCT
+*A:	uhhuh . 292520_292840
+%mor:	co|uhhuh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	but &-um it's &-uh it you know you got to get the the expertise and
+	you got to do the practicing and stuff and . 292630_297930
+%mor:	conj|but pro:per|it~aux|be&3S pro:per|it pro:per|you v|know
+	pro:per|you v|get&PAST inf|to v|get det:art|the det:art|the
+	n|expertise coord|and pro:per|you v|get&PAST inf|to v|do det:art|the
+	part|practice-PRESP coord|and n|stuff coord|and .
+%gra:	1|4|LINK 2|4|SUBJ 3|4|AUX 4|6|CJCT 5|6|SUBJ 6|8|JCT 7|8|SUBJ
+	8|0|ROOT 9|10|INF 10|8|COMP 11|13|DET 12|13|DET 13|10|OBJ 14|16|LINK
+	15|16|SUBJ 16|10|CJCT 17|18|INF 18|16|COMP 19|20|DET 20|18|OBJ
+	21|20|CONJ 22|21|COORD 23|22|COORD 24|8|PUNCT
+*A:	yeah . 297770_298120
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	so far I haven't had anybody to teach me but I'm still working on
+	it . 298000_301100
+%mor:	adv|so adv|far pro:sub|I aux|have~neg|not v|have&PAST
+	pro:indef|anybody inf|to v|teach pro:obj|me conj|but
+	pro:sub|I~cop|be&1S adv|still part|work-PRESP prep|on pro:per|it .
+%gra:	1|2|JCT 2|6|JCT 3|6|SUBJ 4|6|AUX 5|4|NEG 6|0|ROOT 7|6|OBJ 8|9|INF
+	9|7|XMOD 10|9|OBJ 11|13|LINK 12|13|SUBJ 13|6|CJCT 14|13|JCT
+	15|13|XJCT 16|15|JCT 17|16|POBJ 18|6|PUNCT
+*A:	but what I've done twice this summer is go . 301230_303610
+%mor:	conj|but pro:int|what pro:sub|I~aux|have part|do&PASTP adv|twice
+	pro:dem|this n|summer aux|be&3S v|go .
+%gra:	1|5|LINK 2|5|LINK 3|5|SUBJ 4|5|AUX 5|10|CJCT 6|5|JCT 7|8|DET
+	8|10|SUBJ 9|10|AUX 10|0|ROOT 11|10|PUNCT
+*A:	inflatable river kayaking . 304170_306090
+%mor:	adj|inflate&dv-ABLE n|river part|kayak-PRESP .
+%gra:	1|2|MOD 2|0|INCROOT 3|2|XMOD 4|2|PUNCT
+*B:	that's something else . 306620_307370
+%mor:	pro:dem|that~cop|be&3S pro:indef|something post|else .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|3|PQ 5|2|PUNCT
+*A:	in an inflatable raft . 306610_308440
+%mor:	prep|in det:art|a adj|inflate&dv-ABLE n|raft .
+%gra:	1|0|INCROOT 2|4|DET 3|4|MOD 4|1|POBJ 5|1|PUNCT
+*B:	yeah . 308560_308880
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	it's it's a one person inflatable kayak . 308730_311100
+%mor:	pro:per|it~aux|be&3S pro:per|it~cop|be&3S det:art|a pro:indef|one
+	n|person adj|inflate&dv-ABLE n|kayak .
+%gra:	1|4|SUBJ 2|4|AUX 3|4|SUBJ 4|0|ROOT 5|7|DET 6|7|MOD 7|9|MOD 8|9|MOD
+	9|4|PRED 10|4|PUNCT
+*B:	that's wild . 311030_311700
+%mor:	pro:dem|that~cop|be&3S adv|wild .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|JCT 4|2|PUNCT
+*A:	and it's just like a little mini raft that's shaped like a kayak .
+	311550_314880
+%mor:	coord|and pro:per|it~cop|be&3S adj|just prep|like det:art|a
+	adj|little adj|mini n|raft pro:rel|that~aux|be&3S part|shape-PASTP
+	co|like det:art|a n|kayak .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|PRED 5|4|JCT 6|9|DET 7|9|MOD 8|9|MOD
+	9|5|POBJ 10|12|LINK 11|12|AUX 12|9|CMOD 13|12|COM 14|15|DET
+	15|12|OBJ 16|3|PUNCT
+*B:	yeah . 314780_315080
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	and there's no cockpit . 315470_317550
+%mor:	coord|and pro:exist|there~cop|be&3S qn|no n|cockpit .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|5|QUANT 5|3|PRED 6|3|PUNCT
+*B:	yeah . 317880_318280
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	it's all open . 318130_319200
+%mor:	pro:per|it~cop|be&3S adv|all adj|open .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|JCT 4|2|PRED 5|2|PUNCT
+*B:	yeah . 319210_319510
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	and it's self bailing . 319830_321020
+%mor:	coord|and pro:per|it~cop|be&3S n|self part|bail-PRESP .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|PRED 5|4|XMOD 6|3|PUNCT
+*B:	&=laughs yeah right . 321350_322290
+%mor:	co|yeah co|right .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*A:	so you can take it on class three waves . 321450_323950
+%mor:	co|so pro:per|you mod|can v|take pro:per|it prep|on n|class
+	det:num|three n|wave-PL .
+%gra:	1|4|COM 2|4|SUBJ 3|4|AUX 4|0|ROOT 5|4|OBJ 6|4|JCT 7|9|MOD 8|9|QUANT
+	9|6|POBJ 10|4|PUNCT
+*B1:	how does it self bail ? 323780_325010
+%mor:	adv:int|how mod|do&3S pro:per|it n|self n|bail ?
+%gra:	1|5|LINK 2|5|AUX 3|5|MOD 4|5|MOD 5|0|INCROOT 6|5|PUNCT
+*B:	well it . 325020_325420
+%mor:	co|well pro:per|it .
+%gra:	1|2|COM 2|0|ROOT 3|2|PUNCT
+*A:	well . 325060_325700
+%mor:	co|well .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	it's so shallow . 325770_326700
+%mor:	pro:per|it~cop|be&3S adv|so adj|shallow .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|JCT 4|2|PRED 5|2|PUNCT
+*A:	the floor is not the floor is not attached to the sides . 325840_328970
+%mor:	det:art|the n|floor aux|be&3S neg|not det:art|the n|floor aux|be&3S
+	neg|not part|attach-PASTP prep|to det:art|the n|side-PL .
+%gra:	1|2|DET 2|6|SUBJ 3|6|AUX 4|3|NEG 5|6|DET 6|9|SUBJ 7|9|AUX 8|7|NEG
+	9|0|ROOT 10|9|JCT 11|12|DET 12|10|POBJ 13|9|PUNCT
+*A:	they're both inflated separately . 329530_331370
+%mor:	pro:sub|they~cop|be&PRES qn|both v|inflate-PAST
+	adv|separate&dadj-LY .
+%gra:	1|4|SUBJ 2|4|AUX 3|4|QUANT 4|0|ROOT 5|4|JCT 6|4|PUNCT
+*B:	oh . 330960_332040
+%mor:	co|oh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	they're tied together . 332020_333160
+%mor:	pro:sub|they~aux|be&PRES v|tie-PAST adv|together .
+%gra:	1|3|SUBJ 2|3|AUX 3|0|ROOT 4|3|JCT 5|3|PUNCT
+*A:	but what happens is because the floor is inflated . 333800_336110
+%mor:	conj|but pro:int|what v|happen-3S cop|be&3S conj|because
+	det:art|the n|floor aux|be&3S part|inflate-PASTP .
+%gra:	1|3|LINK 2|3|SUBJ 3|4|SUBJ 4|0|ROOT 5|9|LINK 6|7|DET 7|9|SUBJ
+	8|9|AUX 9|4|CJCT 10|4|PUNCT
+*A:	the whole thing rises up with you in it . 336510_338590
+%mor:	det:art|the adj|whole n|thing v|rise-3S adv|up prep|with
+	pro:per|you prep|in pro:per|it .
+%gra:	1|3|DET 2|3|MOD 3|4|SUBJ 4|0|ROOT 5|4|JCT 6|4|JCT 7|6|POBJ 8|7|JCT
+	9|8|POBJ 10|4|PUNCT
+*A:	and as it rises back up . 338980_340520
+%mor:	coord|and conj|as pro:per|it v|rise-3S adv|back adv|up .
+%gra:	1|4|LINK 2|4|LINK 3|4|SUBJ 4|0|ROOT 5|4|JCT 6|4|JCT 7|4|PUNCT
+*A:	the water seeks its own level so it goes out . 341010_343220
+%mor:	det:art|the n|water v|seek-3S det:poss|its adj|own n|level conj|so
+	pro:per|it v|go-3S adv|out .
+%gra:	1|2|DET 2|3|SUBJ 3|0|ROOT 4|6|MOD 5|6|MOD 6|3|OBJ 7|9|LINK 8|9|SUBJ
+	9|3|CJCT 10|9|JCT 11|3|PUNCT
+*B:	yeah it bails out . 342560_343400
+%mor:	co|yeah pro:per|it v|bail-3S adv|out .
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|3|JCT 5|3|PUNCT
+*B:	yeah . 343950_344300
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yeah . 344130_344430
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	but don't you have to be able to roll that . 344620_346130
+%mor:	conj|but mod|do~neg|not pro:per|you v|have inf|to cop|be adj|able
+	inf|to v|roll pro:dem|that .
+%gra:	1|5|LINK 2|5|AUX 3|2|NEG 4|5|SUBJ 5|0|ROOT 6|7|INF 7|5|COMP
+	8|7|PRED 9|10|INF 10|8|XMOD 11|10|OBJ 12|5|PUNCT
+*A:	so it's just like a big . 344830_345940
+%mor:	co|so pro:per|it~aux|be&3S adj|just prep|like det:art|a adj|big .
+%gra:	1|4|COM 2|4|SUBJ 3|4|AUX 4|0|ROOT 5|4|JCT 6|7|DET 7|5|POBJ
+	8|4|PUNCT
+*A:	no people don't roll it . 346960_348000
+%mor:	qn|no n|person&PL mod|do~neg|not v|roll pro:per|it .
+%gra:	1|2|QUANT 2|5|SUBJ 3|5|AUX 4|3|NEG 5|0|ROOT 6|5|OBJ 7|5|PUNCT
+*B:	no . 348330_348780
+%mor:	co|no .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	if you fall if you fall out . 348350_349970
+%mor:	conj|if pro:per|you v|fall conj|if pro:per|you v|fall adv|out .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|6|LINK 5|6|SUBJ 6|3|CJCT 7|6|JCT
+	8|3|PUNCT
+*A:	you just swim up to it and you &+clam clamp her back in . 350390_353450
+%mor:	pro:per|you adj|just n|swim adv|up prep|to pro:per|it coord|and
+	pro:per|you v|clamp pro:obj|her adj|back adv|in .
+%gra:	1|3|SUBJ 2|3|MOD 3|0|INCROOT 4|3|JCT 5|3|JCT 6|5|POBJ 7|9|LINK
+	8|9|SUBJ 9|3|CJCT 10|9|OBJ 11|9|JCT 12|11|JCT 13|3|PUNCT
+*B:	but if you're in white water and stuff you're going to be out of it
+	more than you're going to be in it . 352580_356010
+%mor:	conj|but conj|if pro:per|you~cop|be&PRES prep|in n|white n|water
+	coord|and n|stuff pro:per|you~aux|be&PRES part|go-PRESP inf|to
+	cop|be adv|out prep|of pro:per|it qn|more prep|than
+	pro:per|you~aux|be&PRES part|go-PRESP inf|to cop|be prep|in
+	pro:per|it .
+%gra:	1|12|LINK 2|4|LINK 3|4|SUBJ 4|12|CJCT 5|4|JCT 6|7|MOD 7|5|POBJ
+	8|7|CONJ 9|8|COORD 10|12|SUBJ 11|12|AUX 12|0|ROOT 13|14|INF
+	14|12|COMP 15|14|PRED 16|15|NJCT 17|16|POBJ 18|22|QUANT 19|18|JCT
+	20|19|POBJ 21|22|AUX 22|14|XJCT 23|24|INF 24|22|COMP 25|24|JCT
+	26|25|POBJ 27|12|PUNCT
+*A:	well not in a class three . 356390_357980
+%mor:	co|well neg|not prep|in det:art|a n|class det:num|three .
+%gra:	1|0|INCROOT 2|1|NEG 3|1|JCT 4|6|DET 5|6|MOD 6|3|POBJ 7|1|PUNCT
+*B:	no . 357960_358250
+%mor:	co|no .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	we don't do anything that's class four . 358520_360730
+%mor:	pro:sub|we mod|do~neg|not v|do pro:indef|anything
+	pro:rel|that~cop|be&3S n|class det:num|four .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|4|OBJ 6|7|LINK 7|5|CMOD
+	8|7|PRED 9|8|QUANT 10|4|PUNCT
+*B:	&=smacks:lips oh okay . 360480_361280
+%mor:	co|oh co|okay .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*A:	and . 361510_362060
+%mor:	coord|and .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B1:	I think it's incredible what you do &=laughs . 361720_364350
+%mor:	pro:sub|I v|think pro:per|it~cop|be&3S in#adj|credible pro:int|what
+	pro:per|you v|do .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|4|PRED 6|8|LINK 7|8|SUBJ
+	8|5|COMP 9|2|PUNCT
+*A:	it's really fun I mean it's just going through big waves and having
+	to maneuver around rocks and and stuff . 362860_368520
+%mor:	pro:per|it~aux|be&3S adv|real&dadj-LY adj|fun pro:sub|I v|mean
+	pro:per|it~cop|be&3S adj|just part|go-PRESP adv|through adj|big
+	n|wave-PL coord|and part|have-PRESP prep|to n|maneuver prep|around
+	n|rock-PL coord|and coord|and n|stuff .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|JCT 4|2|PRED 5|6|SUBJ 6|2|CJCT 7|8|SUBJ
+	8|6|COMP 9|8|JCT 10|8|XJCT 11|10|JCT 12|13|MOD 13|11|POBJ 14|13|CONJ
+	15|14|COORD 16|15|JCT 17|16|POBJ 18|17|NJCT 19|18|POBJ 20|13|CONJ
+	21|20|COORD 22|21|COORD 23|2|PUNCT
+*B:	&-huh . 367730_368040
+*B:	yes . 368780_369260
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	we went through one . 369130_370380
+%mor:	pro:sub|we v|go&PAST adj|through pro:indef|one .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|MOD 4|2|OBJ 5|2|PUNCT
+*A:	one rapid that was maybe class three plus . 370670_373600
+%mor:	pro:indef|one adj|rapid pro:rel|that cop|be&PAST&13S adv|maybe
+	v|class det:num|three adv|plus .
+%gra:	1|0|INCROOT 2|1|POSTMOD 3|4|LINK 4|2|CMOD 5|6|JCT 6|4|PRED 7|6|OBJ
+	8|6|JCT 9|1|PUNCT
+*A:	half the people made it and half didn't I made it one day and then
+	the next day I didn't make it . 374130_377970
+%mor:	n|half det:art|the n|person&PL v|make&PAST pro:per|it coord|and
+	n|half mod|do&PAST~neg|not pro:sub|I v|make&PAST pro:per|it
+	det:num|one n|day coord|and adv:tem|then det:art|the adj|next n|day
+	pro:sub|I mod|do&PAST~neg|not v|make pro:per|it .
+%gra:	1|4|LINK 2|3|DET 3|4|SUBJ 4|0|ROOT 5|4|OBJ 6|11|LINK 7|11|SUBJ
+	8|11|AUX 9|8|NEG 10|11|SUBJ 11|4|CJCT 12|11|OBJ 13|14|QUANT
+	14|11|JCT 15|23|LINK 16|23|JCT 17|19|DET 18|19|MOD 19|23|JCT
+	20|23|SUBJ 21|23|AUX 22|21|NEG 23|14|CMOD 24|23|OBJ 25|4|PUNCT
+*B:	&-huh . 378140_378370
+*A:	and it's just a big wave you get washed out of the boat . 378570_380880
+%mor:	coord|and pro:per|it~cop|be&3S adj|just det:art|a adj|big n|wave
+	pro:per|you v|get v|wash-PAST adv|out prep|of det:art|the n|boat .
+%gra:	1|3|LINK 2|3|SUBJ 3|10|LINK 4|10|JCT 5|7|DET 6|7|MOD 7|10|SUBJ
+	8|10|SUBJ 9|10|SUBJ 10|0|ROOT 11|10|JCT 12|11|JCT 13|14|DET
+	14|12|POBJ 15|10|PUNCT
+*B:	mhm . 380210_380450
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	mhm . 381270_381650
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	but we had it's really been fun . 381480_383280
+%mor:	conj|but pro:sub|we v|have&PAST pro:per|it~aux|be&3S
+	adv|real&dadj-LY aux|be&PASTP n|fun .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|OBJ 5|3|COMP 6|8|JCT 7|8|MOD
+	8|5|PRED 9|3|PUNCT
+*B1:	well . 382250_382550
+%mor:	co|well .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B1:	is and what is this called again . 383570_385270
+%mor:	aux|be&3S coord|and pro:int|what cop|be&3S pro:dem|this v|call-PAST
+	adv|again .
+%gra:	1|4|AUX 2|4|LINK 3|4|SUBJ 4|0|ROOT 5|6|SUBJ 6|4|PRED 7|6|JCT
+	8|4|PUNCT
+*A:	this is called this is river kayaking with an inflatable kayak . 385320_389190
+%mor:	pro:dem|this cop|be&3S part|call-PASTP pro:dem|this cop|be&3S
+	n|river part|kayak-PRESP prep|with det:art|a adj|inflate&dv-ABLE
+	n|kayak .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|5|SUBJ 5|3|COMP 6|5|PRED 7|6|XMOD
+	8|7|JCT 9|11|DET 10|11|MOD 11|8|POBJ 12|2|PUNCT
+*B1:	right . 387630_387900
+%mor:	co|right .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B1:	I see . 389390_389910
+%mor:	pro:sub|I v|see .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PUNCT
+*A:	it's just like a raft . 389910_391280
+%mor:	pro:per|it~cop|be&3S adj|just prep|like det:art|a n|raft .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|3|JCT 5|6|DET 6|4|POBJ 7|2|PUNCT
+*B1:	wow . 391320_391880
+%mor:	co|wow .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	just to let you know that hard hypolon . 391470_393530
+%mor:	adv|just inf|to v|let&ZERO pro:per|you v|know pro:rel|that adv|hard
+	n|hypolon .
+%gra:	1|3|JCT 2|3|INF 3|0|ROOT 4|5|SUBJ 5|3|COMP 6|8|LINK 7|8|JCT
+	8|5|COMP 9|3|PUNCT
+*B:	yeah . 393920_394140
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	rafts . 394160_394780
+%mor:	n|raft-PL .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	like zodiacs . 394730_395470
+%mor:	prep|like n|zodiac-PL .
+%gra:	1|0|INCROOT 2|1|POBJ 3|1|PUNCT
+*A:	that the big rafts yeah . 395020_396540
+%mor:	pro:rel|that det:art|the adj|big n|raft-PL co|yeah .
+%gra:	1|4|LINK 2|4|DET 3|4|MOD 4|0|INCROOT 5|4|COM 6|4|PUNCT
+*B:	yeah . 396640_396880
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	and . 397340_398000
+%mor:	coord|and .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=smacks:lips you know it has &-uh it has an inflated seat in it
+	you just and you have a regular kayak oar paddle . 398630_404320
+%mor:	pro:per|you v|know pro:per|it aux|have&3S pro:per|it aux|have&3S
+	det:art|a part|inflate-PASTP n|seat prep|in pro:per|it pro:per|you
+	adv|just coord|and pro:per|you v|have det:art|a adj|regular n|kayak
+	n|oar n|paddle .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|SUBJ 4|5|AUX 5|9|SUBJ 6|9|AUX 7|9|DET 8|9|MOD
+	9|2|OBJ 10|2|JCT 11|10|POBJ 12|16|SUBJ 13|16|JCT 14|16|LINK
+	15|16|SUBJ 16|2|CJCT 17|21|DET 18|19|MOD 19|21|MOD 20|21|MOD
+	21|16|OBJ 22|2|PUNCT
+*A:	and it's it's just really a blast because everybody can do it . 405220_408010
+%mor:	coord|and pro:per|it~cop|be&3S pro:per|it~aux|be&3S adj|just
+	adv|real&dadj-LY det:art|a n|blast conj|because pro:indef|everybody
+	mod|can v|do pro:per|it .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|9|SUBJ 5|9|AUX 6|9|MOD 7|9|JCT 8|9|DET
+	9|3|PRED 10|13|LINK 11|13|SUBJ 12|13|AUX 13|3|CJCT 14|13|OBJ
+	15|3|PUNCT
+*B1:	&=laughs . 407040_407650
+*B:	mhm . 408130_408470
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	you don't have to have any river kayaking skill . 408580_411050
+%mor:	pro:per|you mod|do~neg|not v|have inf|to v|have qn|any n|river
+	part|kayak-PRESP n|skill .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|6|INF 6|4|COMP 7|8|QUANT
+	8|6|OBJ 9|8|XMOD 10|9|OBJ 11|4|PUNCT
+*B1:	uhhuh . 411180_411920
+%mor:	co|uhhuh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	mhm . 411180_411920
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	you know because river kayaks are tippy . 411740_413580
+%mor:	pro:per|you v|know conj|because n|river n|kayak-PL cop|be&PRES
+	adj|tip&dv-Y .
+%gra:	1|2|SUBJ 2|0|ROOT 3|6|LINK 4|5|MOD 5|6|SUBJ 6|2|COMP 7|6|PRED
+	8|2|PUNCT
+*B:	oh yeah they were really . 413810_414780
+%mor:	co|oh co|yeah pro:sub|they cop|be&PAST adv|real&dadj-LY .
+%gra:	1|4|COM 2|4|COM 3|4|SUBJ 4|0|ROOT 5|4|JCT 6|4|PUNCT
+*B1:	oh . 413850_414130
+%mor:	co|oh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	and you know and you're locked into a cockpit and there's &+s you
+	know what you got to know what you're doing . 414390_418360
+%mor:	coord|and pro:per|you v|know coord|and pro:per|you~cop|be&PRES
+	v|lock-PAST prep|into det:art|a n|cockpit coord|and
+	pro:exist|there~cop|be&3S pro:per|you v|know pro:int|what
+	pro:per|you v|get&PAST inf|to v|know pro:int|what
+	pro:per|you~aux|be&PRES part|do-PRESP .
+%gra:	1|3|LINK 2|3|SUBJ 3|7|SUBJ 4|3|CONJ 5|4|COORD 6|7|AUX 7|0|ROOT
+	8|7|JCT 9|10|DET 10|8|POBJ 11|13|LINK 12|13|SUBJ 13|7|CJCT
+	14|15|SUBJ 15|13|PRED 16|18|LINK 17|18|SUBJ 18|15|COMP 19|20|INF
+	20|18|COMP 21|24|LINK 22|24|SUBJ 23|24|AUX 24|20|COMP 25|7|PUNCT
+*B:	yes yes . 416120_417000
+%mor:	co|yes co|yes .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*B:	yeah . 418550_418850
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	with this beginners have a blast . 418920_421330
+%mor:	prep|with pro:dem|this n|begin&dv-AGT-PL v|have det:art|a n|blast .
+%gra:	1|4|LINK 2|3|DET 3|4|SUBJ 4|0|ROOT 5|6|DET 6|4|OBJ 7|4|PUNCT
+*B:	uhhuh . 421500_422170
+%mor:	co|uhhuh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B1:	&=laughs . 421570_422010
+*A:	so we just have you know . 421810_422890
+%mor:	co|so pro:sub|we adv|just v|have pro:per|you v|know .
+%gra:	1|4|LINK 2|4|SUBJ 3|4|JCT 4|0|ROOT 5|6|SUBJ 6|4|COMP 7|4|PUNCT
+*A:	about two weeks ago I met about ten friends . 423550_425980
+%mor:	prep|about det:num|two n|week-PL adv|ago pro:sub|I v|meet&PAST
+	prep|about det:num|ten n|friend-PL .
+%gra:	1|6|JCT 2|3|QUANT 3|1|POBJ 4|6|JCT 5|6|SUBJ 6|0|ROOT 7|6|JCT
+	8|9|QUANT 9|7|POBJ 10|6|PUNCT
+*A:	at this campground . 426450_427450
+%mor:	prep|at pro:dem|this n|campground .
+%gra:	1|0|INCROOT 2|3|DET 3|1|POBJ 4|1|PUNCT
+*A:	up on the Trinity river not that far from forest Glenn where I used
+	to live . 427880_431640
+%mor:	adv|up prep|on det:art|the n:prop|Trinity n|river neg|not
+	pro:rel|that adv|far prep|from n|forest n:prop|Glenn adv:int|where
+	pro:sub|I v|use-PAST inf|to v|live .
+%gra:	1|0|INCROOT 2|1|JCT 3|5|DET 4|5|MOD 5|2|POBJ 6|7|NEG 7|1|PUNCT
+	8|7|JCT 9|8|JCT 10|9|POBJ 11|9|POBJ 12|14|LINK 13|14|SUBJ 14|11|CMOD
+	15|16|INF 16|14|COMP 17|7|PUNCT
+*A:	this is the middle fork of the Trinity and I used to live on the
+	south fork . 432190_435460
+%mor:	pro:dem|this cop|be&3S det:art|the adj|middle n|fork prep|of
+	det:art|the n:prop|Trinity coord|and pro:sub|I v|use-PAST inf|to
+	v|live prep|on det:art|the adj|south n|fork .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|DET 4|5|MOD 5|2|PRED 6|5|NJCT 7|8|DET
+	8|6|POBJ 9|11|LINK 10|11|SUBJ 11|2|CJCT 12|13|INF 13|11|COMP
+	14|13|JCT 15|17|DET 16|17|MOD 17|14|POBJ 18|2|PUNCT
+*A:	and we camped at the campground and the next day we did our own
+	shuttle we went up . 436270_440210
+%mor:	coord|and pro:sub|we v|camp-PAST prep|at det:art|the n|campground
+	coord|and det:art|the adj|next n|day pro:sub|we v|do&PAST
+	det:poss|our adj|own v|shuttle pro:sub|we v|go&PAST adv|up .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|JCT 5|6|DET 6|4|POBJ 7|12|LINK
+	8|10|DET 9|10|MOD 10|12|JCT 11|12|SUBJ 12|3|CJCT 13|15|MOD 14|15|MOD
+	15|12|COMP 16|17|SUBJ 17|15|COMP 18|17|JCT 19|3|PUNCT
+*A:	and we we probably . 440780_441820
+%mor:	coord|and pro:sub|we pro:sub|we adv|probable&dadj-LY .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|JCT 5|3|PUNCT
+*A:	it was probably about three four hours down the river back to the
+	campground . 442140_445850
+%mor:	pro:per|it cop|be&PAST&13S adv|probable&dadj-LY prep|about
+	det:num|three det:num|four n|hour-PL prep|down det:art|the n|river
+	adv|back prep|to det:art|the n|campground .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|JCT 4|2|JCT 5|7|QUANT 6|7|QUANT 7|4|POBJ
+	8|7|NJCT 9|10|DET 10|8|POBJ 11|2|JCT 12|2|JCT 13|14|DET 14|12|POBJ
+	15|2|PUNCT
+*A:	and it was just we took a lunch and it was just gorgeous . 446400_449010
+%mor:	coord|and pro:per|it cop|be&PAST&13S adv|just pro:sub|we
+	v|take&PAST det:art|a n|lunch coord|and pro:per|it cop|be&PAST&13S
+	adv|just adj|gorgeous .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|6|JCT 5|6|SUBJ 6|3|PRED 7|8|DET
+	8|6|OBJ 9|11|LINK 10|11|SUBJ 11|6|CJCT 12|13|JCT 13|11|PRED
+	14|3|PUNCT
+*A:	you know and . 449270_449910
+%mor:	pro:per|you v|know coord|and .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|CONJ 4|2|PUNCT
+*B1:	mhm [=! drawn out] . 449340_450620
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yeah it was it was a blast . 450490_451940
+%mor:	co|yeah pro:per|it cop|be&PAST&13S pro:per|it cop|be&PAST&13S
+	det:art|a n|blast .
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|5|SUBJ 5|3|PRED 6|7|DET 7|5|PRED
+	8|3|PUNCT
+*A:	so we you know I've been doing that a little bit and that's that's
+	fun . 452350_455420
+%mor:	co|so pro:sub|we pro:per|you v|know pro:sub|I~aux|have aux|be&PASTP
+	part|do-PRESP pro:rel|that det:art|a adj|little n|bit coord|and
+	pro:dem|that~cop|be&3S pro:dem|that~cop|be&3S adj|fun .
+%gra:	1|4|COM 2|4|SUBJ 3|4|SUBJ 4|0|ROOT 5|8|SUBJ 6|8|AUX 7|8|AUX
+	8|4|COMP 9|15|LINK 10|12|DET 11|12|MOD 12|15|SUBJ 13|12|CONJ
+	14|13|COORD 15|8|COMP 16|17|SUBJ 17|15|PRED 18|17|PRED 19|4|PUNCT
+*B:	mhm . 455830_456680
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	but I want to get more into sea kayaking too . 456370_458470
+%mor:	conj|but pro:sub|I v|want inf|to v|get qn|more prep|into n|sea
+	part|kayak-PRESP post|too .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|5|INF 5|3|COMP 6|5|OBJ 7|5|JCT
+	8|7|POBJ 9|5|XJCT 10|9|PQ 11|3|PUNCT
+*A:	I haven't . 459090_459540
+%mor:	pro:sub|I aux|have~neg|not .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|NEG 4|2|PUNCT
+*B:	what yeah you got a good place down there sea kayaking is good good
+	. 459310_462320
+%mor:	pro:int|what co|yeah pro:per|you v|get&PAST det:art|a adj|good
+	n|place adv|down adv|there v|sea n:gerund|kayak-PRESP cop|be&3S
+	adj|good adj|good .
+%gra:	1|2|LINK 2|4|COM 3|4|SUBJ 4|0|ROOT 5|7|DET 6|7|MOD 7|4|OBJ 8|4|JCT
+	9|10|SUBJ 10|4|CJCT 11|12|SUBJ 12|10|COMP 13|12|PRED 14|13|JCT
+	15|4|PUNCT
+*A:	yeah there's a lot of places to go I just haven't been going . 461030_463770
+%mor:	co|yeah pro:exist|there~cop|be&3S det:art|a n|lot prep|of
+	n|place-PL inf|to v|go pro:sub|I adv|just aux|have~neg|not
+	aux|be&PASTP part|go-PRESP .
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|5|DET 5|3|PRED 6|5|NJCT 7|6|POBJ
+	8|9|INF 9|5|XMOD 10|15|SUBJ 11|15|JCT 12|15|AUX 13|12|NEG 14|15|AUX
+	15|9|COMP 16|3|PUNCT
+*B:	yeah . 463880_464190
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	how's your love life ? 465170_466030
+%mor:	adv:int|how~aux|be&3S det:poss|your n|love n|life ?
+%gra:	1|5|LINK 2|5|AUX 3|5|MOD 4|5|MOD 5|0|INCROOT 6|5|PUNCT
+*A:	&-uh interesting . 466490_467900
+%mor:	adj|interesting .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	&=laughs good . 467870_469000
+%mor:	adj|good .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	I'm not going I'm not going out with the lawyer anymore . 468520_470890
+%mor:	pro:sub|I~cop|be&1S neg|not part|go-PRESP pro:sub|I~cop|be&1S
+	neg|not part|go-PRESP adv|out prep|with det:art|the n|lawyer
+	adv|anymore .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|NEG 4|2|PRED 5|8|SUBJ 6|8|AUX 7|6|NEG
+	8|4|COMP 9|8|JCT 10|8|JCT 11|12|DET 12|10|POBJ 13|8|JCT 14|2|PUNCT
+*B:	yeah you had a lady in San_Francisco . 470910_472650
+%mor:	co|yeah pro:per|you v|have&PAST det:art|a n|lady prep|in
+	n:prop|San_Francisco .
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|5|DET 5|3|OBJ 6|3|JCT 7|6|POBJ
+	8|3|PUNCT
+*A:	no she was actually in . 472800_474300
+%mor:	co|no pro:sub|she cop|be&PAST&13S adv|actual&dadj-LY adv|in .
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|3|JCT 5|3|JCT 6|3|PUNCT
+*A:	Oakland . 475030_475590
+%mor:	n:prop|Oakland .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	oh okay . 476030_476700
+%mor:	co|oh co|okay .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*A:	yeah . 477090_477550
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	&-huh . 477720_478010
+*A:	now there's one . 478500_479240
+%mor:	adv|now pro:exist|there~cop|be&3S pro:indef|one .
+%gra:	1|3|JCT 2|3|SUBJ 3|0|ROOT 4|3|PRED 5|3|PUNCT
+*B:	wait &+ha have they recovered from the fire down there are they
+	rebuilt down there . 478770_482410
+%mor:	co|wait v|have pro:sub|they v|recover-PAST prep|from det:art|the
+	n|fire adv|down adv|there cop|be&PRES pro:sub|they re#v|build&PAST
+	adv|down adv|there .
+%gra:	1|2|COM 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|4|JCT 6|7|DET 7|5|POBJ
+	8|7|NJCT 9|10|SUBJ 10|2|PUNCT 11|10|PRED 12|11|INCROOT 13|14|JCT
+	14|12|JCT 15|12|PUNCT
+*A:	yes they're pretty much all rebuilt . 482360_484080
+%mor:	co|yes pro:sub|they~aux|be&PRES adv|pretty qn|much pro:indef|all
+	re#part|build&PASTP .
+%gra:	1|4|COM 2|4|SUBJ 3|4|AUX 4|5|JCT 5|7|QUANT 6|7|SUBJ 7|0|ROOT
+	8|7|PUNCT
+*B:	yeah . 483010_483270
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	oh wow . 484150_484750
+%mor:	co|oh co|wow .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*A:	yeah . 485100_485570
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	amazing . 485640_486200
+%mor:	part|amaze-PRESP .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yeah . 486750_487140
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	so you and and so you've replaced her . 488170_489800
+%mor:	co|so pro:per|you coord|and coord|and co|so pro:per|you~aux|have
+	re#part|place-PASTP pro:obj|her .
+%gra:	1|8|COM 2|8|SUBJ 3|2|CONJ 4|3|COORD 5|8|COM 6|8|SUBJ 7|8|AUX
+	8|0|ROOT 9|8|OBJ 10|8|PUNCT
+*A:	yeah . 490280_490980
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	&=laughs . 491090_491580
+*A:	&=laughs . 491410_492480
+*B:	good . 492510_492910
+%mor:	adj|good .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	well but &-um nothing serious yet now I just . 492670_496130
+%mor:	co|well conj|but pro:indef|nothing adj|serious adv|yet adv|now
+	pro:sub|I adv|just .
+%gra:	1|6|COM 2|1|CONJ 3|2|COORD 4|3|POSTMOD 5|6|JCT 6|8|JCT 7|8|SUBJ
+	8|0|ROOT 9|8|PUNCT
+*B:	oh . 495720_495910
+%mor:	co|oh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	I just have a blind date coming up on thursday . 497280_500120
+%mor:	pro:sub|I adv|just v|have det:art|a adj|blind n|date
+	part|come-PRESP adv|up prep|on n|thursday .
+%gra:	1|3|SUBJ 2|3|JCT 3|0|ROOT 4|6|DET 5|6|MOD 6|3|OBJ 7|6|XMOD 8|7|JCT
+	9|7|JCT 10|9|POBJ 11|3|PUNCT
+*A:	with a . 500800_501370
+%mor:	prep|with det:art|a .
+%gra:	1|0|INCROOT 2|3|DET 3|1|PUNCT
+*A:	woman I was waiting to get back from France who was visiting . 501580_504760
+%mor:	n|woman pro:sub|I aux|be&PAST&13S part|wait-PRESP inf|to v|get
+	adv|back prep|from n:prop|France pro:rel|who aux|be&PAST&13S
+	part|visit-PRESP .
+%gra:	1|4|LINK 2|4|SUBJ 3|4|AUX 4|0|ROOT 5|6|INF 6|4|COMP 7|6|JCT 8|6|JCT
+	9|8|POBJ 10|12|LINK 11|12|AUX 12|9|CMOD 13|4|PUNCT
+*A:	in France because her friend was &+tellin a friend I had met . 505580_508120
+%mor:	prep|in n:prop|France conj|because det:poss|her n|friend
+	cop|be&PAST&13S det:art|a n|friend pro:sub|I aux|have&PAST
+	part|meet&PASTP .
+%gra:	1|0|INCROOT 2|1|POBJ 3|6|LINK 4|5|MOD 5|6|SUBJ 6|1|CPOBJ 7|8|DET
+	8|6|PRED 9|11|SUBJ 10|11|AUX 11|8|CMOD 12|1|PUNCT
+*A:	on the river . 509080_509860
+%mor:	prep|on det:art|the n|river .
+%gra:	1|0|INCROOT 2|3|DET 3|1|POBJ 4|1|PUNCT
+*A:	said you got to meet this woman grace you're really going to hit it
+	off with her . 510750_514039
+%mor:	v|say&PAST pro:per|you v|get&PAST inf|to v|meet pro:dem|this
+	n|woman n|grace pro:per|you~aux|be&PRES adv|real&dadj-LY
+	part|go-PRESP inf|to v|hit&ZERO pro:per|it adv|off prep|with
+	pro:obj|her .
+%gra:	1|0|ROOT 2|3|SUBJ 3|1|COMP 4|5|INF 5|3|COMP 6|8|DET 7|8|MOD 8|5|OBJ
+	9|12|SUBJ 10|12|AUX 11|12|JCT 12|8|CMOD 13|14|INF 14|12|COMP
+	15|14|OBJ 16|14|JCT 17|14|JCT 18|17|POBJ 19|1|PUNCT
+*B1:	that's a boy . 514219_514849
+%mor:	pro:dem|that~cop|be&3S det:art|a n|boy .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|DET 4|2|PRED 5|2|PUNCT
+*A:	so talked &+t to her on the phone and we have a a date coming up
+	thursday . 514669_518560
+%mor:	adv|so part|talk-PASTP prep|to pro:obj|her prep|on det:art|the
+	n|phone coord|and pro:sub|we v|have det:art|a det:art|a n|date
+	part|come-PRESP adv|up n|thursday .
+%gra:	1|2|JCT 2|0|ROOT 3|2|JCT 4|3|POBJ 5|2|JCT 6|7|DET 7|5|POBJ
+	8|10|LINK 9|10|SUBJ 10|2|CJCT 11|13|DET 12|13|DET 13|10|OBJ
+	14|13|XMOD 15|14|JCT 16|15|POBJ 17|2|PUNCT
+*B:	neat . 518620_519039
+%mor:	adj|neat .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B1:	oh that's neat . 518610_519390
+%mor:	co|oh pro:dem|that~cop|be&3S adj|neat .
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|3|PRED 5|3|PUNCT
+*A:	but meanwhile I've I've been having I've been going out probably
+	like three different women nothing serious but you know having a
+	good time . 519440_525890
+%mor:	conj|but adv|meanwhile pro:sub|I~aux|have pro:sub|I~aux|have
+	cop|be&PASTP n:gerund|have-PRESP pro:sub|I~aux|have aux|be&PASTP
+	part|go-PRESP adv|out adv|probable&dadj-LY co|like det:num|three
+	adj|different n|woman&PL pro:indef|nothing adj|serious conj|but
+	pro:per|you v|know part|have-PRESP det:art|a adj|good n|time .
+%gra:	1|7|LINK 2|7|JCT 3|7|SUBJ 4|7|AUX 5|7|SUBJ 6|7|AUX 7|0|ROOT
+	8|7|PRED 9|12|SUBJ 10|12|AUX 11|12|AUX 12|8|CMOD 13|12|JCT 14|12|JCT
+	15|18|COM 16|18|QUANT 17|18|MOD 18|12|OBJ 19|18|OBJ 20|19|POSTMOD
+	21|23|LINK 22|23|SUBJ 23|18|CJCT 24|23|OBJ 25|27|DET 26|27|MOD
+	27|24|OBJ 28|7|PUNCT
+*B:	yeah . 525930_526430
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	and &-uh . 526750_527350
+%mor:	coord|and .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B1:	neat . 527340_527610
+%mor:	adj|neat .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	that's good . 527830_528280
+%mor:	pro:dem|that~cop|be&3S adj|good .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|2|PUNCT
+*A:	so it's fun I mean you know I have a active social life I just
+	haven't met the one perfect woman yet . 528360_533890
+%mor:	adv|so pro:per|it~cop|be&3S n|fun pro:sub|I v|mean pro:per|you
+	v|know pro:sub|I v|have det:art|a n|active n|social n|life pro:sub|I
+	adv|just aux|have~neg|not v|meet&PAST det:art|the pro:indef|one
+	adj|perfect n|woman adv|yet .
+%gra:	1|3|JCT 2|3|SUBJ 3|6|CJCT 4|3|SUBJ 5|6|SUBJ 6|0|ROOT 7|8|SUBJ
+	8|6|COMP 9|10|SUBJ 10|8|COMP 11|14|DET 12|13|MOD 13|14|MOD
+	14|19|SUBJ 15|19|SUBJ 16|19|SUBJ 17|19|AUX 18|17|NEG 19|10|COMP
+	20|23|DET 21|23|MOD 22|23|MOD 23|19|OBJ 24|19|JCT 25|6|PUNCT
+*B1:	yeah . 529170_529400
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	aw the one perfect woman . 534030_535560
+%mor:	co|aw det:art|the pro:indef|one adj|perfect n|woman .
+%gra:	1|5|COM 2|5|DET 3|5|MOD 4|5|MOD 5|0|INCROOT 6|5|PUNCT
+*B1:	oh yeah . 534710_535390
+%mor:	co|oh co|yeah .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*A:	&=laughs . 534530_536310
+*B1:	the one that really clicks . 535760_537100
+%mor:	det:art|the pro:indef|one pro:rel|that adv|real&dadj-LY n|click-PL
+	.
+%gra:	1|2|DET 2|0|INCROOT 3|5|LINK 4|5|JCT 5|2|CMOD 6|2|PUNCT
+*B:	I hope . 535980_536480
+%mor:	pro:sub|I v|hope .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PUNCT
+*B:	I hope we keep dropping our expectations of perfection &=laughs . 537200_541030
+%mor:	pro:sub|I v|hope pro:sub|we v|keep part|drop-PRESP det:poss|our
+	n|expectation-PL prep|of n|perfection .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|4|OBJ 6|7|MOD 7|5|OBJ
+	8|7|NJCT 9|8|POBJ 10|2|PUNCT
+*A:	&=laughs . 539520_539840
+*A:	&=inhales yeah well that might help &=laughs . 540420_544090
+%mor:	co|yeah n|well pro:rel|that mod|might co|help .
+%gra:	1|2|COM 2|0|INCROOT 3|5|LINK 4|5|AUX 5|2|CMOD 6|2|PUNCT
+*B:	yes &=laughs . 542290_543220
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	&=laughs that's true . 543920_545800
+%mor:	pro:dem|that~cop|be&3S adj|true .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|2|PUNCT
+*A:	&=laughs and I'm well aware that it might help &=laughs . 545160_548410
+%mor:	coord|and pro:sub|I~aux|be&1S adv|well adj|aware pro:rel|that
+	pro:per|it mod|might co|help .
+%gra:	1|5|LINK 2|5|SUBJ 3|5|AUX 4|5|JCT 5|0|ROOT 6|9|LINK 7|9|SUBJ
+	8|9|AUX 9|5|COMP 10|5|PUNCT
+*B:	&=laughs . 547140_547630
+*A:	&=laughs . 548960_551030
+*B:	well I think it it doesn't need perfection it just needs to click .
+	549800_553320
+%mor:	co|well pro:sub|I v|think pro:per|it pro:per|it mod|do&3S~neg|not
+	v|need n|perfection pro:per|it adv|just v|need-3S prep|to n|click .
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|3|OBJ 5|8|SUBJ 6|8|AUX 7|6|NEG 8|3|COMP
+	9|8|OBJ 10|12|SUBJ 11|12|JCT 12|8|COMP 13|12|JCT 14|13|POBJ
+	15|3|PUNCT
+*A:	exactly yeah exactly . 553870_556120
+%mor:	adv|exact&dadj-LY co|yeah adv|exact&dadj-LY .
+%gra:	1|2|JCT 2|0|INCROOT 3|2|JCT 4|2|PUNCT
+@End

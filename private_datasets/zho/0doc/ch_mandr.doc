@@ -1,0 +1,504 @@
+
+        -----------------------------------------------------------
+        Description of the CallHome telephone speech and transcript
+                          corpus for Mandarin
+        -----------------------------------------------------------
+
+
+CONTENTS
+
+        1. Summary abstract
+        2. Data acquisition
+        3. Data verification
+        4. Speaker demographics
+        5. Data transcription - General
+        6. Data transcription - Mandarin-specific
+             6.1  Mandarin transcription symbol table
+        7. Word segmentation
+
+-----------------------------------------------------------------------
+1.  Summary abstract
+
+        The CallHome Mandarin corpus of telephone speech was collected
+and transcribed by the Linguistic Data Consortium primarily in support
+of the project on Large Vocabulary Conversational Speech Recognition
+(LVCSR), sponsored by the U.S. Department of Defense.
+
+        This release of the CallHome Mandarin corpus consists of 120
+unscripted telephone conversations between native speakers of
+Mandarin.  The transcripts cover a contiguous 5 or 10 minute segment
+(see section 2 below) taken from a recorded conversation lasting up to
+30 minutes.  All speakers were aware that they were being recorded.
+They were given no guidelines concerning what they should talk about.
+Once a caller was recruited to participate, he/she was given a free
+choice of whom to call.  Most participants called family members or
+close friends overseas.  All calls originated in North America.  The
+distribution of call destinations can be found in the file
+"ma_spkrs.tbl".
+
+        The transcripts are timestamped by speaker turn for alignment
+with the speech signal, and are provided in standard orthography.
+
+-----------------------------------------------------------------------
+2.  Data acquisition
+
+        Speakers were solicited by the LDC to participate in this
+telephone speech collection effort through personal contacts and
+appeals to organizations.  A total of 200 call originators were found,
+each of whom placed a telephone call via a toll-free robot operator
+maintained originally by Rutgers University, and later by the LDC.
+Access to the robot operator was possible via a unique Personal
+Identification Number (PIN) issued by the recruiting staff at Rutgers
+or the LDC when the caller enrolled in the project.  The participants
+were made aware that their telephone call would be recorded, as were
+the call recipients.  The call was allowed only if both parties agreed
+to being recorded.  Each caller was allowed to talk up to 30 minutes.
+Each caller was allowed to place only one telephone call.
+
+        In all, 200 calls were transcribed.  Of these, 80 have been
+designated as training calls, 20 as development test calls, and 100 as
+evaluation test calls.  For each of the training and development test
+calls, a contiguous 10-minute region was selected for transcription;
+for the evaluation test calls, a 5-minute region was transcribed.  For
+the present publication, only 20 of the evaluation test calls are
+being released; the remaining 60 test calls are being held in reserve
+for future LVCSR benchmark tests.
+
+-----------------------------------------------------------------------
+3.  Data verification
+
+        After a successful call was completed, a human audit of each
+telephone call was conducted to verify that the proper language was
+spoken, to check the quality of the recording, and to select and
+describe the region to be transcribed.  The description of the
+transcribed region provides information about channel quality, number
+of speakers, their gender, and other attributes.  The information from
+this audit may be found in the file "ma_calls.tbl", and its contents
+are described in greater detail in "ma_calls.doc".
+
+-----------------------------------------------------------------------
+4.  Speaker demographics
+
+        Information on speaker demographics can be found in the file
+ma_spkrs.tbl, whose contents are described in the file ma_spkrs.doc.
+
+-----------------------------------------------------------------------
+
+5.  Data transcription - General
+
+        The initial transcription was carried out by Texas
+Instruments; segmentation and corrections were done at the LDC.  Below
+are the general transcription instructions given to transcribers by
+TI:
+
+
+     CALLHOME TRANSCRIPTION CONVENTIONS - General (TI)
+
+
+1.  Transcribe "verbatim", without correcting grammatical errors.
+
+2.  Do not try to imitate pronunciation details, including accents and
+    mispronunciations.  Write the words that you believe the speaker
+    intended, using standard orthography.
+
+3.  Speaker identification:
+
+    Label each speaker with A: or B: at the beginning of the line.
+
+    Use A: for the lower speaker and B: for the upper speaker in the waveform.
+    (A will be the person calling from the U.S., and B the person overseas.)
+
+    If there is more than one speaker at one end of the conversation (e.g.
+    the telephone is passed around, or multiple extensions in use), add
+    numbers for each new speaker:
+
+        B:  (the first speaker on side B)
+        B1: (a different speaker)
+        B2: (yet another speaker)
+
+    Try to label the speakers consistently.  For example, if the first
+    speaker returns, use "B:" again.
+
+4.  Speaker turns:
+
+    Begin each speaker turn on a new line.  Do not put carriage returns
+    within a speaker line.  (Don't worry if the screen shows a break in the
+    middle of a word.)
+
+    Each speaker turn begins and ends with a pause.  That is, each continuous
+    stretch of speech is transcribed as one turn.  Any simultaneous speech
+    on the other channel is transcribed separately, after the current turn
+    is completed.
+
+    Example: (x indicates speech, - indicates silence)
+
+    channel B:     xxxxxxxxxxxxxxxxxxxxxxxxx---------xxxxxxxxx--
+    channel A:     -------xxx-----xxx-----xxxxxxxxxxxxxxx--------
+    time           0      1       2       3      4      5
+
+    sequence of turns in the transcription (times are not exact):
+    0.1 3.1 B:
+    1.0 1.3 A:
+    2.0 2.3 A:
+    3.0 5.0 A:
+    4.6 5.9 B:
+
+    A "turn" consisting entirely of noise is transcribed only if it is
+    a vocal tract noise from the talker (laugh, cough, etc.) - see 7 below.
+    Channel noise is NOT transcribed.
+
+
+5.  Simultaneous speech on the same channel:
+
+    If two people are speaking on the same channel (an extension phone or
+    a speaker phone), and if they speak simultaneously, put pound signs #
+    around the words spoken simultaneously.
+
+    Example:
+
+        B:  #Oh, how interesting.#
+        B1: #That's good news.#
+
+    If only part of the utterance is simultaneous, mark only the part that
+    is simultaneous, but transcribe the entire utterance as one turn.
+    Put the other speaker's utterance on the next line, with its times.
+
+    Example:
+
+    10.5 12.5 B:  Well, I agree with you.  #I think# you're right.
+    11.5 12.0 B1: #Oh yes, yes.#
+
+    Note that # is used only for simultaneous speech on the same channel.
+    Simultaneous speech on different channels is identifiable as such by
+    reference to the time marks.
+
+6.  Partial words:
+
+    If a speaker does not finish a word, write as much as you heard
+    and end it with a hyphen.  Put a space after the hyphen, but no space
+    before it.
+
+7.  Non-speech sounds:
+
+    a)  Sounds made by the talker:
+
+    When the participants in the conversation make sounds that are not
+    speech, indicate them using a label between braces, for example:
+
+        {cough}
+        {laugh}
+
+    Example:
+
+        A:  Oh, that's funny. {laugh} {cough} Excuse me, I have a cold.
+
+    If the talker makes one of these sounds as an entire turn, transcribe
+    it and show the times, for example:
+
+        340.0 342.0 A: {laugh}
+
+    b)  Other sounds:
+
+    Mark other sounds using brackets [ ].  This includes background
+    noises, background speech, and noises on the line.  Mark these sounds
+    only when they are clearly audible and about as loud as the speech.
+    If they are hard to hear, or quieter than the speech, then ignore them.
+
+    Also, do not transcribe noises that occur when no one on that channel
+    is speaking, even if the noises are loud and clear.  For example, if
+    B is speaking and there is a loud noise on channel A (which is not made
+    by speaker A), do not transcribe it.
+
+    Examples:
+
+    A clearly audible noise occurs during speech:
+
+        A:  Yes [noise].
+
+    If the event being described lasts longer than a few words, then
+    indicate the beginning in braces [ ], and the end in braces with a
+    "/", [/ ].  For intermittent sounds, mark the beginning and end of the
+    intermittent occurrence of the sound - not the beginning and end of
+    each individual occurrence.
+
+    Example:
+
+        A:  Well, it all depends, uh, on, you know, [baby_crying] how the
+        family reacts.  I mean, it can be a positive or a negative thing,
+        you know?
+        B:  Yes, you're right.
+        A:  So it's difficult to say what's best sometimes. [/baby_crying]
+
+    Note: Be sure to mark the end on the channel where it occurred (A, in
+    the example above).  If the noise ends while the other speaker is
+    talking, mark it at the end of the turn of the speaker on the same
+    channel.  For example, if the baby stops crying while B is talking:
+
+        A:  Well, it all depends, uh, on, you know, [baby_crying] how the
+        family reacts.  I mean, it can be a positive or a negative thing,
+        you know? [/baby_crying]
+        B:  Yes, you're right.
+        A:  So it's difficult to say what's best sometimes.
+
+8.  Speech to someone in the background:
+
+    If the speaker talks to someone in the background, put the speech between
+    double slash marks.
+
+    Examples:
+
+        A: Just a minute.  // Mary, please bring me a pencil. //
+
+        A: Sm //una llamada de// ?quieres hablar un poquito con tu papa?
+
+9.  When a word or phrase is not clear, type double parentheses ((  ))
+    around what you think you hear.  If there is no way to tell what the
+    speaker said, leave one blank space between the double parentheses,
+    indicating speech has been left out because it was unintelligible.
+
+    Examples:
+
+        A:  So when I finally did ((take up)) the violin, I
+        progressed pretty quickly in the beginning.
+
+        B:  Of course, that was in college which was a long time
+        ago, so (( )) I remember.
+
+10.  Comments
+
+    To put a comment in the transcription, use double square brackets:
+    [[comment]]
+
+    Comments should be used very sparingly - only when there is no other
+    way to indicate some unusual event.  Notations describing noises should
+    use single brackets, not double brackets (see #7).
+
+    Examples of comments:
+
+    [[speaker is singing]]
+    [[speaker imitates a little child]]
+    [[previous word is exceptionally prolonged]]
+
+    Comments may be used to indicate the reason for unintelligible speech.
+    Example:
+
+        (( )) [[distortion]]
+
+    However, use such comments sparingly.  If there is consistent distortion,
+    note it on the conversation summary sheet and do NOT put it in the
+    transcription every time.  The same is true for mumbling, rapid speech,
+    etc.  In other words, use comments only for unusual cases.
+
+-----------------------------------------------------------------------
+
+6.  Data transcription - Mandarin-specific
+
+1.  Punctuation:
+
+    Use the ASCII (English) punctuation marks rather than Mandarin (to
+    save input time).
+
+    Try to use normal Mandarin punctuation, as far as possible, particularly
+    period, comma, and question mark.  Because conversational speech does
+    not exactly fit punctuation conventions, it may often be difficult to
+    decide on the correct punctuation.  In such cases, simply use whatever
+    seems reasonable and go on -- do not spend a lot of time analyzing
+    it and trying to find the correct way (there may not be one!).
+
+    When the end of a turn is incomplete, leave it unmarked.  That is,
+    do not put a period at the end if the utterance stopped without
+    completing the clause.
+
+2.  Different languages and/or dialects:
+
+    When talkers use words in a different language or Chinese dialect, or
+    when they change languages for a short time, the speech that is
+    not Mandarin needs to be marked and the language labeled, if possible.
+
+    a)  Transcribe English in ASCII.  No special marking is required.
+    b)  Put angled brackets < > around speech that is not Mandarin or English.
+    c)  Put the language name right after the left bracket.  If you don't
+        recognize the language, put ?.
+    d)  If you can transcribe the speech, put the transcription after the
+        language name.  If you can't transcribe it, mark it as
+        unintelligible: (( ))
+
+3.  "Mandarinized" foreign names
+
+    Foreign names that are pronounced as in Mandarin should be
+    transcribed using whichever characters seem most appropriate (as
+    would normally be done in writing Chinese.)  However, if the name is
+    not customarily used in Mandarin, and therefore has no standard
+    representation, mark it by putting the character + immediately
+    before and after it.
+
+4.  Hesitation sounds
+
+    Follow normal Mandarin conventions in representing hesitation sounds;
+    mark them with a preceding "%".
+
+-----------------------------------------------------------------------
+
+6.1.  Mandarin transcription symbol table
+
+
+    {text}              sound made by the talker
+
+                        {laugh} {cough} {sneeze} {breath}
+
+    [text]              sound not made by the talker (background or channel)
+
+                        [distortion]    [background noise]      [buzz]
+
+    [/text]             end of continuous or intermittent sound not made by
+                        the talker (beginning marked with previous [text])
+
+    [[text]]            comment; most often used to describe unusual
+                        characteristics of immediately preceding or following
+                        speech (as opposed to separate noise event)
+
+                        [[previous word lengthened]]    [[speaker is singing]]
+
+    ((text))            unintelligible; text is best guess at transcription
+
+                        ((coffee klatch))
+
+    (( ))               unintelligible; can't even guess text
+
+                        (( ))
+
+
+    <language_text>     speech in another language; note that all words
+			in angled brackets are separated with "_" (this is
+			inserted by the automatic segmenter).
+
+                        <English_going_to_California>
+
+    <? (( ))>           ? indicates unrecognized language; (( )) indicates
+                        untranscribable speech
+
+                        <? ayo_canoli>  <? (( ))>
+
+    text-		partial word
+                        
+			absolu-
+
+    #text#              simultaneous speech on the same channel
+                        (simultaneous speech on different channels is not
+                        explicitly marked, but is identifiable as such by
+                        reference to time marks)
+
+    //text//            aside (talker addressing someone in background)
+
+                        //quit it, I'm talking to your sister!//
+
+    +text+              Mandarinized foreign name, no standard spelling
+
+    **text**            idiosyncratic word, not in common use, not necessarily
+			included in lexicon
+
+                        **poodle-ish**
+
+    *text*		A single asterisk is inserted by the automatic
+			segmenter when the word can't be located in the
+			LDC Callhome Mandarin lexicon; this symbol should
+			be absent from the transcripts.
+
+    %text               This symbol flags non-lexemes, which are
+                        general hesitation sounds.  
+
+                        %mm %uh
+
+    &text               used to mark proper names and place names
+
+                        &Mary &Jones    &Arizona        &Harper's
+                        &Fiat           &Joe's &Grill
+
+
+    text --             marks end of interrupted turn and continuation
+    -- text             of same turn after interruption, e.g.
+
+                        A: I saw &Joe yesterday coming out of --
+
+                        B: You saw &Joe?!
+
+                        A: -- the music store on &Seventeenth and &Chestnut.
+
+-----------------------------------------------------------------------
+
+7.  Word segmentation.
+
+Word segmentation principles for Mandarin were formulated by Shudong
+Huang at the Linguistic Data Consortium, with input from Xuejun Bian
+and Cynthia McLemore, and in subsequent collaboration with LVCSR
+Callhome contractors and other interested parties (especially Dragon,
+BBN, IBM, TI, NIST, and Bell Labs).  A primary source of information
+on Chinese segmentation issues was the following:
+
+"Contemporary Chinese Language Word Segmentation Specification for
+Information Processing," published by the State Bureau of Technology
+Supervision, Beijing China, October 14, 1992.
+
+Principles guiding word segmentation can be found in the file
+"segmentation.principles".
+
+The Callhome Mandarin transcripts were automatically segmented with
+the Dragon Mandarin segmenter, which uses the LDC principles as stated
+in the "segmentation.principles" file.  Further information on the
+Dragon segmenter, provided by Dean Bandes at Dragon Systems Inc.,
+follows:
+
+The Dragon Mandarin Segmenter attempts to break a string of Chinese
+characters (in the GB encoding) into the most likely sequence of words
+in its lexicon and unknown words.  Characters which do not fit into
+known words are output as unknown single-character words.  In general,
+longer words are preferred, but not at the expense of introducing new
+unknown single-character words.  An analogy is the case of a sign
+maker who has a stock of strings of letters with a cost associated to
+each string, who wants to produce a given sign for the minimum cost.
+The cost of each string is based on its frequency (supply and
+demand!), and the cost of the entire sign is the sum of the cost of
+the strings plus a relatively large cost per string (labor to put them
+together).  All letters are available individually, but to save on
+labor cost the sign maker will choose not to use them if the sign can
+be made of existing combinations of letters.  Simply proceeding from
+the beginning of the sign and choosing the longest available string
+may not produce the least expensive sign, as one may overshoot a
+preferable string; for instance, if the desired sign were "No Parking"
+and the stock of strings were "No ", "Park", "Par", "king", "i", "n",
+and "g", always choosing the longest would give "No " + "Park" + "i" +
+"n" + "g", which would be more expensive than "No " + "Par" + "king".
+Simply starting at the end and working backwards always choosing the
+longest word won't work any better.
+
+The low-cost segmentation is either a single lexicon entry or the
+combination of the lowest-cost segmentations of two substrings, and
+thus could in principle be found recursively, trying segmentations of
+substrings at each break point; but this would require a lot of
+duplicated effort.  The problem may be solved much more efficiently by
+standard dynamic programming methods, and that's what the Dragon
+Segmenter does. Basically, it remembers the lowest-cost way to segment
+text up to each character in turn, looking ahead for matches and
+noting the cost to the end of each matching string if it is a new
+low-cost way to that character.
+
+The input lexicon must have the format
+
+<count> <word in GB> [<pinyin>] --
+
+that is, the pinyin is optional but the count (frequency) is required;
+and the word with the largest count must be first.
+
+Please contact Dean Bandes at Dragon Systems for further information
+or to obtain a copy of the program.
+
+Dragon Systems
+320 Nevada Street
+Newton MA 02160
+
+Phone: (617) 965-5200 x221
+Fax: (617) 244-3899
+
+e-mail:  deanb@dragonsys.com
+
+-----------------------------------------------------------------------

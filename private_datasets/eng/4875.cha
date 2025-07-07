@@ -1,0 +1,958 @@
+@UTF8
+@PID:	11312/a-00004946-1
+@Begin
+@Languages:	eng
+@Participants:	A Subject, B Subject
+@Options:	bullets
+@ID:	eng|eng|A|||||Subject|||
+@ID:	eng|eng|B|||||Subject|||
+@Media:	4875, audio
+*B:	blah blah blah . 299670_300550
+%mor:	co|blah co|blah co|blah .
+%gra:	1|3|COM 2|3|COM 3|0|INCROOT 4|3|PUNCT
+*A:	yeah &-mm . 300660_301110
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	you know, it's like having a roommate . 301300_302700
+%mor:	pro:per|you v|know cm|cm pro:per|it~cop|be&3S conj|like
+	part|have-PRESP det:art|a n|+n|room+n|mate .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|LP 4|5|SUBJ 5|2|COMP 6|5|PRED 7|6|XMOD
+	8|9|DET 9|7|OBJ 10|2|PUNCT
+*A:	yeah . 303020_303400
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yeah . 303740_304040
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	but . 304360_304640
+%mor:	conj|but .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	but you got to do what you got to do, right . 306940_308540
+%mor:	conj|but pro:per|you v|get&PAST inf|to v|do pro:int|what
+	pro:per|you v|get&PAST inf|to v|do cm|cm co|right .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|5|INF 5|3|COMP 6|8|LINK 7|8|SUBJ
+	8|5|COMP 9|10|INF 10|8|COMP 11|10|LP 12|10|ENUM 13|3|PUNCT
+*A:	mhm . 308260_308870
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yup . 309060_309310
+%mor:	co|yup .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=breathes is there any way you could get . 309590_310860
+%mor:	cop|be&3S adv|there qn|any n|way pro:per|you mod|could v|get .
+%gra:	1|0|ROOT 2|1|JCT 3|4|QUANT 4|1|PRED 5|7|SUBJ 6|7|AUX 7|4|CMOD
+	8|1|PUNCT
+*A:	like do they have day jobs . 311310_312930
+%mor:	conj|like mod|do pro:sub|they v|have n|day n|job-PL .
+%gra:	1|4|LINK 2|4|AUX 3|4|SUBJ 4|0|ROOT 5|6|MOD 6|4|OBJ 7|4|PUNCT
+*A:	you know +/. 313150_313440
+%mor:	pro:per|you v|know +/.
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PUNCT
+*B:	&=breathes it would be too hard to I wouldn't make enough money . 313760_317240
+%mor:	pro:per|it mod|will&COND cop|be adv|too adv|hard prep|to pro:sub|I
+	mod|will&COND~neg|not v|make adj|enough n|money .
+%gra:	1|3|SUBJ 2|3|AUX 3|0|ROOT 4|5|JCT 5|3|JCT 6|3|JCT 7|10|SUBJ
+	8|10|AUX 9|8|NEG 10|6|CPOBJ 11|12|MOD 12|10|OBJ 13|3|PUNCT
+*A:	+, at the restaurant ? 313870_314560
+%mor:	prep|at det:art|the n|restaurant ?
+%gra:	1|0|INCROOT 2|3|DET 3|1|POBJ 4|1|PUNCT
+*A:	&+whi for day care and stuff . 317130_318530
+%mor:	prep|for n|day n|care coord|and n|stuff .
+%gra:	1|0|INCROOT 2|3|MOD 3|1|POBJ 4|3|CONJ 5|4|COORD 6|1|PUNCT
+*B:	&+t to pay, yeah it's crazy . 317650_320290
+%mor:	inf|to v|pay cm|cm co|yeah pro:per|it~cop|be&3S adj|craze&dv-Y .
+%gra:	1|2|INF 2|0|ROOT 3|2|LP 4|6|COM 5|6|SUBJ 6|2|CJCT 7|6|PRED
+	8|2|PUNCT
+*A:	yeah, that's true . 318730_319710
+%mor:	co|yeah cm|cm pro:dem|that~cop|be&3S adj|true .
+%gra:	1|4|COM 2|1|LP 3|4|SUBJ 4|0|ROOT 5|4|PRED 6|4|PUNCT
+*A:	yup . 320230_320540
+%mor:	co|yup .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	that's right . 320910_321500
+%mor:	pro:dem|that~cop|be&3S co|right .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|2|PUNCT
+*B:	and there's &+n really nothing else that I could do . 321940_324190
+%mor:	coord|and pro:exist|there~cop|be&3S adv|real&dadj-LY
+	pro:indef|nothing post|else pro:rel|that pro:sub|I mod|could v|do .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|5|JCT 5|3|PRED 6|5|PQ 7|10|LINK
+	8|10|SUBJ 9|10|AUX 10|5|CMOD 11|3|PUNCT
+*A:	yeah . 324240_324640
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	you know &+dur &=breathes and I don't think oh I don't know . 324800_326940
+%mor:	pro:per|you v|know coord|and pro:sub|I mod|do~neg|not v|think co|oh
+	pro:sub|I mod|do~neg|not v|know .
+%gra:	1|2|SUBJ 2|0|ROOT 3|7|LINK 4|7|SUBJ 5|7|AUX 6|5|NEG 7|2|COMP
+	8|12|COM 9|12|SUBJ 10|12|AUX 11|10|NEG 12|7|COMP 13|2|PUNCT
+*A:	yeah . 325620_325900
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	I I'd like not having to work during the day . 327170_329220
+%mor:	pro:sub|I pro:sub|I~mod|genmod co|like neg|not part|have-PRESP
+	prep|to n|work prep|during det:art|the n|day .
+%gra:	1|0|INCROOT 2|1|PUNCT 3|4|AUX 4|2|INCROOT 5|4|NEG 6|4|XJCT 7|6|JCT
+	8|7|POBJ 9|6|JCT 10|11|DET 11|9|POBJ 12|4|PUNCT
+*A:	yeah . 329280_329620
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yeah . 329800_330090
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	because I &+l . 330660_331030
+%mor:	conj|because pro:sub|I .
+%gra:	1|2|LINK 2|0|INCROOT 3|2|PUNCT
+*A:	so in a way it works out but it . 330690_332030
+%mor:	adv|so prep|in det:art|a n|way pro:per|it v|work-3S adv|out
+	conj|but pro:per|it .
+%gra:	1|2|JCT 2|6|JCT 3|4|DET 4|2|POBJ 5|6|SUBJ 6|0|ROOT 7|6|JCT 8|6|CONJ
+	9|8|COORD 10|6|PUNCT
+*B:	&=breathes yeah . 331740_332450
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=channel_noise . 332440_332590
+*B:	it's just hard . 332680_333420
+%mor:	pro:per|it~cop|be&3S adj|just adv|hard .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|2|JCT 5|2|PUNCT
+*B:	and then &=breathes he's taking a class another &+cla a class this
+	semester . 333560_337090
+%mor:	coord|and adv:tem|then pro:sub|he~aux|be&3S part|take-PRESP
+	det:art|a v|class qn|another det:art|a v|class pro:dem|this
+	n|semester .
+%gra:	1|5|LINK 2|5|JCT 3|5|SUBJ 4|5|AUX 5|0|ROOT 6|7|DET 7|5|COMP
+	8|10|QUANT 9|10|DET 10|7|OBJ 11|12|DET 12|10|OBJ 13|5|PUNCT
+*A:	yeah . 333610_334080
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yeah . 337160_337600
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and that starts tomorrow . 337470_338870
+%mor:	coord|and pro:rel|that v|start-3S adv:tem|tomorrow .
+%gra:	1|3|LINK 2|3|LINK 3|0|ROOT 4|3|OBJ 5|3|PUNCT
+*A:	so . 339040_339420
+%mor:	co|so .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	so, you know, there goes monday nights again . 339080_341360
+%mor:	adv|so cm|cm pro:per|you v|know cm|cm adv|there v|go-3S n|monday
+	n|night-PL adv|again .
+%gra:	1|4|JCT 2|1|LP 3|4|SUBJ 4|0|ROOT 5|4|LP 6|7|SUBJ 7|4|COMP 8|9|MOD
+	9|7|OBJ 10|7|JCT 11|4|PUNCT
+*A:	there's another day . 339810_340640
+%mor:	pro:exist|there~cop|be&3S qn|another n|day .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|QUANT 4|2|JCT 5|2|PUNCT
+*A:	yeah . 341110_341510
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yeah . 342340_342550
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	so . 342470_342870
+%mor:	co|so .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and it's it's hard &-eh you know having the kids all day too with
+	no break . 343040_346190
+%mor:	coord|and pro:per|it~cop|be&3S pro:per|it~aux|be&3S adj|hard
+	pro:per|you v|know part|have-PRESP det:art|the n|kid-PL adv|all
+	n|day post|too prep|with co|no v|break .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|6|SUBJ 5|6|AUX 6|3|PRED 7|8|SUBJ
+	8|6|CMOD 9|8|OBJ 10|11|DET 11|9|OBJ 12|13|JCT 13|9|JCT 14|13|PQ
+	15|8|JCT 16|17|COM 17|15|POBJ 18|3|PUNCT
+*A:	yeah . 346590_346930
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	I mean &-uh I don't know how . 347050_348210
+%mor:	pro:sub|I v|mean pro:sub|I mod|do~neg|not v|know adv:int|how .
+%gra:	1|2|SUBJ 2|0|ROOT 3|6|SUBJ 4|6|AUX 5|4|NEG 6|2|COMP 7|6|OBJ
+	8|2|PUNCT
+*B:	how you ever did it but . 348360_349560
+%mor:	adv:int|how pro:per|you adv|ever mod|do&PAST pro:per|it conj|but .
+%gra:	1|5|LINK 2|5|SUBJ 3|5|JCT 4|5|AUX 5|6|SUBJ 6|0|ROOT 7|6|PUNCT
+*A:	&=channel_noise . 349480_349680
+*A:	well I was never with them during the day . 350740_352270
+%mor:	co|well pro:sub|I cop|be&PAST&13S adv|never prep|with pro:obj|them
+	prep|during det:art|the n|day .
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|3|JCT 5|3|JCT 6|5|POBJ 7|3|JCT 8|9|DET
+	9|7|POBJ 10|3|PUNCT
+*B:	I just . 350830_351200
+%mor:	pro:sub|I adv|just .
+%gra:	1|0|INCROOT 2|1|JCT 3|1|PUNCT
+*B:	I get crazy that's true and you had them at night . 352070_354110
+%mor:	pro:sub|I v|get adj|craze&dv-Y pro:dem|that~cop|be&3S adj|true
+	coord|and pro:per|you v|have&PAST pro:obj|them prep|at n|night .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|JCT 4|5|SUBJ 5|2|COMP 6|5|PRED 7|9|LINK
+	8|9|SUBJ 9|5|CJCT 10|9|OBJ 11|9|JCT 12|11|POBJ 13|2|PUNCT
+*A:	yeah . 353420_353760
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yeah . 354580_354780
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=breathes that's one thing though . 355340_356430
+%mor:	pro:dem|that~cop|be&3S pro:indef|one n|thing adv|though .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|3|OBJ 5|4|NJCT 6|2|PUNCT
+*A:	just being . 356610_357210
+%mor:	adv|just part|be-PRESP .
+%gra:	1|2|JCT 2|0|ROOT 3|2|PUNCT
+*A:	around more +/. 357520_358400
+%mor:	prep|around pro:indef|more +/.
+%gra:	1|0|INCROOT 2|1|POBJ 3|1|PUNCT
+*B:	yeah . 358270_358830
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	+, has been so nice for us . 359000_360870
+%mor:	aux|have&3S aux|be&PASTP adv|so adj|nice prep|for pro:obj|us .
+%gra:	1|4|SUBJ 2|4|AUX 3|4|JCT 4|0|ROOT 5|4|JCT 6|5|POBJ 7|4|PUNCT
+*B:	yeah . 360250_360620
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	yup . 360980_361270
+%mor:	co|yup .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	you know . 361010_361370
+%mor:	pro:per|you v|know .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PUNCT
+*A:	at least for me I don't know if it is for them &=laughs I can't +/.
+	361530_365160
+%mor:	prep|at adj|least conj|for pro:obj|me pro:sub|I mod|do~neg|not
+	v|know conj|if pro:per|it cop|be&3S prep|for pro:obj|them pro:sub|I
+	mod|can~neg|not +/.
+%gra:	1|0|INCROOT 2|1|POBJ 3|8|LINK 4|8|SUBJ 5|8|SUBJ 6|8|AUX 7|6|NEG
+	8|1|PUNCT 9|11|LINK 10|11|SUBJ 11|8|ROOT 12|11|JCT 13|12|POBJ
+	14|17|SUBJ 15|17|AUX 16|15|NEG 17|11|PUNCT
+*B:	xxx . 361620_361830
+*B:	right . 362600_362860
+%mor:	co|right .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	&=laughs well they probably hate it &=laughs . 363240_367690
+%mor:	co|well pro:sub|they adv|probable&dadj-LY v|hate pro:per|it .
+%gra:	1|4|COM 2|4|SUBJ 3|4|JCT 4|0|ROOT 5|4|OBJ 6|4|PUNCT
+*A:	+, speak for them &=laughs . 365290_369880
+%mor:	v|speak prep|for pro:obj|them .
+%gra:	1|0|ROOT 2|1|JCT 3|2|POBJ 4|1|PUNCT
+*B:	&=breathes . 368880_369390
+*B:	yup . 370010_370480
+%mor:	co|yup .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=breathes . 370140_370400
+*A:	but &=breathes you know I &+d I look back and I think of all the
+	things that I missed . 370730_374560
+%mor:	conj|but pro:per|you v|know pro:sub|I pro:sub|I cop|look n|back
+	coord|and pro:sub|I v|think prep|of qn|all det:art|the n|thing-PL
+	pro:rel|that pro:sub|I v|miss-PAST .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|OBJ 5|6|SUBJ 6|4|CMOD 7|6|PRED
+	8|10|LINK 9|10|SUBJ 10|6|CJCT 11|10|JCT 12|14|QUANT 13|14|DET
+	14|11|POBJ 15|17|LINK 16|17|SUBJ 17|14|CMOD 18|3|PUNCT
+*A:	when they were babies, you know, when they were just little tiny
+	guys . 375100_377660
+%mor:	conj|when pro:sub|they cop|be&PAST n|baby-PL cm|cm pro:per|you
+	v|know cm|cm adv:int|when pro:sub|they aux|be&PAST adv|just
+	adj|little adj|tiny n|guy-PL .
+%gra:	1|3|LINK 2|3|SUBJ 3|7|CJCT 4|3|PRED 5|4|LP 6|7|SUBJ 7|0|ROOT 8|7|LP
+	9|13|LINK 10|13|SUBJ 11|13|AUX 12|13|JCT 13|15|MOD 14|15|MOD
+	15|7|OBJ 16|7|PUNCT
+*B:	yeah . 376090_376690
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	right even like a bad day with me is, at least it's a bad day with
+	me . 377290_381080
+%mor:	adv|right adv|even conj|like det:art|a adj|bad n|day prep|with
+	pro:obj|me aux|be&3S cm|cm prep|at n|least pro:per|it~cop|be&3S
+	det:art|a adj|bad n|day prep|with pro:obj|me .
+%gra:	1|2|JCT 2|0|INCROOT 3|14|LINK 4|6|DET 5|6|MOD 6|14|SUBJ 7|6|NJCT
+	8|7|POBJ 9|14|AUX 10|9|LP 11|14|JCT 12|11|POBJ 13|14|SUBJ 14|2|CJCT
+	15|17|DET 16|17|MOD 17|14|PRED 18|17|NJCT 19|18|POBJ 20|2|PUNCT
+*A:	yeah . 381160_381580
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	you know I'm their mom . 381390_382320
+%mor:	pro:per|you v|know pro:sub|I~cop|be&1S det:poss|their n|mom .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|6|MOD 6|4|PRED 7|2|PUNCT
+*A:	yeah[=! child's voice in background] . 382550_382930
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yep[=! child's coice in background] . 383690_384170
+%mor:	co|yep .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	but . 384860_385270
+%mor:	conj|but .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	xxx . 385570_385860
+*A:	mhm . 386680_386930
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	so . 388060_388510
+%mor:	co|so .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	xxx . 388420_388610
+*B:	hopefully I can . 388930_389780
+%mor:	adv|hope&dadj-FULL-LY pro:sub|I mod|can .
+%gra:	1|3|JCT 2|3|SUBJ 3|0|ROOT 4|3|PUNCT
+*B:	&=sniff . 390180_390430
+*B:	work a little less . 390800_391930
+%mor:	v|work det:art|a adj|little adj|less .
+%gra:	1|0|ROOT 2|4|DET 3|4|MOD 4|1|OBJ 5|1|PUNCT
+*A:	yeah . 392090_392620
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and then &=background_noise . 392650_393160
+%mor:	coord|and adv:tem|then .
+%gra:	1|2|LINK 2|0|INCROOT 3|2|PUNCT
+*A:	that would be . 393380_394180
+%mor:	pro:dem|that mod|will&COND cop|be .
+%gra:	1|3|SUBJ 2|3|AUX 3|0|ROOT 4|3|PUNCT
+*B:	maybe that will be a little bit better . 393740_395120
+%mor:	adv|maybe pro:dem|that mod|will cop|be det:art|a adj|little n|bit
+	adj|good&CP .
+%gra:	1|4|JCT 2|4|SUBJ 3|4|AUX 4|0|ROOT 5|7|DET 6|7|MOD 7|4|PRED
+	8|7|POSTMOD 9|4|PUNCT
+*A:	yeah . 395310_395700
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=channel_noise . 396170_396380
+*B:	but . 396870_397110
+%mor:	conj|but .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	especially I mean you know leaving to go to work at four o'clock is
+	just, I'm tired already . 397300_401740
+%mor:	adv|especial&dadj-LY pro:sub|I v|mean pro:per|you v|know
+	part|leave-PRESP inf|to v|go prep|to n|work prep|at det:num|four
+	n|o'clock aux|be&3S adv|just cm|cm pro:sub|I~aux|be&1S
+	part|tire-PASTP adv|already .
+%gra:	1|3|JCT 2|3|SUBJ 3|19|SUBJ 4|5|SUBJ 5|3|COMP 6|5|OBJ 7|8|INF
+	8|5|COMP 9|8|JCT 10|9|POBJ 11|10|NJCT 12|13|QUANT 13|11|POBJ
+	14|19|AUX 15|14|JCT 16|14|LP 17|19|SUBJ 18|19|AUX 19|0|ROOT
+	20|19|JCT 21|19|PUNCT
+*A:	yeah . 400830_401270
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	I'm like ready for a nap . 401810_402960
+%mor:	pro:sub|I~cop|be&1S prep|like adj|ready prep|for det:art|a n|nap .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|JCT 4|3|POBJ 5|4|JCT 6|7|DET 7|5|POBJ
+	8|2|PUNCT
+*A:	yeah . 401950_402220
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	uhhuh . 403190_403610
+%mor:	co|uhhuh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	I want to like be home making supper and . 403460_405820
+%mor:	pro:sub|I v|want inf|to co|like cop|be n|home part|make-PRESP
+	n|supper coord|and .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|INF 4|5|COM 5|2|COMP 6|5|JCT 7|5|XJCT 8|7|OBJ
+	9|8|COORD 10|2|PUNCT
+*A:	yup . 405810_405960
+%mor:	co|yup .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and then and that's when I have to leave . 407220_408930
+%mor:	coord|and adv:tem|then coord|and pro:dem|that~cop|be&3S conj|when
+	pro:sub|I v|have inf|to v|leave .
+%gra:	1|5|LINK 2|5|JCT 3|2|CONJ 4|3|COORD 5|0|ROOT 6|8|LINK 7|8|SUBJ
+	8|5|PRED 9|10|INF 10|8|COMP 11|5|PUNCT
+*A:	and you have to get up and go and . 408950_410210
+%mor:	coord|and pro:per|you v|have inf|to v|get adv|up coord|and v|go
+	coord|and .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|5|INF 5|3|COMP 6|5|JCT 7|5|CONJ
+	8|7|COORD 9|8|OBJ 10|3|PUNCT
+*B:	and go wait on people . 410130_411310
+%mor:	coord|and v|go v|wait prep|on n|person&PL .
+%gra:	1|3|LINK 2|3|SRL 3|0|ROOT 4|3|JCT 5|4|POBJ 6|3|PUNCT
+*A:	yeah . 410580_410770
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yeah . 411430_411740
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	of all things . 411770_412550
+%mor:	prep|of qn|all n|thing-PL .
+%gra:	1|0|INCROOT 2|3|QUANT 3|1|POBJ 4|1|PUNCT
+*A:	yeah &=laughs . 412610_413050
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	my god . 413120_413810
+%mor:	det:poss|my n|god .
+%gra:	1|2|MOD 2|0|INCROOT 3|2|PUNCT
+*A:	&=laughs . 414060_416490
+*B:	&=breathes . 414940_415300
+*B:	&=breathes watch other people have a nice supper . 415490_417690
+%mor:	v|watch qn|other n|person&PL v|have det:art|a adj|nice n|supper .
+%gra:	1|4|LINK 2|3|QUANT 3|4|SUBJ 4|0|ROOT 5|7|DET 6|7|MOD 7|4|OBJ
+	8|4|PUNCT
+*A:	yeah . 417770_418190
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	shit . 418430_418990
+%mor:	n|shit .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	it's awful . 418860_419410
+%mor:	pro:per|it~cop|be&3S adj|awful .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|2|PUNCT
+*A:	yup . 419780_420000
+%mor:	co|yup .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yuck . 421890_422290
+%mor:	co|yuck .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and waitressing is . 422410_423370
+%mor:	coord|and n:gerund|waitress-PRESP cop|be&3S .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|PUNCT
+*B:	&-mm . 423660_423950
+*A:	it's hard man I . 424570_425620
+%mor:	pro:per|it~cop|be&3S adj|hard n|man pro:sub|I .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|MOD 4|2|PRED 5|2|PRED 6|2|PUNCT
+*B:	it's hard work . 425440_426300
+%mor:	pro:per|it~cop|be&3S adj|hard n|work .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|MOD 4|2|PRED 5|2|PUNCT
+*B:	you know and it's a thankless job &+s if you if you've never waited
+	tables, and there are so many people that have never waited tables .
+	426440_432080
+%mor:	pro:per|you v|know coord|and pro:per|it~cop|be&3S det:art|a
+	adj|thankless n|job conj|if pro:per|you conj|if pro:per|you~aux|have
+	adv|never v|wait-PAST n|table-PL cm|cm coord|and adv|there
+	cop|be&PRES adv|so qn|many n|person&PL pro:rel|that aux|have
+	adv|never v|wait-PAST n|table-PL .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|LINK 4|5|SUBJ 5|2|CJCT 6|8|DET 7|8|MOD
+	8|5|PRED 9|15|LINK 10|15|SUBJ 11|15|LINK 12|15|SUBJ 13|15|AUX
+	14|15|JCT 15|8|CMOD 16|15|OBJ 17|15|LP 18|20|LINK 19|20|SUBJ
+	20|15|CJCT 21|20|JCT 22|23|QUANT 23|21|POBJ 24|27|LINK 25|27|AUX
+	26|27|JCT 27|23|CMOD 28|27|OBJ 29|2|PUNCT
+*A:	that's . 426510_426690
+%mor:	pro:dem|that~cop|be&3S .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PUNCT
+*A:	it is . 426910_427590
+%mor:	pro:per|it cop|be&3S .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PUNCT
+*A:	yeah . 428240_428590
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	mhm . 431640_432060
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	&=breathes . 432310_432870
+*A:	yup . 432730_432950
+%mor:	co|yup .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	you know they just have no clue and . 433060_434630
+%mor:	pro:per|you v|know pro:sub|they adv|just v|have qn|no n|clue
+	coord|and .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|SUBJ 4|5|JCT 5|2|COMP 6|7|QUANT 7|5|OBJ
+	8|7|CONJ 9|2|PUNCT
+*A:	yeah . 434510_434870
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	like . 434760_434950
+%mor:	prep|like .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	you know I'm not your little fucking servant I'm just . 435110_437850
+%mor:	pro:per|you v|know pro:sub|I~cop|be&1S neg|not det:poss|your
+	adj|little n:gerund|fuck-PRESP n|servant pro:sub|I~aux|be&1S
+	adv|just .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|4|NEG 6|9|MOD 7|9|MOD 8|9|MOD
+	9|4|PRED 10|12|SUBJ 11|12|AUX 12|9|NJCT 13|2|PUNCT
+*A:	yup . 435900_436060
+%mor:	co|yup .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yeah . 437500_437830
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	I'm here to do my job and I'm trying to be nice to you . 438120_440800
+%mor:	pro:sub|I~cop|be&1S adv|here inf|to v|do det:poss|my n|job
+	coord|and pro:sub|I~aux|be&1S part|try-PRESP inf|to cop|be adj|nice
+	prep|to pro:per|you .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|JCT 4|5|INF 5|2|XJCT 6|7|MOD 7|5|OBJ
+	8|11|LINK 9|11|SUBJ 10|11|AUX 11|7|CMOD 12|13|INF 13|11|COMP
+	14|13|PRED 15|14|JCT 16|15|POBJ 17|2|PUNCT
+*A:	yup . 439240_439480
+%mor:	co|yup .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and . 441590_441760
+%mor:	coord|and .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yeah, don't push it . 441620_442700
+%mor:	co|yeah cm|cm mod|do~neg|not v|push pro:per|it .
+%gra:	1|5|SUBJ 2|1|LP 3|5|AUX 4|3|NEG 5|0|ROOT 6|5|OBJ 7|5|PUNCT
+*B:	right . 442770_443320
+%mor:	co|right .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=laughs . 443120_445140
+*B:	and of course you can never say things like that . 444950_446690
+%mor:	coord|and prep|of n|course pro:per|you mod|can adv|never v|say
+	n|thing-PL prep|like pro:dem|that .
+%gra:	1|7|LINK 2|7|JCT 3|2|POBJ 4|7|SUBJ 5|7|AUX 6|7|JCT 7|0|ROOT 8|7|OBJ
+	9|8|NJCT 10|9|POBJ 11|7|PUNCT
+*A:	I know yeah . 446320_447240
+%mor:	pro:sub|I v|know co|yeah .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|COM 4|2|PUNCT
+*A:	yup . 447580_447890
+%mor:	co|yup .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	but [=! clears throat] . 448530_448990
+%mor:	conj|but .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	just have to be &=breathes . 449100_450180
+%mor:	adv|just v|have inf|to cop|be .
+%gra:	1|2|JCT 2|0|ROOT 3|4|INF 4|2|COMP 5|2|PUNCT
+*A:	Suzy smiles and . 450860_452100
+%mor:	n:prop|Suzy v|smile-3S coord|and .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|OBJ 4|2|PUNCT
+*B:	yup mhm . 452010_453340
+%mor:	co|yup co|yes .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*A:	xxx [=! sound of disgust] . 452480_453060
+*A:	0 . 453520_453760
+*A:	yuck . 454170_454630
+%mor:	co|yuck .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	&=laughs . 454840_455970
+*B:	&=breathes . 456500_457150
+*A:	&=channel_noise that's why well whenever we go out I always make
+	sure . 456660_459530
+%mor:	pro:dem|that~cop|be&3S adv:int|why adv|well adv:int|whenever
+	pro:sub|we v|go adv|out pro:sub|I adv|always v|make adj|sure .
+%gra:	1|2|SUBJ 2|0|ROOT 3|7|LINK 4|5|JCT 5|7|LINK 6|7|SUBJ 7|2|PRED
+	8|7|JCT 9|11|SUBJ 10|11|JCT 11|7|COMP 12|11|JCT 13|2|PUNCT
+*A:	that I leave a tip . 459870_460730
+%mor:	pro:rel|that pro:sub|I v|leave det:art|a n|tip .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|5|DET 5|3|OBJ 6|3|PUNCT
+*B:	yeah . 460820_461350
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	you know unless . 461290_461860
+%mor:	pro:per|you v|know conj|unless .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|OBJ 4|2|PUNCT
+*A:	the service is really lousy . 462120_463570
+%mor:	det:art|the n|service aux|be&3S adv|real&dadj-LY adj|louse&dn-Y .
+%gra:	1|2|DET 2|3|SUBJ 3|0|ROOT 4|5|JCT 5|3|PRED 6|3|PUNCT
+*B:	yeah . 463690_464040
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	and then she knows it, you know, I mean she knew she what she did
+	&=breathes . 464060_467600
+%mor:	coord|and adv:tem|then pro:sub|she v|know-3S pro:per|it cm|cm
+	pro:per|you v|know cm|cm pro:sub|I adj|mean pro:sub|she v|know&PAST
+	pro:sub|she pro:int|what pro:sub|she mod|do&PAST .
+%gra:	1|4|LINK 2|4|JCT 3|4|SUBJ 4|0|ROOT 5|4|OBJ 6|4|LP 7|8|SUBJ
+	8|4|PUNCT 9|8|LP 10|15|SUBJ 11|15|JCT 12|13|SUBJ 13|11|CMOD
+	14|15|SUBJ 15|17|LINK 16|17|SUBJ 17|8|ROOT 18|17|PUNCT
+*B:	mhm . 465360_465740
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	&=background_noise right . 467260_467840
+%mor:	co|right .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	but if they give any effort at all &=swallow they get a good tip
+	it's just xxx . 467780_471480
+%mor:	conj|but conj|if pro:sub|they v|give qn|any n|effort prep|at
+	pro:indef|all pro:sub|they v|get det:art|a adj|good n|tip
+	pro:per|it~cop|be&3S adj|just .
+%gra:	1|10|LINK 2|4|LINK 3|4|SUBJ 4|10|CJCT 5|6|QUANT 6|4|OBJ 7|4|JCT
+	8|7|POBJ 9|10|SUBJ 10|0|ROOT 11|13|DET 12|13|MOD 13|10|OBJ
+	14|15|SUBJ 15|13|CMOD 16|15|PRED 17|10|PUNCT
+*B:	right . 469730_470140
+%mor:	co|right .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	yeah . 470830_471030
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=breathes . 471970_472260
+*B:	yup . 472070_472440
+%mor:	co|yup .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	I wouldn't want to have to be doing this right now, so thank you
+	for doing it for me, you know . 472510_476810
+%mor:	pro:sub|I mod|will&COND~neg|not v|want inf|to v|have inf|to aux|be
+	part|do-PRESP pro:dem|this adv|right adv|now cm|cm adv|so v|thank
+	pro:per|you prep|for n:gerund|do-PRESP pro:per|it prep|for
+	pro:obj|me cm|cm pro:per|you v|know .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|6|INF 6|4|COMP 7|9|INF 8|9|AUX
+	9|6|COMP 10|9|OBJ 11|12|JCT 12|9|JCT 13|4|LP 14|15|JCT 15|4|COMP
+	16|15|OBJ 17|15|JCT 18|17|POBJ 19|18|OBJ 20|18|JCT 21|20|POBJ
+	22|15|LP 23|24|SUBJ 24|15|CJCT 25|4|PUNCT
+*B:	right . 475130_475470
+%mor:	co|right .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	right . 476440_476890
+%mor:	co|right .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=laughs . 477130_477240
+*B:	exactly . 477210_477950
+%mor:	adv|exact&dadj-LY .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=laughs I didn't want to cook tonight so somebody there did,
+	&=laughs you know &=laughs . 477590_482610
+%mor:	pro:sub|I mod|do&PAST~neg|not v|want inf|to v|cook adv:tem|tonight
+	conj|so pro:indef|somebody adv|there v|do&PAST cm|cm pro:per|you
+	v|know .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|6|INF 6|4|COMP 7|6|JCT
+	8|11|LINK 9|11|SUBJ 10|9|NJCT 11|14|CJCT 12|11|LP 13|14|SUBJ
+	14|4|CJCT 15|4|PUNCT
+*B:	&=laughs . 479990_481480
+*B:	&=breathes yeah . 482440_484550
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yup &=breathes . 482850_483630
+%mor:	co|yup .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	but &=breathes . 484910_485490
+%mor:	conj|but .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yeah I don't know . 487180_487920
+%mor:	co|yeah pro:sub|I mod|do~neg|not v|know .
+%gra:	1|5|COM 2|5|SUBJ 3|5|AUX 4|3|NEG 5|0|ROOT 6|5|PUNCT
+*B:	&=channel_noise but we're &+hangi we're hanging in there . 487220_489040
+%mor:	conj|but pro:sub|we~cop|be&PRES pro:sub|we~aux|be&PRES
+	part|hang-PRESP prep|in adv|there .
+%gra:	1|3|LINK 2|3|SUBJ 3|6|LINK 4|6|SUBJ 5|6|AUX 6|0|ROOT 7|6|JCT
+	8|7|POBJ 9|6|PUNCT
+*A:	are you ? 489060_489470
+%mor:	cop|be&PRES pro:per|you ?
+%gra:	1|0|ROOT 2|1|SUBJ 3|1|PUNCT
+*B:	yeah . 489670_490050
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	&=breathes yup [=! clears throat] . 491030_491990
+%mor:	co|yup .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	it's tough though . 493830_494560
+%mor:	pro:per|it~cop|be&3S adj|tough adv|though .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|2|JCT 5|2|PUNCT
+*B:	it is . 494930_495330
+%mor:	pro:per|it cop|be&3S .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PUNCT
+*B:	but . 498140_498520
+%mor:	conj|but .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	we had a big huge garden this &=background_noise year . 499000_500820
+%mor:	pro:sub|we v|have&PAST det:art|a adj|big adj|huge n|garden
+	pro:dem|this n|year .
+%gra:	1|2|SUBJ 2|0|ROOT 3|6|DET 4|6|MOD 5|6|MOD 6|2|OBJ 7|8|DET 8|6|OBJ
+	9|2|PUNCT
+*A:	oh did you ? 500820_501390
+%mor:	co|oh mod|do&PAST pro:per|you ?
+%gra:	1|3|COM 2|3|AUX 3|0|ROOT 4|3|PUNCT
+*B:	yeah we made tomato sauce today . 501540_503350
+%mor:	co|yeah pro:sub|we v|make&PAST n|tomato n|sauce adv:tem|today .
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|5|MOD 5|3|OBJ 6|3|JCT 7|3|PUNCT
+*A:	oh neat . 501940_502700
+%mor:	co|oh adj|neat .
+%gra:	1|2|COM 2|0|ROOT 3|2|PUNCT
+*A:	oh cool . 503490_504480
+%mor:	co|oh v|cool .
+%gra:	1|2|COM 2|0|ROOT 3|2|PUNCT
+*B:	yeah it's . 504310_504900
+%mor:	co|yeah pro:per|it~cop|be&3S .
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|3|PUNCT
+*B:	bubbling away on the stove . 505250_506690
+%mor:	part|bubble-PRESP adv|away prep|on det:art|the n|stove .
+%gra:	1|0|INCROOT 2|1|JCT 3|1|JCT 4|5|DET 5|3|POBJ 6|1|PUNCT
+*A:	&=channel_noise . 506190_506310
+*A:	oh bet your house smells wonderful . 506550_508600
+%mor:	co|oh n|bet det:poss|your n|house v|smell-3S adj|wonder-FULL .
+%gra:	1|5|COM 2|5|JCT 3|4|MOD 4|5|SUBJ 5|0|ROOT 6|5|JCT 7|5|PUNCT
+*B:	it smells so good . 507950_509550
+%mor:	pro:per|it v|smell-3S adv|so adj|good .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|JCT 4|2|JCT 5|2|PUNCT
+*A:	god . 509510_510010
+%mor:	co|god .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	&=sighs . 510150_510680
+*A:	&=sighs . 510570_510930
+*A:	I just remember your house from when we were there . 511380_513490
+%mor:	pro:sub|I adv|just v|remember det:poss|your n|house prep|from
+	adv:int|when pro:sub|we cop|be&PAST adv|there .
+%gra:	1|3|SUBJ 2|3|JCT 3|0|ROOT 4|5|MOD 5|3|OBJ 6|3|JCT 7|9|LINK 8|9|SUBJ
+	9|6|CPOBJ 10|9|JCT 11|3|PUNCT
+*B:	yeah &=background_noise yup &=background_noise . 513150_514870
+%mor:	co|yeah co|yup .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*A:	I just love that house . 513669_514890
+%mor:	pro:sub|I adv|just n|love pro:dem|that n|house .
+%gra:	1|3|SUBJ 2|3|JCT 3|0|INCROOT 4|5|DET 5|3|OBJ 6|3|PUNCT
+*A:	that kitchen . 515000_515710
+%mor:	pro:dem|that n|kitchen .
+%gra:	1|2|DET 2|0|INCROOT 3|2|PUNCT
+*B:	yeah &=background_noise . 515200_516270
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=breathes you know the kitchen was the focal point in the whole
+	house you know it was just . 515900_519430
+%mor:	pro:per|you v|know det:art|the n|kitchen cop|be&PAST&13S
+	det:art|the adj|focal n|point prep|in det:art|the adj|whole n|house
+	pro:per|you v|know pro:per|it cop|be&PAST&13S adv|just .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|DET 4|5|SUBJ 5|2|COMP 6|8|DET 7|8|MOD
+	8|5|PRED 9|8|NJCT 10|12|DET 11|12|MOD 12|9|POBJ 13|14|SUBJ 14|8|CMOD
+	15|16|SUBJ 16|14|COMP 17|16|JCT 18|2|PUNCT
+*B:	yup . 518620_518979
+%mor:	co|yup .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	mhm . 519599_520270
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	xxx . 520490_520599
+*A:	comfortable place to settle and you know it was just neat . 520830_524000
+%mor:	adj|comfort&dv-ABLE n|place inf|to v|settle coord|and pro:per|you
+	v|know pro:per|it cop|be&PAST&13S adv|just adj|neat .
+%gra:	1|2|MOD 2|0|INCROOT 3|4|INF 4|2|XMOD 5|7|LINK 6|7|SUBJ 7|4|CJCT
+	8|9|SUBJ 9|7|COMP 10|11|JCT 11|9|PRED 12|2|PUNCT
+*B:	&=background_noise yup . 522169_523260
+%mor:	co|yup .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	&=channel_noise . 524420_524690
+*B:	and it smells good and . 524880_526340
+%mor:	coord|and pro:per|it v|smell-3S adj|good coord|and .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|JCT 5|4|CONJ 6|3|PUNCT
+*A:	yep &=breathes &=channel_noise . 526080_526710
+%mor:	co|yep .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	I made &-um . 526540_527230
+%mor:	pro:sub|I v|make&PAST .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PUNCT
+*B:	&=breathes a couple of times I made bread and butter pickles . 527570_530000
+%mor:	det:art|a n|couple prep|of n|time-PL pro:sub|I v|make&PAST n|bread
+	coord|and n|butter n|pickle-PL .
+%gra:	1|2|DET 2|6|JCT 3|2|NJCT 4|3|POBJ 5|6|SUBJ 6|0|ROOT 7|6|OBJ
+	8|6|CONJ 9|10|MOD 10|8|COORD 11|6|PUNCT
+*A:	oh did you oh good . 530060_531920
+%mor:	co|oh mod|do&PAST pro:per|you co|oh adj|good .
+%gra:	1|4|COM 2|3|AUX 3|4|SUBJ 4|5|COM 5|0|ROOT 6|5|PUNCT
+*B:	yup . 530950_531300
+%mor:	co|yup .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and &-um . 532190_532860
+%mor:	coord|and .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	that's wonderful . 532350_533420
+%mor:	pro:dem|that~cop|be&3S adj|wonder-FULL .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|2|PUNCT
+*B:	I made a blueberry lime jam . 533450_535480
+%mor:	pro:sub|I v|make&PAST det:art|a n|blueberry n|lime n|jam .
+%gra:	1|2|SUBJ 2|0|ROOT 3|6|DET 4|6|MOD 5|6|MOD 6|2|OBJ 7|2|PUNCT
+*A:	ooh . 535650_536530
+%mor:	v|ooh .
+%gra:	1|0|ROOT 2|1|PUNCT
+*B:	and the first time I made it it came out perfect . 536290_538550
+%mor:	coord|and det:art|the adj|first n|time pro:sub|I v|make&PAST
+	pro:per|it pro:per|it v|come&PAST prep|out adj|perfect .
+%gra:	1|9|LINK 2|4|DET 3|4|MOD 4|9|SUBJ 5|6|SUBJ 6|4|CMOD 7|9|SUBJ
+	8|9|SUBJ 9|0|ROOT 10|9|JCT 11|10|POBJ 12|9|PUNCT
+*A:	uhhuh . 538530_538970
+%mor:	co|uhhuh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	but then I made it again like last week and it didn't come out
+	right and I was so mad . 538820_542270
+%mor:	conj|but adv:tem|then pro:sub|I v|make&PAST pro:per|it adv|again
+	co|like adj|last n|week coord|and pro:per|it mod|do&PAST~neg|not
+	v|come adv|out adj|right coord|and pro:sub|I cop|be&PAST&13S adv|so
+	adj|mad .
+%gra:	1|4|LINK 2|4|JCT 3|4|SUBJ 4|0|ROOT 5|4|OBJ 6|4|JCT 7|4|COM 8|9|MOD
+	9|4|OBJ 10|14|LINK 11|14|SUBJ 12|14|AUX 13|12|NEG 14|4|CJCT
+	15|19|JCT 16|19|JCT 17|19|LINK 18|19|SUBJ 19|14|COMP 20|21|JCT
+	21|19|PRED 22|4|PUNCT
+*A:	oh . 541530_541800
+%mor:	co|oh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=breathes so did you have to just dump the whole thing out ? 542660_544690
+%mor:	adv|so mod|do&PAST pro:per|you v|have prep|to adj|just n|dump
+	det:art|the adj|whole n|thing adv|out ?
+%gra:	1|4|JCT 2|4|AUX 3|4|SUBJ 4|0|ROOT 5|4|JCT 6|7|MOD 7|5|POBJ 8|10|DET
+	9|10|MOD 10|4|JCT 11|10|NJCT 12|4|PUNCT
+*B:	well I I haven't thrown it away yet because it . 544980_547130
+%mor:	co|well pro:sub|I pro:sub|I aux|have~neg|not part|throw&PASTP
+	pro:per|it adv|away adv|yet conj|because pro:per|it .
+%gra:	1|0|INCROOT 2|1|PUNCT 3|6|SUBJ 4|6|AUX 5|4|NEG 6|2|COMP 7|6|OBJ
+	8|6|JCT 9|6|JCT 10|6|INCROOT 11|10|OBJ 12|10|PUNCT
+*B:	it just +/. 547290_547660
+%mor:	pro:per|it adv|just +/.
+%gra:	1|0|INCROOT 2|1|JCT 3|1|PUNCT
+*A:	try to . 547360_547700
+%mor:	v|try prep|to .
+%gra:	1|0|ROOT 2|1|JCT 3|1|PUNCT
+*B:	+, didn't get thick enough . 547990_549220
+%mor:	mod|do&PAST~neg|not v|get n|thick adv|enough .
+%gra:	1|3|AUX 2|1|NEG 3|0|ROOT 4|3|OBJ 5|3|JCT 6|3|PUNCT
+*A:	oh okay . 549290_550030
+%mor:	co|oh co|okay .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*B:	but it's still like good on pancakes . 549940_551900
+%mor:	conj|but pro:per|it~cop|be&3S adv|still conj|like adj|good prep|on
+	n|pancake-PL .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|JCT 5|3|CONJ 6|5|COORD 7|6|JCT
+	8|7|POBJ 9|3|PUNCT
+*A:	oh yeah . 551850_552600
+%mor:	co|oh co|yeah .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*B:	and stuff like that . 552290_553420
+%mor:	coord|and n|stuff prep|like pro:dem|that .
+%gra:	1|0|INCROOT 2|1|COORD 3|2|NJCT 4|3|POBJ 5|1|PUNCT
+*A:	yeah make it like syrup instead . 553260_555020
+%mor:	co|yeah v|make pro:per|it v|like n|syrup adv|instead .
+%gra:	1|2|COM 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|4|OBJ 6|4|JCT 7|2|PUNCT
+*B:	so . 553600_553810
+%mor:	co|so .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	it's like a sauce yeah . 554480_555880
+%mor:	pro:per|it~cop|be&3S conj|like det:art|a n|sauce co|yeah .
+%gra:	1|2|SUBJ 2|0|ROOT 3|6|LINK 4|5|DET 5|6|SUBJ 6|2|PRED 7|2|PUNCT
+*A:	yeah . 555610_555910
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	cool . 556710_557080
+%mor:	adj|cool .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	but and &+the it's it's really &+ha I don't know if you've ever
+	canned anything ever but it's just . 557380_562360
+%mor:	conj|but coord|and pro:per|it~cop|be&3S pro:per|it~aux|be&3S
+	adv|real&dadj-LY pro:sub|I mod|do~neg|not v|know conj|if
+	pro:per|you~aux|have adv|ever adj|canned pro:indef|anything adv|ever
+	conj|but pro:per|it~cop|be&3S adj|just .
+%gra:	1|4|LINK 2|4|LINK 3|4|SUBJ 4|11|LINK 5|11|SUBJ 6|11|AUX 7|11|JCT
+	8|11|SUBJ 9|11|AUX 10|9|NEG 11|0|ROOT 12|16|LINK 13|16|SUBJ
+	14|16|AUX 15|16|JCT 16|11|COMP 17|16|OBJ 18|17|NJCT 19|21|LINK
+	20|21|SUBJ 21|17|CJCT 22|21|PRED 23|11|PUNCT
+*A:	xxx . 558320_558530
+*A:	unhunh . 560850_561380
+%mor:	co|no .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	nope &=breathes . 561800_562350
+%mor:	co|nope .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and when you do something wrong you don't know what you did wrong
+	and . 563150_566030
+%mor:	coord|and conj|when pro:per|you v|do pro:indef|something adj|wrong
+	pro:per|you mod|do~neg|not v|know pro:int|what pro:per|you v|do&PAST
+	adj|wrong coord|and .
+%gra:	1|4|LINK 2|4|LINK 3|4|SUBJ 4|0|ROOT 5|4|OBJ 6|4|JCT 7|10|SUBJ
+	8|10|AUX 9|8|NEG 10|6|CMOD 11|13|LINK 12|13|SUBJ 13|10|COMP
+	14|13|JCT 15|13|CONJ 16|4|PUNCT
+*A:	mhm . 565840_566330
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and why it &=breathes and you don't know if it's going to come out
+	. 566200_569420
+%mor:	coord|and adv:int|why pro:per|it coord|and pro:per|you
+	mod|do~neg|not v|know conj|if pro:per|it~aux|be&3S part|go-PRESP
+	inf|to v|come adv|out .
+%gra:	1|8|LINK 2|8|LINK 3|8|SUBJ 4|8|LINK 5|8|SUBJ 6|8|AUX 7|6|NEG
+	8|0|ROOT 9|12|LINK 10|12|SUBJ 11|12|AUX 12|8|COMP 13|14|INF
+	14|12|COMP 15|14|JCT 16|8|PUNCT
+*B:	you know . 569740_570180
+%mor:	pro:per|you v|know .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PUNCT
+*A:	yeah . 570180_570670
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	until it comes out, or it doesn't come out . 570720_573000
+%mor:	conj|until pro:per|it v|come-3S adv|out cm|cm coord|or pro:per|it
+	mod|do&3S~neg|not v|come adv|out .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|JCT 5|3|LP 6|10|LINK 7|10|SUBJ
+	8|10|AUX 9|8|NEG 10|3|CJCT 11|10|JCT 12|3|PUNCT
+*A:	yeah . 571100_571260
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yeah till you're done with it, yeah . 572000_573570
+%mor:	co|yeah n|till pro:per|you~aux|be&PRES part|do&PASTP prep|with
+	pro:per|it cm|cm co|yeah .
+%gra:	1|5|COM 2|5|JCT 3|5|SUBJ 4|5|AUX 5|0|ROOT 6|5|JCT 7|6|POBJ 8|5|LP
+	9|5|ENUM 10|5|PUNCT
+*B:	and then it's like . 573320_574000
+%mor:	coord|and adv:tem|then pro:per|it~aux|be&3S co|like .
+%gra:	1|4|LINK 2|4|JCT 3|4|SUBJ 4|0|ROOT 5|4|COM 6|4|PUNCT
+*B:	fuck man you know I wasted all this time &=breathes and energy and
+	effort, my kitchen is like a freaking +/. 574180_580270
+%mor:	v|fuck v|man pro:per|you v|know pro:sub|I v|waste-PAST qn|all
+	pro:dem|this n|time coord|and n|energy coord|and n|effort cm|cm
+	det:poss|my n|kitchen cop|be&3S co|like det:art|a part|freak-PRESP
+	+/.
+%gra:	1|6|COM 2|1|COMP 3|4|SUBJ 4|2|COMP 5|6|SUBJ 6|0|ROOT 7|9|QUANT
+	8|9|DET 9|6|OBJ 10|9|CONJ 11|10|COORD 12|6|CONJ 13|12|COORD 14|13|LP
+	15|16|MOD 16|17|SUBJ 17|6|CJCT 18|20|COM 19|20|DET 20|17|PRED
+	21|6|PUNCT
+*A:	&=channel_noise . 575530_575660
+*A:	&=laughs . 576830_577410
+*A:	yup . 578820_579050
+%mor:	co|yup .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	+, sauna . 580340_580930
+%mor:	n|sauna .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yup &=breathes . 581180_581730
+%mor:	co|yup .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	&=channel_noise . 581620_581940
+*A:	shit . 581980_582490
+%mor:	n|shit .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and it didn't come out right . 582520_583740
+%mor:	coord|and pro:per|it mod|do&PAST~neg|not v|come adv|out co|right .
+%gra:	1|5|LINK 2|5|SUBJ 3|5|AUX 4|3|NEG 5|0|ROOT 6|5|JCT 7|5|COM
+	8|5|PUNCT
+*A:	xxx . 583760_583990
+*B:	I mean you know . 583870_584740
+%mor:	pro:sub|I v|mean pro:per|you v|know .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|2|PUNCT
+*A:	doesn't Jeanette . 584940_585600
+%mor:	mod|do&3S~neg|not n:prop|Jeanette .
+%gra:	1|3|AUX 2|1|NEG 3|0|INCROOT 4|3|PUNCT
+*A:	do canning and stuff ? 585750_586940
+%mor:	mod|do part|can-PRESP coord|and n|stuff ?
+%gra:	1|2|AUX 2|0|ROOT 3|2|CONJ 4|3|COORD 5|2|PUNCT
+*B:	oh I don't know she might . 586930_588320
+%mor:	co|oh pro:sub|I mod|do~neg|not v|know pro:sub|she mod|might .
+%gra:	1|5|COM 2|5|SUBJ 3|5|AUX 4|3|NEG 5|0|ROOT 6|7|SUBJ 7|5|COMP
+	8|5|PUNCT
+*A:	she does [=! background voice] because she sent me some jellies +/.
+	587890_590320
+%mor:	pro:sub|she v|do&3S conj|because pro:sub|she v|send&PAST pro:obj|me
+	qn|some n|jelly-PL +/.
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|LINK 4|5|SUBJ 5|2|CJCT 6|5|OBJ2 7|8|QUANT
+	8|5|OBJ 9|2|PUNCT
+*B:	does she ? 588890_589350
+%mor:	mod|do&3S pro:sub|she ?
+%gra:	1|2|AUX 2|0|INCROOT 3|2|PUNCT
+*B:	yeah . 590580_590960
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	+, for christmas last year . 590910_592160
+%mor:	prep|for n|christmas adv|last n|year .
+%gra:	1|0|INCROOT 2|1|POBJ 3|2|NJCT 4|3|POBJ 5|1|PUNCT
+*B:	yeah . 592260_592640
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	so she might know . 592770_593630
+%mor:	co|so pro:sub|she mod|might v|know .
+%gra:	1|4|COM 2|4|SUBJ 3|4|AUX 4|0|ROOT 5|4|PUNCT
+*B:	probably, yeah . 593520_594410
+%mor:	adv|probable&dadj-LY cm|cm co|yeah .
+%gra:	1|0|INCROOT 2|1|LP 3|1|ENUM 4|1|PUNCT
+*A:	yeah . 594320_594520
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	but . 596140_596370
+%mor:	conj|but .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	it was fun to you know try it and then you know you just get
+	discouraged and it's like I don't want to ever do this again
+	&=laughs . 596920_602850
+%mor:	pro:per|it cop|be&PAST&13S adj|fun prep|to pro:per|you v|know v|try
+	pro:per|it coord|and adv:tem|then pro:per|you v|know pro:per|you
+	adv|just aux|get part|discourage-PASTP coord|and
+	pro:per|it~cop|be&3S conj|like pro:sub|I mod|do~neg|not v|want
+	inf|to adv|ever v|do pro:dem|this adv|again .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|2|JCT 5|4|POBJ 6|2|PRED 7|6|COMP
+	8|7|OBJ 9|12|LINK 10|12|JCT 11|12|SUBJ 12|7|CJCT 13|12|OBJ 14|16|JCT
+	15|16|AUX 16|12|COMP 17|19|LINK 18|19|SUBJ 19|16|CJCT 20|24|LINK
+	21|24|SUBJ 22|24|AUX 23|22|NEG 24|19|PRED 25|27|INF 26|27|JCT
+	27|24|COMP 28|27|OBJ 29|27|JCT 30|2|PUNCT
+*A:	yeah . 598520_598930
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yeah [=! distorted] . 599200_599500
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	uhhuh . 600410_600860
+%mor:	co|uhhuh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=channel_noise yup . 601600_602070
+%mor:	co|yup .
+%gra:	1|0|INCROOT 2|1|PUNCT
+@End

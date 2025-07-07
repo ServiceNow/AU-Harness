@@ -1,0 +1,532 @@
+@UTF8
+@PID:	11312/a-00004937-1
+@Begin
+@Languages:	eng
+@Participants:	A Subject, B Subject
+@Options:	bullets
+@ID:	eng|eng|A|||||Subject|||
+@ID:	eng|eng|B|||||Subject|||
+@Media:	4289, audio
+*B:	you can do &+any . 1200450_1201120
+%mor:	pro:per|you mod|can v|do .
+%gra:	1|3|SUBJ 2|3|AUX 3|0|ROOT 4|3|PUNCT
+*A:	and &-uh . 1200540_1201420
+%mor:	coord|and .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	how do you know you're going to get this money ? 1202700_1204170
+%mor:	adv:int|how v|do pro:per|you v|know pro:per|you~aux|be&PRES
+	part|go-PRESP inf|to v|get pro:dem|this n|money ?
+%gra:	1|2|LINK 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|7|SUBJ 6|7|AUX 7|4|COMP
+	8|9|INF 9|7|COMP 10|11|DET 11|9|OBJ 12|2|PUNCT
+*B:	well . 1205310_1205830
+%mor:	co|well .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	how legitimate is this ? 1205660_1206760
+%mor:	adv:int|how adj|legitimate aux|be&3S pro:dem|this ?
+%gra:	1|4|LINK 2|4|SUBJ 3|4|AUX 4|0|ROOT 5|4|PUNCT
+*B:	well &-eh people are getting checks . 1207230_1209280
+%mor:	co|well n|person&PL aux|be&PRES part|get-PRESP n|check-PL .
+%gra:	1|4|COM 2|4|SUBJ 3|4|AUX 4|0|ROOT 5|4|OBJ 6|4|PUNCT
+*A:	who is ? 1209690_1210030
+%mor:	pro:int|who cop|be&3S ?
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PUNCT
+*B:	mark is, people above him they're . 1210580_1212670
+%mor:	n|mark aux|be&3S cm|cm n|person&PL prep|above pro:obj|him
+	pro:sub|they~aux|be&PRES .
+%gra:	1|8|SUBJ 2|8|AUX 3|2|LP 4|8|XJCT 5|4|NJCT 6|5|POBJ 7|8|SUBJ
+	8|0|ROOT 9|8|PUNCT
+*A:	yeah, but mark's selling to you, of course he's going to tell you
+	he's getting them . 1212180_1215170
+%mor:	co|yeah cm|cm conj|but n|mark~aux|be&3S part|sell-PRESP prep|to
+	pro:per|you cm|cm prep|of n|course pro:sub|he~aux|be&3S
+	part|go-PRESP inf|to v|tell pro:per|you pro:sub|he~aux|be&3S
+	part|get-PRESP pro:obj|them .
+%gra:	1|0|INCROOT 2|1|LP 3|6|LINK 4|6|SUBJ 5|6|AUX 6|1|CJCT 7|6|JCT
+	8|7|POBJ 9|8|LP 10|14|JCT 11|10|POBJ 12|14|SUBJ 13|14|AUX 14|20|CJCT
+	15|16|INF 16|14|COMP 17|16|OBJ 18|20|SUBJ 19|20|AUX 20|8|XJCT
+	21|20|OBJ 22|1|PUNCT
+*B:	well, I don't know, I mean somebody must be seeing them . 1216500_1220050
+%mor:	co|well cm|cm pro:sub|I mod|do~neg|not v|know cm|cm pro:sub|I
+	v|mean pro:indef|somebody mod|must aux|be part|see-PRESP
+	pro:obj|them .
+%gra:	1|6|COM 2|1|LP 3|6|SUBJ 4|6|AUX 5|4|NEG 6|0|ROOT 7|6|LP 8|9|SUBJ
+	9|6|COMP 10|13|SUBJ 11|13|AUX 12|13|AUX 13|9|COMP 14|13|OBJ
+	15|6|PUNCT
+*A:	there are a lot of scams out there too . 1219980_1221610
+%mor:	adv|there cop|be&PRES det:art|a n|lot prep|of n|scam-PL adv|out
+	adv|there post|too .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|DET 4|2|PRED 5|4|NJCT 6|5|POBJ 7|4|NJCT
+	8|7|POBJ 9|8|PQ 10|2|PUNCT
+*B:	well I know, but people, okay people are buying in and . 1221710_1226400
+%mor:	adv|well pro:sub|I v|know cm|cm conj|but n|person&PL cm|cm adj|okay
+	n|person&PL aux|be&PRES part|buy-PRESP adv|in coord|and .
+%gra:	1|3|JCT 2|3|SUBJ 3|0|ROOT 4|3|LP 5|11|LINK 6|11|JCT 7|6|LP 8|9|MOD
+	9|11|SUBJ 10|11|AUX 11|3|CJCT 12|11|JCT 13|11|CONJ 14|3|PUNCT
+*B:	if the people above them were not getting their checks, they
+	wouldn't do it . 1226970_1230930
+%mor:	conj|if det:art|the n|person&PL prep|above pro:obj|them aux|be&PAST
+	neg|not part|get-PRESP det:poss|their n|check-PL cm|cm pro:sub|they
+	mod|will&COND~neg|not v|do pro:per|it .
+%gra:	1|8|LINK 2|3|DET 3|8|SUBJ 4|3|NJCT 5|4|POBJ 6|8|AUX 7|6|NEG
+	8|15|CJCT 9|10|MOD 10|8|OBJ 11|8|LP 12|15|SUBJ 13|15|AUX 14|13|NEG
+	15|0|ROOT 16|15|OBJ 17|15|PUNCT
+*A:	how do you know ? 1232030_1232740
+%mor:	adv:int|how mod|do pro:per|you v|know ?
+%gra:	1|4|LINK 2|4|AUX 3|4|SUBJ 4|0|ROOT 5|4|PUNCT
+*B:	how do I know ? 1233930_1234620
+%mor:	adv:int|how mod|do pro:sub|I v|know ?
+%gra:	1|4|LINK 2|4|AUX 3|4|SUBJ 4|0|ROOT 5|4|PUNCT
+*A:	how do you know they're getting their checks ? 1235040_1236180
+%mor:	adv:int|how mod|do pro:per|you v|know pro:sub|they~aux|be&PRES
+	part|get-PRESP det:poss|their n|check-PL ?
+%gra:	1|4|LINK 2|4|AUX 3|4|SUBJ 4|0|ROOT 5|7|SUBJ 6|7|AUX 7|4|COMP
+	8|9|MOD 9|7|OBJ 10|4|PUNCT
+*B:	well why would they, why would they &-um . 1238210_1240930
+%mor:	co|well adv:int|why mod|will&COND pro:sub|they cm|cm adv:int|why
+	mod|will&COND pro:sub|they .
+%gra:	1|0|INCROOT 2|1|PUNCT 3|4|AUX 4|2|COMP 5|4|LP 6|8|LINK 7|8|AUX
+	8|4|INCROOT 9|8|PUNCT
+*B:	why would they do it ?
+%mor:	adv:int|why mod|will&COND pro:sub|they v|do pro:per|it ?
+%gra:	1|4|LINK 2|4|AUX 3|4|SUBJ 4|0|ROOT 5|4|OBJ 6|4|PUNCT
+*B:	because you make the checks out to the company, you don't make the
+	checks out to them . 1241190_1245500
+%mor:	conj|because pro:per|you v|make det:art|the n|check-PL adv|out
+	prep|to det:art|the n|company cm|cm pro:per|you mod|do~neg|not
+	v|make det:art|the n|check-PL adv|out prep|to pro:obj|them .
+%gra:	1|3|LINK 2|3|SUBJ 3|14|CJCT 4|5|DET 5|3|OBJ 6|3|JCT 7|3|JCT 8|9|DET
+	9|7|POBJ 10|3|LP 11|14|SUBJ 12|14|AUX 13|12|NEG 14|0|ROOT 15|16|DET
+	16|14|OBJ 17|14|JCT 18|17|JCT 19|18|POBJ 20|14|PUNCT
+*A:	what check ? 1247420_1247840
+%mor:	pro:int|what n|check ?
+%gra:	1|2|MOD 2|0|INCROOT 3|2|PUNCT
+*B:	when you go in, you make your money order out, you send it to the
+	company . 1248650_1252160
+%mor:	conj|when pro:per|you v|go prep|in cm|cm pro:per|you v|make
+	det:poss|your n|money v|order adv|out cm|cm pro:per|you v|send
+	pro:per|it prep|to det:art|the n|company .
+%gra:	1|3|LINK 2|3|SUBJ 3|7|CJCT 4|3|JCT 5|3|LP 6|7|SUBJ 7|0|ROOT 8|9|MOD
+	9|10|SUBJ 10|7|COMP 11|10|JCT 12|10|LP 13|14|SUBJ 14|10|CJCT
+	15|14|OBJ 16|14|JCT 17|18|DET 18|16|POBJ 19|7|PUNCT
+*A:	right . 1252240_1252640
+%mor:	co|right .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	you don't send it to the people above you . 1252730_1254700
+%mor:	pro:per|you mod|do~neg|not v|send pro:per|it prep|to det:art|the
+	n|person&PL prep|above pro:per|you .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|4|OBJ 6|4|JCT 7|8|DET 8|6|POBJ
+	9|8|NJCT 10|9|POBJ 11|4|PUNCT
+*B:	so why would the people above you be doing it if they they weren't
+	getting xxx . 1254980_1258100
+%mor:	adv|so adv:int|why mod|will&COND det:art|the n|person&PL prep|above
+	pro:per|you aux|be part|do-PRESP pro:per|it conj|if pro:sub|they
+	pro:sub|they aux|be&PAST~neg|not part|get-PRESP .
+%gra:	1|9|JCT 2|9|LINK 3|5|AUX 4|5|DET 5|9|SUBJ 6|5|NJCT 7|6|POBJ 8|9|AUX
+	9|0|ROOT 10|9|OBJ 11|16|LINK 12|16|SUBJ 13|16|SUBJ 14|16|AUX
+	15|14|NEG 16|9|CJCT 17|9|PUNCT
+*A:	right . 1255130_1255410
+%mor:	co|right .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	how do you know they're doing it ? 1257390_1258500
+%mor:	adv:int|how mod|do pro:per|you v|know pro:sub|they~aux|be&PRES
+	part|do-PRESP pro:per|it ?
+%gra:	1|4|LINK 2|4|AUX 3|4|SUBJ 4|0|ROOT 5|7|SUBJ 6|7|AUX 7|4|COMP
+	8|7|OBJ 9|4|PUNCT
+*B:	well because, they're spending time &+t showing us . 1259750_1262560
+%mor:	co|well conj|because cm|cm pro:sub|they~aux|be&PRES
+	part|spend-PRESP n|time part|show-PRESP pro:obj|us .
+%gra:	1|6|COM 2|6|LINK 3|2|LP 4|6|SUBJ 5|6|AUX 6|0|ROOT 7|6|OBJ 8|7|XMOD
+	9|8|OBJ 10|6|PUNCT
+*B:	and having seminars, why would they even . 1262780_1264760
+%mor:	coord|and part|have-PRESP n|seminar-PL cm|cm adv:int|why
+	mod|will&COND pro:sub|they adv|even .
+%gra:	1|3|LINK 2|3|MOD 3|0|INCROOT 4|3|LP 5|3|ENUM 6|8|AUX 7|8|SUBJ
+	8|5|JCT 9|3|PUNCT
+*A:	just mark you said is doing the seminars . 1264160_1266050
+%mor:	adv|just v|mark pro:per|you v|say&PAST aux|be&3S part|do-PRESP
+	det:art|the n|seminar-PL .
+%gra:	1|2|JCT 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|6|AUX 6|4|COMP 7|8|DET 8|6|OBJ
+	9|2|PUNCT
+*B:	yeah, mark is, and . 1266670_1268930
+%mor:	co|yeah cm|cm n|mark aux|be&3S cm|cm coord|and .
+%gra:	1|4|COM 2|1|LP 3|4|SUBJ 4|0|ROOT 5|4|LP 6|4|ENUM 7|4|PUNCT
+*B:	why would he even do the seminars if he weren't getting &+th his
+	checks that he's supposed to ? 1269320_1272960
+%mor:	adv:int|why mod|will&COND pro:sub|he adv|even v|do det:art|the
+	n|seminar-PL conj|if pro:sub|he aux|be&PAST~neg|not part|get-PRESP
+	det:poss|his n|check-PL pro:rel|that pro:sub|he~aux|be&3S
+	part|suppose-PASTP prep|to ?
+%gra:	1|5|LINK 2|5|AUX 3|5|SUBJ 4|5|JCT 5|0|ROOT 6|7|DET 7|5|OBJ
+	8|12|LINK 9|12|SUBJ 10|12|AUX 11|10|NEG 12|5|CJCT 13|14|MOD
+	14|12|OBJ 15|18|LINK 16|18|SUBJ 17|18|AUX 18|14|CMOD 19|18|JCT
+	20|5|PUNCT
+*A:	because he's getting the money . 1273260_1274240
+%mor:	conj|because pro:sub|he~aux|be&3S part|get-PRESP det:art|the
+	n|money .
+%gra:	1|4|LINK 2|4|SUBJ 3|4|AUX 4|0|ROOT 5|6|DET 6|4|OBJ 7|4|PUNCT
+*B:	no you don't send them to him, you . 1274630_1276660
+%mor:	co|no pro:per|you mod|do~neg|not v|send pro:obj|them prep|to
+	pro:obj|him cm|cm pro:per|you .
+%gra:	1|5|COM 2|5|SUBJ 3|5|AUX 4|3|NEG 5|0|ROOT 6|5|OBJ 7|5|JCT 8|7|POBJ
+	9|5|LP 10|5|OBJ 11|5|PUNCT
+*A:	oh well it's a scam, he gets it back . 1276300_1278690
+%mor:	co|oh adv|well pro:per|it~cop|be&3S det:art|a n|scam cm|cm
+	pro:sub|he v|get-3S pro:per|it adv|back .
+%gra:	1|4|COM 2|4|JCT 3|4|SUBJ 4|9|JCT 5|6|DET 6|4|PRED 7|6|LP 8|9|SUBJ
+	9|0|ROOT 10|9|OBJ 11|9|JCT 12|9|PUNCT
+*B:	well I don't think so .
+%mor:	co|well pro:sub|I mod|do~neg|not v|think co|so .
+%gra:	1|5|COM 2|5|SUBJ 3|5|AUX 4|3|NEG 5|0|ROOT 6|5|COM 7|5|PUNCT
+*B:	he he does another one too, he does . 1280150_1284130
+%mor:	pro:sub|he pro:sub|he v|do&3S qn|another pro:indef|one adv|too
+	cm|cm pro:sub|he v|do&3S .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|5|QUANT 5|3|OBJ 6|3|JCT 7|3|LP
+	8|9|SUBJ 9|3|CJCT 10|3|PUNCT
+*B:	two different ones and he's focusing on this one now . 1284170_1286770
+%mor:	det:num|two adj|different pro:indef|one-PL coord|and
+	pro:sub|he~aux|be&3S part|focus-PRESP prep|on pro:dem|this
+	pro:indef|one adv|now .
+%gra:	1|2|QUANT 2|0|ROOT 3|2|OBJ 4|7|LINK 5|7|SUBJ 6|7|AUX 7|3|CMOD
+	8|7|JCT 9|10|DET 10|8|POBJ 11|10|NJCT 12|2|PUNCT
+*A:	all right . 1287080_1287530
+%mor:	post|all co|right .
+%gra:	1|0|INCROOT 2|3|COM 3|1|PUNCT
+*B:	I mean you send it to some other state it's out in &-um . 1288440_1291570
+%mor:	pro:sub|I v|mean pro:per|you v|send pro:per|it prep|to qn|some
+	qn|other n|state pro:per|it~aux|be&3S adv|out adv|in .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|SUBJ 4|11|CJCT 5|4|OBJ 6|4|JCT 7|9|QUANT
+	8|9|QUANT 9|6|POBJ 10|11|SUBJ 11|2|COMP 12|11|PRED 13|11|JCT
+	14|2|PUNCT
+*B:	it's Kansas or something, I don't know . 1291880_1293960
+%mor:	pro:per|it~aux|be&3S n:prop|Kansas coord|or pro:indef|something
+	cm|cm pro:sub|I mod|do~neg|not v|know .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|3|CONJ 5|4|COORD 6|2|LP 7|10|SUBJ
+	8|10|AUX 9|8|NEG 10|2|CJCT 11|2|PUNCT
+*B:	I forget where it is, Oklahoma, I forget . 1295910_1298580
+%mor:	pro:sub|I v|forget pro:rel|where pro:per|it cop|be&3S cm|cm
+	n:prop|Oklahoma cm|cm pro:sub|I v|forget .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|LINK 4|5|SUBJ 5|2|COMP 6|5|LP 7|5|ENUM 8|7|LP
+	9|10|SUBJ 10|2|CJCT 11|2|PUNCT
+*B:	but it's &-um . 1299420_1300500
+%mor:	conj|but pro:per|it~aux|be&3S .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|PUNCT
+*B:	it's a different state you know . 1301810_1304060
+%mor:	pro:per|it~cop|be&3S det:art|a adj|different n|state pro:per|you
+	v|know .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|DET 4|5|MOD 5|2|PRED 6|7|SUBJ 7|5|CMOD
+	8|2|PUNCT
+*B:	and it makes sense you know, &+y if you figure out how much
+	&=breathes money . 1305130_1309570
+%mor:	coord|and pro:per|it v|make-3S n|sense pro:per|you v|know cm|cm
+	conj|if pro:per|you v|figure adv|out adv:int|how qn|much n|money .
+%gra:	1|3|LINK 2|3|SUBJ 3|6|CJCT 4|3|OBJ 5|6|SUBJ 6|0|ROOT 7|6|LP
+	8|10|LINK 9|10|SUBJ 10|6|CJCT 11|10|JCT 12|10|COMP 13|14|QUANT
+	14|12|OBJ 15|6|PUNCT
+*B:	if you figure out how much money, &-um . 1309930_1312220
+%mor:	conj|if pro:per|you v|figure adv|out adv:int|how qn|much n|money
+	cm|cm .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|JCT 5|7|LINK 6|7|QUANT 7|3|COMP
+	8|7|LP 9|3|PUNCT
+*B:	&-um, what do you call it . 1314680_1316520
+%mor:	cm|cm pro:int|what mod|do pro:per|you v|call pro:per|it .
+%gra:	1|5|LINK 2|5|SUBJ 3|5|AUX 4|5|SUBJ 5|0|ROOT 6|5|OBJ 7|5|PUNCT
+*B:	I mean dick already got his free &+car cards, he's been using his
+	free calling card . 1317620_1322190
+%mor:	pro:sub|I v|mean n|dick adv|already v|get&PAST det:poss|his
+	adj|free n|card-PL cm|cm pro:sub|he~aux|be&3S aux|be&PASTP
+	part|use-PRESP det:poss|his adv|free part|call-PRESP n|card .
+%gra:	1|2|SUBJ 2|5|SUBJ 3|2|OBJ 4|5|JCT 5|0|ROOT 6|8|MOD 7|8|MOD 8|5|OBJ
+	9|5|LP 10|13|SUBJ 11|13|AUX 12|13|AUX 13|5|CJCT 14|13|OBJ 15|16|JCT
+	16|14|XMOD 17|16|OBJ 18|5|PUNCT
+*A:	mhm . 1322810_1323330
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and &-um, if you figure out how much money the company has by
+	&=breathes when you put in the money, . 1323380_1329530
+%mor:	coord|and cm|cm conj|if pro:per|you v|figure adv|out adv:int|how
+	qn|much n|money det:art|the n|company aux|have&3S adv|by conj|when
+	pro:per|you v|put&ZERO prep|in det:art|the n|money cm|cm .
+%gra:	1|5|LINK 2|1|LP 3|5|LINK 4|5|SUBJ 5|0|ROOT 6|5|JCT 7|16|LINK
+	8|9|QUANT 9|16|JCT 10|11|DET 11|16|SUBJ 12|16|AUX 13|12|JCT
+	14|16|LINK 15|16|SUBJ 16|5|COMP 17|16|JCT 18|19|DET 19|17|POBJ
+	20|5|LP 21|5|PUNCT
+*B:	and you know, like you three thousand in each leg, &=clears:throat
+	. 1330470_1333360
+%mor:	coord|and pro:per|you v|know cm|cm prep|like pro:per|you
+	det:num|three det:num|thousand prep|in qn|each n|leg cm|cm .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|LP 5|3|JCT 6|5|POBJ 7|8|QUANT
+	8|3|COMP 9|8|JCT 10|11|QUANT 11|9|POBJ 12|8|LP 13|3|PUNCT
+*B:	&=channel_noise it really only costs for long distance like about
+	&=breathes I don't know, if it's five cents a minute . 1333540_1338650
+%mor:	pro:per|it adv|real&dadj-LY adv|only v|cost-3S prep|for adj|long
+	n|distance co|like adv|about pro:sub|I mod|do~neg|not v|know cm|cm
+	conj|if pro:per|it~cop|be&3S det:num|five n|cent-PL det:art|a
+	n|minute .
+%gra:	1|4|SUBJ 2|4|JCT 3|4|JCT 4|0|ROOT 5|4|JCT 6|7|MOD 7|5|POBJ 8|4|COM
+	9|13|JCT 10|13|SUBJ 11|13|AUX 12|11|NEG 13|4|CJCT 14|13|LP
+	15|17|LINK 16|17|SUBJ 17|13|CJCT 18|19|QUANT 19|17|PRED 20|21|DET
+	21|19|OBJ 22|4|PUNCT
+*B:	&+a and you get three &+se six thousand dollars and you've only
+	made twelve hundred of it . 1340120_1344580
+%mor:	coord|and pro:per|you v|get det:num|three det:num|six
+	det:num|thousand n|dollar-PL coord|and pro:per|you~aux|have adv|only
+	v|make&PAST det:num|twelve det:num|hundred prep|of pro:per|it .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|5|QUANT 5|7|QUANT 6|7|QUANT 7|3|OBJ
+	8|12|LINK 9|12|SUBJ 10|12|AUX 11|12|JCT 12|7|CMOD 13|14|QUANT
+	14|12|OBJ 15|14|JCT 16|15|POBJ 17|3|PUNCT
+*B:	you know, so they make enough money . 1345630_1347320
+%mor:	pro:per|you v|know cm|cm conj|so pro:sub|they v|make adj|enough
+	n|money .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|LP 4|6|LINK 5|6|SUBJ 6|2|CJCT 7|8|MOD 8|6|OBJ
+	9|2|PUNCT
+*B:	to pay you, they're glad to do that . 1349270_1351040
+%mor:	inf|to v|pay pro:per|you cm|cm pro:sub|they~aux|be&PRES adj|glad
+	inf|to v|do pro:dem|that .
+%gra:	1|2|INF 2|0|ROOT 3|2|OBJ 4|2|LP 5|7|SUBJ 6|7|AUX 7|2|COMP 8|9|INF
+	9|7|COMP 10|9|OBJ 11|2|PUNCT
+*B:	right ? 1352860_1353240
+%mor:	co|right ?
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	yeah . 1353370_1353750
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	so . 1354340_1354830
+%mor:	co|so .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	that . 1355930_1356310
+%mor:	pro:dem|that .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	I mean, it's it's a good deal for everybody . 1357180_1359690
+%mor:	pro:sub|I v|mean cm|cm pro:per|it~aux|be&3S pro:per|it~cop|be&3S
+	det:art|a adj|good n|deal prep|for pro:indef|everybody .
+%gra:	1|2|SUBJ 2|7|SUBJ 3|2|LP 4|5|SUBJ 5|7|AUX 6|5|PRED 7|0|ROOT
+	8|10|DET 9|10|MOD 10|7|PRED 11|10|NJCT 12|11|POBJ 13|7|PUNCT
+*B:	&-eh I mean &+f &-uh four &+ce, five cents a minute . 1361800_1364950
+%mor:	pro:sub|I v|mean det:num|four cm|cm det:num|five n|cent-PL
+	det:art|a n|minute .
+%gra:	1|2|SUBJ 2|0|ROOT 3|6|QUANT 4|3|LP 5|6|QUANT 6|2|OBJ 7|8|DET
+	8|6|OBJ 9|2|PUNCT
+*B:	nine hundred, of of say, &=breathes five cents a minute times three
+	hundred thirty minutes . 1366670_1372740
+%mor:	det:num|nine det:num|hundred cm|cm prep|of prep|of v|say cm|cm
+	det:num|five n|cent-PL det:art|a n|minute v|time-3S det:num|three
+	det:num|hundred det:num|thirty n|minute-PL .
+%gra:	1|2|QUANT 2|9|QUANT 3|2|LP 4|2|JCT 5|6|JCT 6|4|POBJ 7|2|LP
+	8|9|QUANT 9|12|LINK 10|11|DET 11|12|SUBJ 12|0|ROOT 13|14|QUANT
+	14|16|QUANT 15|16|QUANT 16|12|OBJ 17|12|PUNCT
+*B:	is what ? 1374010_1374620
+%mor:	cop|be&3S pro:int|what ?
+%gra:	1|0|ROOT 2|1|PRED 3|1|PUNCT
+*B:	sixteen dollars, seventeen dollars . 1376190_1378190
+%mor:	det:num|sixteen n|dollar-PL cm|cm det:num|seventeen n|dollar-PL .
+%gra:	1|2|QUANT 2|0|INCROOT 3|2|LP 4|5|QUANT 5|2|ENUM 6|2|PUNCT
+*B:	at minimum, that's that's trivial . 1380820_1383090
+%mor:	prep|at n|minimum cm|cm pro:rel|that~aux|be&3S
+	pro:dem|that~cop|be&3S adj|trivial .
+%gra:	1|7|LINK 2|1|POBJ 3|1|LP 4|7|SUBJ 5|7|AUX 6|7|SUBJ 7|0|ROOT
+	8|7|PRED 9|7|PUNCT
+*A:	yeah . 1383560_1383980
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	I guess, is that seventeen dollars ? 1385900_1387650
+%mor:	pro:sub|I n|guess cm|cm aux|be&3S det:dem|that det:num|seventeen
+	n|dollar-PL ?
+%gra:	1|2|SUBJ 2|7|SUBJ 3|2|LP 4|7|AUX 5|7|MOD 6|7|QUANT 7|0|INCROOT
+	8|7|PUNCT
+*B:	that's nothing . 1389140_1389920
+%mor:	pro:dem|that~cop|be&3S pro:indef|nothing .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|2|PUNCT
+*B:	and then you got the . 1391450_1392770
+%mor:	coord|and adv:tem|then pro:per|you v|get&PAST det:art|the .
+%gra:	1|4|LINK 2|4|JCT 3|4|SUBJ 4|0|ROOT 5|6|DET 6|4|PUNCT
+*A:	who says it's five cents a minute ? 1392480_1393830
+%mor:	pro:int|who v|say-3S pro:per|it~cop|be&3S det:num|five n|cent-PL
+	det:art|a n|minute ?
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|6|QUANT 6|4|PRED 7|8|DET
+	8|6|OBJ 9|2|PUNCT
+*B:	yeah, is that seventeen dollars ? 1394800_1396540
+%mor:	co|yeah cm|cm aux|be&3S det:dem|that det:num|seventeen n|dollar-PL
+	?
+%gra:	1|6|COM 2|1|LP 3|6|AUX 4|6|MOD 5|6|QUANT 6|0|INCROOT 7|6|PUNCT
+*A:	yeah, but who says it's five cents a minute ? 1396900_1398410
+%mor:	co|yeah cm|cm conj|but pro:rel|who v|say-3S pro:per|it~cop|be&3S
+	det:num|five n|cent-PL det:art|a n|minute ?
+%gra:	1|0|INCROOT 2|1|LP 3|1|CONJ 4|5|LINK 5|3|COORD 6|7|SUBJ 7|5|COMP
+	8|9|QUANT 9|7|PRED 10|11|DET 11|9|OBJ 12|1|PUNCT
+*B:	excuse me ? 1397030_1397620
+%mor:	v|excuse pro:obj|me ?
+%gra:	1|0|ROOT 2|1|OBJ 3|1|PUNCT
+*B:	I don't know, it must cost them like so little, because it only
+	costs sprint, if it only costs the customer ten cents a minute on
+	sprint . 1399370_1406600
+%mor:	pro:sub|I mod|do~neg|not v|know cm|cm pro:per|it mod|must
+	v|cost&ZERO pro:obj|them prep|like adv|so adj|little cm|cm
+	conj|because pro:per|it adv|only v|cost-3S v|sprint cm|cm conj|if
+	pro:per|it adv|only v|cost-3S det:art|the n|customer det:num|ten
+	n|cent-PL det:art|a adj|minute prep|on v|sprint .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|4|LP 6|8|SUBJ 7|8|AUX 8|4|COMP
+	9|8|OBJ 10|8|JCT 11|12|JCT 12|8|JCT 13|12|LP 14|17|LINK 15|17|SUBJ
+	16|17|JCT 17|8|CJCT 18|17|OBJ 19|18|LP 20|23|LINK 21|23|SUBJ
+	22|23|JCT 23|17|CJCT 24|25|DET 25|23|OBJ 26|27|QUANT 27|25|XMOD
+	28|29|DET 29|27|POSTMOD 30|29|JCT 31|30|POBJ 32|4|PUNCT
+*B:	so they must &-mm . 1407610_1408560
+%mor:	co|so pro:sub|they mod|must .
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|3|PUNCT
+*B:	&+co, it must cost them only like five cents a minute .
+%mor:	cm|cm pro:per|it mod|must v|cost&ZERO pro:obj|them adv|only co|like
+	det:num|five n|cent-PL det:art|a n|minute .
+%gra:	1|4|LINK 2|4|SUBJ 3|4|AUX 4|0|ROOT 5|4|OBJ 6|4|JCT 7|4|COM
+	8|9|QUANT 9|4|OBJ 10|11|DET 11|9|OBJ 12|4|PUNCT
+*B:	dick said it costs anywhere from four and a half to six cents a
+	minute for them . 1409120_1415030
+%mor:	n|dick v|say&PAST pro:per|it v|cost-3S adv|anywhere prep|from
+	det:num|four coord|and det:art|a n|half prep|to det:num|six
+	n|cent-PL det:art|a adj|minute conj|for pro:obj|them .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|4|JCT 6|4|JCT 7|6|POBJ
+	8|7|CONJ 9|10|DET 10|8|COORD 11|10|NJCT 12|13|QUANT 13|11|POBJ
+	14|15|DET 15|4|JCT 16|15|CONJ 17|16|COORD 18|2|PUNCT
+*B:	I don't know where he got that number . 1415600_1417120
+%mor:	pro:sub|I mod|do~neg|not v|know adv:int|where pro:sub|he v|get&PAST
+	pro:rel|that v|number .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|7|LINK 6|7|SUBJ 7|4|COMP
+	8|9|LINK 9|7|COMP 10|4|PUNCT
+*A:	&-hm . 1417960_1418360
+*B:	but &-um, this guy mark, he put his &-um . 1419900_1423540
+%mor:	conj|but cm|cm pro:dem|this n|guy n|mark cm|cm pro:sub|he
+	v|put&ZERO det:poss|his .
+%gra:	1|8|LINK 2|1|LP 3|5|DET 4|5|MOD 5|8|JCT 6|5|LP 7|8|SUBJ 8|0|ROOT
+	9|8|OBJ 10|8|PUNCT
+*B:	mark put his, you know, his daughter under him, and then his . 1424680_1429020
+%mor:	n|mark v|put&ZERO det:poss|his cm|cm pro:per|you v|know cm|cm
+	det:poss|his n|daughter adv|under pro:obj|him cm|cm coord|and
+	adv:tem|then det:poss|his .
+%gra:	1|2|SUBJ 2|0|ROOT 3|9|MOD 4|3|LP 5|6|SUBJ 6|3|ENUM 7|6|LP 8|9|MOD
+	9|2|OBJ 10|11|JCT 11|2|OBJ 12|11|LP 13|11|CONJ 14|15|JCT 15|13|COORD
+	16|2|PUNCT
+*B:	girlfriend's under him, on another one and . 1429890_1432710
+%mor:	n|+n|girl+n|friend~poss|s adv|under pro:obj|him cm|cm prep|on
+	qn|another pro:indef|one coord|and .
+%gra:	1|4|SUBJ 2|1|POSS 3|4|JCT 4|0|ROOT 5|4|LP 6|4|JCT 7|8|QUANT
+	8|6|POBJ 9|8|COORD 10|4|PUNCT
+*B:	you know he's got all these people that he knows so that they can
+	make money, but I don't know, you know . 1433430_1439480
+%mor:	pro:per|you v|know pro:sub|he~aux|be&3S v|get&PAST qn|all
+	pro:dem|these n|person&PL pro:rel|that pro:sub|he v|know-3S adv|so
+	pro:rel|that pro:sub|they mod|can v|make n|money cm|cm conj|but
+	pro:sub|I mod|do~neg|not v|know cm|cm pro:per|you v|know .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|SUBJ 4|5|AUX 5|2|COMP 6|8|QUANT 7|8|DET
+	8|5|OBJ 9|11|LINK 10|11|SUBJ 11|8|CMOD 12|11|OBJ 13|16|LINK
+	14|16|SUBJ 15|16|AUX 16|12|COMP 17|16|OBJ 18|16|LP 19|23|LINK
+	20|23|SUBJ 21|23|AUX 22|21|NEG 23|26|CJCT 24|23|LP 25|26|SUBJ
+	26|2|CJCT 27|2|PUNCT
+*A:	mhm . 1439790_1440310
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	I'm I'm &+alr already getting a few people to go to the meeting, so
+	. 1440830_1445070
+%mor:	pro:sub|I~aux|be&1S pro:sub|I~aux|be&1S adv|already
+	n:gerund|get-PRESP det:art|a qn|few n|person&PL inf|to v|go prep|to
+	det:art|the part|meet-PRESP cm|cm adv|so .
+%gra:	1|6|SUBJ 2|6|AUX 3|6|SUBJ 4|6|AUX 5|6|JCT 6|0|ROOT 7|9|DET
+	8|9|QUANT 9|6|OBJ 10|11|INF 11|9|XMOD 12|11|JCT 13|14|DET 14|12|POBJ
+	15|14|LP 16|11|JCT 17|6|PUNCT
+*A:	so that's good . 1445400_1446000
+%mor:	co|so pro:dem|that~cop|be&3S adj|good .
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|3|PRED 5|3|PUNCT
+*B:	yeah, and &-um, let's see &=breathes that guy I talked to
+	yesterday, Michael . 1447200_1452740
+%mor:	co|yeah cm|cm coord|and cm|cm v|let~pro:obj|us v|see pro:rel|that
+	n|guy pro:sub|I v|talk-PAST prep|to adv:tem|yesterday cm|cm
+	n:prop|Michael .
+%gra:	1|0|INCROOT 2|1|LP 3|1|CONJ 4|3|LP 5|3|COORD 6|5|OBJ 7|5|COMP
+	8|11|LINK 9|11|JCT 10|11|SUBJ 11|7|COMP 12|11|JCT 13|12|POBJ
+	14|13|LP 15|13|ENUM 16|1|PUNCT
+*B:	he's real religious, but he's going to &-um . 1453790_1456540
+%mor:	pro:sub|he~cop|be&3S adj|real adj|religious cm|cm conj|but
+	pro:sub|he~aux|be&3S part|go-PRESP inf|to .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|3|PRED 5|4|LP 6|9|LINK 7|9|SUBJ
+	8|9|AUX 9|2|CJCT 10|9|OBJ 11|2|PUNCT
+*B:	he &+s he said he'll go .
+%mor:	pro:sub|he pro:sub|he v|say&PAST pro:sub|he~mod|will v|go .
+%gra:	1|3|SUBJ 2|3|SUBJ 3|0|ROOT 4|6|SUBJ 5|6|AUX 6|3|COMP 7|3|PUNCT
+*B:	he has to get some friends to go too so . 1457390_1460610
+%mor:	pro:sub|he aux|have&3S inf|to v|get qn|some n|friend-PL inf|to v|go
+	adv|too adv|so .
+%gra:	1|4|SUBJ 2|4|AUX 3|4|INF 4|0|ROOT 5|6|QUANT 6|4|OBJ 7|8|INF
+	8|6|XMOD 9|8|JCT 10|8|JCT 11|4|PUNCT
+*B:	you know, it seems like it's a it's a great great deal it's like .
+	1461310_1465130
+%mor:	pro:per|you v|know cm|cm pro:per|it cop|seem-3S conj|like
+	pro:per|it~cop|be&3S det:art|a pro:per|it~cop|be&3S det:art|a
+	adj|great adj|great n|deal pro:per|it~aux|be&3S co|like .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|LP 4|5|SUBJ 5|2|COMP 6|8|LINK 7|8|SUBJ
+	8|5|CJCT 9|10|DET 10|11|SUBJ 11|8|PRED 12|15|DET 13|15|MOD 14|15|MOD
+	15|11|PRED 16|18|SUBJ 17|18|AUX 18|15|CMOD 19|2|PUNCT
+*B:	it's like Mary Kay, how Mary Kay works or anything else, so why
+	wouldn't it be legal ? 1465880_1469990
+%mor:	pro:per|it~cop|be&3S conj|like n:prop|Mary n:prop|Kay cm|cm
+	adv:int|how n:prop|Mary n:prop|Kay v|work-3S coord|or
+	pro:indef|anything post|else cm|cm adv|so adv:int|why
+	mod|will&COND~neg|not pro:per|it cop|be adj|legal ?
+%gra:	1|2|SUBJ 2|0|ROOT 3|20|LINK 4|5|NAME 5|20|SUBJ 6|5|LP 7|10|LINK
+	8|9|NAME 9|10|SUBJ 10|5|ENUM 11|10|CONJ 12|11|COORD 13|12|PQ
+	14|10|LP 15|20|JCT 16|20|SUBJ 17|20|AUX 18|17|NEG 19|20|SUBJ
+	20|2|CJCT 21|20|PRED 22|2|PUNCT
+*A:	I didn't say it wasn't legal, I just I just want to make sure that
+	it's legitimate, that's all . 1471140_1476190
+%mor:	pro:sub|I mod|do&PAST~neg|not v|say pro:per|it
+	cop|be&PAST&13S~neg|not adj|legal cm|cm pro:sub|I adv|just pro:sub|I
+	adv|just v|want inf|to v|make adv|sure pro:rel|that
+	pro:per|it~cop|be&3S adj|legitimate cm|cm pro:dem|that~cop|be&3S
+	pro:indef|all .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|6|SUBJ 6|4|COMP 7|6|NEG
+	8|6|PRED 9|4|LP 10|14|SUBJ 11|12|JCT 12|14|SUBJ 13|14|JCT 14|4|COMP
+	15|16|INF 16|14|COMP 17|16|JCT 18|20|LINK 19|20|SUBJ 20|17|CMOD
+	21|20|PRED 22|20|LP 23|24|SUBJ 24|20|PRED 25|24|PRED 26|4|PUNCT
+*B:	well, it's only been around for not even three months and there are
+	seventeen hundred people in it already . 1475830_1481740
+%mor:	co|well cm|cm pro:per|it~cop|be&3S adv|only aux|be&PASTP adv|around
+	conj|for neg|not adj|even det:num|three n|month-PL coord|and
+	adv|there cop|be&PRES det:num|seventeen det:num|hundred n|person&PL
+	prep|in pro:per|it adv|already .
+%gra:	1|4|COM 2|1|LP 3|4|SUBJ 4|0|ROOT 5|7|JCT 6|7|AUX 7|4|JCT 8|4|PRED
+	9|10|NEG 10|12|MOD 11|12|QUANT 12|8|OBJ 13|12|CONJ 14|15|SUBJ
+	15|13|COORD 16|18|QUANT 17|18|QUANT 18|15|PRED 19|18|NJCT 20|19|POBJ
+	21|18|JCT 22|4|PUNCT
+*A:	well I would &+w, I would want to know &-um how they . 1481870_1485910
+%mor:	co|well pro:sub|I mod|will&COND cm|cm pro:sub|I mod|will&COND
+	v|want inf|to v|know adv:int|how pro:sub|they .
+%gra:	1|7|COM 2|7|SUBJ 3|7|AUX 4|3|LP 5|7|SUBJ 6|7|AUX 7|0|ROOT 8|9|INF
+	9|7|COMP 10|7|PUNCT 11|10|INCROOT 12|11|PUNCT
+*A:	how they do the calls because &=breathes &-um . 1487970_1491140
+%mor:	adv:int|how pro:sub|they v|do det:art|the n|call-PL conj|because .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|5|DET 5|3|OBJ 6|3|JCT 7|3|PUNCT
+*B:	what calls . 1491360_1491860
+%mor:	pro:int|what n|call-PL .
+%gra:	1|2|MOD 2|0|INCROOT 3|2|PUNCT
+*A:	I don't think MCL and sprint and and A_T_And_T are paying them .
+	1491470_1495310
+%mor:	pro:sub|I mod|do~neg|not v|think n:prop|MCL coord|and v|sprint
+	coord|and coord|and n:prop|A_T_And_T aux|be&PRES part|pay-PRESP
+	pro:obj|them .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|4|OBJ 6|4|CONJ 7|6|COORD
+	8|7|CONJ 9|12|LINK 10|12|SUBJ 11|12|AUX 12|8|COORD 13|12|OBJ
+	14|4|PUNCT
+*A:	because they're using their networks you know . 1496300_1498270
+%mor:	conj|because pro:sub|they~cop|be&PRES part|use-PRESP det:poss|their
+	n|network-PL pro:per|you v|know .
+%gra:	1|4|LINK 2|4|SUBJ 3|4|AUX 4|8|CJCT 5|6|MOD 6|4|OBJ 7|8|SUBJ
+	8|0|ROOT 9|8|PUNCT
+*B:	uhhuh . 1496450_1497420
+%mor:	co|uhhuh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	how are they getting how's the call being completed and how are
+	they getting their money ? 1498670_1501910
+%mor:	adv:int|how aux|be&PRES pro:sub|they n:gerund|get-PRESP
+	adv:int|how~aux|be&3S det:art|the n|call aux|be-PRESP
+	part|complete-PASTP coord|and adv:int|how aux|be&PRES pro:sub|they
+	n:gerund|get-PRESP det:poss|their n|money ?
+%gra:	1|10|LINK 2|10|AUX 3|10|SUBJ 4|10|LINK 5|8|SUBJ 6|8|AUX 7|8|DET
+	8|10|SUBJ 9|10|AUX 10|0|ROOT 11|10|CONJ 12|14|SUBJ 13|14|AUX
+	14|11|COORD 15|14|ENUM 16|17|MOD 17|15|OBJ 18|10|PUNCT
+@End

@@ -1,0 +1,377 @@
+
+	-----------------------------------------------------------
+	Description of the CallHome telephone speech and transcript 
+			  corpus for English	
+	-----------------------------------------------------------
+
+
+CONTENTS
+
+	1. Summary abstract
+	2. Data acquisition
+	3. Data verification
+	4. Speaker demographics
+	5. Data transcription - General
+	6. Data transcription - Non-lexemes
+	7. Quality control (QC) procedures
+
+
+-----------------------------------------------------------------------
+1.  Summary abstract
+
+	The CallHome English corpus of telephone speech was collected
+and transcribed by the Linguistic Data Consortium primarily in support
+of the project on Large Vocabulary Conversational Speech Recognition
+(LVCSR), sponsored by the U.S. Department of Defense.
+
+	This release of the CallHome English corpus consists of 120
+unscripted telephone conversations between native speakers of English.
+The CD-ROM distribution contains the speech data only, along with
+essential documentation files and software for handling the compressed
+speech data.  The transcripts and other text data and documentation
+are distributed separately (typically via electronic transmission from
+the LDC's ftp/web server), and will be subject to periodic updates.
+The transcripts cover a contiguous 5 or 10 minute segment (see section
+2 below) taken from a recorded conversation lasting up to 30 minutes.
+All speakers were aware that they were being recorded.  They were
+given no guidelines concerning what they should talk about.  Once a
+caller was recruited to participate, he/she was given a free choice of
+whom to call.  Most participants called family members or close
+friends overseas.  All calls originated in North America; 90 of the
+120 calls were placed to various locations overseas, while the
+remaining 30 were placed within North America.  The distribution of
+call destinations can be found in the file "spkrinfo.tbl".
+
+	The transcripts are timestamped by speaker turn for alignment
+with the speech signal, and are provided in standard orthography.
+
+-----------------------------------------------------------------------
+2.  Data acquisition
+
+	Speakers were solicited by the LDC to participate in this
+telephone speech collection effort via the internet, publications
+(advertisements), and personal contacts.  A total of 200 call
+originators were found, each of whom placed a telephone call via a
+toll-free robot operator maintained by the LDC.  Access to the robot
+operator was possible via a unique Personal Identification Number
+(PIN) issued by the recruiting staff at the LDC when the caller
+enrolled in the project.  The participants were made aware that their
+telephone call would be recorded, as were the call recipients.  The
+call was allowed only if both parties agreed to being recorded.  Each
+caller was allowed to talk up to 30 minutes.  Upon successful
+completion of the call, the caller was paid $20 (in addition to making
+a free long-distance telephone call).  Each caller was allowed to
+place only one telephone call.
+
+	Although the goal of the call collection effort was to have
+unique speakers in all calls, a handful of repeat speakers are
+included in the corpus.  Specific information on this can be found in
+the file "spkrinfo.doc".
+
+	In all, 200 calls were transcribed.  Of these, 80 have been
+designated as training calls, 20 as development test calls, and 100 as
+evaluation test calls.  For each of the training and development test
+calls, a contiguous 10-minute region was selected for transcription;
+for the evaluation test calls, a 5-minute region was transcribed.  For
+the present publication, only 20 of the evaluation test calls are
+being released; the remaining 80 test calls are being held in reserve
+for future LVCSR benchmark tests.
+
+-----------------------------------------------------------------------
+3.  Data verification
+
+	After a successful call was completed, a human audit of each
+telephone call was conducted to verify that the proper language was
+spoken, to check the quality of the recording, and to select and
+describe the region to be transcribed.  The description of the
+transcribed region provides information about channel quality, number
+of speakers, their gender, and other attributes.  The information from
+this audit may be found in the file "callinfo.tbl", and its contents
+are described in greater detail in "callinfo.doc".
+
+-----------------------------------------------------------------------
+4.  Speaker demographics
+
+	Information on speaker demographics can be found in the file
+spkrinfo.tbl, whose contents are described in the file spkrinfo.doc.
+
+-----------------------------------------------------------------------
+5.  Data transcription - General
+
+	All CallHome telephone conversations were transcribed using
+the general conventions described below.  The finite set of
+"non-lexemes" (hesitation sounds) used in the transcripts are provided
+in section 6 below.
+
+	The transcription was carried out on Sun 4 workstations.  The
+transcription was done using the emacs text editor which was linked to
+the visual and auditory soundwave from the telephone recording in an
+xwaves window.  A program written at the LDC linked the xwaves signal
+to the emacs buffer so that a highlighted region of the soundwave
+could be brought into the emacs buffer as a timestamp via a simple
+keystroke.  Similarly, the transcribers could listen to any timemarked
+turn in the transcript, and view the aligned soundwave as well.  Thus,
+the transcribers had a visual as well as auditory signal that they
+were transcribing.  Both the visual and auditory signal were broken
+into two separate channels that could be reviewed separately or
+together.
+
+	The transcribers were given the transcription conventions
+provided below as a guideline how to transcribe the telephone
+conversations.
+
+
+               CALLHOME TRANSCRIPTION CONVENTIONS - General
+
+
+What to transcribe:	10 contiguous minutes (600 seconds) from the
+			recorded telephone conversations.  This should
+			not include the beginning of the conversation
+                        where the speakers are getting permission
+                        for being recorded.
+			
+
+Definition of turns:    Separate turns are defined by the following
+                        criteria:
+
+                (1) speaker change, e.g.
+
+                        A:  Well I was thinking about that
+
+                        B:  I know I talked to &Jan about it yesterday
+
+                (2) within one speaker's stretch of talk, a long
+                turn should be broken up in terms of what makes
+                grammatical/semantic sense, e.g.
+
+                        A: And I told her %um I didn't I wasn't
+                        setting you up to be a spiritual director or
+                        anything {laugh} but I did say to her that if she
+                        were to talk if she felt that she wanted to
+                        talk about her prayer experience in Spanish
+
+                        A: that you would probably be able to certainly
+                        to understand her but to empathize a little bit
+                        with what she was experiencing
+
+                (3) If there is an extra-long pause within a
+                single speaker's turn, break the turn up into two
+                turns, e.g.
+
+                        B: When we were fishing out on &Lake &Travis last
+                        August I thought I saw, %uh [[long pause]]
+
+                        B: %uh, &George &Martin, but I wasn't sure it was him.
+
+
+Timestamps:             Each speaker turn is marked with a unique timestamp
+                        (in seconds). The timestamps mark the beginning and
+                        end time of each turn relative to the beginning of the
+                        recording. Each timestamp is precise to the 100th of a
+                        second, and is in the format: beginning time [space]
+                        ending time, followed by the turn.
+                        Some samples:
+
+                27.98 28.72 A: You know so
+
+                137.49 139.47 A: yeah {breath} (( )) [distortion]
+
+                284.54 286.79 B: %ah &Lydia &Van &Damme.
+
+
+Special Conventions:
+
+
+    Acronyms            Acronyms pronounced like a word are written in all caps
+                        with no spaces, e.g.
+
+                        AIDS    NARAL
+
+                        Acronyms pronounced like the individual letters are
+                        written in all caps with spaces between the letters:
+
+                        C I A           H I V           C E O
+
+    Numbers             Write all numbers out, do not use digits
+
+                        twenty-two      nineteen-ninety-five
+
+    Interjections       Use the most standard spelling (as given on the
+                        lexicon list, if it's there); don't try to
+                        represent lengthening by writing multiple consonants
+                        (like 'ooooh').
+
+                        uh-huh  mhm   uh-oh   okay    jeez
+
+    Punctuation		Transcribers are free to add any punctuation
+			that they feel is helpful to someone reading
+			the transcript.  
+
+
+Special symbols:
+
+
+    Noises, conversational phenomena, foreign words, etc. are marked
+    with special symbols.  In the table below, "text" represents any
+    word or descriptive phrase.
+
+    {text}              sound made by the talker
+
+                        {laugh} {cough} {sneeze} {breath}
+
+    [text]              sound not made by the talker (background or channel)
+
+                        [distortion]    [background noise]      [buzz]
+
+    [/text]             end of continuous or intermittent sound not made by
+                        the talker (beginning marked with previous [text])
+
+    [[text]]            comment; most often used to describe unusual
+                        characteristics of immediately preceding or following
+                        speech (as opposed to separate noise event)
+
+                        [[previous word lengthened]]    [[speaker is singing]]
+
+    ((text))            unintelligible; text is best guess at transcription
+
+                        ((coffee klatch))
+
+    (( ))               unintelligible; can't even guess text
+
+                        (( ))
+
+
+    <language text>     speech in another language
+
+                        <English going to California>
+
+    <? (( ))>           ? indicates unrecognized language; (( )) indicates
+                        untranscribable speech
+
+                        <? ayo canoli>  <? (( ))>
+
+    -text		partial word
+    text-               
+			-tion absolu- 
+
+    #text#              simultaneous speech on the same channel
+                        (simultaneous speech on different channels is not
+                        explicitly marked, but is identifiable as such by
+                        reference to time marks)
+
+    //text//            aside (talker addressing someone in background)
+
+                        //quit it, I'm talking to your sister!//
+
+    +text+              mispronounced word (spell it in usual orthography)
+
+                        +probably+
+
+   **text**             idiosyncratic word, not in common use
+
+                        **poodle-ish**
+
+    %text               This symbol flags non-lexemes, which are
+			general hesitation sounds.  See the section on
+			non-lexemes below to see a complete list for
+			each language.  
+
+			%mm %uh 
+
+    &text               used to mark proper names and place names
+
+                        &Mary &Jones    &Arizona        &Harper's
+                        &Fiat           &Joe's &Grill
+
+
+    text --             marks end of interrupted turn and continuation
+    -- text             of same turn after interruption, e.g.
+
+                        A: I saw &Joe yesterday coming out of --
+
+                        B: You saw &Joe?!
+
+                        A: -- the music store on &Seventeenth and &Chestnut.
+
+-----------------------------------------------------------------------
+6.  Data transcription - Non-lexemes
+
+	For LVCSR purposes, some of the speech sounds uttered by the
+conversational participants were deemed to be "non-lexemes" or
+periodic sound sequences that are not listed as words in the
+pronunciation dictionary.  The "non-lexemes" are distinct from the set
+of interjections such as "okay" and "jeez" which are considered as words
+in the lexicon.  The "non-lexemes" can loosely be considered as
+hesitation sounds that a speaker makes while speaking.  While the
+spelling of these sounds is somewhat arbitrary, the transcribers were
+given a finite list from which to choose in order to maintain
+orthographic consistency.  
+
+	Below is the histogram of the token and frequency of non-lexemes
+occurring in the 80 training and 20 devtest transcripts.
+
+	1530 %uh
+	1470 %um
+	310 %eh
+	309 %mm
+	209 %hm
+	194 %ah
+	166 %huh
+	15 %ha
+	3 %er
+	2 %oof
+	2 %hee
+	2 %ach
+	1 %eee
+	1 %ew
+
+-----------------------------------------------------------------------
+7.  Quality control (QC) procedures
+
+	The creation of the transcripts was made in an iterative
+manner.  The first step was to transcribe and timestamp the
+appropriate portion of each conversation.  Once this was completed,
+proper formatting and spelling was checked and corrected.  Once this
+was completed, a second pass over all of the transcripts was made,
+where both content and formatting was checked once more.  Throughout
+this process, small improvements were constantly made and re-checked
+for accuracy.  In most instances, a third (or even fourth) pass was
+made over the transcript to verify its accuracy.  
+
+Spelling: 
+
+	As the telephone conversations were being transcribed, the
+words found in the transcripts were being compiled for inclusion in
+pronunciation dictionaries also being prepared by the LDC.  As the
+lexicon workers compiled lists of words, they checked (among other
+things) for spelling errors.  The lists of spelling/typo errors found
+in the transcripts were compiled, and a program was run over the
+transcripts to replace a misspelled word with its correct spelling.
+Thus, work on the pronunciation dictionaries of the respective
+languages helped to double-check the proper spelling of all words in
+the transcripts.  
+
+Syntax:  
+
+	To check the well-formedness of the bracketing, a program was
+written which goes over the transcripts and notes any apparent
+irregularities.  This program was later adapted for on-line use by the
+transcribers to be used while creating the transcripts.  A final
+syntax check was run over all transcripts before the final release.
+
+Timestamps:
+
+	To check the well-formedness of timestamps, a program was
+developed that checked for (1) overlapping timestamps, (2) start times
+that are greater than end times, (3) turns that are missing
+timestamps, (4) the proper formatting of a blank line before each
+timestamp, (5) proper number of digits in each timestamp, and (6) the
+proper marking of the speaker id.  This procedure was folded into the
+syntax checking procedure to be used on-line by the transcribers.  
+
+Content:
+
+	To check that the properly spelled and formatted transcription
+actually matched the spoken signal, a second human pass was made over
+all of the transcripts.  In many instances, three or more passes were
+made as well.

@@ -1,0 +1,456 @@
+@UTF8
+@PID:	11312/a-00004945-1
+@Begin
+@Languages:	eng
+@Participants:	A Subject, B Subject
+@Options:	bullets
+@ID:	eng|eng|A|||||Subject|||
+@ID:	eng|eng|B|||||Subject|||
+@Media:	4824, audio
+*B:	oh that's wonderful now, &-uh is Virgil finally retired also or ? 121460_127260
+%mor:	co|oh pro:dem|that~cop|be&3S adj|wonder-FULL adv|now cm|cm
+	aux|be&3S n:prop|Virgil adv|final&dadj-LY v|retire-PAST adv|also
+	coord|or ?
+%gra:	1|3|COM 2|3|SUBJ 3|10|SUBJ 4|3|PRED 5|3|JCT 6|3|LP 7|10|AUX
+	8|10|SUBJ 9|10|JCT 10|0|ROOT 11|10|JCT 12|10|CONJ 13|12|COORD
+*A:	&=channel_noise well, he retired from the university you know he
+	but he's been working up at the base and &-uh . 125370_133520
+%mor:	co|well cm|cm pro:sub|he v|retire-PAST prep|from det:art|the
+	n|university pro:per|you v|know pro:sub|he conj|but
+	pro:sub|he~aux|be&3S aux|be&PASTP part|work-PRESP adv|up prep|at
+	det:art|the n|base coord|and .
+%gra:	1|4|COM 2|1|LP 3|4|SUBJ 4|0|ROOT 5|4|JCT 6|7|DET 7|5|POBJ 8|9|SUBJ
+	9|4|CJCT 10|9|OBJ 11|15|LINK 12|15|SUBJ 13|15|AUX 14|15|AUX
+	15|10|CJCT 16|15|JCT 17|15|JCT 18|19|DET 19|17|POBJ 20|19|COORD
+	21|4|PUNCT
+*B:	oh yeah . 130030_130570
+%mor:	co|oh co|yeah .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*A:	he's still [=! soldiers screaming] working up there . 133750_135410
+%mor:	pro:sub|he~aux|be&3S adv|still part|work-PRESP adv|up adv|there .
+%gra:	1|4|SUBJ 2|4|AUX 3|4|JCT 4|0|ROOT 5|4|JCT 6|4|JCT 7|4|PUNCT
+*B:	is he ? 135540_135950
+%mor:	cop|be&3S pro:sub|he ?
+%gra:	1|0|ROOT 2|1|PRED 3|1|PUNCT
+*A:	&-uh the base has closed but he's with the base &+convergen
+	conversion agency . 135560_141740
+%mor:	det:art|the n|base aux|have&3S part|close-PASTP conj|but
+	pro:sub|he~cop|be&3S prep|with det:art|the n|base n|conversion
+	n|agency .
+%gra:	1|2|DET 2|4|SUBJ 3|4|AUX 4|0|ROOT 5|7|LINK 6|7|SUBJ 7|4|CJCT
+	8|7|JCT 9|12|DET 10|12|MOD 11|12|MOD 12|8|POBJ 13|4|PUNCT
+*A:	and they expect that to go on for about one more year although . 142730_146210
+%mor:	coord|and pro:sub|they v|expect pro:dem|that inf|to v|go adv|on
+	conj|for adv|about pro:indef|one adv|more n|year conj|although .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|OBJ 5|6|INF 6|3|XJCT 7|6|JCT
+	8|13|LINK 9|10|JCT 10|13|SUBJ 11|10|NJCT 12|11|POBJ 13|6|CJCT
+	14|3|PUNCT
+*A:	all the buildings now are occupied I think except one he said it
+	it's gone really much faster than they thought . 146890_153150
+%mor:	qn|all det:art|the n|building-PL adv|now aux|be&PRES
+	part|occupy-PASTP pro:sub|I v|think v|except pro:indef|one
+	pro:sub|he v|say&PAST pro:per|it pro:per|it~aux|be&3S part|go&PASTP
+	adv|real&dadj-LY adv|much adj|fast-CP prep|than pro:sub|they
+	v|think&PAST .
+%gra:	1|3|QUANT 2|3|DET 3|9|SUBJ 4|6|JCT 5|6|AUX 6|3|CMOD 7|8|SUBJ
+	8|3|CMOD 9|0|ROOT 10|9|OBJ 11|12|SUBJ 12|9|CJCT 13|12|OBJ 14|16|SUBJ
+	15|16|AUX 16|12|COMP 17|18|JCT 18|19|JCT 19|16|PRED 20|22|JCT
+	21|22|SUBJ 22|19|CMOD 23|9|PUNCT
+*A:	so &-um but they have clean up to do and . 154380_158030
+%mor:	adv|so conj|but pro:sub|they v|have v|clean adv|up inf|to v|do
+	coord|and .
+%gra:	1|2|JCT 2|4|LINK 3|4|SUBJ 4|0|ROOT 5|4|COMP 6|5|JCT 7|8|INF
+	8|5|COMP 9|8|CONJ 10|4|PUNCT
+*A:	transfer deeds and everything so he said it looks like it's going
+	to take about one more year . 158970_163040
+%mor:	n|transfer n|deed-PL coord|and pro:indef|everything conj|so
+	pro:sub|he v|say&PAST pro:per|it cop|look-3S conj|like
+	pro:per|it~aux|be&3S part|go-PRESP inf|to v|take prep|about
+	det:num|one qn|more n|year .
+%gra:	1|2|MOD 2|0|ROOT 3|2|CONJ 4|3|COORD 5|7|LINK 6|7|SUBJ 7|2|CJCT
+	8|9|SUBJ 9|7|COMP 10|13|LINK 11|13|SUBJ 12|13|AUX 13|9|COMP
+	14|15|INF 15|13|COMP 16|15|JCT 17|19|QUANT 18|19|QUANT 19|16|POBJ
+	20|2|PUNCT
+*A:	to wind everything up [=! shuffling] . 164090_165650
+%mor:	inf|to v|wind pro:indef|everything adv|up .
+%gra:	1|2|INF 2|0|ROOT 3|2|OBJ 4|2|JCT 5|2|PUNCT
+*B:	well, I hope they know what they're doing . 165810_168830
+%mor:	co|well cm|cm pro:sub|I v|hope pro:sub|they v|know pro:int|what
+	pro:sub|they~aux|be&PRES part|do-PRESP .
+%gra:	1|4|COM 2|1|LP 3|4|SUBJ 4|0|ROOT 5|6|SUBJ 6|4|COMP 7|10|LINK
+	8|10|SUBJ 9|10|AUX 10|6|COMP 11|4|PUNCT
+*A:	&=inhales I know it's really sad you know to because that was such
+	a nice base . 168620_174330
+%mor:	pro:sub|I v|know pro:per|it~cop|be&3S adv|real&dadj-LY adj|sad
+	pro:per|you v|know prep|to conj|because pro:dem|that cop|be&PAST&13S
+	qn|such det:art|a adj|nice n|base .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|6|JCT 6|4|PRED 7|8|SUBJ
+	8|2|COMP 9|8|JCT 10|12|LINK 11|12|SUBJ 12|2|CJCT 13|16|QUANT
+	14|16|DET 15|16|MOD 16|12|PRED 17|2|PUNCT
+*B:	yeah well that's the way it is out here the ones are closing and
+	&-uh just hope we don't need them again . 174160_183040
+%mor:	co|yeah co|well pro:dem|that~cop|be&3S det:art|the n|way pro:per|it
+	cop|be&3S adv|out adv|here det:art|the det:num|one-PL aux|be&PRES
+	part|close-PRESP coord|and adj|just n|hope pro:sub|we mod|do~neg|not
+	v|need pro:obj|them adv|again .
+%gra:	1|4|COM 2|4|COM 3|4|SUBJ 4|0|ROOT 5|6|DET 6|8|JCT 7|8|SUBJ 8|4|PRED
+	9|8|JCT 10|14|JCT 11|12|DET 12|14|SUBJ 13|14|AUX 14|21|XJCT
+	15|14|CONJ 16|17|MOD 17|15|COORD 18|21|SUBJ 19|21|AUX 20|19|NEG
+	21|8|CJCT 22|21|OBJ 23|21|JCT 24|4|PUNCT
+*A:	&=inhales I know it's it's kind of scary in a way but . 183400_188110
+%mor:	pro:sub|I v|know pro:per|it~cop|be&3S pro:per|it~cop|be&3S n|kind
+	prep|of adj|scare&dn-Y prep|in det:art|a n|way conj|but .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|6|SUBJ 6|2|COMP 7|6|PRED
+	8|7|NJCT 9|8|POBJ 10|9|JCT 11|12|DET 12|10|POBJ 13|2|JCT 14|2|PUNCT
+*B:	yeah it is . 187900_189960
+%mor:	co|yeah pro:per|it cop|be&3S .
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|3|PUNCT
+*A:	I don't know [=! clank] and it's costing so much to you know put it
+	back so [=! soldiers] that they can sell it you know they have to do
+	so much clean up . 189810_198030
+%mor:	pro:sub|I mod|do~neg|not v|know coord|and pro:per|it~aux|be&3S
+	part|cost-PRESP adv|so qn|much prep|to pro:per|you v|know v|put&ZERO
+	pro:per|it adv|back adv|so pro:rel|that pro:sub|they mod|can v|sell
+	pro:per|it pro:per|you v|know pro:sub|they v|have inf|to v|do adv|so
+	qn|much adj|clean adv|up .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|8|LINK 6|8|SUBJ 7|8|AUX
+	8|4|COMP 9|10|JCT 10|8|JCT 11|8|JCT 12|13|SUBJ 13|11|POBJ 14|8|CJCT
+	15|14|OBJ 16|14|JCT 17|14|JCT 18|21|LINK 19|21|SUBJ 20|21|AUX
+	21|17|COMP 22|21|OBJ 23|24|SUBJ 24|21|COMP 25|26|SUBJ 26|24|COMP
+	27|28|INF 28|26|COMP 29|30|JCT 30|31|QUANT 31|28|JCT 32|31|JCT
+	33|4|PUNCT
+*A:	to the soil and everything it is just a lot of expense . 198120_202320
+%mor:	prep|to det:art|the n|soil coord|and pro:indef|everything
+	pro:per|it cop|be&3S adv|just det:art|a n|lot prep|of n|expense .
+%gra:	1|7|JCT 2|3|DET 3|1|POBJ 4|3|CONJ 5|4|COORD 6|7|SUBJ 7|0|ROOT
+	8|7|JCT 9|10|DET 10|8|POBJ 11|10|NJCT 12|11|POBJ 13|7|PUNCT
+*B:	yeah mhm [=! distorted] . 198130_199500
+%mor:	co|yeah co|yes .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*B:	yeah it is xxx . 202290_203950
+%mor:	co|yeah pro:per|it cop|be&3S .
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|3|PUNCT
+*B:	but . 205770_207340
+%mor:	conj|but .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=smacks:lips &=breathes so how's your family [=! soldiers] . 203950_208300
+%mor:	adv|so adv:int|how~aux|be&3S det:poss|your n|family .
+%gra:	1|5|JCT 2|5|SUBJ 3|5|AUX 4|5|MOD 5|0|INCROOT 6|5|PUNCT
+*B:	he's great yeah so far as I know &=laughs . 208260_212790
+%mor:	pro:sub|he~cop|be&3S adj|great co|yeah adv|so adv|far conj|as
+	pro:sub|I v|know .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|9|COM 5|7|JCT 6|7|JCT 7|9|LINK
+	8|9|SUBJ 9|2|CJCT 10|2|PUNCT
+*A:	where's john, now ? 212280_213410
+%mor:	adv:int|where~cop|be&3S n|john cm|cm adv|now ?
+%gra:	1|2|LINK 2|0|ROOT 3|2|PRED 4|3|LP 5|2|JCT 6|2|PUNCT
+*B:	&-uh he's still in Ohio &-um he was home for about three weeks &-uh
+	in august . 213390_222240
+%mor:	pro:sub|he~aux|be&3S adv|still prep|in n:prop|Ohio pro:sub|he
+	cop|be&PAST&13S adv|home prep|for adv|about det:num|three n|week-PL
+	prep|in adj|august .
+%gra:	1|2|SUBJ 2|7|JCT 3|2|JCT 4|2|JCT 5|4|POBJ 6|7|SUBJ 7|0|ROOT 8|7|JCT
+	9|7|JCT 10|11|JCT 11|12|QUANT 12|9|POBJ 13|12|NJCT 14|13|POBJ
+	15|7|PUNCT
+*B:	he came home the first of august and was here till the twentieth .
+	223100_226070
+%mor:	pro:sub|he v|come&PAST adv|home det:art|the adj|first prep|of
+	adj|august coord|and cop|be&PAST&13S adv|here v|till det:art|the
+	adj|twentieth .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|JCT 4|11|DET 5|11|JCT 6|5|JCT 7|6|POBJ
+	8|7|CONJ 9|8|COORD 10|11|JCT 11|2|CJCT 12|13|DET 13|11|OBJ
+	14|2|PUNCT
+*B:	&-uh . 227650_228530
+*A:	is he married now ? 228350_229410
+%mor:	cop|be&3S pro:sub|he v|marry-PAST adv|now ?
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|JCT 5|3|PUNCT
+*B:	no no oh he's still working on that p_h_d he just has his
+	dissertation to write it's his . 229300_238420
+%mor:	co|no co|no co|oh pro:sub|he~aux|be&3S adv|still part|work-PRESP
+	prep|on pro:dem|that n|p_h_d pro:sub|he adv|just aux|have&3S
+	det:poss|his n|dissertation inf|to v|write pro:per|it~cop|be&3S
+	det:poss|his .
+%gra:	1|7|COM 2|7|COM 3|7|COM 4|7|SUBJ 5|7|AUX 6|7|JCT 7|0|ROOT 8|7|JCT
+	9|10|DET 10|8|POBJ 11|15|SUBJ 12|15|JCT 13|15|AUX 14|15|MOD 15|7|OBJ
+	16|17|INF 17|15|XMOD 18|19|SUBJ 19|17|COMP 20|19|PRED 21|7|PUNCT
+*B:	kind of up to him now how long he spends doing that, you know . 238650_242730
+%mor:	adj|kind prep|of adv|up prep|to pro:obj|him adv|now adv:int|how
+	adj|long pro:sub|he v|spend-3S part|do-PRESP pro:rel|that cm|cm
+	pro:per|you v|know .
+%gra:	1|0|INCROOT 2|1|JCT 3|2|POBJ 4|3|JCT 5|4|POBJ 6|3|JCT 7|10|LINK
+	8|10|JCT 9|10|SUBJ 10|6|CPOBJ 11|10|XJCT 12|15|LINK 13|12|LP
+	14|15|SUBJ 15|11|COMP 16|1|PUNCT
+*A:	uhhuh what's he studying or what's he xxx ? 240170_244630
+%mor:	co|uhhuh pro:int|what~aux|be&3S pro:sub|he part|study-PRESP
+	coord|or pro:int|what~poss|s pro:sub|he ?
+%gra:	1|5|COM 2|5|SUBJ 3|5|AUX 4|5|SUBJ 5|0|ROOT 6|5|CONJ 7|9|MOD
+	8|7|POSS 9|6|COORD 10|5|PUNCT
+*B:	&-uh he's &-um psychology counselling yeah he's working &-um . 243910_252470
+%mor:	pro:sub|he~cop|be&3S n|psychology part|counsel-PRESP co|yeah
+	pro:sub|he~aux|be&3S part|work-PRESP .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|3|XMOD 5|8|COM 6|8|SUBJ 7|8|AUX
+	8|4|COMP 9|2|PUNCT
+*A:	psychology . 247800_248490
+%mor:	n|psychology .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=coughs . 251120_252010
+*A:	well it that's that's a long haul . 254460_256780
+%mor:	co|well pro:per|it pro:rel|that~aux|be&3S pro:dem|that~cop|be&3S
+	det:art|a adj|long n|haul .
+%gra:	1|6|COM 2|6|SUBJ 3|4|LINK 4|6|AUX 5|6|SUBJ 6|0|ROOT 7|9|DET 8|9|MOD
+	9|6|PRED 10|6|PUNCT
+*B:	he's counselling you know he's counselling at the college level and
+	he likes that . 254820_260130
+%mor:	pro:sub|he~aux|be&3S part|counsel-PRESP pro:per|you v|know
+	pro:sub|he~aux|be&3S part|counsel-PRESP prep|at det:art|the
+	n|college n|level coord|and pro:sub|he v|like-3S pro:dem|that .
+%gra:	1|3|SUBJ 2|3|AUX 3|0|ROOT 4|5|SUBJ 5|3|COMP 6|8|SUBJ 7|8|AUX
+	8|5|COMP 9|8|JCT 10|12|DET 11|12|MOD 12|9|POBJ 13|15|LINK 14|15|SUBJ
+	15|5|CJCT 16|15|OBJ 17|3|PUNCT
+*A:	uhhuh . 260299_260840
+%mor:	co|uhhuh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	but &-uh he doesn't know what there will be available or what he
+	really wants to do when he finally gets the p_h_d . 261370_269610
+%mor:	conj|but pro:sub|he mod|do&3S~neg|not v|know pro:int|what adv|there
+	mod|will cop|be adj|avail&dv-ABLE coord|or pro:int|what pro:sub|he
+	adv|real&dadj-LY v|want-3S inf|to v|do conj|when pro:sub|he
+	adv|final&dadj-LY v|get-3S det:art|the n|p_h_d .
+%gra:	1|5|LINK 2|5|SUBJ 3|5|AUX 4|3|NEG 5|0|ROOT 6|9|LINK 7|9|SUBJ
+	8|9|AUX 9|5|COMP 10|9|PRED 11|5|CONJ 12|15|LINK 13|15|SUBJ 14|15|JCT
+	15|11|COORD 16|17|INF 17|15|COMP 18|21|LINK 19|21|SUBJ 20|21|JCT
+	21|5|CJCT 22|23|DET 23|21|OBJ 24|5|PUNCT
+*B:	which he hopes to have within the next year . 270700_273430
+%mor:	pro:rel|which pro:sub|he v|hope-3S inf|to v|have prep|within
+	det:art|the adj|next n|year .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|5|INF 5|3|COMP 6|5|JCT 7|9|DET 8|9|MOD
+	9|6|POBJ 10|3|PUNCT
+*A:	oh I'm sure he'll he'll find something that has a need for that I
+	think . 273620_278840
+%mor:	co|oh pro:sub|I~aux|be&1S adj|sure pro:sub|he~mod|will
+	pro:sub|he~mod|will v|find pro:indef|something pro:rel|that
+	v|have&3S det:art|a v|need conj|for det:dem|that pro:sub|I v|think .
+%gra:	1|3|COM 2|3|SUBJ 3|9|LINK 4|3|PRED 5|9|SUBJ 6|9|AUX 7|9|SUBJ
+	8|9|AUX 9|0|ROOT 10|9|OBJ 11|12|LINK 12|10|CMOD 13|14|DET 14|12|COMP
+	15|14|CONJ 16|15|COORD 17|18|SUBJ 18|16|CMOD 19|9|PUNCT
+*B:	yeah I think so and he's pretty sensitive and I think he'll do a
+	pretty good job . 279090_286630
+%mor:	co|yeah pro:sub|I v|think conj|so coord|and pro:sub|he~aux|be&3S
+	adv|pretty adj|sensitive coord|and pro:sub|I v|think
+	pro:sub|he~mod|will v|do det:art|a adj|pretty adj|good n|job .
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|3|OBJ 5|7|LINK 6|7|SUBJ 7|4|CPOBJ
+	8|9|JCT 9|7|PRED 10|12|LINK 11|12|SUBJ 12|7|CJCT 13|15|SUBJ
+	14|15|AUX 15|12|COMP 16|19|DET 17|19|MOD 18|19|MOD 19|15|OBJ
+	20|3|PUNCT
+*A:	mhm . 286410_286910
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	oh . 287710_289150
+%mor:	co|oh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	and how is Karen is she teaching this year ? 289880_291760
+%mor:	coord|and adv:int|how cop|be&3S n:prop|Karen cop|be&3S pro:sub|she
+	part|teach-PRESP pro:dem|this n|year ?
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|5|SUBJ 5|3|PRED 6|5|PRED 7|6|XMOD
+	8|9|DET 9|7|OBJ 10|3|PUNCT
+*B:	oh yes she's like you she's ready to retire &=laughs . 291830_297330
+%mor:	co|oh co|yes pro:sub|she~cop|be&3S prep|like pro:per|you
+	pro:sub|she~cop|be&3S adj|ready inf|to v|retire .
+%gra:	1|4|COM 2|4|COM 3|4|SUBJ 4|0|ROOT 5|4|JCT 6|5|POBJ 7|8|SUBJ
+	8|4|CJCT 9|8|PRED 10|11|INF 11|9|COMP 12|4|PUNCT
+*A:	&=laughs well you know the way &=breathes the way education has
+	gotten, I I don't know how a teacher can last until retirement age
+	now . 295360_304770
+%mor:	adv|well pro:per|you v|know det:art|the n|way det:art|the n|way
+	n|education aux|have&3S part|get&PASTP cm|cm pro:sub|I pro:sub|I
+	mod|do~neg|not v|know adv:int|how det:art|a n|teach&dv-AGT n|can
+	adj|last conj|until n|retirement n|age adv|now .
+%gra:	1|3|JCT 2|3|SUBJ 3|16|CJCT 4|5|DET 5|3|OBJ 6|8|DET 7|8|MOD
+	8|10|SUBJ 9|10|AUX 10|5|CMOD 11|5|LP 12|16|SUBJ 13|16|SUBJ 14|16|AUX
+	15|14|NEG 16|0|ROOT 17|16|OBJ 18|20|DET 19|20|MOD 20|17|OBJ
+	21|20|POSTMOD 22|24|LINK 23|24|MOD 24|20|CJCT 25|24|JCT 26|16|PUNCT
+*B:	it's just that it's it's not fun anymore . 304720_307440
+%mor:	pro:per|it~cop|be&3S adj|just pro:rel|that pro:per|it~cop|be&3S
+	pro:per|it~cop|be&3S neg|not adj|fun adv|anymore .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|6|LINK 5|6|SUBJ 6|3|CMOD 7|8|SUBJ
+	8|6|PRED 9|8|NEG 10|8|PRED 11|10|JCT 12|2|PUNCT
+*A:	unhunh it isn't . 307120_308280
+%mor:	co|no pro:per|it cop|be&3S~neg|not .
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|3|NEG 5|3|PUNCT
+*B:	she said that all the teachers complain the same they work harder
+	and harder all the time and . 308450_313570
+%mor:	pro:sub|she v|say&PAST pro:rel|that qn|all det:art|the
+	n|teach&dv-AGT-PL v|complain det:art|the adj|same pro:sub|they
+	v|work adj|hard-CP coord|and adj|hard-CP qn|all det:art|the n|time
+	coord|and .
+%gra:	1|2|SUBJ 2|0|ROOT 3|7|LINK 4|6|QUANT 5|6|DET 6|7|SUBJ 7|2|COMP
+	8|9|DET 9|7|OBJ 10|11|SUBJ 11|9|CMOD 12|11|JCT 13|12|CONJ
+	14|13|COORD 15|17|QUANT 16|17|DET 17|14|CONJ 18|17|COORD 19|2|PUNCT
+*A:	every year it gets it more and more demands are put on you . 313390_316840
+%mor:	qn|every n|year pro:per|it v|get-3S pro:per|it adv|more coord|and
+	qn|more n|demand-PL cop|be&PRES part|put&PASTP prep|on pro:per|you .
+%gra:	1|2|QUANT 2|4|JCT 3|4|SUBJ 4|0|ROOT 5|4|OBJ 6|4|JCT 7|11|LINK
+	8|9|QUANT 9|11|SUBJ 10|11|AUX 11|4|CJCT 12|11|JCT 13|12|POBJ
+	14|4|PUNCT
+*B:	oh . 317950_318360
+%mor:	co|oh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	and the kids are getting worse too there's just so much seems like
+	hostility and anger . 318190_323480
+%mor:	coord|and det:art|the n|kid-PL aux|be&PRES n:gerund|get-PRESP
+	adj|bad&CP adv|too pro:exist|there~aux|be&3S adv|just adv|so qn|much
+	cop|seem-3S co|like n|hostility coord|and n|anger .
+%gra:	1|5|LINK 2|3|DET 3|5|SUBJ 4|5|AUX 5|0|ROOT 6|12|JCT 7|8|JCT
+	8|12|SUBJ 9|12|AUX 10|11|JCT 11|12|JCT 12|13|QUANT 13|5|COMP
+	14|15|COM 15|13|PRED 16|15|CONJ 17|16|COORD 18|5|PUNCT
+*B:	and and then the &+te the parents some of them expect so much . 321590_328390
+%mor:	coord|and coord|and adv:tem|then det:art|the det:art|the
+	n|parent-PL qn|some prep|of pro:obj|them v|expect adv|so qn|much .
+%gra:	1|10|LINK 2|10|LINK 3|10|JCT 4|6|DET 5|6|DET 6|10|SUBJ 7|10|SUBJ
+	8|7|JCT 9|8|POBJ 10|0|ROOT 11|12|JCT 12|10|JCT 13|10|PUNCT
+*A:	oh . 328150_328680
+%mor:	co|oh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	that &-uh you know you've got thirty five kids in a classroom you
+	can't give each child the individual attention that the . 329660_337370
+%mor:	pro:rel|that pro:per|you v|know pro:per|you~aux|have part|get&PASTP
+	det:num|thirty det:num|five n|kid-PL prep|in det:art|a
+	n|+n|class+n|room pro:per|you mod|can~neg|not v|give qn|each n|child
+	det:art|the n|individual n|attention pro:rel|that det:art|the .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|OBJ 5|6|AUX 6|16|XJCT 7|9|QUANT
+	8|9|QUANT 9|6|OBJ 10|6|JCT 11|12|DET 12|10|POBJ 13|16|SUBJ 14|16|AUX
+	15|14|NEG 16|3|PUNCT 17|18|QUANT 18|16|OBJ 19|21|DET 20|21|MOD
+	21|18|APP 22|21|ROOT 23|24|DET 24|22|PUNCT
+*A:	no . 335530_335900
+%mor:	co|no .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	parents thinks their child should have you can't do it . 337700_340980
+%mor:	n|parent-PL v|think-3S det:poss|their n|child mod|should v|have
+	pro:per|you mod|can~neg|not v|do pro:per|it .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|MOD 4|6|SUBJ 5|6|AUX 6|2|COMP 7|10|SUBJ
+	8|10|AUX 9|8|NEG 10|6|COMP 11|10|OBJ 12|2|PUNCT
+*A:	I know . 339030_339630
+%mor:	pro:sub|I v|know .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PUNCT
+*B:	they don't have teacher's aids anymore, &-uh &=breathes so they
+	just can't . 341590_348380
+%mor:	pro:sub|they mod|do~neg|not v|have n|teach&dv-AGT~aux|be&3S
+	n|aid-PL adv|anymore cm|cm conj|so pro:sub|they adv|just
+	mod|can~neg|not .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|7|SUBJ 6|7|AUX 7|4|OBJ 8|7|NJCT
+	9|8|LP 10|15|LINK 11|15|SUBJ 12|15|JCT 13|15|AUX 14|13|NEG
+	15|4|PUNCT
+*A:	&=coughs and she's got thirty five, wow . 347630_350590
+%mor:	coord|and pro:sub|she~aux|be&3S part|get&PASTP det:num|thirty
+	det:num|five cm|cm co|wow .
+%gra:	1|4|LINK 2|4|SUBJ 3|4|AUX 4|0|ROOT 5|6|QUANT 6|4|OBJ 7|6|LP
+	8|6|ENUM 9|4|PUNCT
+*B:	yeah and and no aid you know you just you . 350760_356720
+%mor:	co|yeah coord|and coord|and qn|no n|aid pro:per|you v|know
+	pro:per|you adv|just pro:per|you .
+%gra:	1|7|COM 2|1|CONJ 3|2|COORD 4|5|QUANT 5|7|JCT 6|7|SUBJ 7|0|ROOT
+	8|7|OBJ 9|7|JCT 10|9|POBJ 11|7|PUNCT
+*A:	that's ridiculous well, what they're doing here now no I don't know
+	whether they're doing that in California or not they're putting all
+	the special Ed kids back into the classroom . 355420_364570
+%mor:	pro:dem|that~cop|be&3S adj|ridiculous adv|well cm|cm pro:int|what
+	pro:sub|they~aux|be&PRES part|do-PRESP adv|here adv|now co|no
+	pro:sub|I mod|do~neg|not v|know conj|whether
+	pro:sub|they~aux|be&PRES part|do-PRESP pro:dem|that prep|in
+	n:prop|California coord|or neg|not pro:sub|they~aux|be&PRES
+	part|put-PRESP adv|all det:art|the n|special n:prop|Ed v|kid-3S
+	adv|back prep|into det:art|the n|+n|class+n|room .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|16|JCT 5|4|LP 6|9|LINK 7|9|SUBJ
+	8|9|AUX 9|16|XJCT 10|9|JCT 11|9|JCT 12|16|COM 13|16|SUBJ 14|16|AUX
+	15|14|NEG 16|2|CJCT 17|20|LINK 18|20|SUBJ 19|20|AUX 20|16|COMP
+	21|20|OBJ 22|20|JCT 23|22|POBJ 24|28|LINK 25|28|NEG 26|28|SUBJ
+	27|28|AUX 28|20|CJCT 29|31|JCT 30|31|DET 31|33|JCT 32|33|SUBJ
+	33|28|COMP 34|33|JCT 35|33|JCT 36|37|DET 37|35|POBJ 38|2|PUNCT
+*B:	they're doing a lot of that, too . 364910_366840
+%mor:	pro:sub|they~aux|be&PRES part|do-PRESP det:art|a n|lot prep|of
+	pro:dem|that cm|cm post|too .
+%gra:	1|3|SUBJ 2|3|AUX 3|0|ROOT 4|5|DET 5|3|OBJ 6|5|NJCT 7|6|POBJ 8|7|LP
+	9|3|JCT 10|3|PUNCT
+*A:	I mean we at Franklin last year which is a middle school we had a
+	student that could hardly speak probably a hundred words and yet she
+	was in the . 366960_376090
+%mor:	pro:sub|I v|mean pro:sub|we prep|at n:prop|Franklin adv|last n|year
+	pro:rel|which cop|be&3S det:art|a adj|middle n|school pro:sub|we
+	v|have&PAST det:art|a n|student pro:dem|that mod|could
+	adv|hard&dadj-LY v|speak adv|probable&dadj-LY det:art|a
+	det:num|hundred n|word-PL coord|and adv|yet pro:sub|she
+	cop|be&PAST&13S prep|in det:art|the .
+%gra:	1|2|SUBJ 2|0|ROOT 3|6|SUBJ 4|3|JCT 5|4|POBJ 6|7|JCT 7|2|OBJ
+	8|9|LINK 9|7|CMOD 10|12|DET 11|12|MOD 12|9|PRED 13|14|SUBJ
+	14|12|CMOD 15|16|DET 16|14|OBJ 17|20|SUBJ 18|20|AUX 19|20|JCT
+	20|16|CMOD 21|20|JCT 22|24|DET 23|24|QUANT 24|20|OBJ 25|28|LINK
+	26|28|JCT 27|28|SUBJ 28|24|CMOD 29|28|JCT 30|29|POBJ 31|2|PUNCT
+*A:	regular classroom, making straight a@l-s . 376320_378770
+%mor:	adj|regular n|+n|class+n|room cm|cm part|make-PRESP adv|straight
+	n:let|a-PL .
+%gra:	1|2|MOD 2|0|INCROOT 3|2|LP 4|2|ENUM 5|6|JCT 6|2|ENUM 7|2|PUNCT
+*B:	oh no . 380000_381060
+%mor:	co|oh co|no .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*A:	&=laughs . 380690_381920
+*B:	oh no . 383280_384790
+%mor:	co|oh co|no .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*A:	&=laughs I mean she &=breathes . 383030_387820
+%mor:	pro:sub|I v|mean pro:sub|she .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|OBJ 4|2|PUNCT
+*B:	it just doesn't make sense . 387530_388910
+%mor:	pro:per|it adv|just mod|do&3S~neg|not v|make n|sense .
+%gra:	1|5|SUBJ 2|5|JCT 3|5|AUX 4|3|NEG 5|0|ROOT 6|5|OBJ 7|5|PUNCT
+*A:	unhunh no . 388630_390010
+%mor:	co|no co|no .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*B:	I &-uh just &-uh I don't know what we can do about it . 390800_394280
+%mor:	pro:sub|I adv|just pro:sub|I mod|do~neg|not v|know pro:int|what
+	pro:sub|we mod|can v|do prep|about pro:per|it .
+%gra:	1|6|SUBJ 2|6|JCT 3|6|SUBJ 4|6|AUX 5|4|NEG 6|0|ROOT 7|10|LINK
+	8|10|SUBJ 9|10|AUX 10|6|COMP 11|10|JCT 12|11|POBJ 13|6|PUNCT
+*A:	I don't either . 394290_395030
+%mor:	pro:sub|I mod|do~neg|not adv|either .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|4|PUNCT
+*B:	they could just keep saying there's not money enough you know and
+	the funds aren't there xxx . 395370_402280
+%mor:	pro:sub|they mod|could adv|just v|keep n:gerund|say-PRESP
+	pro:exist|there~cop|be&3S neg|not n|money adv|enough pro:per|you
+	v|know coord|and det:art|the n|fund-PL cop|be&PRES~neg|not adv|there
+	.
+%gra:	1|4|SUBJ 2|4|AUX 3|4|JCT 4|0|ROOT 5|4|OBJ 6|7|SUBJ 7|4|COMP 8|7|NEG
+	9|12|JCT 10|9|NJCT 11|12|SUBJ 12|7|PRED 13|16|LINK 14|15|DET
+	15|16|SUBJ 16|7|CJCT 17|16|NEG 18|16|JCT 19|4|PUNCT
+*A:	but now this this child had her personal aid that went with her all
+	day long . 401750_407120
+%mor:	conj|but adv|now pro:dem|this pro:dem|this n|child v|have&PAST
+	det:poss|her adj|personal n|aid pro:rel|that v|go&PAST prep|with
+	pro:obj|her qn|all n|day adv|long .
+%gra:	1|6|LINK 2|6|JCT 3|5|DET 4|5|DET 5|6|SUBJ 6|0|ROOT 7|9|MOD 8|9|MOD
+	9|6|OBJ 10|11|LINK 11|9|CMOD 12|11|JCT 13|12|POBJ 14|15|QUANT
+	15|11|JCT 16|11|JCT 17|6|PUNCT
+*A:	but &-uh you know I &=breathes I &=breathes I just have well that's
+	one reason I quit teaching is because . 409810_418520
+%mor:	conj|but pro:per|you v|know pro:sub|I pro:sub|I pro:sub|I adv|just
+	v|have n|well pro:rel|that~cop|be&3S det:num|one n|reason pro:sub|I
+	v|quit&ZERO n:gerund|teach-PRESP cop|be&3S conj|because .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|8|SUBJ 5|8|SUBJ 6|8|SUBJ 7|8|JCT
+	8|3|COMP 9|8|OBJ 10|11|LINK 11|9|CMOD 12|13|QUANT 13|11|PRED
+	14|15|SUBJ 15|8|CJCT 16|17|SUBJ 17|15|COMP 18|17|PRED 19|3|PUNCT
+*A:	well I mean main reason I quit was because I was just tired and
+	ready to do something else but . 419220_423710
+%mor:	adv|well pro:sub|I adj|mean adj|main n|reason pro:sub|I v|quit&ZERO
+	aux|be&PAST&13S conj|because pro:sub|I cop|be&PAST&13S adv|just
+	part|tire-PASTP coord|and adj|ready inf|to v|do pro:indef|something
+	post|else conj|but .
+%gra:	1|3|JCT 2|3|SUBJ 3|5|MOD 4|5|MOD 5|8|SUBJ 6|7|SUBJ 7|5|CMOD
+	8|0|ROOT 9|13|LINK 10|13|SUBJ 11|13|AUX 12|13|JCT 13|8|CJCT
+	14|13|CONJ 15|14|COORD 16|17|INF 17|15|XMOD 18|17|OBJ 19|18|PQ
+	20|15|OM 21|8|PUNCT
+*A:	even if I had been ten years younger . 425250_427630
+%mor:	adv|even conj|if pro:sub|I aux|have&PAST aux|be&PASTP det:num|ten
+	n|year-PL adj|young-CP .
+%gra:	1|2|JCT 2|6|LINK 3|6|SUBJ 4|6|AUX 5|6|AUX 6|7|QUANT 7|0|ROOT
+	8|7|POSTMOD 9|7|PUNCT
+@End

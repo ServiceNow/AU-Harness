@@ -1,0 +1,813 @@
+@UTF8
+@PID:	11312/a-00004942-1
+@Begin
+@Languages:	eng, heb
+@Participants:	A Subject, B Subject
+@Options:	bullets
+@ID:	eng|eng|A|||||Subject|||
+@ID:	eng|eng|B|||||Subject|||
+@Media:	4753, audio
+*B:	I &+don not only do have a stomach I have lots of other new body
+	parts . 686420_689510
+%mor:	pro:sub|I neg|not adv|only v|do v|have det:art|a n|stomach
+	pro:sub|I v|have n|lot-PL prep|of qn|other adj|new n|body n|part-PL
+	.
+%gra:	1|4|SUBJ 2|1|NEG 3|4|JCT 4|0|ROOT 5|4|OBJ 6|7|DET 7|5|OBJ 8|9|SUBJ
+	9|7|CMOD 10|9|OBJ 11|10|NJCT 12|15|QUANT 13|15|MOD 14|15|MOD
+	15|11|POBJ 16|4|PUNCT
+*A:	uhhuh . 689440_690070
+%mor:	co|uhhuh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&-ah so you must like it &=laughs . 690420_692460
+%mor:	co|so pro:per|you mod|must v|like pro:per|it .
+%gra:	1|4|COM 2|4|SUBJ 3|4|AUX 4|0|ROOT 5|4|OBJ 6|4|PUNCT
+*B:	&=coughs . 690590_690860
+*B:	&=laughs what ? 692240_693250
+%mor:	pro:int|what ?
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=inhales . 693380_696190
+*B:	and &-uh I have a big fat tush . 695570_697500
+%mor:	coord|and pro:sub|I v|have det:art|a adj|big n|fat n|tush .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|7|DET 5|6|MOD 6|7|MOD 7|3|OBJ
+	8|3|PUNCT
+*A:	really . 697370_698230
+%mor:	adv|real&dadj-LY .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	mhm . 698010_698710
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	oh . 698580_699400
+%mor:	co|oh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	when I xxx to Divora she goes that means you're having a girl . 699510_701970
+%mor:	conj|when pro:sub|I prep|to n:prop|Divora pro:sub|she v|go-3S
+	pro:rel|that v|mean-3S pro:per|you~aux|be&PRES part|have-PRESP
+	det:art|a n|girl .
+%gra:	1|6|LINK 2|6|JCT 3|2|NJCT 4|3|POBJ 5|6|SUBJ 6|0|ROOT 7|8|LINK
+	8|6|COMP 9|11|SUBJ 10|11|AUX 11|8|COMP 12|13|DET 13|11|OBJ
+	14|6|PUNCT
+*A:	really if &+y why if you if you get all &+ov if you get wide all
+	over . 701630_705500
+%mor:	adv|real&dadj-LY conj|if adv:int|why conj|if pro:per|you conj|if
+	pro:per|you v|get qn|all conj|if pro:per|you v|get adj|wide adv|all
+	adv|over .
+%gra:	1|0|INCROOT 2|1|CONJ 3|2|COORD 4|8|LINK 5|8|SUBJ 6|8|LINK 7|8|SUBJ
+	8|3|CJCT 9|10|QUANT 10|12|LINK 11|12|SUBJ 12|8|CJCT 13|12|PRED
+	14|15|JCT 15|13|JCT 16|1|PUNCT
+*B:	if you get fat all over besides your tush &+tha I mean besides your
+	stomach &=inhales . 704900_708370
+%mor:	conj|if pro:per|you v|get n|fat adv|all adv|over prep|besides
+	det:poss|your n|tush pro:sub|I v|mean prep|besides det:poss|your
+	n|stomach .
+%gra:	1|3|LINK 2|3|SUBJ 3|11|CJCT 4|3|OBJ 5|6|JCT 6|3|JCT 7|3|JCT 8|9|MOD
+	9|7|POBJ 10|11|SUBJ 11|0|ROOT 12|11|JCT 13|14|MOD 14|12|POBJ
+	15|11|PUNCT
+*A:	uhhuh . 706720_707160
+%mor:	co|uhhuh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	uhhuh . 708200_708720
+%mor:	co|uhhuh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	uhhuh . 708990_710730
+%mor:	co|uhhuh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	well I don't believe those things because they never work . 709730_711700
+%mor:	co|well pro:sub|I mod|do~neg|not v|believe pro:dem|those n|thing-PL
+	conj|because pro:sub|they adv|never n|work .
+%gra:	1|5|COM 2|5|SUBJ 3|5|AUX 4|3|NEG 5|0|ROOT 6|7|DET 7|5|OBJ 8|11|LINK
+	9|11|SUBJ 10|11|JCT 11|5|CJCT 12|5|PUNCT
+*A:	xxx &=inhales . 711480_713430
+*A:	nah don't &+bel don't believe it . 713500_715360
+%mor:	co|nah mod|do~neg|not mod|do~neg|not v|believe pro:per|it .
+%gra:	1|6|SUBJ 2|4|AUX 3|2|NEG 4|6|AUX 5|4|NEG 6|0|ROOT 7|6|OBJ 8|6|PUNCT
+*B:	I don't &+belie . 713800_714200
+%mor:	pro:sub|I mod|do~neg|not .
+%gra:	1|0|INCROOT 2|4|AUX 3|2|NEG 4|1|PUNCT
+*A:	don't believe it . 715650_716300
+%mor:	mod|do~neg|not v|believe pro:per|it .
+%gra:	1|3|AUX 2|1|NEG 3|0|ROOT 4|3|OBJ 5|3|PUNCT
+*B:	I don't believe it at all I mean I don't &+kno maybe I'll have a
+	girl but that &+does it's not because my tush is fat . 716120_721200
+%mor:	pro:sub|I mod|do~neg|not v|believe pro:per|it prep|at pro:indef|all
+	pro:sub|I adj|mean pro:sub|I mod|do~neg|not adv|maybe
+	pro:sub|I~mod|will v|have det:art|a n|girl conj|but det:dem|that
+	pro:per|it~cop|be&3S neg|not conj|because det:poss|my n|tush
+	cop|be&3S adj|fat .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|4|OBJ 6|4|JCT 7|9|JCT 8|9|SUBJ
+	9|6|POBJ 10|13|SUBJ 11|13|AUX 12|11|NEG 13|16|JCT 14|16|SUBJ
+	15|16|AUX 16|4|CJCT 17|18|DET 18|16|OBJ 19|22|LINK 20|22|LINK
+	21|22|SUBJ 22|16|CJCT 23|22|NEG 24|27|LINK 25|26|MOD 26|27|SUBJ
+	27|22|CJCT 28|27|PRED 29|4|PUNCT
+*A:	0 . 716380_718450
+*A:	mhm &=inhales . 718470_719800
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	mhm [=! singing] . 722000_723660
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and if I have a girl I hope her tush isn't fat . 724000_725840
+%mor:	coord|and conj|if pro:sub|I v|have det:art|a n|girl pro:sub|I
+	v|hope det:poss|her n|tush cop|be&3S~neg|not adj|fat .
+%gra:	1|8|LINK 2|4|LINK 3|4|SUBJ 4|8|CJCT 5|6|DET 6|4|OBJ 7|8|SUBJ
+	8|0|ROOT 9|10|MOD 10|11|SUBJ 11|8|COMP 12|11|NEG 13|11|PRED
+	14|8|PUNCT
+*A:	no it's going to be skinny like yours and you you know you'll
+	you'll be like doty after the baby five weeks later you'll be skinny
+	emaciated again . 725750_731440
+%mor:	co|no pro:per|it~aux|be&3S part|go-PRESP inf|to cop|be
+	adj|skin&dn-Y conj|like pro:poss|yours coord|and pro:per|you
+	pro:per|you v|know pro:per|you~mod|will pro:per|you~mod|will cop|be
+	prep|like adj|dote&dv-Y prep|after det:art|the n|baby det:num|five
+	n|week-PL adv|later pro:per|you~mod|will cop|be adj|skin&dn-Y
+	v|emaciate-PAST adv|again .
+%gra:	1|4|COM 2|4|SUBJ 3|4|AUX 4|0|ROOT 5|6|INF 6|4|COMP 7|6|PRED
+	8|7|CONJ 9|8|COORD 10|13|LINK 11|13|SUBJ 12|13|SUBJ 13|9|CJCT
+	14|18|SUBJ 15|18|AUX 16|18|SUBJ 17|18|AUX 18|13|COMP 19|18|JCT
+	20|19|POBJ 21|20|JCT 22|23|DET 23|25|MOD 24|25|QUANT 25|21|POBJ
+	26|29|JCT 27|29|SUBJ 28|29|AUX 29|25|COMP 30|29|PRED 31|29|PRED
+	32|31|JCT 33|4|PUNCT
+*B:	0 . 727480_727840
+*B:	you mean Divora . 730910_731730
+%mor:	pro:per|you v|mean n:prop|Divora .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|OBJ 4|2|PUNCT
+*A:	Divora . 731630_732340
+%mor:	n:prop|Divora .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	&=inhales I don't think so Divora is skinny even when she &+ha even
+	when she's pregnant . 732110_736380
+%mor:	pro:sub|I mod|do~neg|not v|think conj|so n:prop|Divora aux|be&3S
+	adj|skin&dn-Y adj|even conj|when pro:sub|she adv|even conj|when
+	pro:sub|she~aux|be&3S adj|pregnant .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|4|PUNCT 6|7|SUBJ 7|5|COMP
+	8|7|PRED 9|10|MOD 10|8|CONJ 11|10|COORD 12|11|JCT 13|12|CONJ
+	14|13|COORD 15|14|ROOT 16|15|PRED 17|15|PUNCT
+*A:	you will . 734000_734660
+%mor:	pro:per|you mod|will .
+%gra:	1|2|SUBJ 2|0|INCROOT 3|2|PUNCT
+*A:	0 . 735270_735460
+*A:	do you know that Divora when she had Ari she went to . 736080_738970
+%mor:	mod|do pro:per|you v|know pro:rel|that n:prop|Divora conj|when
+	pro:sub|she v|have&PAST n:prop|Ari pro:sub|she v|go&PAST prep|to .
+%gra:	1|3|AUX 2|3|SUBJ 3|0|ROOT 4|11|LINK 5|11|SUBJ 6|8|LINK 7|8|SUBJ
+	8|11|CJCT 9|8|OBJ 10|11|SUBJ 11|3|COMP 12|11|JCT 13|3|PUNCT
+*A:	Syms and she bought a leather skirt . 739130_740770
+%mor:	n:prop|Syms coord|and pro:sub|she v|buy&PAST det:art|a n|leather
+	n|skirt .
+%gra:	1|0|INCROOT 2|4|LINK 3|4|SUBJ 4|1|CJCT 5|7|DET 6|7|MOD 7|4|OBJ
+	8|1|PUNCT
+*A:	and . 741240_741490
+%mor:	coord|and .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&-uh for weeks after the baby I promise she bought a leather skirt
+	size eight and I said Divora you're &+cra she goes I'm fat . 741780_747070
+%mor:	prep|for n|week-PL prep|after det:art|the n|baby pro:sub|I
+	v|promise pro:sub|she v|buy&PAST det:art|a n|leather n|skirt n|size
+	det:num|eight coord|and pro:sub|I v|say&PAST n:prop|Divora
+	pro:per|you~cop|be&PRES pro:sub|she v|go-3S pro:sub|I~cop|be&1S
+	n|fat .
+%gra:	1|7|JCT 2|1|POBJ 3|2|NJCT 4|5|DET 5|3|POBJ 6|7|SUBJ 7|22|CJCT
+	8|9|SUBJ 9|7|COMP 10|13|DET 11|13|MOD 12|13|MOD 13|9|OBJ 14|17|QUANT
+	15|17|LINK 16|17|SUBJ 17|13|CMOD 18|17|OBJ 19|20|SUBJ 20|18|CMOD
+	21|22|SUBJ 22|0|ROOT 23|24|SUBJ 24|22|COMP 25|24|PRED 26|22|PUNCT
+*A:	she goes my mother is hippy@n . 747350_748620
+%mor:	pro:sub|she v|go-3S det:poss|my n|mother aux|be&3S neo|hippy .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|MOD 4|5|SUBJ 5|2|COMP 6|5|PRED 7|2|PUNCT
+*A:	I'm hippy@n I'm never going to lose the weight and she bought a
+	size eight skirt . 748890_751580
+%mor:	pro:sub|I~aux|be&1S neo|hippy pro:sub|I~aux|be&1S adv|never
+	part|go-PRESP inf|to v|lose det:art|the n|weight coord|and
+	pro:sub|she v|buy&PAST det:art|a n|size det:num|eight n|skirt .
+%gra:	1|3|SUBJ 2|3|AUX 3|7|LINK 4|7|SUBJ 5|7|AUX 6|7|JCT 7|0|ROOT 8|9|INF
+	9|7|COMP 10|11|DET 11|9|OBJ 12|14|LINK 13|14|SUBJ 14|7|CJCT
+	15|16|DET 16|18|MOD 17|18|QUANT 18|14|OBJ 19|7|PUNCT
+*A:	I mean like three weeks later it was like falling down . 752210_754350
+%mor:	pro:sub|I v|mean co|like det:num|three n|week-PL adv|later
+	pro:per|it cop|be&PAST&13S prep|like n:gerund|fall-PRESP adv|down .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|COM 4|5|QUANT 5|8|JCT 6|5|POSTMOD 7|8|SUBJ
+	8|2|COMP 9|8|JCT 10|9|POBJ 11|10|JCT 12|2|PUNCT
+*A:	falling down off of her . 754500_755540
+%mor:	part|fall-PRESP adv|down adv|off prep|of pro:obj|her .
+%gra:	1|0|INCROOT 2|1|JCT 3|1|JCT 4|3|JCT 5|4|POBJ 6|1|PUNCT
+*B:	I remember that leather skirt . 754910_756640
+%mor:	pro:sub|I v|remember pro:rel|that n|leather n|skirt .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|MOD 4|5|MOD 5|2|OBJ 6|2|PUNCT
+*A:	remember that . 755810_756280
+%mor:	v|remember pro:dem|that .
+%gra:	1|0|ROOT 2|1|OBJ 3|1|PUNCT
+*A:	yeah so . 756770_757360
+%mor:	co|yeah co|so .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*A:	&+sh she &+sh I said you're crazy she goes I know you don't
+	understand xxx my mother has hip . 757440_760950
+%mor:	pro:sub|she pro:sub|I v|say&PAST pro:per|you~aux|be&PRES
+	adj|craze&dv-Y pro:sub|she v|go-3S pro:sub|I v|know pro:per|you
+	mod|do~neg|not v|understand det:poss|my n|mother aux|have&3S n|hip .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|6|SUBJ 5|6|AUX 6|8|JCT 7|8|SUBJ
+	8|3|COMP 9|10|SUBJ 10|3|CJCT 11|14|SUBJ 12|14|AUX 13|12|NEG
+	14|10|COMP 15|16|MOD 16|18|SUBJ 17|18|AUX 18|14|OBJ 19|3|PUNCT
+*A:	&=inhales and I have hip and I'm &+n I'm never going to be the same
+	. 761000_763750
+%mor:	coord|and pro:sub|I v|have n|hip coord|and pro:sub|I~aux|be&1S
+	pro:sub|I~aux|be&1S adv|never part|go-PRESP inf|to cop|be
+	det:art|the adj|same .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|OBJ 5|11|LINK 6|11|SUBJ 7|11|AUX
+	8|11|SUBJ 9|11|AUX 10|11|JCT 11|3|CJCT 12|13|INF 13|11|COMP
+	14|15|DET 15|13|PRED 16|3|PUNCT
+*B:	what's xxx always decides to all of a sudden she xxx going to be a
+	size eight . 763240_766350
+%mor:	pro:int|what~aux|be&3S adv|always v|decide-3S prep|to qn|all
+	prep|of det:art|a n|sudden pro:sub|she part|go-PRESP inf|to cop|be
+	det:art|a n|size det:num|eight .
+%gra:	1|4|SUBJ 2|4|AUX 3|4|JCT 4|0|ROOT 5|4|JCT 6|5|POBJ 7|6|NJCT 8|9|DET
+	9|7|POBJ 10|11|SUBJ 11|4|XJCT 12|13|INF 13|11|COMP 14|15|DET
+	15|16|MOD 16|13|PRED 17|4|PUNCT
+*A:	I know because &+c she bought a size eight a month after she had
+	the baby . 765020_768240
+%mor:	pro:sub|I v|know conj|because pro:sub|she v|buy&PAST det:art|a
+	n|size det:num|eight det:art|a n|month conj|after pro:sub|she
+	v|have&PAST det:art|the n|baby .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|LINK 4|5|SUBJ 5|2|COMP 6|7|DET 7|5|OBJ
+	8|10|QUANT 9|10|DET 10|7|APP 11|13|LINK 12|13|SUBJ 13|5|CJCT
+	14|15|DET 15|13|OBJ 16|2|PUNCT
+*A:	you know she didn't even like wait till she lost her weight and she
+	goes no I'm going to be fat . 769070_772090
+%mor:	pro:per|you v|know pro:sub|she mod|do&PAST~neg|not adv|even
+	conj|like co|wait n|till pro:sub|she v|lose&PAST det:poss|her
+	n|weight coord|and pro:sub|she v|go-3S qn|no pro:sub|I~aux|be&1S
+	part|go-PRESP inf|to cop|be n|fat .
+%gra:	1|2|SUBJ 2|0|ROOT 3|6|SUBJ 4|6|AUX 5|4|NEG 6|2|COMP 7|11|LINK
+	8|11|COM 9|11|JCT 10|11|SUBJ 11|6|CJCT 12|13|MOD 13|11|OBJ
+	14|16|LINK 15|16|SUBJ 16|11|CJCT 17|20|QUANT 18|20|SUBJ 19|20|AUX
+	20|16|COMP 21|22|INF 22|20|COMP 23|22|PRED 24|2|PUNCT
+*A:	that's what she said . 772260_772880
+%mor:	pro:dem|that~cop|be&3S pro:int|what pro:sub|she v|say&PAST .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|LINK 4|5|SUBJ 5|2|PRED 6|2|PUNCT
+*B:	uhhuh . 772420_772830
+%mor:	co|uhhuh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&-ah &-ah and you're going to be skinny too . 773390_775140
+%mor:	coord|and pro:per|you~cop|be&PRES part|go-PRESP inf|to cop|be
+	adj|skin&dn-Y adv|too .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|PRED 5|6|INF 6|4|COMP 7|6|PRED
+	8|6|JCT 9|3|PUNCT
+*A:	look look xxx . 775350_776560
+%mor:	co|look co|look .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*B:	well hopefully I'll be skinny if I'm not skinny I won't eat . 776000_778700
+%mor:	co|well adv|hope&dadj-FULL-LY pro:sub|I~mod|will cop|be
+	adj|skin&dn-Y conj|if pro:sub|I~cop|be&1S neg|not adj|skin&dn-Y
+	pro:sub|I mod|will~neg|not v|eat .
+%gra:	1|5|COM 2|5|JCT 3|5|SUBJ 4|5|AUX 5|0|ROOT 6|5|PRED 7|9|LINK
+	8|9|SUBJ 9|15|CJCT 10|9|NEG 11|9|PRED 12|15|SUBJ 13|15|AUX 14|13|NEG
+	15|5|CJCT 16|5|PUNCT
+*A:	you will I'm saying you will [=! something falls] what . 777050_778950
+%mor:	pro:per|you mod|will pro:sub|I~aux|be&1S part|say-PRESP pro:per|you
+	mod|will pro:int|what .
+%gra:	1|5|SUBJ 2|5|AUX 3|5|SUBJ 4|5|AUX 5|0|ROOT 6|8|SUBJ 7|8|AUX
+	8|5|COMP 9|5|PUNCT
+*B:	if I'm not skinny I won't eat . 779180_780590
+%mor:	conj|if pro:sub|I~cop|be&1S neg|not adj|skin&dn-Y pro:sub|I
+	mod|will~neg|not v|eat .
+%gra:	1|3|LINK 2|3|SUBJ 3|9|CJCT 4|3|NEG 5|3|PRED 6|9|SUBJ 7|9|AUX
+	8|7|NEG 9|0|ROOT 10|9|PUNCT
+*A:	&=smacks:lips honey but you're going to feed you're baby you going
+	to have to eat a little bit though . 780950_783670
+%mor:	co|honey conj|but pro:per|you~aux|be&PRES part|go-PRESP prep|to
+	n|feed pro:per|you~aux|be&PRES v|baby pro:per|you part|go-PRESP
+	inf|to v|have inf|to v|eat det:art|a adj|little n|bit adv|though .
+%gra:	1|5|COM 2|5|LINK 3|5|SUBJ 4|5|AUX 5|0|ROOT 6|5|JCT 7|6|POBJ
+	8|10|SUBJ 9|10|AUX 10|5|CJCT 11|10|OBJ 12|11|XMOD 13|14|INF
+	14|12|COMP 15|16|INF 16|14|COMP 17|19|DET 18|19|MOD 19|16|OBJ
+	20|16|JCT 21|5|PUNCT
+*A:	don't be anorexic . 784260_785060
+%mor:	mod|do~neg|not cop|be adj|anorexic .
+%gra:	1|3|AUX 2|1|NEG 3|0|ROOT 4|3|PRED 5|3|PUNCT
+*B:	oh . 784310_784710
+%mor:	co|oh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	oh . 785480_786070
+%mor:	co|oh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	you'll be &+sk you'll you'll be fine . 785980_787440
+%mor:	pro:per|you~mod|will cop|be pro:per|you~mod|will
+	pro:per|you~mod|will cop|be adj|fine .
+%gra:	1|3|SUBJ 2|3|AUX 3|0|ROOT 4|8|SUBJ 5|8|AUX 6|8|SUBJ 7|8|AUX
+	8|3|PRED 9|8|PRED 10|3|PUNCT
+*B:	I'm not really worried about it at this point . 788100_789950
+%mor:	pro:sub|I~cop|be&1S neg|not adv|real&dadj-LY v|worry-PAST
+	prep|about pro:per|it prep|at pro:dem|this n|point .
+%gra:	1|2|SUBJ 2|5|SUBJ 3|2|NEG 4|5|JCT 5|0|ROOT 6|5|JCT 7|6|POBJ 8|5|JCT
+	9|10|DET 10|8|POBJ 11|5|PUNCT
+*A:	you never had a problem with weight so you shouldn't have a problem
+	. 789220_791150
+%mor:	pro:per|you adv|never v|have&PAST det:art|a n|problem prep|with
+	n|weight conj|so pro:per|you mod|should~neg|not v|have det:art|a
+	n|problem .
+%gra:	1|3|SUBJ 2|3|JCT 3|0|ROOT 4|5|DET 5|3|OBJ 6|3|JCT 7|6|POBJ
+	8|12|LINK 9|12|SUBJ 10|12|AUX 11|10|NEG 12|3|CJCT 13|14|DET
+	14|12|OBJ 15|3|PUNCT
+*B:	I'm not even worried now that I'm gaining a ton of weight . 790880_793080
+%mor:	pro:sub|I~cop|be&1S neg|not adv|even part|worry-PASTP adv|now
+	pro:rel|that pro:sub|I~aux|be&1S part|gain-PRESP det:art|a n|ton
+	prep|of n|weight .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|NEG 4|5|JCT 5|2|PRED 6|5|JCT 7|10|LINK
+	8|10|SUBJ 9|10|AUX 10|5|COMP 11|12|DET 12|10|OBJ 13|12|NJCT
+	14|13|POBJ 15|2|PUNCT
+*A:	0 [=! knock] . 792040_792600
+*A:	mhm how many kilos did you gain . 793250_794680
+%mor:	co|yes adv:int|how qn|many n|kilo-PL mod|do&PAST pro:per|you v|gain
+	.
+%gra:	1|2|COM 2|7|LINK 3|4|QUANT 4|7|SUBJ 5|7|AUX 6|7|SUBJ 7|0|ROOT
+	8|7|PUNCT
+*B:	like a month ago I already had gained twelve pounds . 794450_796880
+%mor:	prep|like det:art|a n|month adv|ago pro:sub|I adv|already
+	aux|have&PAST part|gain-PASTP det:num|twelve n|pound-PL .
+%gra:	1|0|INCROOT 2|3|DET 3|1|POBJ 4|8|JCT 5|8|SUBJ 6|8|JCT 7|8|AUX
+	8|1|CPOBJ 9|10|QUANT 10|8|OBJ 11|1|PUNCT
+*A:	mhm . 796770_797130
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	&=smacks:lips I think that's a lot I don't know maybe it's maybe
+	it's supposed to be in that month . 797310_800090
+%mor:	pro:sub|I v|think pro:dem|that~cop|be&3S det:art|a n|lot pro:sub|I
+	mod|do~neg|not v|know adv|maybe pro:per|it~cop|be&3S adv|maybe
+	pro:per|it~aux|be&3S v|suppose-PAST inf|to cop|be prep|in
+	pro:dem|that n|month .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|6|DET 6|4|PRED 7|10|SUBJ
+	8|10|AUX 9|8|NEG 10|6|CMOD 11|10|JCT 12|13|SUBJ 13|10|COMP 14|13|JCT
+	15|17|SUBJ 16|17|AUX 17|13|PRED 18|19|INF 19|17|COMP 20|19|JCT
+	21|22|DET 22|20|POBJ 23|2|PUNCT
+*A:	so how what does the doctor say . 799940_801180
+%mor:	adv|so adv:int|how det:int|what v|do&3S det:art|the n|doctor v|say
+	.
+%gra:	1|2|JCT 2|4|LINK 3|4|SUBJ 4|0|ROOT 5|6|DET 6|7|SUBJ 7|4|COMP
+	8|4|PUNCT
+*B:	&-huh . 801720_802210
+*A:	what does the doctor say . 802040_803150
+%mor:	pro:int|what v|do&3S det:art|the n|doctor v|say .
+%gra:	1|2|LINK 2|0|ROOT 3|4|DET 4|5|SUBJ 5|2|COMP 6|2|PUNCT
+*A:	while you were in your fifth month . 803600_805070
+%mor:	conj|while pro:per|you cop|be&PAST prep|in det:poss|your adj|fifth
+	n|month .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|JCT 5|7|MOD 6|7|MOD 7|4|POBJ
+	8|3|PUNCT
+*B:	I was now I am finishing my fifth so then I was finishing my fourth
+	. 805000_808440
+%mor:	pro:sub|I cop|be&PAST&13S adv|now pro:sub|I aux|be&1S
+	n:gerund|finish-PRESP det:poss|my adj|fifth adv|so adv:tem|then
+	pro:sub|I aux|be&PAST&13S n:gerund|finish-PRESP det:poss|my n|fourth
+	.
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|JCT 4|6|SUBJ 5|6|AUX 6|2|PRED 7|8|MOD 8|6|OBJ
+	9|10|JCT 10|13|JCT 11|13|SUBJ 12|13|AUX 13|8|CMOD 14|15|MOD
+	15|13|OBJ 16|2|PUNCT
+*A:	mhm . 808310_808760
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	I'm finishing my fifth yeah . 810520_811860
+%mor:	pro:sub|I~aux|be&1S n:gerund|finish-PRESP det:poss|my adj|fifth
+	co|yeah .
+%gra:	1|3|SUBJ 2|3|AUX 3|0|ROOT 4|5|MOD 5|6|MOD 6|3|OBJ 7|3|PUNCT
+*A:	so what did he want you to gain altogether he said to aim for
+	thirty what did he tell you to aim for
+	[=! child crying in backround] . 812300_815700
+%mor:	adv|so pro:int|what mod|do&PAST pro:sub|he v|want pro:per|you
+	prep|to n|gain adv|altogether pro:sub|he v|say&PAST prep|to n|aim
+	prep|for det:num|thirty pro:int|what mod|do&PAST pro:sub|he v|tell
+	pro:per|you prep|to n|aim prep|for .
+%gra:	1|5|JCT 2|5|LINK 3|5|AUX 4|5|SUBJ 5|0|ROOT 6|5|OBJ 7|5|JCT 8|7|POBJ
+	9|11|JCT 10|11|SUBJ 11|5|CJCT 12|11|JCT 13|12|POBJ 14|11|JCT
+	15|14|POBJ 16|19|LINK 17|19|AUX 18|19|SUBJ 19|15|COBJ 20|19|OBJ
+	21|19|JCT 22|21|POBJ 23|19|JCT 24|5|PUNCT
+*B:	if you didn't tell me to aim for anything . 815080_816750
+%mor:	conj|if pro:per|you mod|do&PAST~neg|not v|tell pro:obj|me inf|to
+	v|aim prep|for pro:indef|anything .
+%gra:	1|5|LINK 2|5|SUBJ 3|5|AUX 4|3|NEG 5|0|ROOT 6|5|OBJ 7|8|INF 8|5|COMP
+	9|8|JCT 10|9|POBJ 11|5|PUNCT
+*B:	he just said everyone gains weight so you're gaining weight
+	&=laughs I mean I'm &+no I mean of course I'm gaining weight I'm
+	just xxx . 817300_822760
+%mor:	pro:sub|he adv|just v|say&PAST pro:indef|everyone v|gain-3S
+	n|weight adv|so pro:per|you~aux|be&PRES part|gain-PRESP n|weight
+	pro:sub|I v|mean pro:sub|I~aux|be&1S pro:sub|I v|mean prep|of
+	n|course pro:sub|I~aux|be&1S part|gain-PRESP n|weight
+	pro:sub|I~aux|be&1S adv|just .
+%gra:	1|3|SUBJ 2|3|JCT 3|0|ROOT 4|5|SUBJ 5|3|COMP 6|5|OBJ 7|10|JCT
+	8|10|SUBJ 9|10|AUX 10|13|XJCT 11|10|OBJ 12|13|SUBJ 13|5|CJCT
+	14|15|SUBJ 15|13|COMP 16|17|SUBJ 17|13|CJCT 18|17|JCT 19|18|POBJ
+	20|22|SUBJ 21|22|AUX 22|17|COMP 23|22|OBJ 24|25|SUBJ 25|17|COMP
+	26|25|JCT 27|3|PUNCT
+*A:	mhm okay so . 818930_820380
+%mor:	co|yes co|okay co|so .
+%gra:	1|3|COM 2|3|COM 3|0|INCROOT 4|3|PUNCT
+*A:	would you rather have a doctor who tells you not to eat . 821910_823740
+%mor:	mod|will&COND pro:per|you adv|rather v|have det:art|a n|doctor
+	pro:rel|who v|tell-3S pro:per|you neg|not inf|to v|eat .
+%gra:	1|4|AUX 2|4|SUBJ 3|4|JCT 4|0|ROOT 5|6|DET 6|4|OBJ 7|8|LINK 8|6|CMOD
+	9|8|OBJ 10|9|NEG 11|12|INF 12|8|COMP 13|4|PUNCT
+*B:	no of course not . 824290_825560
+%mor:	qn|no prep|of n|course neg|not .
+%gra:	1|0|INCROOT 2|1|JCT 3|2|POBJ 4|1|NEG 5|1|PUNCT
+*A:	no I'm saying you you want to have a doctor who's nice . 824780_826490
+%mor:	co|no pro:sub|I~aux|be&1S part|say-PRESP pro:per|you pro:per|you
+	v|want inf|to v|have det:art|a n|doctor pro:rel|who~cop|be&3S
+	adj|nice .
+%gra:	1|4|COM 2|4|SUBJ 3|4|AUX 4|7|XJCT 5|4|OBJ 6|7|SUBJ 7|0|ROOT 8|9|INF
+	9|7|COMP 10|11|DET 11|9|OBJ 12|13|LINK 13|11|CMOD 14|13|PRED
+	15|7|PUNCT
+*B:	he tells me to take it easy if I get dizzy just go back to bed I'm
+	like great okay I do that anyway &=laughs . 826340_831450
+%mor:	pro:sub|he v|tell-3S pro:obj|me inf|to v|take pro:per|it
+	adj|ease&dn-Y conj|if pro:sub|I v|get adj|dizzy adv|just v|go
+	adv|back prep|to n|bed pro:sub|I~cop|be&1S prep|like adj|great
+	adj|okay pro:sub|I v|do pro:dem|that adv|anyway .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|OBJ 4|5|INF 5|2|COMP 6|18|SUBJ 7|18|JCT
+	8|10|LINK 9|10|SUBJ 10|18|CJCT 11|13|JCT 12|13|JCT 13|10|COMP
+	14|13|JCT 15|13|JCT 16|15|POBJ 17|18|SUBJ 18|5|COMP 19|23|JCT
+	20|23|JCT 21|23|JCT 22|23|SUBJ 23|18|PRED 24|23|OBJ 25|23|JCT
+	26|2|PUNCT
+*A:	mhm . 831130_831530
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	no I mean that was in the beginning xxx . 832740_834840
+%mor:	co|no pro:sub|I adj|mean pro:dem|that cop|be&PAST&13S prep|in
+	det:art|the n|beginning .
+%gra:	1|5|COM 2|5|SUBJ 3|5|JCT 4|5|SUBJ 5|0|ROOT 6|5|JCT 7|8|DET 8|6|POBJ
+	9|5|PUNCT
+*A:	yeah . 834020_834340
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	mhm . 835210_835590
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	0 [=! something falls in the backround] . 836690_837060
+*B:	very scary . 836980_837940
+%mor:	adv|very adj|scare&dn-Y .
+%gra:	1|2|JCT 2|0|INCROOT 3|2|PUNCT
+*A:	0 [=! knock] . 838030_838390
+*A:	how's Elma doing ? 839100_840050
+%mor:	adv:int|how~aux|be&3S n:prop|Elma part|do-PRESP ?
+%gra:	1|4|LINK 2|4|AUX 3|4|AUX 4|0|ROOT 5|4|PUNCT
+*B:	it was horrible I threw up a thousand times a day . 839250_841670
+%mor:	pro:per|it cop|be&PAST&13S adj|horrible pro:sub|I v|throw&PAST
+	adv|up det:art|a det:num|thousand n|time-PL det:art|a n|day .
+%gra:	1|2|SUBJ 2|5|CJCT 3|2|PRED 4|5|SUBJ 5|0|ROOT 6|5|JCT 7|9|DET
+	8|9|QUANT 9|5|OBJ2 10|11|DET 11|5|JCT 12|5|PUNCT
+*A:	I remember you know when I spoke to you when &+unc right right
+	after xxx died . 842120_845710
+%mor:	pro:sub|I v|remember pro:per|you v|know conj|when pro:sub|I
+	v|speak&PAST prep|to pro:per|you adv:int|when adj|right n|right
+	prep|after part|die-PASTP .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|7|LINK 6|7|SUBJ 7|4|COMP
+	8|7|JCT 9|8|POBJ 10|12|MOD 11|12|MOD 12|9|INCROOT 13|12|NJCT
+	14|13|POBJ 15|12|PUNCT
+*B:	yeah . 845760_846200
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	and I called oma's house and you were there and I spoke to you . 846370_849420
+%mor:	coord|and pro:sub|I v|call-PAST n|oma~poss|s n|house coord|and
+	pro:per|you cop|be&PAST adv|there coord|and pro:sub|I v|speak&PAST
+	prep|to pro:per|you .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|6|MOD 5|4|POSS 6|3|OBJ 7|9|LINK
+	8|9|SUBJ 9|3|CJCT 10|9|JCT 11|13|LINK 12|13|SUBJ 13|9|CJCT 14|13|JCT
+	15|14|POBJ 16|3|PUNCT
+*B:	I . 848380_849010
+%mor:	pro:sub|I .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	I was about to throw up . 849410_850860
+%mor:	pro:sub|I cop|be&PAST&13S adv|about inf|to v|throw adv|up .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|JCT 4|5|INF 5|2|PRED 6|5|JCT 7|2|PUNCT
+*A:	and I said to you and you said to me oh you sound nauseous and I
+	said really . 850730_853850
+%mor:	coord|and pro:sub|I v|say&PAST prep|to pro:per|you coord|and
+	pro:per|you v|say&PAST prep|to pro:obj|me co|oh pro:per|you
+	adj|sound adj|nauseous coord|and pro:sub|I v|say&PAST
+	adv|real&dadj-LY .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|JCT 5|4|POBJ 6|8|LINK 7|8|SUBJ
+	8|3|CJCT 9|8|JCT 10|9|POBJ 11|13|COM 12|13|SUBJ 13|8|JCT 14|13|PRED
+	15|17|LINK 16|17|SUBJ 17|14|CMOD 18|17|JCT 19|3|PUNCT
+*B:	I had a a rubber . 854170_855530
+%mor:	pro:sub|I v|have&PAST det:art|a det:art|a n|rubber .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|DET 4|5|DET 5|2|OBJ 6|2|PUNCT
+*A:	said I said and I said why so you said I just woke up from a nap I
+	said oh no she's pregnant &=laughs . 854580_860080
+%mor:	v|say&PAST pro:sub|I v|say&PAST coord|and pro:sub|I v|say&PAST
+	adv:int|why conj|so pro:per|you v|say&PAST pro:sub|I adv|just
+	v|wake&PAST adv|up prep|from det:art|a n|nap pro:sub|I v|say&PAST
+	co|oh co|no pro:sub|she~cop|be&3S adj|pregnant .
+%gra:	1|0|ROOT 2|3|SUBJ 3|1|COMP 4|6|LINK 5|6|SUBJ 6|1|CJCT 7|19|LINK
+	8|10|LINK 9|10|SUBJ 10|19|CJCT 11|13|SUBJ 12|13|JCT 13|10|COMP
+	14|13|JCT 15|13|JCT 16|17|DET 17|15|POBJ 18|19|SUBJ 19|6|COMP
+	20|23|COM 21|23|COM 22|23|SUBJ 23|19|COMP 24|23|PRED 25|1|PUNCT
+*B:	and you should know that xxx I I was like very like I wasn't I was
+	barely talking to you I remember do you remember how I cut you off I
+	&+r . 860050_867460
+%mor:	coord|and pro:per|you mod|should v|know pro:dem|that pro:sub|I
+	pro:sub|I cop|be&PAST&13S prep|like adv|very co|like pro:sub|I
+	aux|be&PAST&13S~neg|not pro:sub|I cop|be&PAST&13S adv|bare&dadj-LY
+	part|talk-PRESP prep|to pro:per|you pro:sub|I v|remember mod|do
+	pro:per|you v|remember adv:int|how pro:sub|I v|cut&ZERO pro:per|you
+	adv|off pro:sub|I .
+%gra:	1|4|LINK 2|4|SUBJ 3|4|AUX 4|0|ROOT 5|4|OBJ 6|16|SUBJ 7|16|SUBJ
+	8|16|AUX 9|8|JCT 10|11|JCT 11|9|POBJ 12|16|SUBJ 13|16|AUX 14|13|NEG
+	15|16|SUBJ 16|4|CJCT 17|18|JCT 18|16|PRED 19|18|JCT 20|19|POBJ
+	21|22|SUBJ 22|18|CJCT 23|25|AUX 24|25|SUBJ 25|22|COMP 26|28|LINK
+	27|28|SUBJ 28|25|COMP 29|28|OBJ 30|31|JCT 31|28|JCT 32|4|PUNCT
+*A:	yeah . 864610_864920
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	no no all of sudden no I just remember you said you're nauseous and
+	you just woke up from a nap I said &=inhales . 867010_870960
+%mor:	co|no co|no qn|all prep|of n|sudden co|no pro:sub|I adv|just
+	v|remember pro:per|you v|say&PAST pro:per|you~cop|be&PRES
+	adj|nauseous coord|and pro:per|you adv|just v|wake&PAST adv|up
+	prep|from det:art|a n|nap pro:sub|I v|say&PAST .
+%gra:	1|2|COM 2|6|COM 3|6|QUANT 4|3|JCT 5|4|POBJ 6|9|COM 7|9|SUBJ 8|9|JCT
+	9|0|ROOT 10|11|SUBJ 11|9|COMP 12|13|SUBJ 13|11|COMP 14|13|PRED
+	15|18|LINK 16|18|SUBJ 17|18|JCT 18|13|CJCT 19|18|JCT 20|18|JCT
+	21|22|DET 22|20|POBJ 23|24|SUBJ 24|18|CJCT 25|9|PUNCT
+*A:	she's nauseous and she just got up from a nap in the middle of the
+	day she is pregnant . 871010_873670
+%mor:	pro:sub|she~cop|be&3S adj|nauseous coord|and pro:sub|she adv|just
+	v|get&PAST adv|up prep|from det:art|a n|nap prep|in det:art|the
+	n|middle prep|of det:art|the n|day pro:sub|she cop|be&3S
+	adj|pregnant .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|7|LINK 5|7|SUBJ 6|7|JCT 7|2|CJCT
+	8|7|JCT 9|7|JCT 10|11|DET 11|9|POBJ 12|7|JCT 13|14|DET 14|12|POBJ
+	15|14|NJCT 16|17|DET 17|15|POBJ 18|19|SUBJ 19|7|CJCT 20|19|PRED
+	21|2|PUNCT
+*B:	&=inhales and then I hung up from you I ran to the bathroom and I
+	threw up like a ton . 873740_877550
+%mor:	coord|and adv:tem|then pro:sub|I v|hang&PAST adv|up prep|from
+	pro:per|you pro:sub|I v|run&PAST prep|to det:art|the
+	n|+n|bath+n|room coord|and pro:sub|I v|throw&PAST adv|up prep|like
+	det:art|a n|ton .
+%gra:	1|4|LINK 2|4|JCT 3|4|SUBJ 4|0|ROOT 5|4|JCT 6|4|JCT 7|6|POBJ
+	8|9|SUBJ 9|4|CJCT 10|9|JCT 11|12|DET 12|10|POBJ 13|15|LINK
+	14|15|SUBJ 15|9|CJCT 16|15|JCT 17|15|JCT 18|19|DET 19|17|POBJ
+	20|4|PUNCT
+*A:	&=laughs . 874300_874840
+*A:	oh no . 876820_877360
+%mor:	co|oh co|no .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*A:	oh sorry . 877670_878670
+%mor:	co|oh co|sorry .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*B:	and I remember I just couldn't wait to get off the phone because I
+	had to throw up and I was going to throw up on the phone and I was
+	like help . 879670_883510
+%mor:	coord|and pro:sub|I v|remember pro:sub|I adv|just mod|could~neg|not
+	v|wait inf|to v|get prep|off det:art|the n|phone conj|because
+	pro:sub|I v|have&PAST inf|to v|throw adv|up coord|and pro:sub|I
+	aux|be&PAST&13S part|go-PRESP inf|to v|throw adv|up prep|on
+	det:art|the n|phone coord|and pro:sub|I cop|be&PAST&13S prep|like
+	co|help .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|8|SUBJ 5|8|JCT 6|8|AUX 7|6|NEG
+	8|3|COMP 9|10|INF 10|8|COMP 11|10|JCT 12|13|DET 13|11|POBJ
+	14|16|LINK 15|16|SUBJ 16|3|CJCT 17|18|INF 18|16|COMP 19|18|JCT
+	20|23|LINK 21|23|SUBJ 22|23|AUX 23|16|CJCT 24|25|INF 25|23|COMP
+	26|25|JCT 27|25|JCT 28|29|DET 29|27|POBJ 30|32|LINK 31|32|SUBJ
+	32|23|CJCT 33|32|JCT 34|33|POBJ 35|3|PUNCT
+*A:	&=laughs . 881750_882440
+*A:	&=inhales . 882840_883590
+*B:	and I felt so bad but like I xxx . 884100_885630
+%mor:	coord|and pro:sub|I v|feel&PAST adv|so adj|bad conj|but conj|like
+	pro:sub|I .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|5|JCT 5|3|JCT 6|5|CONJ 7|8|LINK
+	8|6|COORD 9|3|PUNCT
+*A:	how's oma doing ? 885160_886500
+%mor:	adv:int|how~cop|be&3S n|oma part|do-PRESP ?
+%gra:	1|2|LINK 2|0|ROOT 3|2|PRED 4|3|XMOD 5|2|PUNCT
+*B:	oma is &-uh baruch@s:heb shem@s:heb I think . 886610_888420
+%mor:	n|oma aux|be&3S L2|baruch L2|shem pro:sub|I v|think .
+%gra:	1|3|SUBJ 2|3|AUX 3|0|ROOT 4|3|PRED 5|6|SUBJ 6|4|CMOD 7|3|PUNCT
+*B:	I went to visit her like two days ago and she looked okay but she
+	was going to sleep so I didn't really spend a lot of time . 888720_893470
+%mor:	pro:sub|I v|go&PAST inf|to v|visit pro:obj|her co|like det:num|two
+	n|day-PL adv|ago coord|and pro:sub|she cop|look-PAST adj|okay
+	conj|but pro:sub|she aux|be&PAST&13S part|go-PRESP prep|to n|sleep
+	co|so pro:sub|I mod|do&PAST~neg|not adv|real&dadj-LY v|spend
+	det:art|a n|lot prep|of n|time .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|INF 4|2|COMP 5|4|OBJ 6|8|COM 7|8|QUANT
+	8|4|OBJ 9|8|NJCT 10|12|LINK 11|12|SUBJ 12|8|CJCT 13|12|PRED
+	14|17|LINK 15|17|SUBJ 16|17|AUX 17|12|CJCT 18|17|JCT 19|18|POBJ
+	20|25|COM 21|25|SUBJ 22|25|AUX 23|22|NEG 24|25|JCT 25|17|CJCT
+	26|27|DET 27|25|OBJ 28|27|NJCT 29|28|POBJ 30|2|PUNCT
+*A:	mhm . 891270_891630
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	mhm . 893320_893960
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	0 [=! shuffling around] . 894360_895450
+*B:	but whatever I guess as well as it could be . 895270_897640
+%mor:	conj|but pro:int|whatever pro:sub|I v|guess adv|as adv|well conj|as
+	pro:per|it mod|could cop|be .
+%gra:	1|4|LINK 2|4|LINK 3|4|SUBJ 4|0|ROOT 5|4|JCT 6|4|JCT 7|10|LINK
+	8|10|SUBJ 9|10|AUX 10|4|CJCT 11|4|PUNCT
+*B:	what . 898100_898380
+%mor:	pro:int|what .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	xxx . 899230_899740
+*B:	&-um &-um so how is life going ? 902080_904480
+%mor:	adv|so adv:int|how cop|be&3S n|life part|go-PRESP ?
+%gra:	1|5|JCT 2|5|LINK 3|5|AUX 4|3|PRED 5|0|ROOT 6|5|PUNCT
+*A:	xxx same xxx same xxx . 904560_906920
+%mor:	adj|same adj|same .
+%gra:	1|2|MOD 2|0|INCROOT 3|2|PUNCT
+*B:	I want to go to America . 906830_908040
+%mor:	pro:sub|I v|want inf|to v|go prep|to n:prop|America .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|INF 4|2|COMP 5|4|JCT 6|5|POBJ 7|2|PUNCT
+*A:	we have beautiful weather here . 908240_909640
+%mor:	pro:sub|we v|have adj|beautiful n|weather adv|here .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|MOD 4|2|OBJ 5|2|JCT 6|2|PUNCT
+*B:	really today was . 909850_910850
+%mor:	adv|real&dadj-LY adv:tem|today cop|be&PAST&13S .
+%gra:	1|3|JCT 2|3|SUBJ 3|0|ROOT 4|3|PUNCT
+*A:	you should come back and visit us some time when I told the kids
+	that you know that &-um . 910180_914420
+%mor:	pro:per|you mod|should v|come n|back coord|and v|visit pro:obj|us
+	qn|some n|time conj|when pro:sub|I v|tell&PAST det:art|the n|kid-PL
+	pro:rel|that pro:per|you v|know pro:dem|that .
+%gra:	1|3|SUBJ 2|3|AUX 3|0|ROOT 4|3|OBJ 5|3|CONJ 6|5|COORD 7|6|OBJ2
+	8|9|QUANT 9|6|OBJ 10|12|LINK 11|12|SUBJ 12|3|CJCT 13|14|DET
+	14|12|OBJ 15|17|LINK 16|17|SUBJ 17|14|CMOD 18|17|OBJ 19|3|PUNCT
+*B:	today was very beautiful weather . 911310_912680
+%mor:	adv:tem|today cop|be&PAST&13S adv|very adj|beautiful n|weather .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|JCT 4|5|MOD 5|2|PRED 6|2|PUNCT
+*A:	xxx and Divora are moving to LA . 914910_916160
+%mor:	coord|and n:prop|Divora aux|be&PRES part|move-PRESP prep|to
+	n:prop|LA .
+%gra:	1|4|LINK 2|4|SUBJ 3|4|AUX 4|0|ROOT 5|4|JCT 6|5|POBJ 7|4|PUNCT
+*A:	so I told them you know Schleimy xxx xxx
+	[=! some Hebrew mixed in with English] so Schleimy goes I'm so sad
+	xxx go visit them . 917060_922110
+%mor:	adv|so pro:sub|I v|tell&PAST pro:obj|them pro:per|you v|know
+	n:prop|Schleimy adv|so n:prop|Schleimy v|go-3S pro:sub|I~aux|be&1S
+	adv|so adj|sad v|go v|visit pro:obj|them .
+%gra:	1|3|JCT 2|3|SUBJ 3|0|ROOT 4|3|OBJ 5|6|SUBJ 6|3|COMP 7|6|OBJ
+	8|10|JCT 9|10|SUBJ 10|3|COMP 11|16|SUBJ 12|16|AUX 13|16|JCT
+	14|16|JCT 15|16|SRL 16|10|COMP 17|16|OBJ 18|3|PUNCT
+*A:	so &-um . 922950_923860
+%mor:	co|so .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	Leah said yeah like we visited Schleimy and Dodi &=laughs . 924180_927690
+%mor:	n:prop|Leah v|say&PAST co|yeah conj|like pro:sub|we v|visit-PAST
+	n:prop|Schleimy coord|and n:prop|Dodi .
+%gra:	1|2|SUBJ 2|0|ROOT 3|6|COM 4|6|LINK 5|6|SUBJ 6|2|COMP 7|6|OBJ
+	8|7|CONJ 9|8|COORD 10|2|PUNCT
+*B:	&=laughs so you can still come . 927050_930220
+%mor:	co|so pro:per|you mod|can adv|still v|come .
+%gra:	1|5|COM 2|5|SUBJ 3|5|AUX 4|5|JCT 5|0|ROOT 6|5|PUNCT
+*A:	&=inhales . 928480_928840
+*B:	there's still time . 930290_930960
+%mor:	pro:exist|there~cop|be&3S adv|still v|time .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|JCT 4|2|PRED 5|2|PUNCT
+*A:	no so we told them Schleimy and Dodi are going to come back
+	Schleimy and Divora are staying . 930450_933960
+%mor:	co|no conj|so pro:sub|we v|tell&PAST pro:obj|them n:prop|Schleimy
+	coord|and n:prop|Dodi aux|be&PRES part|go-PRESP inf|to v|come n|back
+	n:prop|Schleimy coord|and n:prop|Divora aux|be&PRES part|stay-PRESP
+	.
+%gra:	1|4|COM 2|4|LINK 3|4|SUBJ 4|0|ROOT 5|4|OBJ 6|10|SUBJ 7|6|CONJ
+	8|7|COORD 9|10|AUX 10|4|COMP 11|12|INF 12|10|COMP 13|14|MOD
+	14|18|SUBJ 15|14|CONJ 16|15|COORD 17|18|AUX 18|12|COMP 19|4|PUNCT
+*B:	come for come for sukkoth@s:heb . 932900_934410
+%mor:	v|come prep|for v|come prep|for L2|sukkoth .
+%gra:	1|0|ROOT 2|1|JCT 3|2|POBJ 4|3|JCT 5|4|POBJ 6|1|PUNCT
+*A:	yeah right &-um . 934680_936770
+%mor:	co|yeah co|right .
+%gra:	1|2|COM 2|0|INCROOT 3|2|PUNCT
+*B:	we want you to come for sukkoth@s:heb . 937310_938650
+%mor:	pro:sub|we v|want pro:per|you inf|to v|come prep|for L2|sukkoth .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|SUBJ 4|5|INF 5|2|COMP 6|5|JCT 7|6|POBJ
+	8|2|PUNCT
+*A:	&=laughs . 937320_937620
+*A:	yeah you just need more people in your in your little &-uh &+apar
+	apartment . 938500_941570
+%mor:	co|yeah pro:per|you adv|just v|need adv|more n|person&PL prep|in
+	det:poss|your prep|in det:poss|your adj|little n|apartment .
+%gra:	1|4|COM 2|4|SUBJ 3|4|JCT 4|0|ROOT 5|4|JCT 6|5|POBJ 7|6|NJCT
+	8|7|POBJ 9|8|JCT 10|12|MOD 11|12|MOD 12|9|POBJ 13|4|PUNCT
+*B:	it's not so little we need someone to cook for us . 941590_943540
+%mor:	pro:per|it~cop|be&3S neg|not adv|so adj|little pro:sub|we v|need
+	pro:indef|someone inf|to v|cook prep|for pro:obj|us .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|NEG 4|5|JCT 5|2|PRED 6|7|SUBJ 7|2|PRED
+	8|10|SUBJ 9|10|INF 10|7|COMP 11|10|JCT 12|11|POBJ 13|2|PUNCT
+*A:	how did it go with Tobin in her letter . 943010_944460
+%mor:	adv:int|how mod|do&PAST pro:per|it v|go prep|with n:prop|Tobin
+	prep|in det:poss|her n|letter .
+%gra:	1|4|LINK 2|4|AUX 3|4|SUBJ 4|0|ROOT 5|4|JCT 6|5|POBJ 7|6|NJCT
+	8|9|MOD 9|7|POBJ 10|4|PUNCT
+*B:	&=inhales Tobin was very fun what's . 944710_946580
+%mor:	n:prop|Tobin cop|be&PAST&13S adv|very adj|fun
+	pro:int|what~aux|be&3S .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|JCT 4|2|PRED 5|6|MOD 6|2|PRED 7|2|PUNCT
+*A:	Tobin is making a birthday party today for kuche@s:heb Leah
+	rifke@s:heb and Shana . 946140_949000
+%mor:	n:prop|Tobin aux|be&3S part|make-PRESP det:art|a n|+n|birth+n|day
+	n|party adv:tem|today conj|for L2|kuche n:prop|Leah L2|rifke
+	coord|and n:prop|Shana .
+%gra:	1|3|SUBJ 2|3|AUX 3|0|ROOT 4|6|DET 5|6|MOD 6|3|OBJ 7|6|XMOD 8|7|CONJ
+	9|11|LINK 10|11|SUBJ 11|8|COORD 12|11|CONJ 13|12|COORD 14|3|PUNCT
+*A:	when with &+to last night after the party like about eleven thirty
+	at night . 949710_953360
+%mor:	conj|when prep|with adj|last n|night prep|after det:art|the n|party
+	co|like prep|about det:num|eleven det:num|thirty prep|at n|night .
+%gra:	1|0|INCROOT 2|1|JCT 3|4|MOD 4|2|POBJ 5|4|NJCT 6|7|DET 7|5|POBJ
+	8|1|COM 9|1|JCT 10|11|QUANT 11|9|POBJ 12|11|JCT 13|12|POBJ
+	14|1|PUNCT
+*B:	yeah . 953470_953830
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	I had to wake up Leah . 953740_954720
+%mor:	pro:sub|I v|have&PAST inf|to v|wake adv|up n:prop|Leah .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|INF 4|2|COMP 5|4|JCT 6|5|POBJ 7|2|PUNCT
+*A:	and send her . 955100_955840
+%mor:	coord|and v|send pro:obj|her .
+%gra:	1|2|LINK 2|0|ROOT 3|2|OBJ 4|2|PUNCT
+*A:	to to what do you call it to Philly with xxx and they xxx camp out
+	in xxx . 956740_960340
+%mor:	inf|to prep|to pro:int|what mod|do pro:per|you v|call pro:per|it
+	prep|to n:prop|Philly prep|with coord|and pro:sub|they v|camp
+	adv|out adv|in .
+%gra:	1|2|INF 2|6|LINK 3|6|SUBJ 4|6|AUX 5|6|SUBJ 6|0|ROOT 7|6|OBJ 8|6|JCT
+	9|8|POBJ 10|6|JCT 11|13|LINK 12|13|SUBJ 13|10|CPOBJ 14|13|JCT
+	15|14|JCT 16|6|PUNCT
+*B:	aren't they having a a hair a hair . 959940_962350
+%mor:	aux|be&PRES~neg|not pro:sub|they part|have-PRESP det:art|a
+	det:art|a n|hair det:art|a n|hair .
+%gra:	1|4|AUX 2|1|NEG 3|4|SUBJ 4|0|ROOT 5|7|DET 6|7|DET 7|4|OBJ 8|9|DET
+	9|7|OBJ 10|4|PUNCT
+*A:	yes they went to the beauty parlor and &-eh to get their nails . 961750_965220
+%mor:	co|yes pro:sub|they v|go&PAST prep|to det:art|the n|beauty n|parlor
+	coord|and prep|to v|get det:poss|their n|nail-PL .
+%gra:	1|3|COM 2|3|SUBJ 3|0|ROOT 4|3|JCT 5|7|DET 6|7|MOD 7|4|POBJ 8|3|CONJ
+	9|8|COORD 10|9|POBJ 11|12|MOD 12|10|OBJ 13|3|PUNCT
+*B:	so there was room for Leah_Rifke and Shana you said like it &+c
+	like it can only be like a very small party . 963990_969000
+%mor:	co|so pro:exist|there cop|be&PAST&13S n|room prep|for
+	n:prop|Leah_Rifke coord|and n:prop|Shana pro:per|you v|say&PAST
+	prep|like pro:per|it v|like pro:per|it mod|can adv|only cop|be
+	prep|like det:art|a adv|very adj|small n|party .
+%gra:	1|3|COM 2|3|SUBJ 3|10|JCT 4|3|PRED 5|4|NJCT 6|5|POBJ 7|6|CONJ
+	8|7|COORD 9|10|SUBJ 10|0|ROOT 11|10|JCT 12|11|POBJ 13|17|SUBJ
+	14|13|OBJ 15|17|AUX 16|17|JCT 17|10|CJCT 18|17|JCT 19|22|DET
+	20|21|JCT 21|22|MOD 22|18|POBJ 23|10|PUNCT
+*A:	with . 966170_966640
+%mor:	prep|with .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	I know but Tova originally she didn't invite them but then she
+	&+invi after a few people said they weren't coming . 968620_973410
+%mor:	pro:sub|I v|know conj|but n:prop|Tova adv|original&dadj-LY
+	pro:sub|she mod|do&PAST~neg|not v|invite pro:obj|them conj|but
+	adv:tem|then pro:sub|she prep|after det:art|a qn|few n|person&PL
+	v|say&PAST pro:sub|they aux|be&PAST~neg|not part|come-PRESP .
+%gra:	1|2|SUBJ 2|0|ROOT 3|9|LINK 4|9|SUBJ 5|9|JCT 6|9|SUBJ 7|9|AUX
+	8|7|NEG 9|2|COMP 10|9|OBJ 11|18|LINK 12|18|JCT 13|18|SUBJ 14|18|JCT
+	15|17|DET 16|17|QUANT 17|18|SUBJ 18|9|CJCT 19|22|SUBJ 20|22|AUX
+	21|20|NEG 22|18|COMP 23|2|PUNCT
+*B:	oh . 973270_973820
+%mor:	co|oh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	she invited them &=exhales . 973540_974780
+%mor:	pro:sub|she v|invite-PAST pro:obj|them .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|OBJ 4|2|PUNCT
+*B:	&-ah because she was telling me that she's not going to be able to
+	invite everyone xxx . 974460_976770
+%mor:	conj|because pro:sub|she aux|be&PAST&13S part|tell-PRESP pro:obj|me
+	pro:rel|that pro:sub|she~aux|be&3S neg|not part|go-PRESP inf|to
+	cop|be adj|able inf|to v|invite pro:indef|everyone .
+%gra:	1|4|LINK 2|4|SUBJ 3|4|AUX 4|0|ROOT 5|4|OBJ 6|10|LINK 7|10|SUBJ
+	8|10|AUX 9|8|NEG 10|4|COMP 11|12|INF 12|10|COMP 13|12|PRED 14|15|INF
+	15|13|XMOD 16|15|OBJ 17|4|PUNCT
+*A:	yeah no then she called the the she xxx . 975980_978480
+%mor:	co|yeah co|no adv:tem|then pro:sub|she v|call-PAST det:art|the
+	det:art|the pro:sub|she .
+%gra:	1|5|COM 2|5|COM 3|5|JCT 4|5|SUBJ 5|0|ROOT 6|8|DET 7|8|DET 8|5|OBJ
+	9|5|PUNCT
+*B:	&=smacks:lips that's so fun . 977940_979200
+%mor:	pro:dem|that~cop|be&3S adv|so adj|fun .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|JCT 4|2|PRED 5|2|PUNCT
+*A:	yeah . 979390_979800
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	&=breathes &=smacks:lips &=breathes . 979950_981510
+*B:	so were they all excited . 981360_982460
+%mor:	adv|so cop|be&PAST pro:sub|they post|all v|excite-PAST .
+%gra:	1|2|JCT 2|0|ROOT 3|5|SUBJ 4|3|PQ 5|2|PRED 6|2|PUNCT
+*A:	yeah but I I just spoke to Tova before and she said that Leah got
+	her nails done but she didn't want to get she didn't want them to
+	touch her hair . 983790_988910
+%mor:	co|yeah conj|but pro:sub|I pro:sub|I adv|just v|speak&PAST prep|to
+	n:prop|Tova conj|before coord|and pro:sub|she v|say&PAST
+	pro:rel|that n:prop|Leah v|get&PAST det:poss|her n|nail-PL
+	part|do&PASTP conj|but pro:sub|she mod|do&PAST~neg|not v|want inf|to
+	v|get pro:sub|she mod|do&PAST~neg|not v|want pro:obj|them inf|to
+	v|touch det:poss|her n|hair .
+%gra:	1|6|COM 2|6|LINK 3|6|SUBJ 4|6|SUBJ 5|6|JCT 6|0|ROOT 7|6|JCT
+	8|7|POBJ 9|6|JCT 10|12|LINK 11|12|SUBJ 12|9|CPOBJ 13|15|LINK
+	14|15|SUBJ 15|12|COMP 16|17|MOD 17|15|OBJ 18|15|XJCT 19|23|LINK
+	20|23|SUBJ 21|23|AUX 22|21|NEG 23|29|CJCT 24|25|INF 25|23|COMP
+	26|29|SUBJ 27|29|AUX 28|27|NEG 29|18|COMP 30|29|OBJ 31|32|INF
+	32|29|COMP 33|34|MOD 34|32|OBJ 35|6|PUNCT
+@End

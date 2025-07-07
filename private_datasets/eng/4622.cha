@@ -1,0 +1,472 @@
+@UTF8
+@PID:	11312/a-00077151-1
+@Begin
+@Languages:	eng
+@Participants:	PAR0 Participant, PAR1 Participant, PAR2 Participant
+@ID:	eng|eng|PAR0|||||Participant|||
+@ID:	eng|eng|PAR1|||||Participant|||
+@ID:	eng|eng|PAR2|||||Participant|||
+@Media:	4622, audio
+@Comment:	ASR from Rev-AI
+*PAR0:	hmm . 965_1045
+*PAR0:	publicly distributed . 1725_2445
+*PAR0:	that sounds interesting . 2515_3525
+*PAR1:	yes . 4025_4245
+*PAR0:	well I think I'll go for it . 6795_8125
+*PAR1:	all right . 9305_9645
+*PAR1:	no . 10945_11165
+*PAR1:	no exciting conversation . 11225_12565
+*PAR0:	well I was wondering how much &-uh we'd be able to talk about if your family's around anyway . 14795_19845
+*PAR1:	oh well they'll just have to live with it . 21665_23165
+*PAR0:	yeah . 25035_25325
+*PAR0:	so . 27145_27365
+*PAR0:	well let's see . 29275_30005
+*PAR0:	now where did we leave off . 30025_31725
+*PAR1:	oh geez . 33025_33525
+*PAR0:	I guess I could start with your &-uh email address . 35525_38085
+*PAR1:	oh my email address . 39065_40125
+*PAR0:	yeah . 40395_40685
+*PAR1:	well you can reach me at &-uh Duo Dot AOL Dot Com . 41715_46365
+*PAR0:	&-um yeah . 47905_49365
+*PAR0:	I tried sending something to you on that . 49405_51605
+*PAR0:	Duo at AOL . 53165_55965
+*PAR1:	Duo, yeah . 57005_58525
+*PAR1:	at AOL Dot Com . 58785_60165
+*PAR0:	dot com . 60465_60805
+*PAR0:	yeah . 60805_61045
+*PAR0:	okay . 61045_61285
+*PAR0:	does that work . 61285_61885
+*PAR0:	well I sent it . 62435_63445
+*PAR0:	so let me know if you receive it all right . 63825_66325
+*PAR0:	I didn't get any message back saying &-uh user unknown or whatever it is . 66725_72655
+*PAR0:	unknown address . 74085_75135
+*PAR1:	okay . 75845_76135
+*PAR0:	so I presume that it went through . 77035_78815
+*PAR0:	and &-uh you were saying that &-uh that's &-uh one of Gus's addresses . 81635_86415
+*PAR1:	yeah . 86885_87175
+*PAR1:	it's like an id off of his a o L account . 87175_90535
+*PAR1:	mhm . 90635_91055
+*PAR1:	so &-um my friend Rich Reta sent me . 91715_97415
+*PAR1:	he's writing some software for this guy who's part of the &-uh global . 97525_102055
+*PAR1:	he's got this thing called the Global something or other network . 104525_109175
+*PAR1:	and it's a multi-level marketing &-um internet service provider kind of thing . 110475_119655
+*PAR1:	mhm . 120155_120575
+*PAR1:	kind of weird . 120725_121375
+*PAR1:	but so I might get onto the net that way . 121635_124535
+*PAR1:	and &-um you know I'll let you know if soon that address becomes available . 127475_131735
+*PAR0:	okay . 132365_132655
+*PAR1:	there's also supposedly you know a magazine listing all of the internet service providers here in Denver which I need to still look over . 133165_144375
+*PAR0:	hmm . 145695_145815
+*PAR0:	&-um what do those . 148115_149095
+*PAR0:	&-um cost . 149115_150215
+*PAR1:	&-uh generally it runs about you know I've heard of things as low as twenty dollars a month . 152355_160535
+*PAR1:	actually there's this one place &-uh that's bulletin board which allows &-uh there they're I guess trying to attract new people . 162055_170455
+*PAR1:	so it's like twenty five dollars for the first year . 170475_172495
+*PAR1:	but in general I think serious &-um access providers generally charge about twenty dollars a month I see . 173635_180845
+*PAR1:	and the price can go up from there depending on how much volume you expect to be using . 180905_187805
+*PAR1:	&-uh last year it was like seventy five dollars for a slip account which is like this like you know dedicated &-uh line between your computer and there is &-um now there's I think the price has gone down to about forty dollars a month . 190025_208605
+*PAR1:	so and I still need to do some more looking . 209785_212045
+*PAR1:	these are all just kind of you know &-uh hearsay . 212045_216285
+*PAR2:	mhm . 216945_217365
+*PAR2:	yeah . 221035_221325
+*PAR1:	hmm . 221925_222005
+*PAR1:	and were you telling me once that you had an electronic news service through your computer . 222705_227965
+*PAR1:	yeah . 228675_228965
+*PAR1:	I used to have &-um Xenex which is &-um Santa Cruz operations version of Unix installed on my two eighty six . 229045_239005
+*PAR1:	and &-um it has you know I've since &-uh reconfigured it back to a dos machine . 240225_247965
+*PAR1:	we use it for &-um you know burning Eproms and you know doing kind of low level &-uh development kind of things on it . 247965_259805
+*PAR1:	what was the other thing . 261915_262805
+*PAR1:	you said . 262805_263165
+*PAR1:	Eprom programming Eprom yeah . 264255_267485
+*PAR1:	what [/] what is that . 268755_269605
+*PAR1:	erasable programmable read only memory . 270005_272565
+*PAR1:	so it's not modifiable unless you use a higher voltage hence the term to burn a chip . 273985_281285
+*PAR1:	you [/] you have the you have a programmer which has a special socket that you drop the chip into . 281465_288045
+*PAR1:	and you then it then raises the voltage up to about well depending on the chip anywhere from twelve to twenty five volts normal operating voltage is at five volts . 288585_301965
+*PAR1:	so at the higher voltage it &-uh I forget the exact physics of it . 302505_311165
+*PAR1:	but you end up &-um kind of like an etch of sketch . 311185_315045
+*PAR1:	you know you [/] you put some you [/] you burn zeroes into it . 315065_320285
+*PAR1:	it starts out being all one . 321225_322485
+*PAR1:	and then you burn the zeroes in . 323465_325005
+*PAR1:	and then you with the Eprom you use ultraviolet light to &-um dislodge the electrons . 325425_334725
+*PAR1:	and then you know it [/] it erases it back to one . 334945_338085
+*PAR1:	oh . 338705_338925
+*PAR1:	and then there's also electrically erasable which uses another voltage to discharge the [/] the memory locations . 339185_349425
+*PAR1:	hmm . 349865_349985
+*PAR1:	so it's kind of &-uh . 350645_351585
+*PAR1:	you know it takes about depending on the chip you know and the strength of the eraser anywhere from five to twenty minutes to erase it . 353125_360965
+*PAR1:	you know . 361585_361845
+*PAR1:	and then you've gotta you know download the program to the programmer . 361845_365565
+*PAR1:	and then it burns it in . 365945_367565
+*PAR1:	so you know the whole thing can take you know a bit of time . 367665_372205
+*PAR1:	mhm . 372985_373405
+*PAR1:	but it's &-uh you know it's a good way to you know make changes to systems just by swapping out a chip . 373665_380725
+*PAR0:	mhm . 381345_381765
+*PAR1:	and &-um you know so we've got an E problem programmer . 386025_391125
+*PAR1:	we've got a programmer for microcontrollers which also have Eprom in them . 391125_396525
+*PAR0:	mhm . 397425_397845
+*PAR0:	&-um . 398265_398485
+*PAR1:	that kind of thing . 400795_401565
+*PAR0:	mhm . 403745_404165
+*PAR1:	oh another thing we use it for is the like uploading and downloading programs from the Hp_Forty_eight_g , the graphics calculator . 406345_414125
+*PAR1:	chemical . 415285_415525
+*PAR0:	mhm . 416745_417165
+*PAR1:	it's good . 417915_418365
+*PAR1:	we &-uh you know it's [/] it's cheaper to buy a an Hp and to program it than it is to buy &-uh L C D screen . 418365_429645
+*PAR1:	and [/] and then &-uh assemble all of the circuitry required to drive that . 429745_436485
+*PAR1:	hmm . 437245_437325
+*PAR1:	so for any kind of a system where you needed just like a little user interface you know like a keypad and a screen with a few lines of text on it . 437625_445805
+*PAR1:	&-um it's just more economical . 446625_448885
+*PAR0:	mhm . 449425_449845
+*PAR1:	and &-uh so that's another thing we use it for is you know like uploading downloading programs from [/] from the calculator . 451185_460645
+*PAR0:	hmm . 461325_461445
+*PAR0:	that reminds me . 464315_465085
+*PAR0:	one thing that I'm looking for now is &-um some kind of a typewriter that's maybe real light and portable where I could type a document . 465185_474485
+*PAR0:	and then &-um &-uh upload it to a computer or [/] or even just save it to a disc . 474705_482365
+*PAR0:	if I don't know if there's typewriters that do that . 482505_484445
+*PAR1:	&-um yeah . 485265_487445
+*PAR1:	they tend . 488315_489005
+*PAR1:	my experience with them is that they're awfully non-standard mm . 490505_494165
+*PAR1:	&-um you may be better off finding a cheap laptop . 494425_498725
+*PAR1:	you know a used you might find a used two eighty six or used three eighty six laptop . 498905_506045
+*PAR0:	mm . 507185_507405
+*PAR0:	that'd probably be good . 507425_508405
+*PAR0:	yeah . 508635_508925
+*PAR0:	how much do those go for . 509345_510405
+*PAR0:	do you know . 510425_510845
+*PAR1:	&-uh you should be able to get it . 511745_516325
+*PAR1:	I would guess you could probably get one for like five hundred . 516925_520125
+*PAR0:	hmm . 521085_521165
+*PAR1:	and [/] and some of these portable typewriters are gonna cost as much you know . 522385_526725
+*PAR1:	mhm . 526865_527285
+*PAR1:	and then not be standard . 528105_530325
+*PAR0:	right . 530855_531205
+*PAR0:	yeah . 533315_533605
+*PAR0:	I was hoping I could get something for two hundred . 533645_535685
+*PAR0:	but . 535945_536165
+*PAR1:	hmm . 536685_536805
+*PAR0:	sounds like there might not be anything . 538185_539885
+*PAR1:	there are things . 540775_541685
+*PAR1:	and you just you really have to like keep your eye open like you maybe go and buy a copy of computer shopper you know . 542105_548565
+*PAR1:	and then you it's like you're gonna spend all day like you know Saturday morning . 548565_552285
+*PAR1:	you buy computer shopper . 552285_553485
+*PAR1:	and then you spend the rest of the day flipping through <you know> [/] you know it's like an inch and a half thick . 553485_559005
+*PAR1:	you know it's this oversized . 559025_560205
+*PAR1:	it's this gargantuan you know thing . 561915_564285
+*PAR1:	it's full of nothing but ads you know . 564475_566325
+*PAR1:	and they [/] they still use equipment . 566325_567725
+*PAR1:	they've got a fairly comprehensive set of indexes nowadays . 567725_570645
+*PAR1:	mhm . 570985_571405
+*PAR1:	so it's pretty easy to track down . 571845_573325
+*PAR1:	like it will give you a list of all the used hardware vendors . 573675_576845
+*PAR1:	and then you just kinda look at each one of them and you know have a pad of paper ready so you can take notes . 576945_582965
+*PAR1:	and you probably want a little you know pad of post-it so you can tear off and make little bookmarks . 583065_587525
+*PAR1:	and . 587585_587805
+*PAR1:	mhm . 588305_588725
+*PAR1:	you know then you've gotta go and column them all . 588825_590845
+*PAR1:	so I mean you're gonna take a while . 590865_592285
+*PAR1:	mhm . 592345_592765
+*PAR1:	and if you really want you know you're gonna spend in time what you don't spend in money . 592765_598405
+*PAR1:	mhm . 598665_599085
+*PAR1:	but you know it is possible to find some good deals . 600145_602325
+*PAR1:	hmm . 603325_603405
+*PAR1:	another choice is like &-um Miss Dot for sale on the usenet . 606155_613725
+*PAR0:	hmm . 616045_616165
+*PAR1:	Usenet news . 617905_618645
+*PAR1:	that's you know that's another option . 619305_620885
+*PAR1:	and then of course every so often you know someone wants to download a computer through the Sunday ads . 621025_627485
+*PAR1:	I mean &-um this girl I was seeing for very briefly . 628045_633405
+*PAR1:	Carmen ended up buying a [/] a Mac Performa for like five hundred fifty bucks . 634665_639485
+*PAR1:	hmm . 640525_640645
+*PAR1:	which was a good deal . 640645_641525
+*PAR1:	you know she got &-um you know a sixty eight oh thirty processor and a eighty Meg you know it's like . 641545_650765
+*PAR1:	no . 651585_651805
+*PAR1:	actually it was like a hundred twenty meg hard drive . 652005_653885
+*PAR1:	and . 654025_654245
+*PAR1:	wow . 654865_655085
+*PAR1:	software you know all you know in a Mac so . 655765_657845
+*PAR0:	that sounds pretty good . 659875_660765
+*PAR0:	yeah I . 660795_661165
+*PAR1:	thought that was a good deal for her . 661165_662085
+*PAR0:	yeah . 662395_662685
+*PAR0:	for five fifty . 662745_663525
+*PAR0:	hmm . 666165_666245
+*PAR1:	and it had all the software she wanted . 666985_668445
+*PAR1:	you know it had a little bit of a spreadsheet . 668445_669965
+*PAR1:	and it had a you know simple database and a word . 670065_673405
+*PAR1:	processor . 673405_674005
+*PAR1:	and so she was all set you know she was able to do . 674065_677725
+*PAR1:	she was very [/] very well set up . 677905_681125
+*PAR1:	mhm . 681345_681765
+*PAR1:	with the kinds of things she needed to do . 681875_683405
+*PAR0:	yeah . 683955_684245
+*PAR0:	so well maybe I'll have to look for something like that . 684945_687845
+*PAR0:	there's a monthly Computer fair . 688595_690965
+*PAR1:	oh no . 692105_692525
+*PAR1:	there's yeah . 692525_693005
+*PAR1:	that's they usually have some good bargains . 693025_695525
+*PAR0:	yeah . 695715_696005
+*PAR0:	I should probably just go to that . 696205_697165
+*PAR0:	and eventually it'll probably be a laptop . 697265_699525
+*PAR0:	it'll turn up . 699535_700245
+*PAR1:	hmm . 701085_701165
+*PAR0:	actually I think there were some laptops out . 703485_705965
+*PAR0:	&-uh sure . 705965_706565
+*PAR1:	you just have one of your friends you know knock himself off . 706625_709485
+*PAR1:	and you'll get all this stuff . 709625_710965
+*PAR0:	oh no . 713785_714485
+*PAR0:	oh yeah . 717265_717725
+*PAR0:	I . 717805_717925
+*PAR1:	figure now that the suitable period for grieving has passed . 717925_720765
+*PAR1:	now I'm allowed to tell Joe . 720865_722085
+*PAR0:	yeah . 722755_723045
+*PAR0:	so . 723625_723845
+*PAR0:	yeah [/] yeah well . 724755_728725
+*PAR1:	in fact Gus [/] Gus is putting out a webpage for his company W F T and he's you know he it's very &-um he's very whimsical about it . 729825_742565
+*PAR1:	I I'm not sure if you expect to really get any business doing it or not . 742765_745885
+*PAR1:	but it's <you know> [/] you know there's like pictures of everyone . 746065_749445
+*PAR1:	there's a picture of me . 750075_751285
+*PAR1:	and I've got this you know expression on my like my teeth clenched . 751305_755445
+*PAR1:	and you know my eyes open really wide . 755505_757925
+*PAR1:	and . 758105_758325
+*PAR0:	uhhuh . 759935_760285
+*PAR1:	picture of another guy with his you know like face almost up into the camera . 760285_764245
+*PAR1:	and was just hung out and you know different people in different poses . 764385_768085
+*PAR1:	and Gus did Gus like took his picture into the into &-uh the like this video paint &-um application . 768105_780485
+*PAR1:	mhm . 780665_781085
+*PAR0:	and adds this wizard . 781165_781965
+*PAR1:	cap to him to his head and then underneath each one it's like . 782185_786765
+*PAR1:	you know it's like . 786945_787605
+*PAR1:	Gus Calabrese you know and it you know then it says . 787705_791605
+*PAR1:	you know mood swings . 791785_792925
+*PAR1:	and it says . 792925_793365
+*PAR1:	Jeff or rock shoots fire . 793365_795285
+*PAR1:	Dave E Inc walks through walls . 796275_798005
+*PAR1:	Jim Black attends Rocky Games Joanne Yama Gucci high iq omniscient . 798905_805285
+*PAR1:	then he is got this little drawing of a bunch of dots in a shape of a you know it looks like a pile of something . 806035_814365
+*PAR1:	and it says Rob Mccall and underneath it says . 815105_817285
+*PAR1:	a ten seances . 817365_818325
+*PAR0:	what does it say . 819115_819725
+*PAR0:	underneath that . 819725_820125
+*PAR0:	a ten . 820405_820725
+*PAR1:	seances . 821155_821645
+*PAR0:	oh boy . 822105_822685
+*PAR1:	so . 824705_824925
+*PAR0:	what now what business is that . 825675_827165
+*PAR1:	&-um well he is got a freelance &-um engineering company . 828705_834125
+*PAR1:	he calls it WFT Electronic Systems . 834185_836125
+*PAR0:	WFT . 837085_837565
+*PAR1:	yeah . 837685_838165
+*PAR1:	it stands for . 838165_838605
+*PAR1:	we fix things . 838625_839325
+*PAR0:	uhhuh . 839895_840245
+*PAR0:	it's a good name . 841795_842605
+*PAR1:	and so you know he's basically a contractor . 843985_847725
+*PAR1:	and everyone who works with him is a contractor . 847905_851605
+*PAR1:	and . 851865_852085
+*PAR0:	right . 852455_852805
+*PAR0:	so huh . 854025_855245
+*PAR0:	well interesting . 855755_856565
+*PAR0:	so are you &-uh making ends meet . 859305_861125
+*PAR1:	well &-um yeah I'm kind of hanging in there . 862955_865285
+*PAR1:	&-um I have a couple of &-uh delays in my latest project which are making me wonder how I'm going to &-uh pull the money together . 865665_877085
+*PAR0:	pay rent and that kind of thing . 879505_880845
+*PAR0:	huh . 881185_881405
+*PAR0:	pay rent and [/] and . 881705_882925
+*PAR1:	that . 882925_883085
+*PAR1:	oh no . 883225_883685
+*PAR1:	well <I'm sure> [/] I'm sure I'll have it . 883685_886165
+*PAR1:	well I'm intending to have it done before the end of the month . 886755_892245
+*PAR1:	so that they pay me they paid me half front and half on delivery . 892345_896325
+*PAR1:	so &-um &-um yeah we'll see . 896625_905645
+*PAR1:	I mean it's one of the parts that got sent to me . 905805_908805
+*PAR1:	doesn't do what the they said . 909075_911205
+*PAR1:	it would you know . 911205_912085
+*PAR1:	so I have to they're saying I have to wait two weeks to get &-uh you know a different part that will work . 912145_920045
+*PAR1:	mhm . 920265_920685
+*PAR1:	at this point I'm inclined to start looking around for another supplier . 921945_925205
+*PAR1:	hmm . 925805_925925
+*PAR1:	and &-um you know it [/] it it's gonna be kind of a close call because you know living expenses don't stop . 926625_935525
+*PAR1:	and so if the project gets delayed you know I have to start you know spending some of the money just you know keeping alive . 935665_944815
+*PAR1:	and &-uh so it's gonna be a close shave . 945235_949775
+*PAR1:	but I think I'll be able to get through by virtue of I've got one of Rob's clients is now &-uh going to me for business . 949915_958935
+*PAR1:	mhm &-um so you're doing consulting on your own and with Gus yeah right now Gus doesn't have any projects . 959195_970135
+*PAR1:	he's trying to put together a product that's basically &-uh multiple &-uh addresses on a single r S Two thirty two line which &-uh you know if you're familiar with the comport of an I B m &-um ordinarily you can plug one thing into a comport . 970135_991495
+*PAR1:	and using this device that we're coming up with it'll be possible to have multiple devices on a single comport . 991995_1001095
+*PAR1:	hmm and &-uh . 1002255_1004255
+*PAR1:	so you know we're in the process of verifying the schematic and producing these boards . 1007155_1012215
+*PAR1:	and then &-uh you know I've requested that we review the protocol . 1012235_1016055
+*PAR1:	I wanna make sure that there's a couple of different methods for sending data to make it you know fairly versatile . 1016135_1023135
+*PAR1:	and &-uh you know it should come in . 1024515_1027775
+*PAR1:	it's [/] it's kind of like you know on the [/] the Apple Macintosh the desktop bus has &-uh the desktop what bus [/] bus . 1028165_1036935
+*PAR1:	oh okay . 1036995_1037455
+*PAR1:	you have &-uh things like you know the mouse the track ball the keyboard . 1038395_1043815
+*PAR1:	extra keypad . 1045025_1045935
+*PAR1:	you know you can plug all kinds of little things into that into the you know they have these special plug shaped . 1045935_1053015
+*PAR1:	you've worked with the max you know . 1054235_1055815
+*PAR1:	mhm . 1055815_1055975
+*PAR1:	if you know how the keyboards plug in . 1056055_1057415
+*PAR1:	okay . 1058245_1058535
+*PAR1:	you can have up to sixteen devices running on the Apple Desktop bust . 1059715_1065055
+*PAR1:	and so you know we were just looking to produce a similar kind of a situation using a you know the Rs Two thirty two Com port on a I B M so . 1065955_1079125
+*PAR0:	mhm . 1081185_1081605
+*PAR1:	but that one's not you know that's kind of like you know we have to start marketing it . 1084185_1088485
+*PAR1:	and we won't you know we'll probably be a little while before we actually start realizing any kind of a you know . 1088745_1098565
+*PAR0:	income . 1099065_1099485
+*PAR0:	yeah . 1099675_1099965
+*PAR1:	yeah . 1100155_1100445
+*PAR1:	revenue from that source . 1100445_1101725
+*PAR1:	so . 1101865_1102085
+*PAR0:	yeah . 1105155_1105445
+*PAR1:	you know so it's [/] it's &-uh it'll be a little bit of work . 1105745_1109045
+*PAR0:	mhm . 1110465_1110885
+*PAR1:	meanwhile that's not stopping me . 1113725_1115495
+*PAR1:	I I've got together with a few people . 1115615_1117575
+*PAR1:	and &-uh said that . 1117835_1119215
+*PAR1:	you know I was interested in living in [/] in a intentional community . 1119215_1123935
+*PAR1:	and so we're actually looking at &-um buying someplace . 1123955_1129295
+*PAR1:	and &-uh you know having enough room for people plus a little extra room . 1130875_1137375
+*PAR1:	and &-uh you know having a [/] a community in which we explore states of consciousness and various disciplines like meditation or you know Shamanic journeys or &-um yoga . 1137835_1158225
+*PAR1:	tan . 1158725_1158945
+*PAR1:	mhm . 1159845_1160265
+*PAR1:	so did I mention this before . 1161245_1164505
+*PAR0:	yeah . 1165455_1165745
+*PAR0:	&-uh yes . 1166005_1166465
+*PAR0:	and that was just the thing I wanted to ask you about . 1166485_1168385
+*PAR0:	next was &-um . 1168415_1169265
+*PAR0:	how how's that going . 1169365_1170425
+*PAR0:	and &-um I think I had mentioned to you that &-um Shanda's &-um talked a little bit about something like that . 1170565_1180455
+*PAR0:	&-um with some of her friends . 1181595_1183135
+*PAR0:	&-um not maybe not with such emphasis on the &-um you know exploring the mental states and that kind of thing . 1184555_1196505
+*PAR0:	&-um although that you know would probably be &-um part of the spiritual life of the community . 1198165_1204705
+*PAR1:	uhhuh . 1205035_1205385
+*PAR0:	but &-uh yeah I was wondering . 1206245_1208945
+*PAR0:	&-um where &-uh would you where are you planning on doing this . 1208965_1213985
+*PAR0:	and <are there> [/] are there quite a few or five or six or . 1214085_1219345
+*PAR1:	<we got> [/] we got four people who are committed to it . 1219565_1224085
+*PAR1:	and then there was another person who &-uh you know expressed some interest initially . 1224505_1232325
+*PAR1:	and then kind of backed off . 1232665_1234805
+*PAR1:	and she's decided that she's kind of attached to her apartment . 1236625_1239525
+*PAR1:	and you know yeah you know having her own space . 1239905_1244925
+*PAR1:	and [/] and she's got she teaches voice lessons . 1245065_1247925
+*PAR1:	and so she's afraid that she'd lose some clientele if she moved . 1248185_1253365
+*PAR1:	mhm . 1254185_1254605
+*PAR1:	that makes sense . 1254685_1255125
+*PAR1:	and &-uh to which I responded . 1255145_1257925
+*PAR1:	well of course there aren't any students anywhere else in the world . 1257925_1260285
+*PAR1:	but &-um so you know <I don't> [/] I don't get that . 1261585_1265965
+*PAR1:	you know she [/] she is she's got you know these barriers you know in place that will prevent her from doing this . 1266305_1277165
+*PAR1:	mhm you know and she [/] she could choose to you know eliminate those but you know people who are more invested in &-uh let's see . 1277385_1296605
+*PAR1:	how do I wanna put this . 1296605_1297525
+*PAR1:	most people get wrapped up in their emotions about things . 1298235_1300725
+*PAR1:	and that generally keeps them like stuck where they are . 1301185_1306405
+*PAR1:	and I it [/] it seems to be the emotions behind something . 1308145_1314845
+*PAR1:	and just [/] just my own take on it . 1314945_1316645
+*PAR1:	you know I mean I know that like in neurolinguistic programming there's a focus on the beliefs . 1316665_1321645
+*PAR1:	but I think that &-um . 1321905_1324405
+*PAR1:	&-um the beliefs you know beliefs are just thoughts . 1326945_1331325
+*PAR1:	it's [/] it's the fact that you I guess have some emotional accompaniment that I think that's generally what keeps [/] keeps things in place . 1331475_1346325
+*PAR1:	&-um which is kind of &-um you know the root for believe is the same as the root for love . 1348425_1359365
+*PAR1:	and so <I think that> [/] I think that it's kind of telling . 1360225_1363285
+*PAR1:	I mean <I don't> [/] I don't know if you know people nowadays probably don't necessarily attach the two words but you can see that you know it's like they hold some you know they hold some opinion you know as if it were the truth . 1363485_1380565
+*PAR1:	and &-uh you know and one of the most prevalent ones seems to be <like the> [/] like the supremacy of emotion like whatever I'm feeling must be the way things really are . 1381745_1398965
+*PAR1:	you know kind of like &-uh trust your gut kind of thing . 1400105_1405605
+*PAR1:	mhm . 1405865_1406285
+*PAR1:	and that &-um you know like whatever emotions or feelings they have about something will determine how they act about it . 1407385_1416445
+*PAR1:	mhm which can be quite frustrating for other people . 1417185_1421485
+*PAR1:	so &-um so anyway I mean I guess it's [/] it's I mean I [/] I suppose I shouldn't care . 1429265_1441005
+*PAR1:	it's just that there's I guess I have a belief myself which is that &-um . 1441035_1448525
+*PAR1:	you know it's I think that most people kind of get the cart before the horse . 1452345_1456925
+*PAR1:	you know they decide to go for these you know mystical approaches to life or whatever . 1456985_1463205
+*PAR1:	and they or they're these philosophy you know something like greater than them and I know that the twelve step people think that that's &-uh you know like part of the steps on the road to recovery . 1463265_1479125
+*PAR0:	say that last thing again . 1480265_1481845
+*PAR0:	something like Reganism . 1481845_1483285
+*PAR1:	I'm sorry . 1484145_1484485
+*PAR0:	well I didn't catch that . 1484715_1485925
+*PAR0:	you said something about . 1485985_1486885
+*PAR0:	it's something like Reganism or . 1487195_1490725
+*PAR1:	Greg . 1491475_1491765
+*PAR0:	well I wasn't sure what you said it was before you were talking about the twelve step . 1492475_1495685
+*PAR1:	&-um . 1498615_1498835
+*PAR0:	just right before it . 1499585_1500595
+*PAR1:	oh what did I say . 1502695_1506995
+*PAR1:	my poor short term memory . 1507135_1508275
+*PAR0:	something like something ism . 1508465_1510155
+*PAR1:	oh it was just you know this . 1511455_1512795
+*PAR1:	I don't know just you know like a belief in something you know higher outside of oneself . 1515835_1523315
+*PAR0:	uhhuh . 1524205_1524555
+*PAR0:	mysticism . 1525905_1526515
+*PAR1:	or yeah . 1526775_1527515
+*PAR1:	maybe I know I said that earlier . 1527525_1529715
+*PAR0:	yeah . 1530265_1530555
+*PAR1:	&-um . 1533195_1533415
+*PAR0:	yeah . 1538085_1538375
+*PAR0:	so anyway and you were saying . 1538795_1539935
+*PAR0:	so they twelve step people . 1540035_1541495
+*PAR1:	well for them it seems like it's useful to have some kind of a structure . 1542885_1546455
+*PAR1:	because they don't seem to be able to hold anything in place for themselves . 1546695_1549495
+*PAR0:	uhhuh . 1550145_1550495
+*PAR1:	but it seems that &-uh you know so they move from a position of you know disarray into some order . 1550575_1559735
+*PAR1:	but you can get just as fixed and hung up on systems as you can on your whims . 1560515_1568575
+*PAR0:	yeah . 1571085_1571375
+*PAR1:	in either case you end up with these you know like passionate feelings about well about reality ultimately . 1571715_1583015
+*PAR1:	and like what you should do . 1583035_1585855
+*PAR1:	you know people get all . 1586195_1587335
+*PAR1:	and I'm just thinking of like a friend of mine Michael and [/] and he [/] he was seeing this girl . 1589235_1595655
+*PAR1:	that they were lovers back quite a while . 1595685_1599375
+*PAR1:	I think back in high school . 1599655_1600615
+*PAR1:	and then they kind of like sort of had a reunion . 1601235_1605685
+*PAR1:	&-uh you know they kind of ran into each other . 1606105_1607885
+*PAR0:	and this is Michael Ika . 1608865_1610405
+*PAR1:	yeah . 1610715_1611005
+*PAR0:	uhhuh . 1611175_1611525
+*PAR1:	and they were going out and seeing each other for a while . 1612505_1615445
+*PAR1:	but she's kind of got this thing about you know this you know she's got this sensitivity thing . 1615505_1622405
+*PAR1:	it's hard to . 1622475_1623205
+*PAR1:	I don't know if there's like a specific name for it . 1624565_1626645
+*PAR1:	but it's kind of like you know it's kind of like she's got you know like these sensitive emotions you know . 1626645_1632245
+*PAR1:	and &-um you know she can't bear to have them &-um infringed . 1632705_1640645
+*PAR1:	upon . 1640795_1641085
+*PAR0:	hmm . 1641965_1642085
+*PAR1:	and so it's like whatever &-um it's you know it's like . 1643345_1654005
+*PAR1:	so whatever you know gives her a bad feelings . 1654005_1657085
+*PAR1:	you know she like steers clear instead of you know organizing herself to be powerful in a situation . 1657145_1664845
+*PAR0:	mhm . 1665705_1666125
+*PAR1:	&-um she lets her you know she just lets these emotions kind of like be the ultimate test of reality . 1666985_1675885
+*PAR1:	and since they're bad [/] bad feelings then you know her [/] her reaction is to sort of withdraw from the situation . 1677425_1686405
+*PAR0:	yeah . 1687155_1687445
+*PAR1:	and so you know it's [/] it's just the same kind of thing . 1689465_1691645
+*PAR1:	it's like people get invested in you know comfort . 1691645_1697605
+*PAR1:	and &-uh you know keeps them you know gets them so far maybe . 1702035_1710935
+*PAR1:	but generally gets them like where they are . 1711155_1713135
+*PAR1:	and then that's as far as they've gone . 1713195_1715015
+*PAR1:	you know . 1715075_1715375
+*PAR1:	mhm . 1715515_1715935
+*PAR1:	there's gonna be no more development because they're more interested in their comfort . 1716015_1719815
+*PAR0:	mhm . 1720435_1720855
+*PAR1:	so it just kind of for some reason irritates me . 1722835_1726015
+*PAR0:	yeah . 1728085_1728375
+*PAR0:	well you do you &-uh you know it seems like you place a pretty high value on flexibility and on development . 1728525_1739135
+*PAR0:	continuing to develop . 1739225_1740375
+*PAR0:	I think that's something I value . 1740815_1742255
+*PAR1:	I guess it's kinda like disappointment because it's like you know you're going along . 1743695_1747695
+*PAR1:	and then they just like drop out like . 1747695_1749335
+*PAR1:	I don't wanna play anymore . 1750255_1751135
+*PAR1:	yeah . 1752125_1752415
+*PAR1:	so it's kind of like a disappointment . 1752555_1754175
+*PAR1:	like they'd rather have their emotions you know than you know some kind of relatedness . 1754485_1763375
+*PAR0:	mhm . 1763915_1764335
+*PAR1:	so I find that disappointing . 1765435_1769095
+*PAR0:	yeah . 1771565_1771855
+*PAR0:	yeah . 1777605_1777895
+*PAR1:	anyway . 1778195_1778615
+*PAR0:	hmm . 1779495_1779575
+*PAR0:	well . 1780445_1780735
+*PAR1:	so you were saying that there's five of you altogether . 1781025_1783605
+*PAR1:	then . 1783635_1783925
+*PAR1:	well one of the five is this girl who is I guess pretty much deciding to stay in her own apartment . 1785435_1792525
+*PAR1:	so there's four of us four counting you . 1793745_1795885
+*PAR1:	yeah . 1796555_1796845
+*PAR1:	uhhuh . 1797175_1797525
+*PAR1:	&-um and where . 1798345_1799725
+@End

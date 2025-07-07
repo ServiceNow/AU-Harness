@@ -1,0 +1,497 @@
+@UTF8
+@PID:	11312/a-00004940-1
+@Begin
+@Languages:	eng
+@Participants:	A Subject, B Subject
+@Options:	bullets
+@ID:	eng|eng|A|||||Subject|||
+@ID:	eng|eng|B|||||Subject|||
+@Media:	4522, audio
+*B:	I think that must have been before I went on the riverboat . 443440_446670
+%mor:	pro:sub|I v|think pro:dem|that mod|must aux|have cop|be&PASTP
+	prep|before pro:sub|I v|go&PAST prep|on det:art|the
+	n|+n|river+n|boat .
+%gra:	1|2|SUBJ 2|0|ROOT 3|6|SUBJ 4|6|AUX 5|6|AUX 6|2|COMP 7|9|JCT
+	8|9|SUBJ 9|6|CJCT 10|9|JCT 11|12|DET 12|10|POBJ 13|2|PUNCT
+*B:	cruise they have a cruise on sunday nights . 447950_450660
+%mor:	n|cruise pro:sub|they v|have det:art|a n|cruise prep|on n|sunday
+	n|night-PL .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|5|DET 5|3|OBJ 6|3|JCT 7|8|MOD 8|6|POBJ
+	9|3|PUNCT
+*A:	yeah . 451320_451780
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and &=breathes they have &-um . 452050_454910
+%mor:	coord|and pro:sub|they v|have .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|PUNCT
+*B:	&=breathes they get local bands to come on and they charge you ten
+	dollars you know and . 455620_460630
+%mor:	pro:sub|they v|get n|local v|band-3S inf|to v|come adv|on coord|and
+	pro:sub|they v|charge pro:per|you det:num|ten n|dollar-PL
+	pro:per|you v|know coord|and .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|6|INF 6|4|COMP 7|6|JCT
+	8|10|LINK 9|10|SUBJ 10|6|CJCT 11|15|SUBJ 12|13|QUANT 13|15|JCT
+	14|15|SUBJ 15|10|COMP 16|15|CONJ 17|2|PUNCT
+*A:	xxx . 460630_461060
+*B:	it was this one band that &+d Dennis knows a lot of the people in
+	it you know so he had . 462310_467690
+%mor:	pro:per|it cop|be&PAST&13S det:dem|this pro:indef|one n|band
+	pro:rel|that n:prop|Dennis v|know-3S det:art|a n|lot prep|of
+	det:art|the n|person&PL prep|in pro:per|it pro:per|you v|know co|so
+	pro:sub|he v|have&PAST .
+%gra:	1|2|SUBJ 2|0|ROOT 3|17|LINK 4|17|SUBJ 5|17|AUX 6|8|LINK 7|8|SUBJ
+	8|17|CJCT 9|10|DET 10|8|OBJ 11|10|NJCT 12|13|DET 13|11|POBJ 14|8|JCT
+	15|14|POBJ 16|17|SUBJ 17|2|PRED 18|20|COM 19|20|SUBJ 20|17|COMP
+	21|2|PUNCT
+%com:	initial moment of short I syllable is squeaky before settling back
+	to the speaker's usual voice .
+*B:	0 . 467950_468190
+*B:	told me about it and &=breathes so I went with him and some of his
+	friends and . 468580_473350
+%mor:	v|tell&PAST pro:obj|me prep|about pro:per|it coord|and co|so
+	pro:sub|I v|go&PAST prep|with pro:obj|him coord|and qn|some prep|of
+	det:poss|his n|friend-PL coord|and .
+%gra:	1|0|ROOT 2|1|OBJ 3|1|JCT 4|3|POBJ 5|1|CONJ 6|5|COORD 7|8|SUBJ
+	8|1|COMP 9|8|JCT 10|9|POBJ 11|8|CONJ 12|16|QUANT 13|12|NJCT
+	14|15|MOD 15|13|POBJ 16|11|COORD 17|1|PUNCT
+*B:	&=breathes it was really nice it was really relaxing &=breathes it
+	was . 475300_479360
+%mor:	pro:per|it cop|be&PAST&13S adv|real&dadj-LY adj|nice pro:per|it
+	cop|be&PAST&13S adv|real&dadj-LY part|relax-PRESP pro:per|it
+	cop|be&PAST&13S .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|JCT 4|2|PRED 5|8|SUBJ 6|8|AUX 7|8|JCT
+	8|2|XJCT 9|10|SUBJ 10|8|COMP 11|2|PUNCT
+*B:	kind of a a &=background_noise . 479940_482550
+%mor:	adj|kind prep|of det:art|a det:art|a .
+%gra:	1|0|INCROOT 2|1|JCT 3|4|DET 4|2|POBJ 5|1|PUNCT
+*B:	more of a family atmosphere than going . 483240_485700
+%mor:	qn|more prep|of det:art|a n|family n|atmosphere prep|than
+	n:gerund|go-PRESP .
+%gra:	1|0|INCROOT 2|1|JCT 3|5|DET 4|5|MOD 5|2|POBJ 6|1|JCT 7|6|POBJ
+	8|1|PUNCT
+*B:	you know . 486880_487260
+%mor:	pro:per|you v|know .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PUNCT
+*A:	xxx . 487440_488070
+*B:	to a bar to listen to these people perform &=breathes because they
+	their families came &=breathes . 487530_493230
+%mor:	prep|to det:art|a n|bar inf|to v|listen prep|to pro:dem|these
+	n|person&PL v|perform conj|because pro:sub|they det:poss|their
+	n|family-PL v|come&PAST .
+%gra:	1|0|INCROOT 2|3|DET 3|1|POBJ 4|5|INF 5|1|CPOBJ 6|5|JCT 7|8|DET
+	8|6|POBJ 9|5|XJCT 10|14|LINK 11|14|SUBJ 12|13|MOD 13|14|SUBJ
+	14|9|CJCT 15|1|PUNCT
+*B:	on the cruise for the most part you know they had their &+m parents
+	and their grandparents and their brothers and their sisters and
+	their &=breathes . 493610_499850
+%mor:	prep|on det:art|the n|cruise prep|for det:art|the qn|most adj|part
+	pro:per|you v|know pro:sub|they v|have&PAST det:poss|their
+	n|parent-PL coord|and det:poss|their grand#n|parent-PL coord|and
+	det:poss|their n|brother-PL coord|and det:poss|their n|sister-PL
+	coord|and det:poss|their .
+%gra:	1|9|JCT 2|3|DET 3|1|POBJ 4|3|NJCT 5|7|DET 6|7|QUANT 7|4|POBJ
+	8|9|SUBJ 9|0|ROOT 10|11|SUBJ 11|9|COMP 12|13|MOD 13|11|OBJ
+	14|11|CONJ 15|16|MOD 16|14|COORD 17|11|CONJ 18|19|MOD 19|17|COORD
+	20|19|CONJ 21|22|MOD 22|20|COORD 23|19|CONJ 24|23|COORD 25|9|PUNCT
+*B:	&=breathes nieces and nephews you know and . 499930_502250
+%mor:	n|niece-PL coord|and n|nephew-PL pro:per|you v|know coord|and .
+%gra:	1|5|JCT 2|1|CONJ 3|2|COORD 4|5|SUBJ 5|0|ROOT 6|5|CONJ 7|5|PUNCT
+*B:	and other people brought their children to it . 503570_505660
+%mor:	coord|and qn|other n|person&PL v|bring&PAST det:poss|their
+	n|child&PL prep|to pro:per|it .
+%gra:	1|4|LINK 2|3|QUANT 3|4|SUBJ 4|0|ROOT 5|6|MOD 6|4|OBJ 7|4|JCT
+	8|7|POBJ 9|4|PUNCT
+*B:	it starts . 505870_506820
+%mor:	pro:per|it v|start-3S .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PUNCT
+*B:	xxx the boat leaves about seven and it's all over by about ten
+	o'clock so it's not a late evening you know . 506880_512159
+%mor:	det:art|the n|boat v|leave-3S prep|about det:num|seven coord|and
+	pro:per|it~cop|be&3S adv|all adv|over adv|by prep|about det:num|ten
+	n|o'clock adv|so pro:per|it~cop|be&3S neg|not det:art|a adj|late
+	n|evening pro:per|you v|know .
+%gra:	1|2|DET 2|3|SUBJ 3|0|ROOT 4|5|JCT 5|8|QUANT 6|5|CONJ 7|6|COORD
+	8|3|COMP 9|10|JCT 10|11|JCT 11|8|JCT 12|8|JCT 13|14|QUANT 14|12|POBJ
+	15|17|JCT 16|17|SUBJ 17|8|CJCT 18|17|NEG 19|21|DET 20|21|MOD
+	21|17|PRED 22|23|SUBJ 23|21|CMOD 24|3|PUNCT
+*A:	mhm . 511480_511930
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	and &=breathes I like the music and &=breathes . 513409_516349
+%mor:	coord|and pro:sub|I co|like det:art|the n|music coord|and .
+%gra:	1|5|LINK 2|5|SUBJ 3|5|COM 4|5|DET 5|0|INCROOT 6|5|CONJ 7|5|PUNCT
+*B:	&=breathes &+I it was just &=breathes . 516719_518520
+%mor:	pro:per|it cop|be&PAST&13S adv|just .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|JCT 4|2|PUNCT
+*B:	it's been so hot it's really pleasant to go out on the water . 518810_522050
+%mor:	pro:per|it~aux|be&3S cop|be&PASTP adv|so adj|hot
+	pro:per|it~aux|be&3S adv|real&dadj-LY adj|pleasant inf|to v|go
+	adv|out prep|on det:art|the n|water .
+%gra:	1|3|SUBJ 2|3|AUX 3|0|ROOT 4|5|JCT 5|3|PRED 6|9|SUBJ 7|9|AUX 8|9|JCT
+	9|3|PRED 10|11|INF 11|9|COMP 12|11|JCT 13|11|JCT 14|15|DET
+	15|13|POBJ 16|3|PUNCT
+*A:	yeah . 522680_523190
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	they had &-uh . 523360_524500
+%mor:	pro:sub|they v|have&PAST .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PUNCT
+*B:	the main &=breathes . 525200_526200
+%mor:	det:art|the adj|main .
+%gra:	1|2|DET 2|0|INCROOT 3|2|PUNCT
+*B:	deck they had the air conditioning on . 527640_530400
+%mor:	n|deck pro:sub|they v|have&PAST det:art|the n|air
+	part|condition-PRESP adv|on .
+%gra:	1|3|JCT 2|3|SUBJ 3|0|ROOT 4|5|DET 5|3|OBJ 6|5|XMOD 7|6|JCT
+	8|3|PUNCT
+*B:	but later on &=breathes . 531150_532580
+%mor:	conj|but adv|later adv|on .
+%gra:	1|0|INCROOT 2|3|JCT 3|1|JCT 4|1|PUNCT
+*B:	&-um . 532990_534170
+*B:	during a break I . 534360_535320
+%mor:	prep|during det:art|a v|break pro:sub|I .
+%gra:	1|0|INCROOT 2|3|DET 3|1|POBJ 4|3|OBJ 5|1|PUNCT
+*B:	went outside and &-uh just stood on the deck for a while and
+	watched the sunset . 536380_541740
+%mor:	v|go&PAST adv|outside coord|and adv|just v|stand&PAST prep|on
+	det:art|the n|deck prep|for det:art|a n|while coord|and v|watch-PAST
+	det:art|the n|sunset .
+%gra:	1|0|ROOT 2|1|JCT 3|1|CONJ 4|5|JCT 5|3|COORD 6|5|JCT 7|8|DET
+	8|6|POBJ 9|5|JCT 10|11|DET 11|9|POBJ 12|1|CONJ 13|12|COORD 14|15|DET
+	15|13|OBJ 16|1|PUNCT
+*B:	and &=breathes . 542510_543540
+%mor:	coord|and .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	you know felt the the breeze and everything and . 544030_547030
+%mor:	pro:per|you v|know v|feel&PAST det:art|the det:art|the n|breeze
+	coord|and pro:indef|everything coord|and .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|COMP 4|6|DET 5|6|DET 6|3|OBJ 7|2|CONJ
+	8|7|COORD 9|2|CONJ 10|2|PUNCT
+*B:	it was just so peaceful it was like &=breathes . 548000_550250
+%mor:	pro:per|it cop|be&PAST&13S adv|just adv|so adj|peace&dn-FULL
+	pro:per|it cop|be&PAST&13S prep|like .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|JCT 4|5|JCT 5|7|JCT 6|7|SUBJ 7|2|CJCT 8|7|JCT
+	9|2|PUNCT
+*B:	one of those rare moments of pure serenity &=breathes . 550760_553770
+%mor:	det:num|one prep|of pro:dem|those adj|rare n|moment-PL prep|of
+	adj|pure n|serenity .
+%gra:	1|0|INCROOT 2|1|JCT 3|5|DET 4|5|MOD 5|2|POBJ 6|5|NJCT 7|8|MOD
+	8|6|POBJ 9|1|PUNCT
+*A:	mhm . 554130_554560
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	it was really . 554140_554770
+%mor:	pro:per|it cop|be&PAST&13S adv|real&dadj-LY .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|JCT 4|2|PUNCT
+*B:	pleasant . 555020_555620
+%mor:	adj|pleasant .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	I really liked it . 556230_557260
+%mor:	pro:sub|I adv|real&dadj-LY v|like-PAST pro:per|it .
+%gra:	1|3|SUBJ 2|3|JCT 3|0|ROOT 4|3|OBJ 5|3|PUNCT
+*A:	has it been real hot again &=breathes since I left . 558380_561310
+%mor:	aux|have&3S pro:per|it cop|be&PASTP adj|real adj|hot adv|again
+	prep|since pro:sub|I v|leave&PAST .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|PRED 5|3|JCT 6|5|JCT 7|9|LINK
+	8|9|SUBJ 9|3|CJCT 10|3|PUNCT
+*A:	since a week . 561640_562810
+%mor:	conj|since det:art|a n|week .
+%gra:	1|3|LINK 2|3|DET 3|0|INCROOT 4|3|PUNCT
+*B:	it has been some days yesterday was bad &=breathes . 561820_564910
+%mor:	pro:per|it aux|have&3S aux|be&PASTP qn|some n|day-PL
+	adv:tem|yesterday cop|be&PAST&13S adj|bad .
+%gra:	1|2|SUBJ 2|5|SUBJ 3|5|AUX 4|5|QUANT 5|0|INCROOT 6|7|SUBJ 7|5|CMOD
+	8|7|PRED 9|5|PUNCT
+*B:	and &=breathes . 567000_568310
+%mor:	coord|and .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	it hasn't rained a drop . 569490_571010
+%mor:	pro:per|it aux|have&3S~neg|not v|rain-PAST det:art|a n|drop .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|6|DET 6|4|OBJ 7|4|PUNCT
+*A:	0 . 571810_571990
+*B:	actually I think it rained a little bit . 572510_574190
+%mor:	adv|actual&dadj-LY pro:sub|I v|think pro:per|it v|rain-PAST
+	det:art|a adj|little n|bit .
+%gra:	1|3|JCT 2|3|SUBJ 3|0|ROOT 4|5|SUBJ 5|3|COMP 6|8|DET 7|8|MOD 8|5|OBJ
+	9|3|PUNCT
+*B:	way out in west Omaha . 574870_576650
+%mor:	n|way adv|out prep|in n|west n:prop|Omaha .
+%gra:	1|2|JCT 2|0|ROOT 3|2|JCT 4|3|POBJ 5|3|POBJ 6|2|PUNCT
+*B:	but not enough to &=breathes really do anything you know &=breathes
+	. 578200_582700
+%mor:	conj|but neg|not adv|enough inf|to adv|real&dadj-LY v|do
+	pro:indef|anything pro:per|you v|know .
+%gra:	1|9|LINK 2|3|NEG 3|9|JCT 4|6|INF 5|6|JCT 6|9|XJCT 7|6|OBJ 8|9|SUBJ
+	9|0|ROOT 10|9|PUNCT
+*A:	mhm . 582730_583340
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	anyhow so that was fun I did that &=breathes and . 585020_589090
+%mor:	adv|anyhow conj|so pro:dem|that cop|be&PAST&13S adj|fun pro:sub|I
+	v|do&PAST pro:dem|that coord|and .
+%gra:	1|7|JCT 2|4|LINK 3|4|SUBJ 4|7|CJCT 5|4|PRED 6|7|SUBJ 7|0|ROOT
+	8|7|OBJ 9|7|CONJ 10|7|PUNCT
+*A:	0 . 589030_589170
+*B:	I enjoyed that a lot &-uh then &-uh &=breathes . 590220_593060
+%mor:	pro:sub|I v|enjoy-PAST pro:rel|that det:art|a n|lot adv:tem|then .
+%gra:	1|2|SUBJ 2|0|ROOT 3|6|LINK 4|5|DET 5|6|SUBJ 6|2|COMP 7|2|PUNCT
+*B:	xxx I worked all day saturday because I wanted to take some time
+	off this . 594250_598490
+%mor:	pro:sub|I v|work-PAST qn|all n|day n|saturday conj|because
+	pro:sub|I v|want-PAST inf|to v|take qn|some n|time prep|off
+	pro:dem|this .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|QUANT 4|5|MOD 5|2|OBJ 6|8|LINK 7|8|SUBJ
+	8|2|CJCT 9|10|INF 10|8|COMP 11|12|QUANT 12|10|OBJ 13|10|JCT
+	14|13|POBJ 15|2|PUNCT
+*B:	this week for my birthday just to try to catch up on the things
+	that . 599070_602440
+%mor:	pro:dem|this n|week prep|for det:poss|my n|+n|birth+n|day adv|just
+	inf|to v|try inf|to v|catch adv|up prep|on det:art|the n|thing-PL
+	pro:dem|that .
+%gra:	1|2|DET 2|8|SUBJ 3|2|NJCT 4|5|MOD 5|3|POBJ 6|8|JCT 7|8|INF 8|0|ROOT
+	9|10|INF 10|8|COMP 11|10|JCT 12|10|JCT 13|14|DET 14|12|POBJ
+	15|10|OBJ 16|8|PUNCT
+*B:	I can't get done when I'm working and &=breathes . 603120_605490
+%mor:	pro:sub|I mod|can~neg|not v|get part|do&PASTP conj|when
+	pro:sub|I~aux|be&1S part|work-PRESP coord|and .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|4|PRED 6|9|LINK 7|9|SUBJ
+	8|9|AUX 9|4|CJCT 10|9|CONJ 11|4|PUNCT
+*B:	because &=breathes it's kind of nice to have some time to yourself
+	you know . 605900_609890
+%mor:	conj|because pro:per|it~cop|be&3S n|kind prep|of adj|nice inf|to
+	v|have qn|some n|time prep|to pro:refl|yourself pro:per|you v|know .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|PRED 5|4|NJCT 6|5|POBJ 7|8|INF
+	8|6|XMOD 9|10|QUANT 10|8|OBJ 11|8|JCT 12|11|POBJ 13|14|SUBJ
+	14|8|CJCT 15|3|PUNCT
+*A:	yeah . 609340_609760
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	it's kind of a treat for me to be off on my birthday and &=breathes
+	. 610830_614370
+%mor:	pro:per|it~cop|be&3S n|kind prep|of det:art|a n|treat prep|for
+	pro:obj|me inf|to cop|be adv|off prep|on det:poss|my
+	n|+n|birth+n|day coord|and .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|PRED 4|3|NJCT 5|6|DET 6|4|POBJ 7|2|JCT
+	8|7|POBJ 9|10|INF 10|2|XJCT 11|10|JCT 12|10|JCT 13|14|MOD 14|12|POBJ
+	15|14|COORD 16|2|PUNCT
+*B:	I've had a lot of work to do &=breathes . 615470_617450
+%mor:	pro:sub|I~aux|have part|have&PASTP det:art|a n|lot prep|of n|work
+	inf|to v|do .
+%gra:	1|3|SUBJ 2|3|AUX 3|0|ROOT 4|5|DET 5|3|OBJ 6|5|NJCT 7|6|POBJ 8|9|INF
+	9|5|XMOD 10|3|PUNCT
+*B:	and the only way I could really . 618090_619530
+%mor:	coord|and det:art|the qn|only n|way pro:sub|I mod|could
+	adv|real&dadj-LY .
+%gra:	1|7|LINK 2|4|DET 3|4|QUANT 4|7|JCT 5|7|SUBJ 6|7|AUX 7|0|ROOT
+	8|7|PUNCT
+*B:	&=breathes get this week off was . 620300_622450
+%mor:	v|get pro:dem|this n|week adv|off cop|be&PAST&13S .
+%gra:	1|0|ROOT 2|3|DET 3|5|SUBJ 4|5|JCT 5|1|COMP 6|1|PUNCT
+*B:	you know to &=breathes to work all day saturday . 623340_625430
+%mor:	pro:per|you v|know prep|to inf|to v|work qn|all n|day n|saturday .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|JCT 4|5|INF 5|3|CPOBJ 6|7|QUANT 7|8|MOD
+	8|5|OBJ 9|2|PUNCT
+*A:	&=background_noise . 625470_625790
+*B:	0 . 625600_626100
+*B:	tell them that the project was ready to go and &=breathes . 628810_631540
+%mor:	v|tell pro:obj|them pro:rel|that det:art|the n|project
+	cop|be&PAST&13S adj|ready inf|to v|go coord|and .
+%gra:	1|0|ROOT 2|1|OBJ 3|6|LINK 4|5|DET 5|6|SUBJ 6|1|COMP 7|6|PRED
+	8|9|INF 9|7|XMOD 10|9|COORD 11|1|PUNCT
+*B:	&=smacks:lips &=breathes . 632130_633780
+*B:	I don't think there going to have any problems while I'm gone
+	&=breathes . 634400_637640
+%mor:	pro:sub|I mod|do~neg|not v|think adv|there part|go-PRESP inf|to
+	v|have qn|any n|problem-PL conj|while pro:sub|I~cop|be&1S
+	part|go&PASTP .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|4|JCT 6|4|XJCT 7|8|INF 8|6|COMP
+	9|10|QUANT 10|8|OBJ 11|13|LINK 12|13|SUBJ 13|4|CJCT 14|13|PRED
+	15|4|PUNCT
+*B:	&=breathes I told my boss to call me if they did and I would come
+	in but . 637980_641760
+%mor:	pro:sub|I v|tell&PAST det:poss|my n|boss inf|to v|call pro:obj|me
+	conj|if pro:sub|they v|do&PAST coord|and pro:sub|I mod|will&COND
+	v|come adv|in conj|but .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|MOD 4|2|OBJ 5|6|INF 6|4|XMOD 7|6|OBJ
+	8|10|LINK 9|10|SUBJ 10|2|CJCT 11|14|LINK 12|14|SUBJ 13|14|AUX
+	14|10|COMP 15|14|JCT 16|10|JCT 17|2|PUNCT
+*B:	I don't think he would call anyway he doesn't like to bother people
+	when they've got time scheduled off . 642670_647410
+%mor:	pro:sub|I mod|do~neg|not v|think pro:sub|he mod|will&COND v|call
+	co|anyway pro:sub|he mod|do&3S~neg|not v|like inf|to v|bother
+	n|person&PL conj|when pro:sub|they~aux|have part|get&PASTP n|time
+	v|schedule-PAST adv|off .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|7|SUBJ 6|7|AUX 7|4|COMP
+	8|12|COM 9|12|SUBJ 10|12|AUX 11|10|NEG 12|4|CJCT 13|14|INF
+	14|12|COMP 15|14|OBJ 16|19|LINK 17|19|SUBJ 18|19|AUX 19|21|CJCT
+	20|21|SUBJ 21|12|CJCT 22|21|JCT 23|4|PUNCT
+*A:	mhm &=background_noise . 647810_648710
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	but I &=breathes I really don't think they're going to have any
+	problems he . 648840_651930
+%mor:	conj|but pro:sub|I pro:sub|I adv|real&dadj-LY mod|do~neg|not
+	v|think pro:sub|they~aux|be&PRES part|go-PRESP inf|to v|have qn|any
+	n|problem-PL pro:sub|he .
+%gra:	1|7|LINK 2|7|SUBJ 3|7|SUBJ 4|7|JCT 5|7|AUX 6|5|NEG 7|0|ROOT
+	8|10|SUBJ 9|10|AUX 10|7|COMP 11|12|INF 12|10|COMP 13|14|QUANT
+	14|15|MOD 15|12|OBJ 16|7|PUNCT
+*A:	&=background_noise . 651520_651790
+*B:	he told me that . 652120_653060
+%mor:	pro:sub|he v|tell&PAST pro:obj|me pro:dem|that .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|OBJ 4|2|OBJ 5|2|PUNCT
+*B:	they &-uh &=breathes . 654140_655890
+%mor:	pro:sub|they .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	you know they were so concerned &=breathes . 656280_658080
+%mor:	pro:per|you v|know pro:sub|they cop|be&PAST adv|so
+	part|concern-PASTP .
+%gra:	1|2|SUBJ 2|0|ROOT 3|4|SUBJ 4|2|COMP 5|6|JCT 6|4|PRED 7|2|PUNCT
+*B:	they pushed my due date up a week they you know moved it &+u
+	advanced it a week . 658440_663200
+%mor:	pro:sub|they v|push-PAST det:poss|my adj|due n|date adv|up
+	det:art|a n|week pro:sub|they pro:per|you v|know part|move-PASTP
+	pro:per|it v|advance-PAST pro:per|it det:art|a n|week .
+%gra:	1|2|SUBJ 2|0|ROOT 3|5|MOD 4|5|MOD 5|2|OBJ 6|2|JCT 7|8|DET 8|6|POBJ
+	9|11|SUBJ 10|11|SUBJ 11|2|CJCT 12|11|OBJ 13|12|OBJ 14|12|ENUM
+	15|14|OBJ 16|17|DET 17|14|OBJ 18|2|PUNCT
+*B:	and then they wanted to push it up further . 663810_665960
+%mor:	coord|and adv:tem|then pro:sub|they v|want-PAST inf|to v|push
+	pro:per|it adv|up adv|further .
+%gra:	1|4|LINK 2|4|JCT 3|4|SUBJ 4|0|ROOT 5|6|INF 6|4|COMP 7|6|OBJ 8|6|JCT
+	9|6|JCT 10|4|PUNCT
+*A:	0 . 664790_664910
+*B:	and I told them . 666160_667690
+%mor:	coord|and pro:sub|I v|tell&PAST pro:obj|them .
+%gra:	1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|OBJ 5|3|PUNCT
+*B:	it couldn't be done any quicker if they wanted it tested . 668660_671800
+%mor:	pro:per|it mod|could~neg|not aux|be part|do&PASTP qn|any
+	adj|quick-CP conj|if pro:sub|they v|want-PAST pro:per|it v|test-PAST
+	.
+%gra:	1|5|SUBJ 2|5|AUX 3|2|NEG 4|5|AUX 5|0|ROOT 6|7|QUANT 7|5|JCT
+	8|10|LINK 9|10|SUBJ 10|12|CJCT 11|10|OBJ 12|5|CJCT 13|5|PUNCT
+*B:	&=breathes so and you know he &=breathes . 672970_675060
+%mor:	adv|so coord|and pro:per|you v|know pro:sub|he .
+%gra:	1|4|JCT 2|4|LINK 3|4|SUBJ 4|0|ROOT 5|4|OBJ 6|4|PUNCT
+*B:	backed me up on that he . 675830_677440
+%mor:	v|back-PAST pro:obj|me adv|up prep|on pro:rel|that pro:sub|he .
+%gra:	1|0|ROOT 2|1|OBJ 3|1|JCT 4|1|JCT 5|6|LINK 6|4|POBJ 7|1|PUNCT
+*B:	&=breathes figured they didn't really need it that soon anyway I
+	think . 678550_681570
+%mor:	part|figure-PASTP pro:sub|they mod|do&PAST~neg|not adv|real&dadj-LY
+	v|need pro:per|it pro:dem|that adv|soon co|anyway pro:sub|I v|think
+	.
+%gra:	1|6|LINK 2|6|SUBJ 3|6|AUX 4|3|NEG 5|6|JCT 6|0|ROOT 7|6|OBJ 8|9|DET
+	9|6|JCT 10|12|COM 11|12|SUBJ 12|6|CJCT 13|6|PUNCT
+*B:	and &=breathes monday he told me that they really weren't ready to
+	use it . 682280_685820
+%mor:	coord|and n|monday pro:sub|he v|tell&PAST pro:obj|me pro:rel|that
+	pro:sub|they adv|real&dadj-LY cop|be&PAST~neg|not adj|ready inf|to
+	v|use pro:per|it .
+%gra:	1|4|LINK 2|4|JCT 3|4|SUBJ 4|0|ROOT 5|4|OBJ 6|9|LINK 7|9|SUBJ
+	8|9|JCT 9|4|COMP 10|9|NEG 11|9|PRED 12|13|INF 13|11|XMOD 14|13|OBJ
+	15|4|PUNCT
+*B:	after all that fuss and you know that they did &=breathes . 686270_689310
+%mor:	conj|after adv|all pro:dem|that n|fuss coord|and pro:per|you v|know
+	pro:rel|that pro:sub|they mod|do&PAST .
+%gra:	1|3|LINK 2|3|JCT 3|4|DET 4|0|ROOT 5|7|LINK 6|7|SUBJ 7|4|CMOD
+	8|10|LINK 9|10|SUBJ 10|7|COMP 11|4|PUNCT
+*B:	&=breathes to . 689850_690280
+%mor:	inf|to .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*A:	xxx . 689980_690280
+*B:	get it done &=breathes . 690360_691340
+%mor:	v|get pro:per|it part|do&PASTP .
+%gra:	1|0|ROOT 2|1|OBJ 3|1|XJCT 4|1|PUNCT
+*A:	mhm . 691140_691830
+%mor:	co|yes .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	so &=breathes anyhow &=breathes . 693060_695710
+%mor:	co|so adv|anyhow .
+%gra:	1|0|INCROOT 2|1|JCT 3|1|PUNCT
+*B:	I don't care it's it's that's fine with me I'd just as soon
+	&=breathes that . 696930_700790
+%mor:	pro:sub|I mod|do~neg|not v|care pro:per|it~aux|be&3S
+	pro:per|it~aux|be&3S pro:dem|that~cop|be&3S adj|fine prep|with
+	pro:obj|me pro:sub|I~mod|genmod adv|just conj|as adj|soon
+	pro:dem|that .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|10|SUBJ 5|4|OBJ 6|10|AUX 7|10|SUBJ
+	8|10|AUX 9|10|SUBJ 10|0|ROOT 11|10|PRED 12|11|JCT 13|12|POBJ
+	14|10|PUNCT 15|17|AUX 16|17|JCT 17|19|COORD 18|19|MOD 19|14|INCROOT
+	20|19|PUNCT
+*B:	I was waiting on them than I don't like to have &-uh them waiting
+	on me you know . 701070_704770
+%mor:	pro:sub|I aux|be&PAST&13S part|wait-PRESP prep|on pro:obj|them
+	prep|than pro:sub|I mod|do~neg|not v|like inf|to v|have pro:obj|them
+	part|wait-PRESP prep|on pro:obj|me pro:per|you v|know .
+%gra:	1|3|SUBJ 2|3|AUX 3|0|ROOT 4|3|JCT 5|4|POBJ 6|10|JCT 7|10|SUBJ
+	8|10|AUX 9|8|NEG 10|3|CJCT 11|12|INF 12|10|COMP 13|12|OBJ 14|18|XJCT
+	15|14|JCT 16|15|POBJ 17|18|SUBJ 18|12|COMP 19|3|PUNCT
+*A:	yeah . 704310_705020
+%mor:	co|yeah .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	&=breathes so &=breathes I I'll go back to work friday . 705360_710520
+%mor:	co|so pro:sub|I pro:sub|I~mod|will v|go adv|back prep|to n|work
+	n|friday .
+%gra:	1|5|COM 2|5|SUBJ 3|5|SUBJ 4|5|AUX 5|0|ROOT 6|5|JCT 7|5|JCT 8|9|MOD
+	9|7|POBJ 10|5|PUNCT
+*B:	and &=breathes . 711630_712770
+%mor:	coord|and .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	&=breathes we'll see &+whe whether or not they've caught up a
+	little bit or anything . 714720_718610
+%mor:	pro:sub|we~mod|will v|see conj|whether coord|or neg|not
+	pro:sub|they~aux|have v|catch&PAST adv|up det:art|a adj|little n|bit
+	coord|or pro:indef|anything .
+%gra:	1|3|SUBJ 2|3|AUX 3|0|ROOT 4|9|LINK 5|4|CONJ 6|5|COORD 7|9|SUBJ
+	8|9|AUX 9|3|COMP 10|9|JCT 11|13|DET 12|13|MOD 13|9|JCT 14|13|CONJ
+	15|14|COORD 16|3|PUNCT
+*B:	and what else &=breathes &=smacks:lips . 720290_722220
+%mor:	coord|and pro:int|what post|else .
+%gra:	1|0|INCROOT 2|1|COORD 3|2|PQ 4|1|PUNCT
+*B:	&=breathes I haven't been out to pick up the mail . 723420_726220
+%mor:	pro:sub|I aux|have~neg|not cop|be&PASTP adv|out inf|to v|pick
+	prep|up det:art|the n|mail .
+%gra:	1|4|SUBJ 2|4|AUX 3|2|NEG 4|0|ROOT 5|4|JCT 6|7|INF 7|4|XJCT 8|7|JCT
+	9|10|DET 10|8|POBJ 11|4|PUNCT
+*B:	because it's so hot I didn't want to go out &=breathes . 727270_729540
+%mor:	conj|because pro:per|it~cop|be&3S adv|so adj|hot pro:sub|I
+	mod|do&PAST~neg|not v|want inf|to v|go adv|out .
+%gra:	1|3|LINK 2|3|SUBJ 3|9|CJCT 4|5|JCT 5|3|PRED 6|9|SUBJ 7|9|AUX
+	8|7|NEG 9|0|ROOT 10|11|INF 11|9|COMP 12|11|JCT 13|9|PUNCT
+*B:	&=smacks:lips &=breathes so I don't know if I got any birthday
+	cards or not &=breathes . 729770_733280
+%mor:	conj|so pro:sub|I mod|do~neg|not v|know conj|if pro:sub|I
+	v|get&PAST qn|any n|+n|birth+n|day n|card-PL coord|or neg|not .
+%gra:	1|5|LINK 2|5|SUBJ 3|5|AUX 4|3|NEG 5|0|ROOT 6|8|LINK 7|8|SUBJ
+	8|5|CJCT 9|10|QUANT 10|11|MOD 11|8|OBJ 12|11|CONJ 13|12|COORD
+	14|5|PUNCT
+*A:	well we just got our cards in the mail so . 734680_739580
+%mor:	co|well pro:sub|we adv|just v|get&PAST det:poss|our n|card-PL
+	prep|in det:art|the n|mail adv|so .
+%gra:	1|4|COM 2|4|SUBJ 3|4|JCT 4|0|ROOT 5|6|MOD 6|4|OBJ 7|4|JCT 8|9|DET
+	9|7|POBJ 10|4|JCT 11|4|PUNCT
+*B:	well I usually get interesting cards on my birthday from . 739800_742500
+%mor:	co|well pro:sub|I adv|usual&dadj-LY v|get adj|interesting n|card-PL
+	prep|on det:poss|my n|+n|birth+n|day prep|from .
+%gra:	1|4|COM 2|4|SUBJ 3|4|JCT 4|0|ROOT 5|6|MOD 6|4|OBJ 7|4|JCT 8|9|MOD
+	9|7|POBJ 10|4|JCT 11|4|PUNCT
+*A:	uhhuh . 742150_742840
+%mor:	co|uhhuh .
+%gra:	1|0|INCROOT 2|1|PUNCT
+*B:	you know people in other parts of the states . 742700_745270
+%mor:	pro:per|you v|know n|person&PL prep|in qn|other n|part-PL prep|of
+	det:art|the n|state-PL .
+%gra:	1|2|SUBJ 2|0|ROOT 3|2|OBJ 4|2|JCT 5|6|QUANT 6|4|POBJ 7|6|NJCT
+	8|9|DET 9|7|POBJ 10|2|PUNCT
+*B:	but &=breathes so I usually kind of look forward to it but
+	&=breathes I have this weird thing on the back of my neck . 746350_752110
+%mor:	conj|but conj|so pro:sub|I adv|usual&dadj-LY n|kind prep|of v|look
+	adv|forward prep|to pro:per|it conj|but pro:sub|I v|have
+	pro:dem|this adj|weird n|thing prep|on det:art|the n|back prep|of
+	det:poss|my n|neck .
+%gra:	1|7|LINK 2|7|LINK 3|7|SUBJ 4|7|JCT 5|7|JCT 6|7|JCT 7|0|ROOT 8|7|JCT
+	9|7|JCT 10|9|POBJ 11|13|LINK 12|13|SUBJ 13|7|CJCT 14|16|DET
+	15|16|MOD 16|13|OBJ 17|16|NJCT 18|19|DET 19|17|POBJ 20|19|NJCT
+	21|22|MOD 22|20|POBJ 23|7|PUNCT
+@End
