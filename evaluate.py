@@ -219,6 +219,7 @@ def main(cfg_path='config.yaml'):
     num_samples = cfg.get("num_samples", None)
     judge_concurrency = cfg.get("judge_concurrency", None)
     judge_model = cfg.get("judge_model", None)
+    api_version = cfg.get("api_version", None)
     user_prompt_add_ons: list[str] = cfg.get("user_prompt_add_ons", []) or []
     
     # --- Build (dataset, metric) pairs ---

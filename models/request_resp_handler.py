@@ -1,6 +1,6 @@
 import time
 import httpx
-from openai import AsyncOpenAI
+from openai import AsyncAzureOpenAI, AsyncOpenAI
 from models.model_response import ModelResponse
 from utils import constants
 import logging
@@ -18,6 +18,7 @@ class RequestRespHandler:
         self.model_info = model_info
         self.api = model_info.get("url")
         self.auth = model_info.get("auth_token", "")
+        self.api_version = model_info.get("api_version", "")
         self.client = None
         self.timeout = timeout
         # Remove Bearer if present for vllm/openai
@@ -36,10 +37,22 @@ class RequestRespHandler:
         #vllm chat completions compatibility
         if self.inference_type in [
             constants.OPENAI_CHAT_COMPLETION,
-            constants.OPENAI_TRANSCRIPTION, 
-            constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION,
+            constants.OPENAI_TRANSCRIPTION
         ]:
-
+            # Azure OpenAI endpoints
+            self.client = (
+                AsyncAzureOpenAI(
+                    azure_endpoint=self.api,
+                    api_key=self.auth,
+                    api_version=self.api_version,
+                    timeout=timeout,
+                    max_retries=0,
+                    default_headers={"Connection": "close"},
+                    http_client=httpx.AsyncClient(verify=verify_ssl),
+                )
+            )
+        elif self.inference_type == constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION:
+            # vLLM endpoints (OpenAI-compatible, no api_version)
             self.client = (
                 AsyncOpenAI(
                     base_url=self.api,
@@ -153,7 +166,7 @@ class RequestRespHandler:
             # First attempt to wrap the error in ModelResponse
             try:
                 return ModelResponse(
-                    input_prompt=str(msg_body),
+                    input_prompt=str(msg_body) if msg_body is not None else "error",
                     llm_response="",
                     raw_response=str(e),
                     response_code=500,
