@@ -96,7 +96,7 @@ class RequestRespHandler:
                 llm_response = self.get_response_text(raw_response)
                 response_code = 200
                 elapsed_time: float = time.time() - start_time
-                logger.info(f"Successful post request: {response_code}")
+                #logger.info(f"Successful post request: {response_code}")
                 return ModelResponse (
                 input_prompt=str(msg_body),
                 llm_response=llm_response if llm_response else " ",
@@ -115,7 +115,7 @@ class RequestRespHandler:
                 raw_response: str = response_data
                 llm_response: str = response_data['choices'][0]['message']['content'] or " "
                 response_code: int = 200
-                logger.info(f"Successful post request: {response_code}")
+                #logger.info(f"Successful post request: {response_code}")
                 elapsed_time: float = time.time() - start_time
 
                 return ModelResponse (
@@ -136,7 +136,7 @@ class RequestRespHandler:
                 raw_response: str = response_data
                 llm_response: str = response_data['text'] or " "
                 response_code: int = 200
-                logger.info(f"Successful post request: {response_code}")
+                #logger.info(f"Successful post request: {response_code}")
                 elapsed_time: float = time.time() - start_time
 
                 return ModelResponse (

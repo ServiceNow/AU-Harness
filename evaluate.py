@@ -9,6 +9,7 @@ import importlib
 import logger_setup
 logger_setup.configure()
 import logging
+logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 from models.model import Model
 from metrics.metrics import Metrics
@@ -59,16 +60,25 @@ class Engine:
         logger.info(f"[Engine.run] Predictions complete. Calculating scores...")
         scores = {}
         model_targets = self.postprocessor.extract_model_targets(dataset=self.dataset)
+        import json
+        from tqdm import tqdm
+        record_log_path = "record_scores.log"
         for model_name, outs in predictions.items():
             logger.info(f"[Engine.run] Scoring model: {model_name}")
-            # Log first 5 prediction/target pairs for quick sanity-check
-            n_log = min(10, len(outs), len(model_targets))
-            logger.info(f"[Engine.run] Logging first {n_log} prediction-target pairs for sanity-check\n\n")
-            for i in range(n_log):
-                logger.info(
-                    f"[Engine.run] Example {i}: Prediction = {outs[i]!r} | Target = {model_targets[i]!r}"
-                )
-            logger.info("\n")
+            # Log every prediction/reference pair to record_scores.log with tqdm progress bar
+            with open(record_log_path, "a", encoding="utf-8") as rec_log:
+                for i, (pred, ref) in tqdm(
+                    enumerate(zip(outs, model_targets)),
+                    total=min(len(outs), len(model_targets)),
+                    desc=f"Logging {model_name} pairs"
+                ):
+                    log_entry = {
+                        "model": model_name,
+                        "index": i,
+                        "prediction": pred,
+                        "reference": ref
+                    }
+                    rec_log.write(json.dumps(log_entry, ensure_ascii=False) + "\n")
             scores[model_name] = self.metric(outs, model_targets)
         logger.info(f"[Engine.run] Evaluation complete. Returning scores.")
         logger.info(f"[Engine.run] Scores: {scores}")

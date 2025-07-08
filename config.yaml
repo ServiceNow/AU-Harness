@@ -5,7 +5,7 @@ dataset_metric:
   - "(audiocaps_qa_test, llm_judge_detailed)"
   - "(audiocaps_test, llm_judge_detailed)"
   - "(clotho_aqa_test, llm_judge_detailed)"
-  - "(cn_college_listen_mcq_test, word_error_rate)"
+  - "(cn_college_listen_mcq_test, llm_judge_binary)"
   - "(common_voice_15_en_test, word_error_rate)"
   - "(covost2_ta_en_test, word_error_rate)"
   - "(covost2_zh_en_test, word_error_rate)"
@@ -63,7 +63,7 @@ models:
   - info:
       name: "qwen_2_audio"
       inference_type: "openai"
-      url: "https://corelmm-gpt-4t.openai.azure.com/openai/deployments/gpt-4o-mini-audio-preview/chat/completions?api-version=2025-01-01-preview"
+      url: "https://corelmm-gpt-4t.openai.azure.com"
       delay: 100
       retry_attempts: 8
       timeout: 30
