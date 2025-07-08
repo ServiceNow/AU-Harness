@@ -1,3 +1,9 @@
+import logger_setup
+logger_setup.configure()
+import logging
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logger = logging.getLogger(__name__)
+
 import json
 from pathlib import Path
 import asyncio
@@ -6,11 +12,6 @@ import yaml
 from tqdm import tqdm
 import importlib
 # Central logging setup
-import logger_setup
-logger_setup.configure()
-import logging
-logging.getLogger("httpx").setLevel(logging.WARNING)
-logger = logging.getLogger(__name__)
 from models.model import Model
 from metrics.metrics import Metrics
 
@@ -99,11 +100,13 @@ def get_class_from_module(module_prefix, module_name):
 #load an preprocess(dataset specific)
 from preprocessors.CallHomePreprocessor import CallHomePreprocessor
 
-def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = [], zip=False, dataset_config=None):
+def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = [], zip=False, dataset_config=None):
     # CallHome special download
-    if (isinstance(repo, str) and repo.lower() == "callhome") or (dataset_config and dataset_config.get("name", "").lower() == "callhome"):
-        logger.info("[_load_dataset] Detected CallHome dataset. Downloading media files...")
-        CallHomePreprocessor().download_media(dataset=None, properties=dataset_config or {})
+    # Handle CallHome dataset by repo name or config
+    if preprocessor_name == "CallHomePreprocessor":
+        logger.info("[_load_dataset] Detected CallHome dataset. Processing files...")
+        processed = CallHomePreprocessor().process(dataset=repo, properties=dataset_config or {})
+        return processed
 
     logger.info(f"[_load_dataset] Loading HuggingFace dataset repo: {repo}")
     # If 'subset' or 'data_dir' is specified, pass as second arg or kwarg
@@ -227,11 +230,14 @@ def main(cfg_path='config.yaml'):
         logger.info(f"[main] Loading dataset '{dname}' with metric '{metric_name}' ...")
         if dname not in db:
             raise ValueError(f"Dataset '{dname}' not found in {cfg_path}.")
-        repo = db[dname]["hf_repo"]
+        repo = db[dname].get("hf_repo", None)
+        if not repo:
+            repo = db[dname].get("path", None)
         subset = db[dname].get("subset", "")
         language = db[dname].get("language", "en")
         preprocessor_name = db[dname]["preprocessor"]
         postprocessor_name = db[dname]["postprocessor"]
+        
         dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, user_prompt_add_ons=user_prompt_add_ons)
         metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
         # Dynamically import postprocessor class

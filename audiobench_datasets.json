@@ -365,39 +365,33 @@
 
 
   "callhome_eng": {
-
     "language": "english",
     "preprocessor": "CallHomePreprocessor",
     "postprocessor": "AudiobenchPostprocessor",
-    "private": true,
-    "path": "/path/to/callhome_eng"
+    "path": "private_datasets/CallHome_eng"
   },
   "callhome_deu": {
     "language": "german",
     "preprocessor": "CallHomePreprocessor",
     "postprocessor": "AudiobenchPostprocessor",
-    "private": true,
-    "path": "/path/to/callhome_deu"
+    "path": "private_datasets/CallHome_eng"
   },
   "callhome_jpn": {
     "language": "japanese",
     "preprocessor": "CallHomePreprocessor",
     "postprocessor": "AudiobenchPostprocessor",
-    "private": true,
-    "path": "/path/to/callhome_jpn"
+    "path": "private_datasets/CallHome_eng"
   },
   "callhome_spa": {
     "language": "spanish",
     "preprocessor": "CallHomePreprocessor",
     "postprocessor": "AudiobenchPostprocessor",
-    "private": true,
-    "path": "/path/to/callhome_spa"
+    "path": "private_datasets/CallHome_eng"
   },
   "callhome_zho": {
     "language": "chinese",
-    "preprocessor": "CallHomwPreprocessor",
+    "preprocessor": "CallHomePreprocessor",
     "postprocessor": "AudiobenchPostprocessor",
-    "private": true,
-    "path": "/path/to/callhome_zho"
+    "path": "private_datasets/CallHome_eng"
   }
 }

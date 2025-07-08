@@ -44,8 +44,13 @@ CER_DEFAULTS = Compose(
 
 
 def convert_unicode_to_characters(text: str) -> str:
-    """Convert unicode (\u00e9) to characters (é)."""
-    return text.encode("raw_unicode_escape").decode("unicode-escape")
+    """Convert unicode to composed form."""
+    try:
+        return unicodedata.normalize("NFC", text)
+    except Exception as e:
+        # Optionally log the error
+        logger.warning(f"Unicode normalization failed: {e}. Returning original text.")
+        return text
 
 
 def convert_digits_to_words(text: str, language: str):
@@ -173,7 +178,10 @@ class WERMetrics(Metrics):
                 incorrect_scores.append(substitutions + deletions + insertions)
                 total_scores.append(substitutions + deletions + hits)
             #logger.info(f"For sample {i}: reference={reference} candidate={candidate}")
-            scores.append(incorrect_scores[-1] / total_scores[-1])
+            wer = incorrect_scores[-1] / total_scores[-1]
+            if wer > 1.0:
+                wer = 1.0
+            scores.append(wer)
 
         results = {
             "wer_per_row": scores,

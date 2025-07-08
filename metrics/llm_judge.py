@@ -46,23 +46,34 @@ class _BaseLLMJudge(Metrics):
             azure_endpoint="https://corelmm-gpt-4t.openai.azure.com",
         )
 
-    async def _score_once(self, system_prompt: str, user_prompt: str) -> float | dict:
-        #logger.info(f"system_prompt: {system_prompt}")
-        #logger.info(f"user_prompt: {user_prompt}")
-        resp = await self._client.chat.completions.create(
-            model=self._model,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            temperature=0.1,
-        )
-        content = resp.choices[0].message.content.strip()
-        #logger.info(f"content: {content}")
-        try:
-            return json.loads(content)
-        except Exception:
-            return content
+    async def _score_once(self, system_prompt: str, user_prompt: str) -> float | dict | None:
+        import asyncio
+        import httpx
+        import openai
+        max_retries = 8
+        for attempt in range(max_retries):
+            try:
+                resp = await self._client.chat.completions.create(
+                    model=self._model,
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_prompt},
+                    ],
+                    temperature=0.1,
+                )
+                content = resp.choices[0].message.content.strip()
+                try:
+                    return json.loads(content)
+                except Exception:
+                    return content
+            except (openai.APIConnectionError, httpx.ConnectError, httpx.HTTPError) as e:
+                logger.warning(f"OpenAI API connection failed (attempt {attempt+1}/{max_retries}): {e}")
+                await asyncio.sleep(2)  # Wait before retrying
+            except Exception as e:
+                logger.error(f"Unexpected error in _score_once: {e}")
+                break
+        logger.error(f"All {max_retries} attempts failed for this sample. Skipping.")
+        return None
 
     async def _judge_all(
         self,
