@@ -30,3 +30,4 @@ librosa
 jiwer
 num2words
 jaconv
+bs4

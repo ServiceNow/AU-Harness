@@ -55,11 +55,7 @@ def convert_digits_to_words(text: str, language: str):
     try:
         return re.sub(r"\d+", lambda m: num2words(int(m.group()), lang=language), text)
     except Exception as e:
-<<<<<<< HEAD
         logger.warning(f"Non-fatal error: {e} - continuing...")
-=======
-        logger.info(f"Failed to convert digits to words for language {language} - continuing...")
->>>>>>> ASR_Translation
         return text
 
 
