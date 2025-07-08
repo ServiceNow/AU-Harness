@@ -36,6 +36,7 @@ class Model(ABC):
         self.model = model_info["model"]
         self.api_key = model_info.get("auth_token", "")
         self.model_url = model_info.get("url", "")
+        self.api_version = model_info.get("api_version", "")  # Optional API version
         self.inference_type = model_info["inference_type"]
         self.batch_size = model_info.get("batch_size", 1)
         # sleep before every call - in ms
