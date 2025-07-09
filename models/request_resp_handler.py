@@ -21,6 +21,8 @@ class RequestRespHandler:
         self.api_version = model_info.get("api_version", "")
         self.client = None
         self.timeout = timeout
+        # current retry attempt (set by caller). Default 1.
+        self.current_attempt: int = 1
         # Remove Bearer if present for vllm/openai
         
         # Strip 'Bearer ' ONLY for OpenAI flows – VLLM endpoints expect full 'Bearer <token>'
@@ -128,7 +130,8 @@ class RequestRespHandler:
                 raw_response: str = response_data
                 llm_response: str = response_data['choices'][0]['message']['content'] or " "
                 response_code: int = 200
-                #logger.info(f"Successful post request: {response_code}")
+                logger.info(f"Successful post request: {response_code}")
+                logger.info(f"LLM response: {llm_response}")
                 elapsed_time: float = time.time() - start_time
 
                 return ModelResponse (
@@ -162,7 +165,7 @@ class RequestRespHandler:
                 )
 
         except Exception as e:
-            logger.error(f"audio_raw_response={e!r}")
+            logger.error(f"Attempt {self.current_attempt}: audio_raw_response={e!r}")
             # First attempt to wrap the error in ModelResponse
             try:
                 return ModelResponse(

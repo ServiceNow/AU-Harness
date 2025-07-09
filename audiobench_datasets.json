@@ -373,25 +373,25 @@
   "callhome_deu": {
     "language": "german",
     "preprocessor": "CallHomePreprocessor",
-    "postprocessor": "AudiobenchPostprocessor",
+    "postprocessor": "CallHomePostprocessor",
     "path": "private_datasets/CallHome_eng"
   },
   "callhome_jpn": {
     "language": "japanese",
     "preprocessor": "CallHomePreprocessor",
-    "postprocessor": "AudiobenchPostprocessor",
+    "postprocessor": "CallHomePostprocessor",
     "path": "private_datasets/CallHome_eng"
   },
   "callhome_spa": {
     "language": "spanish",
     "preprocessor": "CallHomePreprocessor",
-    "postprocessor": "AudiobenchPostprocessor",
+    "postprocessor": "CallHomePostprocessor",
     "path": "private_datasets/CallHome_eng"
   },
   "callhome_zho": {
     "language": "chinese",
     "preprocessor": "CallHomePreprocessor",
-    "postprocessor": "AudiobenchPostprocessor",
+    "postprocessor": "CallHomePostprocessor",
     "path": "private_datasets/CallHome_eng"
   }
 }

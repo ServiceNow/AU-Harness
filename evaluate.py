@@ -32,8 +32,11 @@ class Engine:
         sem = asyncio.Semaphore(model.batch_size)  # Use per-model batch size
         async def _call(idx: int, sample):
             async with sem:
-                #logger.info(f"{sample.keys()}")
+                logger.info(f"{sample.keys()}")
                 resp = await model._generate_text_with_retry(sample, {"chunk_size": model.chunk_size, "metric": self.metric.name})
+                logger.info(f"in infer single model {resp}")
+                logger.info(type(resp))
+                logger.info(f"{resp.llm_response}")
                 return idx, (resp.llm_response if resp else "")
         # Create tasks paired with their original indexx
         tasks = [_call(i, ex) for i, ex in enumerate(self.dataset)]
@@ -51,7 +54,7 @@ class Engine:
         tasks = {m.name(): asyncio.create_task(self._infer_single_model(m)) for m in self.models}
         results = {name: await t for name, t in tasks.items()}
         logger.info(f"[Engine._infer_all] All models finished inference.")
-        #logger.info(f"[Engine._infer_all] Results: {results}")
+        logger.info(f"[Engine._infer_all] Results: {results}")
         return results
 
     #main engine runner
@@ -60,12 +63,16 @@ class Engine:
         predictions = asyncio.run(self._infer_all())
         logger.info(f"[Engine.run] Predictions complete. Calculating scores...")
         scores = {}
+        logger.info(f"[Engine.run] Dataset keys: {self.dataset[0].keys()}")
+        logger.info(f"[Engine.run] Dataset: {self.dataset}")
         model_targets = self.postprocessor.extract_model_targets(dataset=self.dataset)
         import json
         from tqdm import tqdm
         record_log_path = "record_scores.log"
         for model_name, outs in predictions.items():
             logger.info(f"[Engine.run] Scoring model: {model_name}")
+            logger.info(f"[Engine.run] Outs: {outs}")
+            logger.info(f"[Engine.run] Model targets: {model_targets}")
             # Log every prediction/reference pair to record_scores.log with tqdm progress bar
             with open(record_log_path, "a", encoding="utf-8") as rec_log:
                 for i, (pred, ref) in tqdm(
@@ -73,6 +80,7 @@ class Engine:
                     total=min(len(outs), len(model_targets)),
                     desc=f"Logging {model_name} pairs"
                 ):
+                    logger.info(f"[Engine.run] Logging pair {i}: {pred} | {ref}")
                     log_entry = {
                         "model": model_name,
                         "index": i,
@@ -105,7 +113,7 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="A
     # Handle CallHome dataset by repo name or config
     if preprocessor_name == "CallHomePreprocessor":
         logger.info("[_load_dataset] Detected CallHome dataset. Processing files...")
-        processed = CallHomePreprocessor().process(dataset=repo, properties=dataset_config or {})
+        processed = CallHomePreprocessor().process(dataset=repo, num_samples=num_samples, properties=dataset_config or {})
         return processed
 
     logger.info(f"[_load_dataset] Loading HuggingFace dataset repo: {repo}")

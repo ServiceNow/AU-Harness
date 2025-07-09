@@ -120,9 +120,12 @@ class Model(ABC):
                 with attempt:
                     try:
                         # All data prep is now in _generate_text
+                        # Set attempt number for downstream logging
+                        self.req_resp_hndlr.current_attempt = attempt.retry_state.attempt_number
                         #logger.info(f"[{self.name()}] Generating text for input: {message}")
                         result: ModelResponse = await self._generate_text(message, run_params)
                         await self._mark_errors(result)
+                        logger.info(f"result in retry: {result}")
                     except Exception as e:
                         logger.error(f"Exception during text generation: {e}")
                         result = ModelResponse(
@@ -170,6 +173,7 @@ class Model(ABC):
                 performance=None,
                 wait_time=0,
             ) 
+        logger.info(f"final result: {result}")
         return result
 
 
@@ -239,6 +243,7 @@ class Model(ABC):
                         }
                     ]
                     resp = await self.req_resp_hndlr.request_server(message["model_inputs"])
+                    logger.info(f"Requester response: {resp}")
                     concatenated_text += resp.llm_response or ""
                     responses.append(resp)
                 # Merge responses

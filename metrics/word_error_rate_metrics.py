@@ -128,7 +128,7 @@ class WERMetrics(Metrics):
 
         results = {
             "wer": sum(incorrect) / sum(total),
-            "average_wer_per_row": smart_round(sum(wer_per_row) / len(wer_per_row)) if len(wer_per_row) else 0.0,
+            "average_sample_wer": smart_round(sum(wer_per_row) / len(wer_per_row)) if len(wer_per_row) else 0.0,
         }
 
         results.update(self.compute_attributes(incorrect, total, ["accent", "gender"]))
@@ -177,7 +177,7 @@ class WERMetrics(Metrics):
 
                 incorrect_scores.append(substitutions + deletions + insertions)
                 total_scores.append(substitutions + deletions + hits)
-            #logger.info(f"For sample {i}: reference={reference} candidate={candidate}")
+            logger.info(f"For sample {i}: reference={reference} candidate={candidate}")
             wer = incorrect_scores[-1] / total_scores[-1]
             if wer > 1.0:
                 wer = 1.0
@@ -206,7 +206,7 @@ class WERMetrics(Metrics):
         Returns:
             The dictionary of columns and values to actually present in wandb
         """
-        overall_score.pop("average_wer_per_row")
+        overall_score.pop("average_sample_wer")
         return overall_score
 
     def get_metadata(self) -> dict:
