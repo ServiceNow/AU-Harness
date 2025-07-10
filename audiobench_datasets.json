@@ -367,7 +367,7 @@
   "callhome_eng": {
     "language": "english",
     "preprocessor": "CallHomePreprocessor",
-    "postprocessor": "AudiobenchPostprocessor",
+    "postprocessor": "CallHomePostprocessor",
     "path": "private_datasets/CallHome_eng"
   },
   "callhome_deu": {

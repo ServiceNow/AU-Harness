@@ -1,3 +1,9 @@
+import logger_setup
+logger_setup.configure()
+import logging
+logger = logging.getLogger(__name__)
+logger.propagate = True
+
 class _SimpleMeta:  # stand-in for MetricMetadata
     def __init__(self, name, display_name=None, description=""):
         self.name = name
@@ -11,7 +17,7 @@ class ReportingMetrics(dict):
 
 class AudiobenchPostprocessor():
     """Postprocessor class to calculate the model scores for the model predictions."""
-    def extract_model_targets(self, dataset: list[dict]) -> list:
+    def process(self, dataset: list[dict], predictions) -> tuple:
         """Return a list of `model_target` strings, preserving dataset order.
 
         Args:
@@ -19,55 +25,6 @@ class AudiobenchPostprocessor():
                      by the pre-processor (must contain the key ``"model_target"``).
 
         Returns:
-            List of ``model_target`` values in the same order as ``dataset``.
+            tuple: (model_targets, predictions)
         """
-        return [record["model_target"] for record in dataset if "model_target" in record]
-    def process(self, results: list[dict]) -> dict[str, float | list]:
-        """Process the results to calculate.
-
-        The judge_response can be either 'incorrect' or 'correct'. Sum up the correct
-        responses and calculate the correctness rate. Also, calculate the correctness rate
-        by pattern.
-
-        Args:
-            results: results of the model predictions
-
-        Returns:
-            output: dictionary containing the correctness score
-
-        """
-        overall_sum = 0
-        successful_extractions = 0
-        multiplier = 100 if results[0]["judge_type"] == "binary" else 20
-        for result in results:
-            try:
-                overall_sum += int(result["eval_response"].split()[-1])
-                successful_extractions += 1
-            except (ValueError, IndexError):
-                continue
-
-        success_rate = successful_extractions / len(results)
-        overall_results = {
-            "avg_rating": ((overall_sum / len(results)) * multiplier) / 100,
-            "success_rate": success_rate,
-        }
-        return overall_results
-
-    def get_reporting_summary_score(self, overall_score):
-        """Get the overall score to show in the result dashboard."""
-        return ReportingMetrics(overall_score=overall_score["avg_rating"] / 100)
-
-    def metadata_info(self):
-        """Creates a mapping from the metric name to the metric metadata object."""
-        return {
-            "avg_rating": MetricMetadata(
-                name="Average Rating",
-                display_name="Average Rating",
-                description="Average judge score rating across all predictions",
-            ),
-            "success_rate": MetricMetadata(
-                name="Success Rate",
-                display_name="Success Rate",
-                description="Rate of successful extractions from the judge predictions",
-            ),
-        }
+        return [record["model_target"] for record in dataset if "model_target" in record], predictions

@@ -4,6 +4,7 @@ import logging
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
+import re
 import json
 from pathlib import Path
 import asyncio
@@ -67,17 +68,13 @@ class Engine:
         scores = {}
         logger.info(f"[Engine.run] Dataset keys: {self.dataset[0].keys()}")
         logger.info(f"[Engine.run] Dataset: {self.dataset}")
-        model_targets = self.postprocessor.extract_model_targets(dataset=self.dataset)
-        import json
-        from tqdm import tqdm
-        import re
+        model_targets, predictions = self.postprocessor.process(dataset=self.dataset, predictions=predictions)
         # Build a safe log filename that uniquely identifies the dataset/metric/model combo
         def _slug(s: str) -> str:
             return re.sub(r"[^A-Za-z0-9_]+", "_", s)
 
         # We will compute scores after generating predictions so we can append them to the log
         record_dir = Path(".")
-
         for model_name, outs in predictions.items():
             logger.info(f"[Engine.run] Scoring model: {model_name}")
             logger.info(f"[Engine.run] Outs: {outs}")
