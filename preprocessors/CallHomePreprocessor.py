@@ -75,6 +75,9 @@ def process_one(cha_path, audio_dir, base_instruction):
     transcript_lines = []
     current_chunk_idx = -1
     speaker_map = {}
+    # For custom instructions per chunk
+    chunk_lines = {}  # chunk_idx: list of lines (already formatted as 'A: ...')
+    chunk_order = []  # preserve order of chunk indices as they appear
 
     with cha_path.open("r", encoding="utf-8", errors="ignore") as f:
         for line in f:
@@ -110,9 +113,18 @@ def process_one(cha_path, audio_dir, base_instruction):
             text = re.sub(r'&=\w+', '', text)
             text = ts_re.sub('', text)
             text = re.sub(r'\s+', ' ', text).strip()
-            if not text:
+            # Skip if text is empty or contains no word characters (only punctuation/whitespace)
+            if not text or not re.search(r'\w', text):
                 continue
-            transcript_lines.append(f"{canon_spkr}: {text}")
+            line_str = f"{canon_spkr}: {text}"
+            transcript_lines.append(line_str)
+
+            # Collect lines per chunk for custom instructions
+            if chunk_idx not in chunk_lines:
+                chunk_lines[chunk_idx] = []
+                chunk_order.append(chunk_idx)
+            if len(chunk_lines[chunk_idx]) < 3:
+                chunk_lines[chunk_idx].append(line_str)
 
     # --- NEW: Cut audio to [min_start_ms, max_end_ms] ---
     if min_start_ms is not None and max_end_ms is not None:
@@ -120,12 +132,16 @@ def process_one(cha_path, audio_dir, base_instruction):
         end_sample = int(max_end_ms / 1000 * sr)
         audio_array = audio_array[start_sample:end_sample]
 
+    # Build array of custom instructions per chunk
+    chunk_instructions = ["\n".join(chunk_lines[idx]) for idx in chunk_order]
+
     reference_txt = "\n".join(transcript_lines)
     logger.info(f"[CallHomePreprocessor] Reference first 100 characters: {reference_txt[:100]}")
     return {
         "array": audio_array,
         "sampling_rate": sr,
         "instruction": base_instruction,
+        "chunk_instructions": chunk_instructions,
         "model_target": reference_txt,
         "id": cha_id,
         "task_type": "Transcription",

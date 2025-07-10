@@ -227,11 +227,19 @@ class Model(ABC):
                     chunk_array = audio_array[start:end]
                     encoded = encode_audio_array_base64(chunk_array, sampling_rate)
 
+                    # Compose chunk-specific instruction
+                    chunk_instructions = message.get("chunk_instructions")
+                    if chunk_instructions and i < len(chunk_instructions):
+                        chunk_instruction = chunk_instructions[i]
+                        full_instruction = instruction + "\n" + chunk_instruction
+                    else:
+                        full_instruction = instruction
+
                     message["model_inputs"] = [
                         {
                             "role": "user",
                             "content": [
-                                {"type": "text", "text": instruction},
+                                {"type": "text", "text": full_instruction},
                                 {
                                     "type": "input_audio",
                                     "input_audio": {
