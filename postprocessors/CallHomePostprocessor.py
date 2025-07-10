@@ -18,13 +18,17 @@ class CallHomePostprocessor():
         Returns:
             tuple: (model_targets, predictions)
         """
-        def process_sample(pred_str):
-            lines = pred_str.splitlines()
-            a_lines = [line.strip() for line in lines if line.strip().startswith('A')]
-            b_lines = [line.strip() for line in lines if line.strip().startswith('B')]
-            a_concat = ' '.join(a_lines)
-            b_concat = ' '.join(b_lines)
-            return f"{a_concat}\n{b_concat}"
+        def process_sample(sample: str) -> str:
+            lines = sample.splitlines()
+            a_words = []
+            b_words = []
+            for line in lines:
+                line = line.strip()
+                if line.startswith('A:'):
+                    a_words.append(line[2:].strip())
+                elif line.startswith('B:'):
+                    b_words.append(line[2:].strip())
+            return f"A: {' '.join(a_words)}\nB: {' '.join(b_words)}"
 
         model_targets = [process_sample(record["model_target"]) for record in dataset if "model_target" in record]
         processed_predictions = {}

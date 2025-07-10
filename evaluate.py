@@ -87,7 +87,7 @@ class Engine:
                     total=min(len(outs), len(model_targets)),
                     desc=f"Logging {model_name} pairs"
                 ):
-                    logger.info(f"[Engine.run] Logging pair {i}: {pred} | {ref}")
+                    logger.info(f"\n\n\n[Engine.run] Logging pair {i}: |prediction: {pred} |reference: {ref}\n\n\n")
                     log_entry = {
                         "model": model_name,
                         "index": i,

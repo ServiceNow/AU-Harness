@@ -135,7 +135,16 @@ def process_one(cha_path, audio_dir, base_instruction):
     # Build array of custom instructions per chunk
     chunk_instructions = ["\n".join(chunk_lines[idx]) for idx in chunk_order]
 
-    reference_txt = "\n".join(transcript_lines)
+    # Build reference as a single two-line string: A: all A's words\nB: all B's words
+    a_words = []
+    b_words = []
+    for line in transcript_lines:
+        line = line.strip()
+        if line.startswith('A:'):
+            a_words.append(line[2:].strip())
+        elif line.startswith('B:'):
+            b_words.append(line[2:].strip())
+    reference_txt = f"A: {' '.join(a_words)}\nB: {' '.join(b_words)}"
     logger.info(f"[CallHomePreprocessor] Reference first 100 characters: {reference_txt[:100]}")
     return {
         "array": audio_array,

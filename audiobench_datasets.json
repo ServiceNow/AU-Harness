@@ -401,4 +401,65 @@
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   }
+  "ami": {
+    "hf_repo": "edinburghcstr/ami",
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
+  },
+  "common_voice_15": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "language": "multilingual",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
+  },
+  "earnings_22": {
+    "hf_repo": "anton-l/earnings22",
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
+  },
+  "fleurs": {
+    "hf_repo": "google/fleurs",
+    "language": "multilingual",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
+  },
+  "gigaspeech": {
+    "hf_repo": "speechcolab/gigaspeech",
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
+  },
+  "librispeech": {
+    "hf_repo": "openslr/librispeech_asr",
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
+  },
+  "librispeech_multilingual": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "language": "multilingual",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
+  },
+  "spgispeech": {
+    "hf_repo": "kensho/spgispeech",
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
+  },
+  "tedlium": {
+    "hf_repo": "LIUM/tedlium",
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
+  },
+  "voxpopuli": {
+    "hf_repo": "facebook/voxpopuli",
+    "language": "multilingual",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
+  }
+
 }
