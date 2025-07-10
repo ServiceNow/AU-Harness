@@ -393,5 +393,12 @@
     "preprocessor": "CallHomePreprocessor",
     "postprocessor": "CallHomePostprocessor",
     "path": "private_datasets/CallHome_eng"
+  },
+
+  "enterprise": {
+    "hf_repo": "ServiceNow-AI/enterprise-audio", 
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor"
   }
 }

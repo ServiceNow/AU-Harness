@@ -17,12 +17,14 @@ from metrics.metrics import Metrics
 
 class Engine:
     """Evaluate one or many models over the same dataset concurrently."""
-    def __init__(self, models: list[Model], dataset: list[dict], metric: Metrics, postprocessor):
+    def __init__(self, models: list[Model], dataset: list[dict], metric: Metrics, postprocessor, dataset_name: str):
         logger.info(f"[Engine.__init__] Initializing Engine with {len(models)} model(s), dataset size: {len(dataset)}, metric: {metric.name}")
         self.models = models
         self.dataset = dataset
         self.metric = metric
         self.postprocessor = postprocessor
+        # Keep track of dataset name so we can create per-dataset log files
+        self.dataset_name = dataset_name
 
 
     # ---------------- internal helpers ----------------x
@@ -68,13 +70,21 @@ class Engine:
         model_targets = self.postprocessor.extract_model_targets(dataset=self.dataset)
         import json
         from tqdm import tqdm
-        record_log_path = "record_scores.log"
+        import re
+        # Build a safe log filename that uniquely identifies the dataset/metric/model combo
+        def _slug(s: str) -> str:
+            return re.sub(r"[^A-Za-z0-9_]+", "_", s)
+
+        # We will compute scores after generating predictions so we can append them to the log
+        record_dir = Path(".")
+
         for model_name, outs in predictions.items():
             logger.info(f"[Engine.run] Scoring model: {model_name}")
             logger.info(f"[Engine.run] Outs: {outs}")
             logger.info(f"[Engine.run] Model targets: {model_targets}")
-            # Log every prediction/reference pair to record_scores.log with tqdm progress bar
-            with open(record_log_path, "a", encoding="utf-8") as rec_log:
+            # Build/overwrite the log file for this (dataset, metric, model) triple
+            record_log_path = record_dir / f"{_slug(self.dataset_name)}_{_slug(self.metric.name)}_{_slug(model_name)}.log"
+            with open(record_log_path, "w", encoding="utf-8") as rec_log:
                 for i, (pred, ref) in tqdm(
                     enumerate(zip(outs, model_targets)),
                     total=min(len(outs), len(model_targets)),
@@ -88,7 +98,21 @@ class Engine:
                         "reference": ref
                     }
                     rec_log.write(json.dumps(log_entry, ensure_ascii=False) + "\n")
-            scores[model_name] = self.metric(outs, model_targets)
+                # Finished logging pairs – now calculate the score for this model
+            model_score = self.metric(outs, model_targets)
+            scores[model_name] = model_score
+
+            # Append benchmark result at the end of the existing log file
+            summary_entry = {
+                "model": model_name,
+                "dataset": self.dataset_name,
+                "metric": self.metric.name,
+                "score": model_score
+            }
+            # Re-open the same log file in append mode because the previous context manager
+            # has already closed the handle (`rec_log`).
+            with open(record_log_path, "a", encoding="utf-8") as rec_log_append:
+                rec_log_append.write(json.dumps(summary_entry, ensure_ascii=False) + "\n")
         logger.info(f"[Engine.run] Evaluation complete. Returning scores.")
         logger.info(f"[Engine.run] Scores: {scores}")
         return {self.metric.name: scores}
@@ -254,7 +278,7 @@ def main(cfg_path='config.yaml'):
             PostprocessorClass = AudiobenchPostprocessor
         postprocessor = PostprocessorClass()
         logger.info("[main] Initializing Engine and running evaluation...")
-        result = Engine(models, dataset, metric, postprocessor).run()
+        result = Engine(models, dataset, metric, postprocessor, dname).run()
         all_scores[dname] = result
     logger.info("[main] Evaluation scores:")
     logger.info(json.dumps(all_scores, indent=2))
