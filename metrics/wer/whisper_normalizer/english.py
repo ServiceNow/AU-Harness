@@ -512,6 +512,9 @@ class EnglishTextNormalizer:
     def __call__(self, s: str):
         s = s.lower()
 
+        # Normalize various unicode apostrophes/backticks to standard ASCII apostrophe
+        s = re.sub(r"[‘’´`‛ʻʼʽʾʿˊˋˈ]", "'", s)
+
         s = re.sub(r"[<\[][^>\]]*[>\]]", "", s)  # remove words between brackets
         s = re.sub(r"\(([^)]+?)\)", "", s)  # remove words between parenthesis
         s = re.sub(self.ignore_patterns, "", s)

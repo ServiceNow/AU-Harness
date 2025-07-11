@@ -9,7 +9,7 @@ import logging
 from pathlib import Path
 from typing import Optional
 
-_DEFAULT_NAME = "default.log"
+_DEFAULT_NAME = "default2.log"
 
 
 def _install_handlers(log_path: Path):

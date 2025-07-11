@@ -79,37 +79,9 @@ class Engine:
             logger.info(f"[Engine.run] Scoring model: {model_name}")
             logger.info(f"[Engine.run] Outs: {outs}")
             logger.info(f"[Engine.run] Model targets: {model_targets}")
-            # Build/overwrite the log file for this (dataset, metric, model) triple
-            record_log_path = record_dir / f"{_slug(self.dataset_name)}_{_slug(self.metric.name)}_{_slug(model_name)}.log"
-            with open(record_log_path, "w", encoding="utf-8") as rec_log:
-                for i, (pred, ref) in tqdm(
-                    enumerate(zip(outs, model_targets)),
-                    total=min(len(outs), len(model_targets)),
-                    desc=f"Logging {model_name} pairs"
-                ):
-                    logger.info(f"\n\n\n[Engine.run] Logging pair {i}: |prediction: {pred} |reference: {ref}\n\n\n")
-                    log_entry = {
-                        "model": model_name,
-                        "index": i,
-                        "prediction": pred,
-                        "reference": ref
-                    }
-                    rec_log.write(json.dumps(log_entry, ensure_ascii=False) + "\n")
-                # Finished logging pairs – now calculate the score for this model
-            model_score = self.metric(outs, model_targets)
+            # Let the metric handle per-record logging internally
+            model_score = self.metric(outs, model_targets, dataset_name=self.dataset_name, model_name=model_name)
             scores[model_name] = model_score
-
-            # Append benchmark result at the end of the existing log file
-            summary_entry = {
-                "model": model_name,
-                "dataset": self.dataset_name,
-                "metric": self.metric.name,
-                "score": model_score
-            }
-            # Re-open the same log file in append mode because the previous context manager
-            # has already closed the handle (`rec_log`).
-            with open(record_log_path, "a", encoding="utf-8") as rec_log_append:
-                rec_log_append.write(json.dumps(summary_entry, ensure_ascii=False) + "\n")
         logger.info(f"[Engine.run] Evaluation complete. Returning scores.")
         logger.info(f"[Engine.run] Scores: {scores}")
         return {self.metric.name: scores}
@@ -205,6 +177,9 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
     elif name == "llm_judge_detailed":
         from metrics.llm_judge import DetailedLLMJudgeMetric
         metric = DetailedLLMJudgeMetric(max_concurrency=judge_concurrency, model=judge_model)
+    elif name == "llm_judge_callhome":
+        from metrics.llm_judge import CallHomeLLMJudgeMetric
+        metric = CallHomeLLMJudgeMetric(max_concurrency=judge_concurrency, model=judge_model)
     elif name == "meteor":
         from metrics.meteor_score import MeteorScore
         metric = MeteorScore()

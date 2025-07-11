@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-import asyncio, json, yaml, os
+import asyncio, json, yaml, os, re
+from pathlib import Path
 from pathlib import Path
 
 from openai import AsyncAzureOpenAI
@@ -103,6 +104,23 @@ class _BaseLLMJudge(Metrics):
             results.append(result)
         return results
 
+    # ---------------------------------------------------
+    # Internal helper for per-record logging
+    # ---------------------------------------------------
+    def _write_record_log(self, refs, cands, scores, dataset_name, model_name):
+        if not refs or not scores:
+            return
+        def _slug(s):
+            return re.sub(r"[^A-Za-z0-9_]+", "_", s)
+        log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
+        explanations = getattr(self, "explanations", [""] * len(scores))
+        with open(log_path, "w", encoding="utf-8") as f:
+            for ref, cand, sc, expl in zip(refs, cands, scores, explanations):
+                f.write(json.dumps({"reference": ref, "candidate": cand, "score": sc, "explanation": expl}, ensure_ascii=False) + "\n")
+
+
+#All of these judges always return on a scale of 100
+
 # ---------------------------------------------------------------------------
 # Binary (yes/no) judge
 # ---------------------------------------------------------------------------
@@ -111,14 +129,25 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
     name: str = "llm_judge_binary"
     _prompt_key: str = "binary_judge_prompt"
 
-    def __call__(self, candidates, references):
-        """Return overall average dict and record-level details."""
-        #self.record_level_scores = self.compute_record_level_scores(candidates, references)
+    def __call__(self, candidates, references, *, dataset_name: str | None = None, model_name: str | None = None):
+        """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
         overall = super().get_score(candidates, references)
-        # Scale final overall score to 0–100
         if self.name in overall:
-            overall[self.name] *= (100 if self.name == "llm_judge_binary" else 20)
+            overall[self.name] *= 100
+        if dataset_name and model_name:
+            scores = self.record_level_scores.get(self.name, [])
+            self._write_record_log(references, candidates, scores, dataset_name, model_name)
+            self._append_final_score(overall, dataset_name, model_name)
         return overall
+
+    def _append_final_score(self, overall, dataset_name, model_name):
+        import json, re
+        from pathlib import Path
+        def _slug(s):
+            return re.sub(r"[^A-Za-z0-9_]+", "_", s)
+        log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
+        with open(log_path, "a", encoding="utf-8") as f:
+            f.write(json.dumps({"final_score": overall}, ensure_ascii=False) + "\n")
     def compute_record_level_scores(self, candidates: list, references: list):
         raw_scores = asyncio.run(self._judge_all(candidates, references))
         # Expect {"score": number, "explanation": str}
@@ -134,14 +163,25 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
     name: str = "llm_judge_detailed"
     _prompt_key: str = "detailed_judge_prompt"
 
-    def __call__(self, candidates, references):
-        """Return overall average dict and record-level details."""
-        #self.record_level_scores = self.compute_record_level_scores(candidates, references)
+    def __call__(self, candidates, references, *, dataset_name: str | None = None, model_name: str | None = None):
+        """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
         overall = super().get_score(candidates, references)
-        # Scale final overall score to 0–100
         if self.name in overall:
-            overall[self.name] *= (100 if self.name == "llm_judge_binary" else 20)
+            overall[self.name] *= 20
+        if dataset_name and model_name:
+            scores = self.record_level_scores.get(self.name, [])
+            self._write_record_log(references, candidates, scores, dataset_name, model_name)
+            self._append_final_score(overall, dataset_name, model_name)
         return overall
+
+    def _append_final_score(self, overall, dataset_name, model_name):
+        import json, re
+        from pathlib import Path
+        def _slug(s):
+            return re.sub(r"[^A-Za-z0-9_]+", "_", s)
+        log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
+        with open(log_path, "a", encoding="utf-8") as f:
+            f.write(json.dumps({"final_score": overall}, ensure_ascii=False) + "\n")   
     def compute_record_level_scores(self, candidates: list, references: list):
         raw_scores = asyncio.run(self._judge_all(candidates, references))
         # Expect {"score": number, "explanation": str}
@@ -149,6 +189,37 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
         self.explanations = [r.get("explanation", "") if isinstance(r, dict) else "" for r in raw_scores]
         return {self.name: scores}
 
+class CallHomeLLMJudgeMetric(_BaseLLMJudge):
+    name: str = "llm_judge_callhome"
+    _prompt_key: str = "callhome_judge_prompt"
+
+    def __call__(self, candidates, references, *, dataset_name: str | None = None, model_name: str | None = None):
+        """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
+        overall = super().get_score(candidates, references)
+        print(overall)
+        if self.name in overall:
+            overall[self.name] += 1
+            overall[self.name] *= 10
+        if dataset_name and model_name:
+            scores = self.record_level_scores.get(self.name, [])
+            self._write_record_log(references, candidates, scores, dataset_name, model_name)
+            self._append_final_score(overall, dataset_name, model_name)
+        return overall
+
+    def _append_final_score(self, overall, dataset_name, model_name):
+        import json, re
+        from pathlib import Path
+        def _slug(s):
+            return re.sub(r"[^A-Za-z0-9_]+", "_", s)
+        log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
+        with open(log_path, "a", encoding="utf-8") as f:
+            f.write(json.dumps({"final_score": overall}, ensure_ascii=False) + "\n")   
+    def compute_record_level_scores(self, candidates: list, references: list):
+        raw_scores = asyncio.run(self._judge_all(candidates, references))
+        # Expect {"score": number, "explanation": str}
+        scores = [float(r.get("score", 0)) if isinstance(r, dict) else 0.0 for r in raw_scores]
+        self.explanations = [r.get("explanation", "") if isinstance(r, dict) else "" for r in raw_scores]
+        return {self.name: scores}
 # ---------------------------------------------------------------------------
 # Original LLM judge
 # ---------------------------------------------------------------------------

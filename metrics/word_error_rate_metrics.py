@@ -72,16 +72,43 @@ def normalize_text(text: str, language: str) -> str:
         language: language code
     """
     normalizer = NORMALIZERS.get(language, DEFAULT_NORMALIZER)
-    #logger.info(f"[normalize_text] Normalizing text: {text}")
+    logger.info(f"[normalize_text] Normalizing text: {text}")
     text = convert_unicode_to_characters(text)
     text = convert_digits_to_words(text, language)
     return BASIC_TRANSFORMATIONS([normalizer(text)])[0]
 
 
 class WERMetrics(Metrics):
-    def __call__(self, candidates, references):
+    def __call__(self, candidates, references, *, dataset_name: str | None = None, model_name: str | None = None):
         logger.info(f"[WERMetrics.__call__] Calculating WER for {len(candidates)} samples.")
-        return self.get_score(candidates, references)
+        overall = self.get_score(candidates, references)
+        if dataset_name and model_name:
+            scores = self.record_level_scores.get(self.name, [])
+            self._write_record_log(references, candidates, scores, dataset_name, model_name)
+            # Append overall metric at the end
+            self._append_final_score(overall, dataset_name, model_name)
+        return overall
+
+    def _append_final_score(self, overall, dataset_name, model_name):
+        import json, re
+        from pathlib import Path
+        def _slug(s):
+            return re.sub(r"[^A-Za-z0-9_]+", "_", s)
+        log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
+        with open(log_path, "a", encoding="utf-8") as f:
+            f.write(json.dumps({"final_score": overall}, ensure_ascii=False) + "\n")
+
+    def _write_record_log(self, refs, cands, scores, dataset_name, model_name):
+        import json, re
+        from pathlib import Path
+        if not refs or not scores:
+            return
+        def _slug(s):
+            return re.sub(r"[^A-Za-z0-9_]+", "_", s)
+        log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
+        with open(log_path, "w", encoding="utf-8") as f:
+            for ref, cand, sc in zip(refs, cands, scores):
+                f.write(json.dumps({"reference": ref, "candidate": cand, "score": sc}, ensure_ascii=False) + "\n")
     """Word Error Rate metric class, used for transcription tasks."""
 
     def __init__(self, language="en"):
@@ -155,6 +182,8 @@ class WERMetrics(Metrics):
             lang_code = getattr(self, 'language', 'en')
             references_clean.append(normalize_text(reference, lang_code))
             candidates_clean.append(normalize_text(candidate, lang_code))
+            logger.info(f"[compute_record_level_scores] Cleaned Reference: {references_clean[-1]}")
+            logger.info(f"[compute_record_level_scores] Cleaned Candidate: {candidates_clean[-1]}")
             if references_clean[-1].strip() == "":
                 logger.warning(
                     f"After normalization, '{reference}' is empty. Considering all words in '{candidate}' as incorrect."

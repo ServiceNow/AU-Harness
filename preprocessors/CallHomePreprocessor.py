@@ -74,21 +74,6 @@ def process_one(cha_path, audio_dir, base_instruction):
     max_end_ms = None
     cleaned_lines = []  # List of tuples: (orig_spkr, cleaned_text, start_ms, end_ms)
 
-    # Filler word removal logic (copied from CallHomePostprocessor)
-    import re as _re
-    _FILLER_PATTERNS = [
-        r"\buh\b", r"\bum+\b", r"\buhhuh\b", r"\bmhm+\b", r"\bmm+\b", r"\bah+\b", r"\beh+\b", r"\bhmm+\b",
-        r"\bh\b", r"\bye\b", r"\byeah yeah\b", r"\bI I\b", r"\bx+\b", r"\bxxx\b",
-        r"\bca-\b", r"\be-\b", r"\bI-\b", r"\bm-\b", r"\bw-\b", r"\b\+/, \+\b", r"\b\+\,\b",
-        r"\b(hm)+\b", r"\b(um)+\b", r"\b(uh)+\b"
-    ]
-    def _remove_fillers(text):
-        for pat in _FILLER_PATTERNS:
-            text = _re.sub(pat, '', text, flags=_re.IGNORECASE)
-        text = _re.sub(r'\b[a-zA-Z]-\b', '', text)
-        text = _re.sub(r'\s+', ' ', text).strip()
-        return text
-
     # First pass: clean up all text and collect lines with timestamps
     with cha_path.open("r", encoding="utf-8", errors="ignore") as f:
         for line in f:
@@ -107,10 +92,14 @@ def process_one(cha_path, audio_dir, base_instruction):
             if max_end_ms is None or end_ms > max_end_ms:
                 max_end_ms = end_ms
             text = raw_txt
-            text = re.sub(r'&=\w+', '', text)
+            # Remove any word immediately following an = sign (e.g., =laughs, =lipsmack)
+            text = re.sub(r'=\w+', '', text)
+            text = re.sub(r'&\w+', '', text)
             text = ts_re.sub('', text)
             text = re.sub(r'\s+', ' ', text).strip()
-            text = _remove_fillers(text)
+            # Remove weird punctuation/annotation tokens
+            text = re.sub(r'(?:[&+\-/]+[.,]*)+', '', text)
+            text = re.sub(r'\s+', ' ', text).strip()
             # Remove if only punctuation or whitespace remains
             if not text or not re.search(r'\w', text) or all(c in '.,;:!?-()[]{}"\'\s' for c in text):
                 continue

@@ -109,6 +109,7 @@ class RequestRespHandler:
                     raise ValueError("Invalid input: msg_body must be a wav file path")
                 raw_response = resp.text
                 llm_response = self.get_response_text(raw_response)
+                logger.info(f"LLM response for try {self.current_attempt}: {llm_response}")
                 response_code = 200
                 elapsed_time: float = time.time() - start_time
                 #logger.info(f"Successful post request: {response_code}")

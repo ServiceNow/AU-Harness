@@ -7,8 +7,34 @@ from utils import util
 
 
 class MeteorScore(Metrics):
-    def __call__(self, candidates, references):
-        return self.compute_record_level_scores(candidates, references)
+    def __call__(self, candidates, references, *, dataset_name: str | None = None, model_name: str | None = None):
+        overall = self.compute_record_level_scores(candidates, references)
+        if dataset_name and model_name:
+            scores = overall.get(self.name, [])
+            self._write_record_log(references, candidates, scores, dataset_name, model_name)
+            self._append_final_score(overall, dataset_name, model_name)
+        return overall
+
+    def _append_final_score(self, overall, dataset_name, model_name):
+        import json, re
+        from pathlib import Path
+        def _slug(s):
+            return re.sub(r"[^A-Za-z0-9_]+", "_", s)
+        log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
+        with open(log_path, "a", encoding="utf-8") as f:
+            f.write(json.dumps({"final_score": overall}, ensure_ascii=False) + "\n")
+
+    def _write_record_log(self, refs, cands, scores, dataset_name, model_name):
+        import json, re
+        from pathlib import Path
+        if not refs or not scores:
+            return
+        def _slug(s):
+            return re.sub(r"[^A-Za-z0-9_]+", "_", s)
+        log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
+        with open(log_path, "w", encoding="utf-8") as f:
+            for ref, cand, sc in zip(refs, cands, scores):
+                f.write(json.dumps({"reference": ref, "candidate": cand, "score": sc}, ensure_ascii=False) + "\n")
     """MeteorScore using nltk tokenizer."""
 
     def __init__(self):
