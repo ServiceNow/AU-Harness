@@ -400,7 +400,7 @@
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
-  }
+  },
   "ami": {
     "hf_repo": "edinburghcstr/ami",
     "language": "english",

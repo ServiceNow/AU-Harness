@@ -72,13 +72,24 @@ def process_one(cha_path, audio_dir, base_instruction):
     # --- NEW: Find min start and max end timestamps ---
     min_start_ms = None
     max_end_ms = None
-    transcript_lines = []
-    current_chunk_idx = -1
-    speaker_map = {}
-    # For custom instructions per chunk
-    chunk_lines = {}  # chunk_idx: list of lines (already formatted as 'A: ...')
-    chunk_order = []  # preserve order of chunk indices as they appear
+    cleaned_lines = []  # List of tuples: (orig_spkr, cleaned_text, start_ms, end_ms)
 
+    # Filler word removal logic (copied from CallHomePostprocessor)
+    import re as _re
+    _FILLER_PATTERNS = [
+        r"\buh\b", r"\bum+\b", r"\buhhuh\b", r"\bmhm+\b", r"\bmm+\b", r"\bah+\b", r"\beh+\b", r"\bhmm+\b",
+        r"\bh\b", r"\bye\b", r"\byeah yeah\b", r"\bI I\b", r"\bx+\b", r"\bxxx\b",
+        r"\bca-\b", r"\be-\b", r"\bI-\b", r"\bm-\b", r"\bw-\b", r"\b\+/, \+\b", r"\b\+\,\b",
+        r"\b(hm)+\b", r"\b(um)+\b", r"\b(uh)+\b"
+    ]
+    def _remove_fillers(text):
+        for pat in _FILLER_PATTERNS:
+            text = _re.sub(pat, '', text, flags=_re.IGNORECASE)
+        text = _re.sub(r'\b[a-zA-Z]-\b', '', text)
+        text = _re.sub(r'\s+', ' ', text).strip()
+        return text
+
+    # First pass: clean up all text and collect lines with timestamps
     with cha_path.open("r", encoding="utf-8", errors="ignore") as f:
         for line in f:
             m = line_re.match(line)
@@ -86,54 +97,62 @@ def process_one(cha_path, audio_dir, base_instruction):
                 continue
             orig_spkr = m.group("spkr")
             raw_txt = m.group("txt")
-
             ts_match = ts_re.search(raw_txt)
-            if ts_match:
-                start_ms = int(ts_match.group("start"))
-                end_ms = int(ts_match.group("end"))
-                if min_start_ms is None or start_ms < min_start_ms:
-                    min_start_ms = start_ms
-                if max_end_ms is None or end_ms > max_end_ms:
-                    max_end_ms = end_ms
-                chunk_idx = start_ms // 30000
-            else:
-                chunk_idx = current_chunk_idx
-
-            if chunk_idx != current_chunk_idx:
-                current_chunk_idx = chunk_idx
-                speaker_map = {}
-
-            if orig_spkr in speaker_map:
-                canon_spkr = speaker_map[orig_spkr]
-            else:
-                canon_spkr = "A" if not speaker_map else "B"
-                speaker_map[orig_spkr] = canon_spkr
-
+            if not ts_match:
+                continue  # Only process lines with timestamps
+            start_ms = int(ts_match.group("start"))
+            end_ms = int(ts_match.group("end"))
+            if min_start_ms is None or start_ms < min_start_ms:
+                min_start_ms = start_ms
+            if max_end_ms is None or end_ms > max_end_ms:
+                max_end_ms = end_ms
             text = raw_txt
             text = re.sub(r'&=\w+', '', text)
             text = ts_re.sub('', text)
             text = re.sub(r'\s+', ' ', text).strip()
-            # Skip if text is empty or contains no word characters (only punctuation/whitespace)
-            if not text or not re.search(r'\w', text):
+            text = _remove_fillers(text)
+            # Remove if only punctuation or whitespace remains
+            if not text or not re.search(r'\w', text) or all(c in '.,;:!?-()[]{}"\'\s' for c in text):
                 continue
+            cleaned_lines.append((orig_spkr, text, start_ms, end_ms))
+
+    if min_start_ms is None or max_end_ms is None or not cleaned_lines:
+        return None
+
+    logger.info("Contents of cleaned_lines:")
+    for line in cleaned_lines:
+        logger.info(line)
+    # Second pass: chunking and speaker resetting per chunk
+    chunk_lines = {}  # chunk_idx: list of (orig_spkr, text)
+    chunk_order = []
+    for orig_spkr, text, start_ms, end_ms in cleaned_lines:
+        chunk_idx = (start_ms - min_start_ms) // 30000  # relative to min_start_ms
+        if chunk_idx not in chunk_lines:
+            chunk_lines[chunk_idx] = []
+            chunk_order.append(chunk_idx)
+        chunk_lines[chunk_idx].append((orig_spkr, text))
+
+    transcript_lines = []
+    chunk_instructions = []
+    for chunk_idx in chunk_order:
+        spkr_map = {}
+        lines = []
+        for orig_spkr, text in chunk_lines[chunk_idx]:
+            if orig_spkr in spkr_map:
+                canon_spkr = spkr_map[orig_spkr]
+            else:
+                canon_spkr = "A" if not spkr_map else "B"
+                spkr_map[orig_spkr] = canon_spkr
             line_str = f"{canon_spkr}: {text}"
             transcript_lines.append(line_str)
-
-            # Collect lines per chunk for custom instructions
-            if chunk_idx not in chunk_lines:
-                chunk_lines[chunk_idx] = []
-                chunk_order.append(chunk_idx)
-            if len(chunk_lines[chunk_idx]) < 3:
-                chunk_lines[chunk_idx].append(line_str)
-
-    # --- NEW: Cut audio to [min_start_ms, max_end_ms] ---
-    if min_start_ms is not None and max_end_ms is not None:
-        start_sample = int(min_start_ms / 1000 * sr)
-        end_sample = int(max_end_ms / 1000 * sr)
-        audio_array = audio_array[start_sample:end_sample]
-
-    # Build array of custom instructions per chunk
-    chunk_instructions = ["\n".join(chunk_lines[idx]) for idx in chunk_order]
+            if len(lines) < 2:
+                lines.append(line_str)
+        chunk_instructions.append("\n".join(lines))
+    logger.info(f"Transcript lines: {transcript_lines}")
+    # --- Cut audio to [min_start_ms, max_end_ms] ---
+    start_sample = int(min_start_ms / 1000 * sr)
+    end_sample = int(max_end_ms / 1000 * sr)
+    audio_array = audio_array[start_sample:end_sample]
 
     # Build reference as a single two-line string: A: all A's words\nB: all B's words
     a_words = []
@@ -145,7 +164,7 @@ def process_one(cha_path, audio_dir, base_instruction):
         elif line.startswith('B:'):
             b_words.append(line[2:].strip())
     reference_txt = f"A: {' '.join(a_words)}\nB: {' '.join(b_words)}"
-    logger.info(f"[CallHomePreprocessor] Reference first 100 characters: {reference_txt[:100]}")
+    logger.info(f"[CallHomePreprocessor] Reference first 100000 characters: {reference_txt[:100000]}")
     return {
         "array": audio_array,
         "sampling_rate": sr,
@@ -155,31 +174,3 @@ def process_one(cha_path, audio_dir, base_instruction):
         "id": cha_id,
         "task_type": "Transcription",
     }
-
-
-if __name__ == "__main__":
-    import textwrap, sys
-
-    # If the script is called with an argument, treat it as a dataset path (original behaviour)
-    if len(sys.argv) > 1:
-        preprocessor = CallHomePreprocessor()
-        preprocessor.process(sys.argv[1])
-    else:
-        # Demo run on hard-coded CHA snippet provided by the user
-        demo_text = textwrap.dedent(r"""@UTF8
-@PID:\t11312/t-00001005-1
-@Begin
-@Languages:\teng
-@Participants:\tA Subject, B Subject
-@ID:\teng|eng|A|||||Subject|||
-@ID:\teng|eng|B|||||Subject|||
-@Media:\t0638, audio
-*A:\tRight . \x15200460_200690\x15
-*B:\tand I . \x15201140_201610\x15
-*B:\tI already got another &=yelling apartment . \x15201950_203290\x15
-*B:\tfor when I move out &=bang . \x15203880_204930\x15
-*A:\toh you did . \x15205210_205610\x15
-*B:\tyeah . \x15205780_206050\x15
-*A:\tWhere ? \x15206410_206720\x15
-*B:\t&=lipsmack it's on the corner of Columbia and Cole . \x15206830_209640\x15
-*A:\tuhhuh . \x15210130_210500\x15""")
