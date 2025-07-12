@@ -125,7 +125,6 @@ class Model(ABC):
                         #logger.info(f"[{self.name()}] Generating text for input: {message}")
                         result: ModelResponse = await self._generate_text(message, run_params)
                         await self._mark_errors(result)
-                        logger.info(f"result in retry: {result}")
                     except Exception as e:
                         logger.error(f"Exception during text generation: {e}")
                         result = ModelResponse(
@@ -173,7 +172,6 @@ class Model(ABC):
                 performance=None,
                 wait_time=0,
             ) 
-        logger.info(f"final result: {result}")
         return result
 
 

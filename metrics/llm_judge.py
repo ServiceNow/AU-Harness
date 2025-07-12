@@ -68,7 +68,7 @@ class _BaseLLMJudge(Metrics):
                 except Exception:
                     return content
             except (openai.APIConnectionError, httpx.ConnectError, httpx.HTTPError) as e:
-                logger.warning(f"OpenAI API connection failed (attempt {attempt+1}/{max_retries}): {e}")
+                logger.warning(f"API connection failed (attempt {attempt+1}/{max_retries}): {e}")
                 await asyncio.sleep(2)  # Wait before retrying
             except Exception as e:
                 logger.error(f"Unexpected error in _score_once: {e}")

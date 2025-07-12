@@ -73,7 +73,6 @@ def normalize_text(text: str, language: str) -> str:
         language: language code
     """
     normalizer = NORMALIZERS.get(language, DEFAULT_NORMALIZER)
-    logger.info(f"[normalize_text] Normalizing text: {text}")
     text = convert_unicode_to_characters(text)
     text = convert_digits_to_words(text, language)
     return BASIC_TRANSFORMATIONS([normalizer(text)])[0]
@@ -81,9 +80,6 @@ def normalize_text(text: str, language: str) -> str:
 
 class WERMetrics(Metrics):
     def __call__(self, candidates, references, ids=None, lengths=None, *, dataset_name: str | None = None, model_name: str | None = None):
-        logger.info(f"[WERMetrics.__call__] Calculating WER for {len(candidates)} samples.")
-        logger.info(f"[WERMetrics.__call__] ids: {ids}")
-        logger.info(f"[WERMetrics.__call__] lengths: {lengths}")
         overall = self.get_score(candidates, references, ids, lengths)
         if dataset_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
@@ -172,10 +168,6 @@ class WERMetrics(Metrics):
             "overall_wer": overall_wer
         }
 
-        # If ids are provided, calculate WER by conversation
-        logger.info(f"[WERMetrics.get_score] length ids: {len(ids)}")
-        logger.info(f"[WERMetrics.get_score] length lengths: {len(lengths)}")
-        logger.info(f"[WERMetrics.get_score] length scores: {len(scores["wer_per_row"])}")
         if ids and len(ids) == len(scores["wer_per_row"]):
             conversation_wer = {}
             # Group WERs by conversation ID
@@ -231,8 +223,6 @@ class WERMetrics(Metrics):
                     length_wer[bucket_label] = 0.0
             
             result["length_wer"] = length_wer
-        
-        logger.info(f"[get_score] Result: {result}")
 
         # Store the scores for later record level reporting
         # Important to use setdefault which is a no-op if the value already exists
@@ -263,8 +253,6 @@ class WERMetrics(Metrics):
             lang_code = getattr(self, 'language', 'en')
             references_clean.append(normalize_text(reference, lang_code))
             candidates_clean.append(normalize_text(candidate, lang_code))
-            logger.info(f"[compute_record_level_scores] Cleaned Reference: {references_clean[-1]}")
-            logger.info(f"[compute_record_level_scores] Cleaned Candidate: {candidates_clean[-1]}")
             if references_clean[-1].strip() == "":
                 logger.warning(
                     f"After normalization, '{reference}' is empty. Considering all words in '{candidate}' as incorrect."
@@ -287,7 +275,6 @@ class WERMetrics(Metrics):
 
                 incorrect_scores.append(substitutions + deletions + insertions)
                 total_scores.append(substitutions + deletions + hits)
-            logger.info(f"For sample {i}: reference={reference} candidate={candidate}")
             wer = incorrect_scores[-1] / total_scores[-1]
             if wer > 1.0:
                 wer = 1.0

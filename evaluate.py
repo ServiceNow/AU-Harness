@@ -35,11 +35,7 @@ class Engine:
         sem = asyncio.Semaphore(model.batch_size)  # Use per-model batch size
         async def _call(idx: int, sample):
             async with sem:
-                logger.info(f"{sample.keys()}")
                 resp = await model._generate_text_with_retry(sample, {"chunk_size": model.chunk_size, "metric": self.metric.name})
-                logger.info(f"in infer single model {resp}")
-                logger.info(type(resp))
-                logger.info(f"{resp.llm_response}")
                 return idx, (resp.llm_response if resp else "")
         # Create tasks paired with their original indexx
         tasks = [_call(i, ex) for i, ex in enumerate(self.dataset)]
@@ -57,7 +53,6 @@ class Engine:
         tasks = {m.name(): asyncio.create_task(self._infer_single_model(m)) for m in self.models}
         results = {name: await t for name, t in tasks.items()}
         logger.info(f"[Engine._infer_all] All models finished inference.")
-        logger.info(f"[Engine._infer_all] Results: {results}")
         return results
 
     #main engine runner
@@ -66,25 +61,13 @@ class Engine:
         predictions = asyncio.run(self._infer_all())
         logger.info(f"[Engine.run] Predictions complete. Calculating scores...")
         scores = {}
-        logger.info(f"[Engine.run] Dataset keys: {self.dataset[0].keys()}")
-        logger.info(f"[Engine.run] Dataset: {self.dataset}")
         
         # Pass the metric name to the postprocessor
         process_result = self.postprocessor.process(dataset=self.dataset, predictions=predictions, metric=self.metric.name)
         
         model_targets, predictions, ids, lengths = process_result
-        logger.info(f"[Engine.run] ids: {ids}")
-        logger.info(f"[Engine.run] lengths: {lengths}")
-        # Build a safe log filename that uniquely identifies the dataset/metric/model combo
-        def _slug(s: str) -> str:
-            return re.sub(r"[^A-Za-z0-9_]+", "_", s)
 
-        # We will compute scores after generating predictions so we can append them to the log
-        record_dir = Path(".")
         for model_name, outs in predictions.items():
-            logger.info(f"[Engine.run] Scoring model: {model_name}")
-            logger.info(f"[Engine.run] Outs: {outs}")
-            logger.info(f"[Engine.run] Model targets: {model_targets}")
             # Let the metric handle per-record logging internally
             if ids and lengths:
                 model_score = self.metric(outs, model_targets, ids, lengths, dataset_name=self.dataset_name, model_name=model_name)
@@ -157,7 +140,6 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="A
         dset = dset[:num_samples]
     #Added to convert to dict
     else:
-        logger.info(f"[_load_dataset] num_samples not provided; using full dataset length.")
         dset = dset[:len(dset)]
     #logger.info(f"[_load_dataset] Dataset loaded after truncation: {dset}")
     logger.info(f"[_load_dataset] Preprocessing dataset using {preprocessor_name}...")

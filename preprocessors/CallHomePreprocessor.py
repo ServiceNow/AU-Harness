@@ -119,9 +119,6 @@ def process_one(cha_path, audio_dir, base_instruction, metric=None, length_filte
     if min_start_ms is None or max_end_ms is None or not cleaned_lines:
         return None
 
-    logger.info("Contents of cleaned_lines:")
-    for line in cleaned_lines:
-        logger.info(line)
     # Special handling for word error rate metric
     if metric and metric.lower() == "word_error_rate":
         # For each cleaned line, create a separate sample
@@ -187,7 +184,6 @@ def process_one(cha_path, audio_dir, base_instruction, metric=None, length_filte
             if len(lines) < 2:
                 lines.append(line_str)
         chunk_instructions.append("\n".join(lines))
-    logger.info(f"Transcript lines: {transcript_lines}")
     # --- Cut audio to [min_start_ms, max_end_ms] ---
     start_sample = int(min_start_ms / 1000 * sr)
     end_sample = int(max_end_ms / 1000 * sr)
@@ -198,7 +194,6 @@ def process_one(cha_path, audio_dir, base_instruction, metric=None, length_filte
     if length_filter and isinstance(length_filter, tuple) and len(length_filter) == 2:
         min_length, max_length = length_filter
         if audio_duration < min_length or audio_duration > max_length:
-            logger.info(f"Filtered out sample {cha_id} with duration {audio_duration:.2f}s (filter: {length_filter})")
             return None
 
     # Build reference as a single two-line string: A: all A's words\nB: all B's words
@@ -211,7 +206,6 @@ def process_one(cha_path, audio_dir, base_instruction, metric=None, length_filte
         elif line.startswith('B:'):
             b_words.append(line[2:].strip())
     reference_txt = f"A: {' '.join(a_words)}\nB: {' '.join(b_words)}"
-    logger.info(f"[CallHomePreprocessor] Reference first 100000 characters: {reference_txt[:100000]}")
     return {
         "array": audio_array,
         "sampling_rate": sr,

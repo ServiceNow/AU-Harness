@@ -36,7 +36,6 @@ class AudiobenchPreprocessor():
         #logger.info(f"Dataset keys: {keys}, num_samples: {num_samples}")
         for i in tqdm(range(num_samples), desc="Preprocessing"):
             record = {k: dataset[k][i] for k in keys}
-            logger.debug(f"Processing sample {i}: {record}")
             if "audio" in record:
                 record["array"] = record["audio"]["array"]
                 record["sampling_rate"] = record["audio"]["sampling_rate"]
@@ -56,7 +55,6 @@ class AudiobenchPreprocessor():
             if length_filter and isinstance(length_filter, tuple) and len(length_filter) == 2:
                 min_length, max_length = length_filter
                 if audio_duration < min_length or audio_duration > max_length:
-                    logger.info(f"Filtered out sample {i} with duration {audio_duration:.2f}s (filter: {length_filter})")
                     continue
 
             if "reference" in record:
