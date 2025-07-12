@@ -68,7 +68,13 @@ class Engine:
         scores = {}
         logger.info(f"[Engine.run] Dataset keys: {self.dataset[0].keys()}")
         logger.info(f"[Engine.run] Dataset: {self.dataset}")
-        model_targets, predictions = self.postprocessor.process(dataset=self.dataset, predictions=predictions)
+        
+        # Pass the metric name to the postprocessor
+        process_result = self.postprocessor.process(dataset=self.dataset, predictions=predictions, metric=self.metric.name)
+        
+        model_targets, predictions, ids, lengths = process_result
+        logger.info(f"[Engine.run] ids: {ids}")
+        logger.info(f"[Engine.run] lengths: {lengths}")
         # Build a safe log filename that uniquely identifies the dataset/metric/model combo
         def _slug(s: str) -> str:
             return re.sub(r"[^A-Za-z0-9_]+", "_", s)
@@ -80,7 +86,10 @@ class Engine:
             logger.info(f"[Engine.run] Outs: {outs}")
             logger.info(f"[Engine.run] Model targets: {model_targets}")
             # Let the metric handle per-record logging internally
-            model_score = self.metric(outs, model_targets, dataset_name=self.dataset_name, model_name=model_name)
+            if ids and lengths:
+                model_score = self.metric(outs, model_targets, ids, lengths, dataset_name=self.dataset_name, model_name=model_name)
+            else:
+                model_score = self.metric(outs, model_targets, dataset_name=self.dataset_name, model_name=model_name)
             scores[model_name] = model_score
         logger.info(f"[Engine.run] Evaluation complete. Returning scores.")
         logger.info(f"[Engine.run] Scores: {scores}")
@@ -101,13 +110,26 @@ def get_class_from_module(module_prefix, module_name):
 #load an preprocess(dataset specific)
 from preprocessors.CallHomePreprocessor import CallHomePreprocessor
 
-def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = [], zip=False, dataset_config=None):
-    # CallHome special download
-    # Handle CallHome dataset by repo name or config
-    if preprocessor_name == "CallHomePreprocessor":
-        logger.info("[_load_dataset] Detected CallHome dataset. Processing files...")
-        processed = CallHomePreprocessor().process(dataset=repo, num_samples=num_samples, properties=dataset_config or {})
-        return processed
+def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = [], length_filter=None, zip=False, dataset_config=None, metric=None):
+    """Load and preprocess a dataset from a local or remote path."""
+    logger.info(f"[_load_dataset] Loading dataset {repo} with preprocessor {preprocessor_name}")
+    # We can load different formats of datasets
+    if repo and repo.startswith("/") or repo.startswith("./"): # Local path
+        repo = Path(repo).resolve()
+        logger.info(f"[_load_dataset] Loading local dataset from {repo}")
+    
+    if preprocessor_name.startswith("CallHome"):
+        # Special-case CallHome dataset
+        # Load CallHomePreprocessor from local preprocessor code
+        properties = {"metric": metric}
+        if user_prompt_add_ons:
+            properties["user_prompt_add_ons"] = user_prompt_add_ons
+        if length_filter:
+            logger.info(f"[_load_dataset] Applying length filter: {length_filter}")
+            properties["length_filter"] = tuple(length_filter)  # Convert list to tuple
+        logger.info(f"[_load_dataset] Loading CallHome from path: {repo}")
+        dataset = CallHomePreprocessor().process(repo, num_samples=num_samples, properties=properties)
+        return dataset
 
     logger.info(f"[_load_dataset] Loading HuggingFace dataset repo: {repo}")
     # If 'subset' or 'data_dir' is specified, pass as second arg or kwarg
@@ -140,7 +162,13 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="A
     #logger.info(f"[_load_dataset] Dataset loaded after truncation: {dset}")
     logger.info(f"[_load_dataset] Preprocessing dataset using {preprocessor_name}...")
     PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
-    processed = PreprocessorClass().process(dset, {"user_prompt_add_ons": user_prompt_add_ons})
+    properties = {"metric": metric}
+    if user_prompt_add_ons:
+        properties["user_prompt_add_ons"] = user_prompt_add_ons
+    if length_filter:
+        logger.info(f"[_load_dataset] Applying length filter: {length_filter}")
+        properties["length_filter"] = tuple(length_filter)
+    processed = PreprocessorClass().process(dset, properties)
     logger.info(f"[_load_dataset] Dataset loaded and processed. Size: {len(processed)}")
     return processed
 
@@ -208,6 +236,7 @@ def main(cfg_path='config.yaml'):
     judge_model = cfg.get("judge_model", None)
     api_version = cfg.get("api_version", None)
     user_prompt_add_ons: list[str] = cfg.get("user_prompt_add_ons", []) or []
+    length_filter = cfg.get("length_filter", None)  # Get the length_filter from config
     
     # --- Build (dataset, metric) pairs ---
     raw_pairs_seq = cfg["dataset_metric"]
@@ -242,7 +271,8 @@ def main(cfg_path='config.yaml'):
         preprocessor_name = db[dname]["preprocessor"]
         postprocessor_name = db[dname]["postprocessor"]
         
-        dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, user_prompt_add_ons=user_prompt_add_ons)
+        dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, 
+                             user_prompt_add_ons=user_prompt_add_ons, length_filter=length_filter, metric=metric_name)
         metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
         # Dynamically import postprocessor class
         PostprocessorClass = get_class_from_module('postprocessors', postprocessor_name)

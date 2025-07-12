@@ -1,2 +1,2 @@
 asr_clean_output: |-
-  From the audio, you MUST only output the transcribed text, without any additional formatting or additional text.
+  You have been given an audio clip. From the audio, you MUST only output the transcribed text, without any additional formatting or additional text.

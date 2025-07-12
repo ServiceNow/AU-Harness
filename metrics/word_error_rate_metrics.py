@@ -1,4 +1,5 @@
 import re
+import unicodedata
 from collections import defaultdict
 
 from jiwer import (
@@ -79,9 +80,11 @@ def normalize_text(text: str, language: str) -> str:
 
 
 class WERMetrics(Metrics):
-    def __call__(self, candidates, references, *, dataset_name: str | None = None, model_name: str | None = None):
+    def __call__(self, candidates, references, ids=None, lengths=None, *, dataset_name: str | None = None, model_name: str | None = None):
         logger.info(f"[WERMetrics.__call__] Calculating WER for {len(candidates)} samples.")
-        overall = self.get_score(candidates, references)
+        logger.info(f"[WERMetrics.__call__] ids: {ids}")
+        logger.info(f"[WERMetrics.__call__] lengths: {lengths}")
+        overall = self.get_score(candidates, references, ids, lengths)
         if dataset_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
             self._write_record_log(references, candidates, scores, dataset_name, model_name)
@@ -113,7 +116,7 @@ class WERMetrics(Metrics):
 
     def __init__(self, language="en"):
         super().__init__()
-        self.name = "WER"
+        self.name = "word_error_rate"
         self.display_name = "Word Error Rate"
         self.description = "The proportion of words that are incorrectly predicted, when compared to the reference text. The dataset is considered as one big conversation."
         self.language = language
@@ -136,30 +139,108 @@ class WERMetrics(Metrics):
                     results[f"wer_{attribute}_{attr}"] = incorrect_per_attr[attr] / total_attr
         return results
 
-    def get_score(self, candidates, references) -> dict:
+    def get_score(self, candidates, references, ids=None, lengths=None):
         """Get overall score.
 
         Args:
             candidates: generated text list
             references: reference text list
+            ids: optional list of conversation IDs (first 4 letters)
+            lengths: optional list of audio sample lengths in seconds
 
         Returns:
-            vary based on implementation, should be a dict
+            Dict with WER metrics by overall, conversation, and length buckets
         """
-        if not self.record_level_scores:
-            self.record_level_scores = self.compute_record_level_scores(candidates, references)
+        scores = self.compute_record_level_scores(candidates, references)
 
-        wer_per_row = self.record_level_scores["wer_per_row"]
-        incorrect = self.record_level_scores["incorrect"]
-        total = self.record_level_scores["total"]
+        # Compute the overall WER
+        incorrect_chars = sum(scores["incorrect"])
+        total_chars = sum(scores["total"])
+        # Overall WER is the sum of incorrect divided by sum of total
+        overall_wer = incorrect_chars / total_chars if total_chars > 0 else 0
+        # Cap at 1.0
+        overall_wer = min(overall_wer, 1.0)
+        
+        # We also track per-sample average for a more balanced view
+        avg_sample_wer = sum(scores["wer_per_row"]) / len(scores["wer_per_row"]) if scores["wer_per_row"] else 0
+        # Cap the WER at 1.0
+        avg_sample_wer = min(avg_sample_wer, 1.0)
 
-        results = {
-            "wer": sum(incorrect) / sum(total),
-            "average_sample_wer": smart_round(sum(wer_per_row) / len(wer_per_row)) if len(wer_per_row) else 0.0,
+        # Initialize the result with both WER metrics
+        result = {
+            "average_sample_wer": avg_sample_wer,
+            "overall_wer": overall_wer
         }
 
-        results.update(self.compute_attributes(incorrect, total, ["accent", "gender"]))
-        return results
+        # If ids are provided, calculate WER by conversation
+        logger.info(f"[WERMetrics.get_score] length ids: {len(ids)}")
+        logger.info(f"[WERMetrics.get_score] length lengths: {len(lengths)}")
+        logger.info(f"[WERMetrics.get_score] length scores: {len(scores["wer_per_row"])}")
+        if ids and len(ids) == len(scores["wer_per_row"]):
+            conversation_wer = {}
+            # Group WERs by conversation ID
+            id_to_wers = defaultdict(list)
+            id_to_incorrect = defaultdict(int)
+            id_to_total = defaultdict(int)
+            
+            for i, conv_id in enumerate(ids):
+                if i < len(scores["wer_per_row"]) and i < len(scores["incorrect"]) and i < len(scores["total"]):
+                    id_to_wers[conv_id].append(scores["wer_per_row"][i])
+                    id_to_incorrect[conv_id] += scores["incorrect"][i]
+                    id_to_total[conv_id] += scores["total"][i]
+            
+            # Calculate average WER for each conversation ID
+            for conv_id, wers in id_to_wers.items():
+                # Using ratio of sums for conversation WER
+                conv_wer = id_to_incorrect[conv_id] / id_to_total[conv_id] if id_to_total[conv_id] > 0 else 0
+                # Cap at 1.0
+                conv_wer = min(conv_wer, 1.0)
+                conversation_wer[conv_id] = conv_wer
+            
+            result["conversation_wer"] = conversation_wer
+        
+        # If lengths are provided, calculate WER by length buckets
+        if lengths and len(lengths) == len(scores["wer_per_row"]):
+            # Define length buckets
+            buckets = [(0, 0.5), (0.5, 1), (1, 1.5), (1.5, 2), (2, 3), (3, float('inf'))]
+            bucket_labels = ["0-0.5", "0.5-1", "1-1.5", "1.5-2", "2-3", "3+"]
+            length_wer = {}
+            
+            # Group WERs by length bucket
+            bucket_to_incorrect = {label: 0 for label in bucket_labels}
+            bucket_to_total = {label: 0 for label in bucket_labels}
+            
+            for i, length in enumerate(lengths):
+                if i < len(scores["wer_per_row"]) and i < len(scores["incorrect"]) and i < len(scores["total"]):
+                    # Find which bucket this length belongs to
+                    bucket_idx = next((j for j, (min_len, max_len) in enumerate(buckets) 
+                                      if min_len <= length < max_len), len(buckets) - 1)
+                    bucket_label = bucket_labels[bucket_idx]
+                    
+                    bucket_to_incorrect[bucket_label] += scores["incorrect"][i]
+                    bucket_to_total[bucket_label] += scores["total"][i]
+            
+            # Calculate WER for each length bucket
+            for bucket_label in bucket_labels:
+                if bucket_to_total[bucket_label] > 0:
+                    bucket_wer = bucket_to_incorrect[bucket_label] / bucket_to_total[bucket_label]
+                    # Cap at 1.0
+                    bucket_wer = min(bucket_wer, 1.0)
+                    length_wer[bucket_label] = bucket_wer
+                else:
+                    length_wer[bucket_label] = 0.0
+            
+            result["length_wer"] = length_wer
+        
+        logger.info(f"[get_score] Result: {result}")
+
+        # Store the scores for later record level reporting
+        # Important to use setdefault which is a no-op if the value already exists
+        # As users can evaluate multiple models and call compute_record_level_scores multiple times
+        self.record_level_scores.setdefault("wer_per_row", scores["wer_per_row"])
+        self.record_level_scores.setdefault("incorrect", scores["incorrect"])
+        self.record_level_scores.setdefault("total", scores["total"])
+        return result
 
     def compute_record_level_scores(self, candidates: list, references: list):
         """Compute the scores that should be saved in the record level file.
@@ -178,7 +259,7 @@ class WERMetrics(Metrics):
         references_clean = []
         candidates_clean = []
 
-        for i, (reference, candidate) in enumerate(tqdm(zip(references, candidates), desc="WER", total=len(references))):
+        for i, (reference, candidate) in enumerate(tqdm(zip(references, candidates), desc="word_error_rate", total=len(references))):
             lang_code = getattr(self, 'language', 'en')
             references_clean.append(normalize_text(reference, lang_code))
             candidates_clean.append(normalize_text(candidate, lang_code))
@@ -235,7 +316,6 @@ class WERMetrics(Metrics):
         Returns:
             The dictionary of columns and values to actually present in wandb
         """
-        overall_score.pop("average_sample_wer")
         return overall_score
 
     def get_metadata(self) -> dict:

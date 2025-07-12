@@ -495,15 +495,15 @@ class EnglishTextNormalizer:
             r"'s gone\b": " has gone",
             r"'d done\b": " had done",  # "'s done" is ambiguous
             r"'s got\b": " has got",
-            # general contractions
-            r"n't\b": " not",
-            r"'re\b": " are",
-            r"'s\b": " is",
-            r"'d\b": " would",
-            r"'ll\b": " will",
-            r"'t\b": " not",
-            r"'ve\b": " have",
-            r"'m\b": " am",
+            # general contractions - with word capture group to get the base word
+            r"(\w+)n't\b": "\1 not",
+            r"(\w+)'re\b": "\1 are",
+            r"(\w+)'s\b": "\1 is",
+            r"(\w+)'d\b": "\1 would",
+            r"(\w+)'ll\b": "\1 will",
+            r"(\w+)'t\b": "\1 not",
+            r"(\w+)'ve\b": "\1 have",
+            r"(\w+)'m\b": "\1 am",
         }
         self.standardize_numbers = EnglishNumberNormalizer()
         self.standardize_spellings = EnglishSpellingNormalizer()

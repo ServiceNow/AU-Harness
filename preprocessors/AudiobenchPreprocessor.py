@@ -9,10 +9,17 @@ class AudiobenchPreprocessor():
     """Preprocessor for Audio benchmarks from AudioBench on HF."""
 
     def process(self, dataset: dict, properties: dict | None) -> list[dict]:
-        """Process the dataset and flatten audio/context structure (expects dict-of-lists)."""
+        """Process the dataset and flatten audio/context structure (expects dict-of-lists).
+        
+        Args:
+            dataset: Dictionary containing audio data
+            properties: Optional dict of properties, may include 'length_filter' tuple (min_seconds, max_seconds)
+                       to filter samples by audio length.
+        """
         logger.info("In [AudiobenchPreprocessor] Processing dataset...")
         #logger.info(dataset)
         user_prompt_add_ons = properties.get("user_prompt_add_ons", [])
+        length_filter = properties.get("length_filter", None)  # Optional (min_seconds, max_seconds) tuple
         # Load prompt add-ons mapping
         prompt_yaml_path = Path(__file__).resolve().parent.parent / "prompts" / "prompt_add_ons.yaml"
         try:
@@ -41,7 +48,16 @@ class AudiobenchPreprocessor():
             else:
                 raise KeyError("Neither 'audio' nor 'context' keys found in data")
 
-            total_duration += len(record["array"]) / record["sampling_rate"]
+            # Calculate audio duration in seconds
+            audio_duration = len(record["array"]) / record["sampling_rate"]
+            total_duration += audio_duration
+            
+            # Apply length filtering if specified
+            if length_filter and isinstance(length_filter, tuple) and len(length_filter) == 2:
+                min_length, max_length = length_filter
+                if audio_duration < min_length or audio_duration > max_length:
+                    logger.info(f"Filtered out sample {i} with duration {audio_duration:.2f}s (filter: {length_filter})")
+                    continue
 
             if "reference" in record:
                 record["model_target"] = record["reference"]

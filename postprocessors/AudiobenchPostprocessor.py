@@ -17,14 +17,5 @@ class ReportingMetrics(dict):
 
 class AudiobenchPostprocessor():
     """Postprocessor class to calculate the model scores for the model predictions."""
-    def process(self, dataset: list[dict], predictions) -> tuple:
-        """Return a list of `model_target` strings, preserving dataset order.
-
-        Args:
-            dataset: A list where each element is the sample dictionary produced
-                     by the pre-processor (must contain the key ``"model_target"``).
-
-        Returns:
-            tuple: (model_targets, predictions)
-        """
-        return [record["model_target"] for record in dataset if "model_target" in record], predictions
+    def process(self, dataset: list[dict], predictions, metric) -> tuple:
+        return [record["model_target"] for record in dataset if "model_target" in record], predictions, [], []

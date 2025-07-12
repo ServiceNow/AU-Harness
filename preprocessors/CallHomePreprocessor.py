@@ -16,12 +16,27 @@ class CallHomePreprocessor:
         Processes a dataset for CallHome speaker diarization.
         Args:
             dataset: str | Path. Path pointing to the root `CallHome_eng` folder that contains `audio/` and `transcripts/` sub-folders
-            properties: dict, optional
+            properties: dict, optional. May include 'length_filter' tuple (min_seconds, max_seconds) to filter samples.
         Returns:
             input_data: list of processed dicts
         """
         if properties is None:
             properties = {}
+        metric = properties.get("metric", None)
+        length_filter = properties.get("length_filter", None)  # Optional (min_seconds, max_seconds) tuple
+
+        # Set base instruction depending on metric
+        if metric and metric.lower() == "word_error_rate":
+            base_instruction = (
+                "Transcribe the text verbatim. Do not include any extra text or formatting. Include EVERY word."
+            )
+        else:
+            base_instruction = (
+                "Transcribe this turn based two speaker audio. There may be speaker overlap, and a speaker may go twice. "
+                "You should return the output as \nA: words\nB: more words\nA: even more words\n"
+                "you MUST return in this exact format, or the answer is considered invalid"
+                "A is the first speaker, so always start with 'A:'"
+            )
 
         dataset_path = Path(dataset).resolve()
         transcripts_dir = dataset_path / "transcripts"
@@ -30,13 +45,6 @@ class CallHomePreprocessor:
             logger.error("CallHome dataset must contain 'transcripts' and 'audio' sub-folders")
             raise FileNotFoundError("CallHome dataset must contain 'transcripts' and 'audio' sub-folders")
 
-        base_instruction = (
-            "Transcribe this turn based two speaker audio. There may be speaker overlap, and a speaker may go twice. "
-            "You should return the output as \nA: words\nB: more words\nA: even more words\n"
-            "you MUST return in this exact format, or the answer is considered invalid"
-            "A is the first speaker, so always start with 'A:'"
-        )
-
         input_data = []
         cha_files = sorted(transcripts_dir.glob("*.cha"))
         if not cha_files:
@@ -44,14 +52,17 @@ class CallHomePreprocessor:
         if num_samples is not None:
             cha_files = cha_files[:num_samples]
         for cha_path in tqdm(cha_files, desc="Processing CallHome"):
-            result = process_one(cha_path, audio_dir, base_instruction)
+            result = process_one(cha_path, audio_dir, base_instruction, metric, length_filter)
             if result is not None:
-                input_data.append(result)
+                if metric and metric.lower() == "word_error_rate" and isinstance(result, list):
+                    input_data.extend(result)  # flatten
+                else:
+                    input_data.append(result)
         logger.info(f"[CallHomePreprocessor] Total samples processed: {len(input_data)}")
         return input_data
 
 
-def process_one(cha_path, audio_dir, base_instruction):
+def process_one(cha_path, audio_dir, base_instruction, metric=None, length_filter=None):
     logger.info(f"Processing {cha_path}")
     # Allow optional leading '*' and whitespace before the speaker code
     # We capture the speaker code and the entire remainder of the line (which may contain a \x15<start>_<end>\x15 timestamp)
@@ -111,6 +122,45 @@ def process_one(cha_path, audio_dir, base_instruction):
     logger.info("Contents of cleaned_lines:")
     for line in cleaned_lines:
         logger.info(line)
+    # Special handling for word error rate metric
+    if metric and metric.lower() == "word_error_rate":
+        # For each cleaned line, create a separate sample
+        samples = []
+        filtered_count = 0
+        for idx, (orig_spkr, text, start_ms, end_ms) in enumerate(cleaned_lines, 1):
+            # Extract audio segment for this line
+            start_sample = int(start_ms / 1000 * sr)
+            end_sample = int(end_ms / 1000 * sr)
+            audio_segment = audio_array[start_sample:end_sample]
+            
+            # Calculate audio duration in seconds
+            duration_seconds = len(audio_segment) / sr
+            
+            # Apply length filtering if specified
+            if length_filter and isinstance(length_filter, tuple) and len(length_filter) == 2:
+                min_length, max_length = length_filter
+                if duration_seconds < min_length or duration_seconds > max_length:
+                    filtered_count += 1
+                    continue
+            
+            sample_id = f"{cha_id}_{idx}"
+            samples.append({
+                "array": audio_segment,
+                "sampling_rate": sr,
+                "instruction": base_instruction,
+                # No chunk instructions for this case
+                "chunk_instructions": [],
+                "model_target": text,
+                "id": sample_id,
+                "task_type": "Turn-based WER",
+            })
+        if filtered_count > 0:
+            logger.info(f"Filtered out {filtered_count} samples that didn't meet length criteria {length_filter}")
+        if not samples:
+            # All samples were filtered out
+            return None
+        return samples
+
     # Second pass: chunking and speaker resetting per chunk
     chunk_lines = {}  # chunk_idx: list of (orig_spkr, text)
     chunk_order = []
@@ -142,6 +192,14 @@ def process_one(cha_path, audio_dir, base_instruction):
     start_sample = int(min_start_ms / 1000 * sr)
     end_sample = int(max_end_ms / 1000 * sr)
     audio_array = audio_array[start_sample:end_sample]
+    
+    # Apply length filtering if specified
+    audio_duration = len(audio_array) / sr
+    if length_filter and isinstance(length_filter, tuple) and len(length_filter) == 2:
+        min_length, max_length = length_filter
+        if audio_duration < min_length or audio_duration > max_length:
+            logger.info(f"Filtered out sample {cha_id} with duration {audio_duration:.2f}s (filter: {length_filter})")
+            return None
 
     # Build reference as a single two-line string: A: all A's words\nB: all B's words
     a_words = []
@@ -161,5 +219,5 @@ def process_one(cha_path, audio_dir, base_instruction):
         "chunk_instructions": chunk_instructions,
         "model_target": reference_txt,
         "id": cha_id,
-        "task_type": "Transcription",
+        "task_type": "Turn Transcription",
     }
