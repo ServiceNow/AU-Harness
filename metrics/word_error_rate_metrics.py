@@ -82,7 +82,8 @@ class WERMetrics(Metrics):
     def __call__(self, candidates, references, ids=None, lengths=None, *, dataset_name: str | None = None, model_name: str | None = None):
         overall = self.get_score(candidates, references, ids, lengths)
         if dataset_name and model_name:
-            scores = self.record_level_scores.get(self.name, [])
+            # WER record scores are stored under 'wer_per_row'
+            scores = self.record_level_scores.get("wer_per_row", [])
             self._write_record_log(references, candidates, scores, dataset_name, model_name)
             # Append overall metric at the end
             self._append_final_score(overall, dataset_name, model_name)
@@ -100,14 +101,21 @@ class WERMetrics(Metrics):
     def _write_record_log(self, refs, cands, scores, dataset_name, model_name):
         import json, re
         from pathlib import Path
-        if not refs or not scores:
-            return
+        from itertools import zip_longest
         def _slug(s):
             return re.sub(r"[^A-Za-z0-9_]+", "_", s)
         log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
         with open(log_path, "w", encoding="utf-8") as f:
-            for ref, cand, sc in zip(refs, cands, scores):
-                f.write(json.dumps({"reference": ref, "candidate": cand, "score": sc}, ensure_ascii=False) + "\n")
+            for ref, cand, sc in zip_longest(refs, cands, scores, fillvalue=None):
+                entry = {"reference": ref, "candidate": cand}
+                if sc is not None:
+                    entry["score"] = sc
+                f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+        # Always write to shared run.log
+        self._write_to_run_json(refs, cands, scores, dataset_name, model_name)
+        logger.info(f"Wrote record-level log to {log_path}")
+        # Write to shared run.json
+        # self._write_to_run_json(refs, cands, scores, dataset_name, model_name)
     """Word Error Rate metric class, used for transcription tasks."""
 
     def __init__(self, language="en"):
@@ -117,6 +125,26 @@ class WERMetrics(Metrics):
         self.description = "The proportion of words that are incorrectly predicted, when compared to the reference text. The dataset is considered as one big conversation."
         self.language = language
 
+    def _write_to_run_json(self, refs, cands, scores, dataset_name, model_name):
+        """Write each sample's prediction to a shared run.log file."""
+        import json
+        from pathlib import Path
+        from itertools import zip_longest
+        
+        run_path = Path(".") / "run.log"
+        with open(run_path, "a", encoding="utf-8") as f:
+            for ref, cand, sc in zip_longest(refs, cands, scores, fillvalue=None):
+                entry = {
+                    "dataset": dataset_name,
+                    "metric": self.name,
+                    "model": model_name,
+                    "reference": ref,
+                    "candidate": cand,
+                }
+                if sc is not None:
+                    entry["score"] = sc
+                f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    
     def compute_attributes(self, incorrect: list[int | float], total: list[int | float], attributes: list[str]) -> dict:
         """Compute the attributes (e.g., accent, gender) that should be saved in the record level file for analysis."""
         results = {}

@@ -28,6 +28,29 @@ class BleuMetrics(Metrics):
         self.scorer = None
         self.name = "BLEU"
         self.max_ngram_order = max_ngram_order
+        
+    def _write_to_run_json(self, refs, cands, scores, dataset_name, model_name):
+        """Write each sample's prediction to a shared run.log file that resets with every run."""
+        import json
+        from pathlib import Path
+        from itertools import zip_longest
+        
+        run_path = Path(".") / "run.log"
+        
+        # Open run.log in append mode
+        with open(run_path, "a", encoding="utf-8") as f:
+            # Add entries for this metric/dataset/model
+            for ref, cand, sc in zip_longest(refs, cands, scores, fillvalue=None):
+                entry = {
+                    "dataset": dataset_name,
+                    "metric": self.name,
+                    "model": model_name,
+                    "reference": ref,
+                    "candidate": cand,
+                }
+                if sc is not None:
+                    entry["score"] = sc
+                f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
     def get_score(self, candidates, references):
         """This gives overall score of complete dataset.
@@ -47,14 +70,19 @@ class BleuMetrics(Metrics):
     # Internal helper
     # ---------------------------------------------------
     def _write_record_log(self, refs, cands, scores, dataset_name, model_name):
-        if not refs or not scores:
-            return
+        from itertools import zip_longest
         def _slug(s):
             return re.sub(r"[^A-Za-z0-9_]+", "_", s)
         log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
         with open(log_path, "w", encoding="utf-8") as f:
-            for ref, cand, sc in zip(refs, cands, scores):
-                f.write(json.dumps({"reference": ref, "candidate": cand, "score": sc}, ensure_ascii=False) + "\n")
+            for ref, cand, sc in zip_longest(refs, cands, scores, fillvalue=None):
+                entry = {"reference": ref, "candidate": cand}
+                if sc is not None:
+                    entry["score"] = sc
+                f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+        
+        # Always write to shared run.log
+        self._write_to_run_json(refs, cands, scores, dataset_name, model_name)
 
     def compute_record_level_scores(self, candidates: list, references: list) -> dict[str, list | None]:
         """Compute the scores that should be saved in the record level file.

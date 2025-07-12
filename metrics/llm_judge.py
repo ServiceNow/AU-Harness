@@ -117,6 +117,34 @@ class _BaseLLMJudge(Metrics):
         with open(log_path, "w", encoding="utf-8") as f:
             for ref, cand, sc, expl in zip(refs, cands, scores, explanations):
                 f.write(json.dumps({"reference": ref, "candidate": cand, "score": sc, "explanation": expl}, ensure_ascii=False) + "\n")
+        
+        # Write to shared run.json
+        self._write_to_run_json(refs, cands, scores, dataset_name, model_name)
+        
+    def _write_to_run_json(self, refs, cands, scores, dataset_name, model_name):
+        """Write each sample's prediction to a shared run.log file that resets with every run."""
+        import json
+        from pathlib import Path
+        
+        run_path = Path(".") / "run.log"
+        
+        # Get explanations if available
+        explanations = getattr(self, "explanations", [""] * len(scores))
+        
+        # Open run.log in append mode
+        with open(run_path, "a", encoding="utf-8") as f:
+            # Add entries for this metric/dataset/model
+            for ref, cand, sc, expl in zip(refs, cands, scores, explanations):
+                entry = {
+                    "dataset": dataset_name,
+                    "metric": self.name,
+                    "model": model_name,
+                    "reference": ref,
+                    "candidate": cand,
+                    "score": sc,
+                    "explanation": expl
+                }
+                f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 
 #All of these judges always return on a scale of 100
