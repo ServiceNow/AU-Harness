@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import asyncio, json, yaml, os, re
 from pathlib import Path
-from pathlib import Path
+from typing import List, Tuple, Optional
 
 from openai import AsyncAzureOpenAI
 from tqdm import tqdm  # progress bar
@@ -14,7 +14,6 @@ from metrics.metrics import Metrics
 # ---------------------------------------------------------------------------
 # Helper to load prompt templates shipped with the package
 # ---------------------------------------------------------------------------
-from pathlib import Path
 
 _template_cache: dict[str, str] | None = None
 PROMPT_FILE_PATH = Path(__file__).resolve().parents[1] / "prompts/judge_prompts.yaml"
@@ -260,3 +259,104 @@ class LLMJudgeMetric(Metrics):  # noqa: D401
 
     def __call__(self, ref: str, hyp: str) -> float:
         return float(ref.strip() == hyp.strip())
+
+
+class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
+    """
+    A judge metric for evaluating BigBenchAudio predictions using an LLM to determine correctness.
+
+    This class compares model predictions (candidates) against references (transcript, official_answer pairs)
+    using a prompt-based LLM, which returns either "CORRECT" or "INCORRECT" for each comparison.
+    """
+    name: str = "llm_judge_big_bench_audio"
+    _prompt_key: str = "big_bench_audio_judge_prompt"
+
+    def __call__(
+        self,
+        candidates: List[str],
+        references: List[Tuple[str, str]],
+        *,
+        dataset_name: Optional[str] = None,
+        model_name: Optional[str] = None
+    ) -> dict:
+        """
+        Evaluate the predictions using LLM-based judgment and return overall accuracy.
+
+        Args:
+            candidates (List[str]): List of model predictions.
+            references (List[Tuple[str, str]]): List of (transcript, official_answer) pairs.
+            dataset_name (Optional[str]): Optional dataset name for logging purposes.
+            model_name (Optional[str]): Optional model name for logging purposes.
+
+        Returns:
+            dict: Evaluation result with accuracy and counts for correct, incorrect, and failed responses.
+        """
+        scores = self.compute_record_level_scores(candidates, references)
+        all_scores = scores[self.name]
+
+        num_correct = sum(1 for s in all_scores if s == 1.0)
+        num_incorrect = sum(1 for s in all_scores if s == 0.0)
+        total = num_correct + num_incorrect
+
+        overall = {
+            self.name: num_correct / total if total > 0 else 0.0,
+            "num_correct": num_correct,
+            "num_incorrect": num_incorrect,
+            "num_failed": len(all_scores) - total,
+        }
+
+        if dataset_name and model_name:
+            self._write_record_log(references, candidates, all_scores, dataset_name, model_name)
+            self._append_final_score(overall, dataset_name, model_name)
+
+        return overall
+
+    def compute_record_level_scores(
+        self,
+        candidates: List[str],
+        references: List[Tuple[str, str]]
+    ) -> dict:
+        """
+        Calls the LLM to judge each (transcript, prediction, official_answer) triple and returns scores.
+
+        Args:
+            candidates (List[str]): List of model predictions.
+            references (List[Tuple[str, str]]): List of (transcript, official_answer) pairs.
+
+        Returns:
+            dict: A mapping from metric name to list of 1.0 (correct), 0.0 (incorrect), or None (failed).
+        """
+        # LLM input: (transcript, prediction, official_answer)
+        raw_responses = asyncio.run(self._judge_all(candidates, references))
+        scores = []
+
+        for response in raw_responses:
+            if isinstance(response, str):
+                normalized = response.strip().upper()
+                if normalized == "CORRECT":
+                    scores.append(1.0)
+                elif normalized == "INCORRECT":
+                    scores.append(0.0)
+                else:
+                    scores.append(None)
+            else:
+                scores.append(None)
+
+        self.explanations = raw_responses  # Save raw LLM responses for inspection/logging
+        return {self.name: scores}
+
+    def _append_final_score(self, overall: dict, dataset_name: str, model_name: str) -> None:
+        """
+        Appends the final score summary to a structured log file.
+
+        Args:
+            overall (dict): Final evaluation scores and metadata.
+            dataset_name (str): Dataset identifier.
+            model_name (str): Model identifier.
+        """
+        def _slug(text: str) -> str:
+            return re.sub(r"[^A-Za-z0-9_]+", "_", text)
+
+        log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
+        with open(log_path, "a", encoding="utf-8") as f:
+            f.write(json.dumps({"final_score": overall}, ensure_ascii=False) + "\n")

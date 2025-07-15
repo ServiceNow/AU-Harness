@@ -193,6 +193,9 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
     elif name == "meteor":
         from metrics.meteor_score import MeteorScore
         metric = MeteorScore()
+    elif name == "llm_judge_big_bench_audio":
+        from metrics.llm_judge import BigBenchAudioLLMJudgeMetric
+        metric = BigBenchAudioLLMJudgeMetric(max_concurrency=judge_concurrency, model=judge_model)
     else:
         raise ValueError(f"Unknown metric: {name}")
     logger.info(f"[_load_metric] Metric loaded: {metric.name}")

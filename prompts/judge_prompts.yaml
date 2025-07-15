@@ -59,3 +59,27 @@ callhome_judge_prompt: |-
     "explanation": (string explaining your rating across all 3 criteria)
   }}
   Do not return anything except this JSON object.
+
+
+
+big_bench_audio_judge_prompt: |-
+
+    Assess whether the following CANDIDATE ANSWER is CORRECT or INCORRECT.
+    For the CANDIDATE ANSWER to be correct, it must be consistent with the OFFICIAL ANSWER.
+    If the CANDIDATE ANSWER contradicts itself, assess the first proposed answer.
+    If the CANDIDATE ANSWER provides a final answer and working, assess the final answer only.
+    If the CANDIDATE ANSWER includes irrelevant information, assess only the relevant information.
+    If the CANDIDATE ANSWER includes a numeric value it is ok if it is spelled e.g. 7 or seven
+    It is ok if the CANDIDATE ANSWER involves a misspelling of a person's name e.g. Leda or Lida, Autry or Audrie.
+
+    The question, for reference only: START QUESTION {reference[0]} \n\nEND QUESTION
+
+    The OFFICIAL ANSWER: {reference[1]}
+
+    BEGIN CANDIDATE ANSWER TO ASSESS
+
+    {prediction}
+
+    END CANDIDATE ANSWER TO ASSESS
+
+    Reply only with CORRECT or INCORRECT.
