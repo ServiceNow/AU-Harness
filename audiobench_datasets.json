@@ -3,463 +3,2988 @@
     "hf_repo": "AudioLLMs/alpaca_audio_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Speech Instruction",
+      "QA"
+    ]
   },
   "aishell_1_test": {
     "hf_repo": "AudioLLMs/aishell_1_zh_test",
     "language": "chinese",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
   },
   "audiocaps_qa_test": {
     "hf_repo": "AudioLLMs/audiocaps_qa_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Scene QA",
+      "QA"
+    ]
   },
   "audiocaps_test": {
     "hf_repo": "AudioLLMs/audiocaps_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Scene Captioning",
+      "QA"
+    ]
   },
   "clotho_aqa_test": {
     "hf_repo": "AudioLLMs/clotho_aqa_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Scene QA",
+      "QA"
+    ]
   },
   "cn_college_listen_mcq_test": {
     "hf_repo": "AudioLLMs/cn_college_listen_mcq_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
-  },
-  "common_voice_15_en_test": {
-    "hf_repo": "AudioLLMs/common_voice_15_en_test",
-    "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Spoken QA",
+      "QA"
+    ]
   },
   "covost2_ta_en_test": {
     "hf_repo": "AudioLLMs/covost2_ta_en_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Translation"
+    ]
   },
   "covost2_zh_en_test": {
     "hf_repo": "AudioLLMs/covost2_zh_en_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Translation"
+    ]
   },
   "covost2_id_en_test": {
     "hf_repo": "AudioLLMs/covost2_id_en_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Translation"
+    ]
   },
   "covost2_en_ta_test": {
     "hf_repo": "AudioLLMs/covost2_en_ta_test",
     "language": "tamil",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Translation"
+    ]
   },
   "covost2_en_zh_test": {
     "hf_repo": "AudioLLMs/covost2_en_zh_test",
     "language": "chinese",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Translation"
+    ]
   },
   "covost2_en_id_test": {
     "hf_repo": "AudioLLMs/covost2_en_id_test",
     "language": "indonesian",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Translation"
+    ]
   },
   "dream_tts_mcq_test": {
     "hf_repo": "AudioLLMs/dream_tts_mcq_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Spoken QA",
+      "QA"
+    ]
   },
   "earnings21_test": {
     "hf_repo": "AudioLLMs/earnings21_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Long form ASR"
+    ]
   },
   "earnings22_test": {
     "hf_repo": "AudioLLMs/earnings22_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Long form ASR"
+    ]
   },
-  "gigaspeech_test": {
-    "hf_repo": "AudioLLMs/gigaspeech_test",
+  "gigaspeech2_test": {
+    "hf_repo": "AudioLLMs/gigaspeech2-test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
   },
   "gigaspeech2_id_test": {
     "hf_repo": "AudioLLMs/gigaspeech2-test",
     "subset": "id-test",
     "language": "indonesian",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
   },
   "gigaspeech2_th_test": {
     "hf_repo": "AudioLLMs/gigaspeech2-test",
     "subset": "th-test",
     "language": "thai",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
   },
   "gigaspeech2_vi_test": {
     "hf_repo": "AudioLLMs/gigaspeech2-test",
     "subset": "vi-test",
     "language": "vietnamese",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
   },
   "iemocap_emotion_recognition": {
     "hf_repo": "AudioLLMs/iemocap_emotion_recognition",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Emotion Recognition"
+    ]
   },
   "iemocap_gender_recognition": {
     "hf_repo": "AudioLLMs/iemocap_gender_recognition",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Gender Recognition"
+    ]
   },
   "librispeech_test_clean": {
     "hf_repo": "AudioLLMs/librispeech_test_clean",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
   },
   "librispeech_test_other": {
     "hf_repo": "AudioLLMs/librispeech_test_other",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
   },
   "meld_emotion_test": {
     "hf_repo": "AudioLLMs/meld_emotion_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Emotion Recognition"
+    ]
   },
   "meld_sentiment_test": {
     "hf_repo": "AudioLLMs/meld_sentiment_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Emotion Recognition"
+    ]
   },
   "mmau_mini": {
     "hf_repo": "AudioLLMs/MMAU-mini",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Spoken QA",
+      "Speaker Recognition",
+      "QA"
+    ]
   },
   "mnsc_asr_part1_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "ASR-PART1-Test",
-    "language": "",
+    "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ],
+    "accented": true
   },
   "mnsc_asr_part2_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "ASR-PART2-Test",
-    "language": "",
+    "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ],
+    "accented": true
   },
   "mnsc_asr_part3_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "ASR-PART3-Test",
-    "language": "",
+    "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ],
+    "accented": true
   },
   "mnsc_asr_part4_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "ASR-PART4-Test",
-    "language": "",
+    "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ],
+    "accented": true
   },
   "mnsc_asr_part5_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "ASR-PART5-Test",
-    "language": "",
+    "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ],
+    "accented": true
   },
   "mnsc_asr_part6_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "ASR-PART6-Test",
-    "language": "",
+    "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ],
+    "accented": true
   },
   "mnsc_pqa_ar_dialogue_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "PQA-AR-Dialogue-Test",
-    "language": "",
+    "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Accent Recognition"
+    ],
+    "accented": true
   },
   "mnsc_pqa_ar_sentence_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "PQA-AR-Sentence-Test",
-    "language": "",
+    "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Accent Recognition"
+    ],
+    "accented": true
   },
   "mnsc_pqa_gr_dialogue_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "PQA-GR-Dialogue-Test",
-    "language": "",
+    "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Gender Recognition"
+    ],
+    "accented": true
   },
   "mnsc_pqa_gr_sentence_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "PQA-GR-Sentence-Test",
-    "language": "",
+    "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Gender Recognition"
+    ],
+    "accented": true
   },
   "mnsc_sds_part3_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SDS-PART3-Test",
-    "language": "",
+    "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Spoken Dialogue Summarization",
+      "QA"
+    ],
+    "accented": true
   },
   "mnsc_sds_part4_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SDS-PART4-Test",
-    "language": "",
+    "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Spoken Dialogue Summarization",
+      "QA"
+    ],
+    "accented": true
   },
   "mnsc_sds_part5_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SDS-PART5-Test",
-    "language": "",
+    "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Spoken Dialogue Summarization",
+      "QA"
+    ],
+    "accented": true
   },
   "mnsc_sqa_part3_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SQA-PART3-Test",
-    "language": "",
+    "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Spoken QA",
+      "QA"
+    ],
+    "accented": true
   },
   "mnsc_sqa_part4_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SQA-PART4-Test",
-    "language": "",
+    "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Spoken QA",
+      "QA"
+    ],
+    "accented": true
   },
   "mnsc_sqa_part5_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SQA-PART5-Test",
-    "language": "",
+    "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Spoken QA",
+      "QA"
+    ],
+    "accented": true
   },
   "mnsc_sqa_part6_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SQA-PART6-Test",
-    "language": "",
+    "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Spoken QA",
+      "QA"
+    ],
+    "accented": true
   },
   "mu_chomusic_test": {
     "hf_repo": "AudioLLMs/mu_chomusic_test",
-    "language": "",
+    "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Music Understanding"
+    ]
   },
   "openhermes_instruction_test": {
     "hf_repo": "AudioLLMs/openhermes_instruction_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Speech Instruction",
+      "QA"
+    ]
   },
   "peoples_speech_test": {
     "hf_repo": "AudioLLMs/peoples_speech_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
   },
   "public_sg_speech_qa_test": {
     "hf_repo": "AudioLLMs/public_sg_speech_qa_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Spoken QA",
+      "QA"
+    ]
   },
   "seame_dev_sge": {
     "hf_repo": "AudioLLMs/seame_dev_sge",
     "language": "chinese/english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Code-Switching ASR"
+    ]
   },
   "slue_p2_sqa5_test": {
     "hf_repo": "AudioLLMs/slue_p2_sqa5_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Spoken QA",
+      "QA"
+    ]
   },
   "spoken_squad_test": {
     "hf_repo": "AudioLLMs/spoken_squad_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Spoken QA",
+      "QA"
+    ]
   },
   "tedlium3_test": {
     "hf_repo": "AudioLLMs/tedlium3_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
   },
   "tedlium3_long_form_test": {
     "hf_repo": "AudioLLMs/tedlium3_long_form_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Long form ASR"
+    ]
   },
   "voxceleb_accent_test": {
     "hf_repo": "AudioLLMs/voxceleb_accent_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Accent Recognition"
+    ],
+    "accented": true
   },
   "voxceleb_gender_test": {
     "hf_repo": "AudioLLMs/voxceleb_gender_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Gender Recognition"
+    ]
   },
   "wavcaps_qa_test": {
     "hf_repo": "AudioLLMs/wavcaps_qa_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Scene QA",
+      "QA"
+    ]
   },
   "wavcaps_test": {
     "hf_repo": "AudioLLMs/wavcaps_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Scene Captioning",
+      "QA"
+    ]
   },
-
-
-
   "callhome_eng": {
     "language": "english",
     "preprocessor": "CallHomePreprocessor",
     "postprocessor": "CallHomePostprocessor",
-    "path": "private_datasets/CallHome_eng"
+    "path": "private_datasets/CallHome_eng",
+    "tasks": [
+      "Long form ASR"
+    ]
   },
   "callhome_deu": {
     "language": "german",
     "preprocessor": "CallHomePreprocessor",
     "postprocessor": "CallHomePostprocessor",
-    "path": "private_datasets/CallHome_eng"
+    "path": "private_datasets/CallHome_eng",
+    "tasks": [
+      "Long form ASR"
+    ]
   },
   "callhome_jpn": {
     "language": "japanese",
     "preprocessor": "CallHomePreprocessor",
     "postprocessor": "CallHomePostprocessor",
-    "path": "private_datasets/CallHome_eng"
+    "path": "private_datasets/CallHome_eng",
+    "tasks": [
+      "Long form ASR"
+    ]
   },
   "callhome_spa": {
     "language": "spanish",
     "preprocessor": "CallHomePreprocessor",
     "postprocessor": "CallHomePostprocessor",
-    "path": "private_datasets/CallHome_eng"
+    "path": "private_datasets/CallHome_eng",
+    "tasks": [
+      "Long form ASR"
+    ]
   },
   "callhome_zho": {
     "language": "chinese",
     "preprocessor": "CallHomePreprocessor",
     "postprocessor": "CallHomePostprocessor",
-    "path": "private_datasets/CallHome_eng"
+    "path": "private_datasets/CallHome_eng",
+    "tasks": [
+      "Long form ASR"
+    ]
   },
-
-  "enterprise": {
-    "hf_repo": "ServiceNow-AI/enterprise-audio", 
-    "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
-  },
-  "ami": {
+  "ami_sdm": {
     "hf_repo": "edinburghcstr/ami",
+    "subset": "sdm",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
   },
-  "common_voice_15": {
-    "hf_repo": "mozilla-foundation/common_voice_15_0",
-    "language": "multilingual",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
-  },
-  "earnings_22": {
-    "hf_repo": "anton-l/earnings22",
+  "ami_ihm": {
+    "hf_repo": "edinburghcstr/ami",
+    "subset": "ihm",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
   },
-  "fleurs": {
-    "hf_repo": "google/fleurs",
-    "language": "multilingual",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
-  },
-  "gigaspeech": {
-    "hf_repo": "speechcolab/gigaspeech",
-    "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
-  },
-  "librispeech": {
-    "hf_repo": "openslr/librispeech_asr",
-    "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
-  },
-  "librispeech_multilingual": {
-    "hf_repo": "facebook/multilingual_librispeech",
-    "language": "multilingual",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
-  },
-  "spgispeech": {
+  "spgispeech_test": {
     "hf_repo": "kensho/spgispeech",
+    "subset": "test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
   },
-  "tedlium": {
-    "hf_repo": "LIUM/tedlium",
-    "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
-  },
-  "voxpopuli": {
+  "voxpopuli_en": {
     "hf_repo": "facebook/voxpopuli",
-    "language": "multilingual",
+    "subset": "en",
+    "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "voxpopuli_de": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "de",
+    "language": "german",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "voxpopuli_fr": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "fr",
+    "language": "french",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "voxpopuli_es": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "es",
+    "language": "spanish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "voxpopuli_en_accented": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "en_accented",
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ],
+    "accented": true
+  },
+  "voxpopuli_pl": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "pl",
+    "language": "polish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "voxpopuli_it": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "it",
+    "language": "italian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "voxpopuli_ro": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "ro",
+    "language": "romanian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "voxpopuli_hu": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "hu",
+    "language": "hungarian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "voxpopuli_cs": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "cs",
+    "language": "czech",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "voxpopuli_nl": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "nl",
+    "language": "dutch",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "voxpopuli_fi": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "fi",
+    "language": "finnish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "voxpopuli_hr": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "hr",
+    "language": "croatian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "voxpopuli_sk": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "sk",
+    "language": "slovak",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "voxpopuli_sl": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "sl",
+    "language": "slovene",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "voxpopuli_et": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "et",
+    "language": "estonian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "voxpopuli_lt": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "lt",
+    "language": "lithuanian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "librispeech_multilingual_dutch": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "language": "dutch",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "librispeech_multilingual_french": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "subset": "french",
+    "language": "french",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "librispeech_multilingual_german": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "subset": "german",
+    "language": "german",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "librispeech_multilingual_italian": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "subset": "italian",
+    "language": "italian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "librispeech_multilingual_spanish": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "subset": "spanish",
+    "language": "spanish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "librispeech_multilingual_polish": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "subset": "polish",
+    "language": "polish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "librispeech_multilingual_portuguese": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "subset": "portuguese",
+    "language": "portuguese",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ab": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ab",
+    "language": "abkhaz",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_af": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "af",
+    "language": "afrikaans",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_am": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "am",
+    "language": "amharic",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ar": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ar",
+    "language": "arabic",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_as": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "as",
+    "language": "assamese",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ast": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ast",
+    "language": "asturian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_az": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "az",
+    "language": "azerbaijani",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ba": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ba",
+    "language": "bashkir",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_bas": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "bas",
+    "language": "basaa",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_be": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "be",
+    "language": "belarusian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_bg": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "bg",
+    "language": "bulgarian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_bn": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "bn",
+    "language": "bengali",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_br": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "br",
+    "language": "breton",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ca": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ca",
+    "language": "catalan",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ckb": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ckb",
+    "language": "central kurdish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_cnh": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "cnh",
+    "language": "hakha chin",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_cs": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "cs",
+    "language": "czech",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_cv": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "cv",
+    "language": "chuvash",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_cy": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "cy",
+    "language": "welsh",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_da": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "da",
+    "language": "danish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_de": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "de",
+    "language": "german",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_dv": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "dv",
+    "language": "dhivehi",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_dyu": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "dyu",
+    "language": "dioula",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_el": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "el",
+    "language": "greek",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_en": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "en",
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_eo": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "eo",
+    "language": "esperanto",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_es": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "es",
+    "language": "spanish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_et": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "et",
+    "language": "estonian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_eu": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "eu",
+    "language": "basque",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_fa": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "fa",
+    "language": "persian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_fi": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "fi",
+    "language": "finnish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_fr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "fr",
+    "language": "french",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_fy-NL": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "fy-NL",
+    "language": "frisian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ga-IE": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ga-IE",
+    "language": "irish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_gl": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "gl",
+    "language": "galician",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_gn": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "gn",
+    "language": "guarani",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ha": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ha",
+    "language": "hausa",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_he": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "he",
+    "language": "hebrew",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_hi": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "hi",
+    "language": "hindi",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_hsb": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "hsb",
+    "language": "sorbian, upper",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_hu": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "hu",
+    "language": "hungarian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_hy-AM": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "hy-AM",
+    "language": "armenian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ia": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ia",
+    "language": "interlingua",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_id": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "id",
+    "language": "indonesian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ig": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ig",
+    "language": "igbo",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_is": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "is",
+    "language": "icelandic",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_it": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "it",
+    "language": "italian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ja": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ja",
+    "language": "japanese",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ka": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ka",
+    "language": "georgian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_kab": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "kab",
+    "language": "kabyle",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_kk": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "kk",
+    "language": "kazakh",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_kmr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "kmr",
+    "language": "kurmanji kurdish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ko": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ko",
+    "language": "korean",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ky": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ky",
+    "language": "kyrgyz",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_lg": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "lg",
+    "language": "luganda",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_lo": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "lo",
+    "language": "lao",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_lt": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "lt",
+    "language": "lithuanian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_lv": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "lv",
+    "language": "latvian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_mdf": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mdf",
+    "language": "moksha",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_mhr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mhr",
+    "language": "meadow mari",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_mk": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mk",
+    "language": "macedonian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ml": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ml",
+    "language": "malayalam",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_mn": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mn",
+    "language": "mongolian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_mr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mr",
+    "language": "marathi",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_mrj": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mrj",
+    "language": "hill mari",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_mt": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mt",
+    "language": "maltese",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_myv": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "myv",
+    "language": "erzya",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_nan-tw": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "nan-tw",
+    "language": "taiwanese (minnan)",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ne-NP": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ne-NP",
+    "language": "nepali",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_nl": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "nl",
+    "language": "dutch",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_nn-NO": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "nn-NO",
+    "language": "norwegian nynorsk",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_oc": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "oc",
+    "language": "occitan",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_or": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "or",
+    "language": "odia",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_pa-IN": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "pa-IN",
+    "language": "punjabi",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_pl": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "pl",
+    "language": "polish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ps": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ps",
+    "language": "pashto",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_pt": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "pt",
+    "language": "portuguese",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ro": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ro",
+    "language": "romanian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ru": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ru",
+    "language": "russian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_rw": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "rw",
+    "language": "kinyarwanda",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_sah": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sah",
+    "language": "sakha",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_sat": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sat",
+    "language": "santali (ol chiki)",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_sc": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sc",
+    "language": "sardinian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_sk": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sk",
+    "language": "slovak",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_skr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "skr",
+    "language": "saraiki",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_sl": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sl",
+    "language": "slovenian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_sq": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sq",
+    "language": "albanian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_sr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sr",
+    "language": "serbian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_sv-SE": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sv-SE",
+    "language": "swedish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_sw": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sw",
+    "language": "swahili",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ta": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ta",
+    "language": "tamil",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_th": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "th",
+    "language": "thai",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ti": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ti",
+    "language": "tigrinya",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_tig": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "tig",
+    "language": "tigre",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_tk": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "tk",
+    "language": "turkmen",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_tok": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "tok",
+    "language": "toki pona",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_tr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "tr",
+    "language": "turkish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_tt": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "tt",
+    "language": "tatar",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_tw": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "tw",
+    "language": "twi",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ug": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ug",
+    "language": "uyghur",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_uk": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "uk",
+    "language": "ukrainian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_ur": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ur",
+    "language": "urdu",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_uz": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "uz",
+    "language": "uzbek",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_vi": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "vi",
+    "language": "vietnamese",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_vot": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "vot",
+    "language": "votic",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_yue": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "yue",
+    "language": "cantonese",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_zh-CN": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "zh-CN",
+    "language": "chinese (china)",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_zh-HK": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "zh-HK",
+    "language": "chinese (hong kong)",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "common_voice_15_zh-TW": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "zh-TW",
+    "language": "chinese (taiwan)",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_af": {
+    "hf_repo": "google/fleurs",
+    "subset": "af_za",
+    "language": "Afrikaans",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_am": {
+    "hf_repo": "google/fleurs",
+    "subset": "am_et",
+    "language": "Amharic",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ar": {
+    "hf_repo": "google/fleurs",
+    "subset": "ar_eg",
+    "language": "Arabic",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_hy": {
+    "hf_repo": "google/fleurs",
+    "subset": "hy_am",
+    "language": "Armenian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_as": {
+    "hf_repo": "google/fleurs",
+    "subset": "as_in",
+    "language": "Assamese",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ast": {
+    "hf_repo": "google/fleurs",
+    "subset": "ast_es",
+    "language": "Asturian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_az": {
+    "hf_repo": "google/fleurs",
+    "subset": "az_az",
+    "language": "Azerbaijani",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_be": {
+    "hf_repo": "google/fleurs",
+    "subset": "be_by",
+    "language": "Belarusian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_bn": {
+    "hf_repo": "google/fleurs",
+    "subset": "bn_in",
+    "language": "Bengali",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_bs": {
+    "hf_repo": "google/fleurs",
+    "subset": "bs_ba",
+    "language": "Bosnian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_bg": {
+    "hf_repo": "google/fleurs",
+    "subset": "bg_bg",
+    "language": "Bulgarian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_my": {
+    "hf_repo": "google/fleurs",
+    "subset": "my_mm",
+    "language": "Burmese",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ca": {
+    "hf_repo": "google/fleurs",
+    "subset": "ca_es",
+    "language": "Catalan",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ceb": {
+    "hf_repo": "google/fleurs",
+    "subset": "ceb_ph",
+    "language": "Cebuano",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_cmn_hans": {
+    "hf_repo": "google/fleurs",
+    "subset": "cmn_hans_cn",
+    "language": "Mandarin Chinese",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_yue_hant": {
+    "hf_repo": "google/fleurs",
+    "subset": "yue_hant_hk",
+    "language": "Cantonese Chinese",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_hr": {
+    "hf_repo": "google/fleurs",
+    "subset": "hr_hr",
+    "language": "Croatian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_cs": {
+    "hf_repo": "google/fleurs",
+    "subset": "cs_cz",
+    "language": "Czech",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_da": {
+    "hf_repo": "google/fleurs",
+    "subset": "da_dk",
+    "language": "Danish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_nl": {
+    "hf_repo": "google/fleurs",
+    "subset": "nl_nl",
+    "language": "Dutch",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_en": {
+    "hf_repo": "google/fleurs",
+    "subset": "en_us",
+    "language": "English",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_et": {
+    "hf_repo": "google/fleurs",
+    "subset": "et_ee",
+    "language": "Estonian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_fil": {
+    "hf_repo": "google/fleurs",
+    "subset": "fil_ph",
+    "language": "Filipino",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_fi": {
+    "hf_repo": "google/fleurs",
+    "subset": "fi_fi",
+    "language": "Finnish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_fr": {
+    "hf_repo": "google/fleurs",
+    "subset": "fr_fr",
+    "language": "French",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ff": {
+    "hf_repo": "google/fleurs",
+    "subset": "ff_sn",
+    "language": "Fula",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_gl": {
+    "hf_repo": "google/fleurs",
+    "subset": "gl_es",
+    "language": "Galician",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_lg": {
+    "hf_repo": "google/fleurs",
+    "subset": "lg_ug",
+    "language": "Ganda",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ka": {
+    "hf_repo": "google/fleurs",
+    "subset": "ka_ge",
+    "language": "Georgian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_de": {
+    "hf_repo": "google/fleurs",
+    "subset": "de_de",
+    "language": "German",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_el": {
+    "hf_repo": "google/fleurs",
+    "subset": "el_gr",
+    "language": "Greek",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_gu": {
+    "hf_repo": "google/fleurs",
+    "subset": "gu_in",
+    "language": "Gujarati",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ha": {
+    "hf_repo": "google/fleurs",
+    "subset": "ha_ng",
+    "language": "Hausa",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_he": {
+    "hf_repo": "google/fleurs",
+    "subset": "he_il",
+    "language": "Hebrew",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_hi": {
+    "hf_repo": "google/fleurs",
+    "subset": "hi_in",
+    "language": "Hindi",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_hu": {
+    "hf_repo": "google/fleurs",
+    "subset": "hu_hu",
+    "language": "Hungarian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_is": {
+    "hf_repo": "google/fleurs",
+    "subset": "is_is",
+    "language": "Icelandic",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ig": {
+    "hf_repo": "google/fleurs",
+    "subset": "ig_ng",
+    "language": "Igbo",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_id": {
+    "hf_repo": "google/fleurs",
+    "subset": "id_id",
+    "language": "Indonesian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ga": {
+    "hf_repo": "google/fleurs",
+    "subset": "ga_ie",
+    "language": "Irish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_it": {
+    "hf_repo": "google/fleurs",
+    "subset": "it_it",
+    "language": "Italian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ja": {
+    "hf_repo": "google/fleurs",
+    "subset": "ja_jp",
+    "language": "Japanese",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_jv": {
+    "hf_repo": "google/fleurs",
+    "subset": "jv_id",
+    "language": "Javanese",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_kea": {
+    "hf_repo": "google/fleurs",
+    "subset": "kea_cv",
+    "language": "Kabuverdianu",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_kam": {
+    "hf_repo": "google/fleurs",
+    "subset": "kam_ke",
+    "language": "Kamba",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_kn": {
+    "hf_repo": "google/fleurs",
+    "subset": "kn_in",
+    "language": "Kannada",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_kk": {
+    "hf_repo": "google/fleurs",
+    "subset": "kk_kz",
+    "language": "Kazakh",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_km": {
+    "hf_repo": "google/fleurs",
+    "subset": "km_kh",
+    "language": "Khmer",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ko": {
+    "hf_repo": "google/fleurs",
+    "subset": "ko_kr",
+    "language": "Korean",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ky": {
+    "hf_repo": "google/fleurs",
+    "subset": "ky_kg",
+    "language": "Kyrgyz",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_lo": {
+    "hf_repo": "google/fleurs",
+    "subset": "lo_la",
+    "language": "Lao",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_lv": {
+    "hf_repo": "google/fleurs",
+    "subset": "lv_lv",
+    "language": "Latvian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ln": {
+    "hf_repo": "google/fleurs",
+    "subset": "ln_cd",
+    "language": "Lingala",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_lt": {
+    "hf_repo": "google/fleurs",
+    "subset": "lt_lt",
+    "language": "Lithuanian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_luo": {
+    "hf_repo": "google/fleurs",
+    "subset": "luo_ke",
+    "language": "Luo",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_lb": {
+    "hf_repo": "google/fleurs",
+    "subset": "lb_lu",
+    "language": "Luxembourgish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_mk": {
+    "hf_repo": "google/fleurs",
+    "subset": "mk_mk",
+    "language": "Macedonian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ms": {
+    "hf_repo": "google/fleurs",
+    "subset": "ms_my",
+    "language": "Malay",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ml": {
+    "hf_repo": "google/fleurs",
+    "subset": "ml_in",
+    "language": "Malayalam",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_mt": {
+    "hf_repo": "google/fleurs",
+    "subset": "mt_mt",
+    "language": "Maltese",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_mi": {
+    "hf_repo": "google/fleurs",
+    "subset": "mi_nz",
+    "language": "Maori",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_mr": {
+    "hf_repo": "google/fleurs",
+    "subset": "mr_in",
+    "language": "Marathi",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_mn": {
+    "hf_repo": "google/fleurs",
+    "subset": "mn_mn",
+    "language": "Mongolian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ne": {
+    "hf_repo": "google/fleurs",
+    "subset": "ne_np",
+    "language": "Nepali",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_nso": {
+    "hf_repo": "google/fleurs",
+    "subset": "nso_za",
+    "language": "Northern-Sotho",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_nb": {
+    "hf_repo": "google/fleurs",
+    "subset": "nb_no",
+    "language": "Norwegian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ny": {
+    "hf_repo": "google/fleurs",
+    "subset": "ny_mw",
+    "language": "Nyanja",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_oc": {
+    "hf_repo": "google/fleurs",
+    "subset": "oc_fr",
+    "language": "Occitan",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_or": {
+    "hf_repo": "google/fleurs",
+    "subset": "or_in",
+    "language": "Oriya",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_om": {
+    "hf_repo": "google/fleurs",
+    "subset": "om_et",
+    "language": "Oromo",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ps": {
+    "hf_repo": "google/fleurs",
+    "subset": "ps_pk",
+    "language": "Pashto",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_fa": {
+    "hf_repo": "google/fleurs",
+    "subset": "fa_ir",
+    "language": "Persian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_pl": {
+    "hf_repo": "google/fleurs",
+    "subset": "pl_pl",
+    "language": "Polish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_pt": {
+    "hf_repo": "google/fleurs",
+    "subset": "pt_pt",
+    "language": "Portuguese",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_pa": {
+    "hf_repo": "google/fleurs",
+    "subset": "pa_in",
+    "language": "Punjabi",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ro": {
+    "hf_repo": "google/fleurs",
+    "subset": "ro_ro",
+    "language": "Romanian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ru": {
+    "hf_repo": "google/fleurs",
+    "subset": "ru_ru",
+    "language": "Russian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_sr": {
+    "hf_repo": "google/fleurs",
+    "subset": "sr_rs",
+    "language": "Serbian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_sn": {
+    "hf_repo": "google/fleurs",
+    "subset": "sn_zw",
+    "language": "Shona",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_sd": {
+    "hf_repo": "google/fleurs",
+    "subset": "sd_in",
+    "language": "Sindhi",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_sk": {
+    "hf_repo": "google/fleurs",
+    "subset": "sk_sk",
+    "language": "Slovak",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_sl": {
+    "hf_repo": "google/fleurs",
+    "subset": "sl_si",
+    "language": "Slovenian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_so": {
+    "hf_repo": "google/fleurs",
+    "subset": "so_so",
+    "language": "Somali",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ckb": {
+    "hf_repo": "google/fleurs",
+    "subset": "ckb_iq",
+    "language": "Sorani-Kurdish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_es": {
+    "hf_repo": "google/fleurs",
+    "subset": "es_es",
+    "language": "Spanish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_sw": {
+    "hf_repo": "google/fleurs",
+    "subset": "sw_ke",
+    "language": "Swahili",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_sv": {
+    "hf_repo": "google/fleurs",
+    "subset": "sv_se",
+    "language": "Swedish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_tg": {
+    "hf_repo": "google/fleurs",
+    "subset": "tg_tj",
+    "language": "Tajik",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ta": {
+    "hf_repo": "google/fleurs",
+    "subset": "ta_in",
+    "language": "Tamil",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_te": {
+    "hf_repo": "google/fleurs",
+    "subset": "te_in",
+    "language": "Telugu",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_th": {
+    "hf_repo": "google/fleurs",
+    "subset": "th_th",
+    "language": "Thai",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_tr": {
+    "hf_repo": "google/fleurs",
+    "subset": "tr_tr",
+    "language": "Turkish",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_uk": {
+    "hf_repo": "google/fleurs",
+    "subset": "uk_ua",
+    "language": "Ukrainian",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_umb": {
+    "hf_repo": "google/fleurs",
+    "subset": "umb_ao",
+    "language": "Umbundu",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_ur": {
+    "hf_repo": "google/fleurs",
+    "subset": "ur_pk",
+    "language": "Urdu",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_uz": {
+    "hf_repo": "google/fleurs",
+    "subset": "uz_uz",
+    "language": "Uzbek",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_vi": {
+    "hf_repo": "google/fleurs",
+    "subset": "vi_vn",
+    "language": "Vietnamese",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_cy": {
+    "hf_repo": "google/fleurs",
+    "subset": "cy_gb",
+    "language": "Welsh",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_wo": {
+    "hf_repo": "google/fleurs",
+    "subset": "wo_sn",
+    "language": "Wolof",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_xh": {
+    "hf_repo": "google/fleurs",
+    "subset": "xh_za",
+    "language": "Xhosa",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_yo": {
+    "hf_repo": "google/fleurs",
+    "subset": "yo_ng",
+    "language": "Yoruba",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
+  },
+  "fleurs_zu": {
+    "hf_repo": "google/fleurs",
+    "subset": "zu_za",
+    "language": "Zulu",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "ASR"
+    ]
   }
-
 }

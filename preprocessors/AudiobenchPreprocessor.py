@@ -61,10 +61,20 @@ class AudiobenchPreprocessor():
                 record["model_target"] = record["reference"]
             elif "answer" in record:
                 record["model_target"] = record["answer"]
+            elif "text" in record:
+                record["model_target"] = record["text"]
+            elif "transcription" in record:
+                record["model_target"] = record["transcription"]
+            elif "sentence" in record:
+                record["model_target"] = record["sentence"]
+            elif "transcript" in record:
+                record["model_target"] = record["transcript"]
+            elif "normalized_text" in record:
+                record["model_target"] = record["normalized_text"]
             else:
                 record["model_target"] = "no reference - use your judgement"
 
-            instruction = record.get("instruction") or record.get("question") or "no instruction - use your judgement"
+            instruction = record.get("instruction") or record.get("question") or ""
             # Append any user-specified prompt add-ons
             for k in user_prompt_add_ons:
                 add_on = prompt_add_ons.get(k)

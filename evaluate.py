@@ -4,7 +4,7 @@ import logging
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
-import re
+import os
 import json
 from pathlib import Path
 import asyncio
@@ -115,26 +115,49 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="A
         return dataset
 
     logger.info(f"[_load_dataset] Loading HuggingFace dataset repo: {repo}")
-    # If 'subset' or 'data_dir' is specified, pass as second arg or kwarg
-    # ----- robust split handling -----
-    def _select_split(ds):
-        """Return desired split name or None if *ds* is already a Dataset."""
-        if isinstance(ds, dict):  # HuggingFace DatasetDict
-            for cand in ("test", "data", "train"):
-                if cand in ds:
-                    return cand
-        return None  # single-split Dataset
+    # Determine the preferred split to load directly (more efficient)
+    preferred_splits = ["test", "data", "train"]
+    
+    # Try to load a specific split directly
+    dset = None
+    # Try the preferred splits in order
+    token=os.getenv("HF_TOKEN")
+    for split_name in preferred_splits:
+        try:
+            if subset:
+                logger.info(f"[_load_dataset] Attempting to load subset: {subset}, split: {split_name}")
+                if token:
+                    dset = load_dataset(repo, subset, split=split_name, trust_remote_code=True, token=token)
+                else:
+                    dset = load_dataset(repo, subset, split=split_name, trust_remote_code=True)
+            else:
+                logger.info(f"[_load_dataset] Attempting to load split: {split_name}")
+                if token:
+                    dset = load_dataset(repo, split=split_name, trust_remote_code=True, token=token)
+                else:
+                    dset = load_dataset(repo, split=split_name, trust_remote_code=True)
+            logger.info(f"[_load_dataset] Successfully loaded split: {split_name}")
+            break
+        except Exception as e:
+            logger.info(f"[_load_dataset] Split {split_name} not available: {str(e)}")
+    
+    # Raise an error if no valid split was found
+    if dset is None:
+        logger.info(f"[_load_dataset] Attempting to load no split")
+        try:
+            if subset:
+                dset = load_dataset(repo, subset, trust_remote_code=True)
+            else:
+                dset = load_dataset(repo, trust_remote_code=True)
+        except Exception as e:
+            error_msg = f"[_load_dataset] No valid dataset found in {repo}"
+            logger.error(error_msg)
+            raise ValueError(error_msg)
+    
+    logger.info(f"[_load_dataset] Dataset loaded  |  Size before trunc: {len(dset)}")
 
-    if subset:
-        logger.info(f"[_load_dataset] Loading subset: {subset}")
-        ds_builder = load_dataset(repo, subset)
-    else:
-        ds_builder = load_dataset(repo)
 
-    chosen_split = _select_split(ds_builder)
-    dset = ds_builder if chosen_split is None else ds_builder[chosen_split]
-    logger.info(f"[_load_dataset] Using split: {chosen_split or 'single-dataset'}  |  Size before trunc: {len(dset)}")
-        #logger.info(f"[_load_dataset] Dataset loaded: {dset}")
+    #logger.info(f"[_load_dataset] Dataset loaded: {dset}")
     if num_samples is not None:
         logger.info(f"[_load_dataset] Truncating dataset to first {num_samples} samples.")
         dset = dset[:num_samples]
@@ -241,10 +264,51 @@ def main(cfg_path='config.yaml'):
     all_scores = {}
     cfg_path = Path(__file__).with_name("audiobench_datasets.json")
     db = json.loads(cfg_path.read_text())
+    # Process each dataset-metric pair
+    expanded_pairs = []
+    # Check for accented filter setting
+    accented_filter = cfg.get("accented", None)
+    logger.info(f"[main] Accented filter setting: {accented_filter}")
+    
     for dname, metric_name in dataset_metric_pairs:
+        logger.info(f"[main] Processing dataset '{dname}' with metric '{metric_name}' ...")
+        
+        # Check if the dataset name directly exists in the database
+        if dname in db:
+            logger.info(f"[main] Found direct match for dataset '{dname}'")
+            # Check if we need to filter out accented datasets
+            if accented_filter is False and db[dname].get("accented", False) is True:
+                logger.info(f"[main] Skipping dataset '{dname}' because it is accented and accented filter is False")
+                continue
+            expanded_pairs.append((dname, metric_name))
+        else:
+            # Check if dname might be a task category instead
+            logger.info(f"[main] Dataset '{dname}' not found directly. Checking if it's a task category...")
+            found_matches = False
+            
+            # Search for datasets that have the task category
+            for dataset_name, dataset_info in db.items():
+                if "tasks" in dataset_info and dname in dataset_info["tasks"]:
+                    # Check if we need to filter out accented datasets
+                    if accented_filter is False and dataset_info.get("accented", False) is True:
+                        logger.info(f"[main] Skipping dataset '{dataset_name}' matching task '{dname}' because it is accented and accented filter is False")
+                        continue
+                    
+                    logger.info(f"[main] Found dataset '{dataset_name}' matching task category '{dname}'")
+                    expanded_pairs.append((dataset_name, metric_name))
+                    found_matches = True
+            
+            if not found_matches:
+                # If we get here, neither dataset nor task was found, or all matching datasets were filtered out
+                raise ValueError(f"Neither dataset nor task category '{dname}' found in {cfg_path}, or all matching datasets were filtered out.")
+    
+    logger.info(f"[main] Expanded dataset-metric pairs: {expanded_pairs}")
+    
+    # Process each actual dataset
+    for dname, metric_name in expanded_pairs:
         logger.info(f"[main] Loading dataset '{dname}' with metric '{metric_name}' ...")
-        if dname not in db:
-            raise ValueError(f"Dataset '{dname}' not found in {cfg_path}.")
+        
+        # These datasets must exist in the database since we've validated them above
         repo = db[dname].get("hf_repo", None)
         if not repo:
             repo = db[dname].get("path", None)

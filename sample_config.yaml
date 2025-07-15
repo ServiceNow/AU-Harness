@@ -5,16 +5,42 @@ dataset_metric: #tuple of dataset, metric
 num_samples: 100 #number of samples to run(remove for all)
 judge_concurrency: 8 #judge call(optional)
 judge_model: "gpt-4o-mini" #optional(only supported model right no2)
+user_prompt_add_ons: ["asr_clean_output"] #optional - additional prompting in text instructions for each sample
+length_filter: [1.0, 3.0] #optional - filters for only audio samples in this length(seconds)
 
 models:
   - info:
-      name: "audio_transcriptions_openai" 
+      name: "gpt-4o-mini-audio-preview-1" 
+      inference_type: "openai" #you can use vllm, openai, (chat completion) or audio transcription endpoint
+      url: "${ENDPOINT_URL}" - #endpoint url
+      delay: 100
+      retry_attempts: 8
+      timeout: 30
+      model: "gpt-4o-mini-audio-preview" #only needed for vllm
+      auth_token: "${AUTH_TOKEN}" 
+      batch_size: 4 #batch eval size
+      chunk_size: 45 #max audio length in seconds fed to model
+  - info:
+      name: "gpt-4o-mini-audio-preview-2" 
+      inference_type: "openai" #you can use vllm, openai, (chat completion) or audio transcription endpoint
+      url: "${ENDPOINT_URL}" - #endpoint url
+      delay: 100
+      retry_attempts: 8
+      timeout: 30
+      model: "gpt-4o-mini-audio-preview" #only needed for vllm
+      auth_token: "${AUTH_TOKEN}" 
+      batch_size: 4 #batch eval size
+      chunk_size: 45 #max audio length in seconds fed to model
+    - info:
+      name: "qwen-2.5-omni" 
       inference_type: "vllm" #you can use vllm, openai, (chat completion) or audio transcription endpoint
       url: "${ENDPOINT_URL}" - #endpoint url
       delay: 100
       retry_attempts: 8
       timeout: 30
-      model: "whisper-3" #only needed for vllm
+      model: "qwen-2.5-omni" #only needed for vllm
       auth_token: "${AUTH_TOKEN}" 
       batch_size: 4 #batch eval size
       chunk_size: 45 #max audio length in seconds fed to model
+
+      #If two models have same "model" attribute, we implement dataset sharding
