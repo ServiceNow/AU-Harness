@@ -9,7 +9,7 @@ class ReportingMetrics(dict):
     """Placeholder so downstream code still works."""
 
 
-class AudiobenchPostprocessor():
+class AudiobenchPostprocessor(Postprocessor):
     """Postprocessor class to calculate the model scores for the model predictions."""
     def extract_model_targets(self, dataset: list[dict]) -> list:
         """Return a list of `model_target` strings, preserving dataset order.
@@ -52,22 +52,3 @@ class AudiobenchPostprocessor():
             "success_rate": success_rate,
         }
         return overall_results
-
-    def get_reporting_summary_score(self, overall_score):
-        """Get the overall score to show in the result dashboard."""
-        return ReportingMetrics(overall_score=overall_score["avg_rating"] / 100)
-
-    def metadata_info(self):
-        """Creates a mapping from the metric name to the metric metadata object."""
-        return {
-            "avg_rating": MetricMetadata(
-                name="Average Rating",
-                display_name="Average Rating",
-                description="Average judge score rating across all predictions",
-            ),
-            "success_rate": MetricMetadata(
-                name="Success Rate",
-                display_name="Success Rate",
-                description="Rate of successful extractions from the judge predictions",
-            ),
-        }

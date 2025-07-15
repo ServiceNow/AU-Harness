@@ -2,6 +2,9 @@
 MODEL_OPENAI_JUDGE = "openai_gpt4_judge"
 MODEL_OPEN_ROUTER = "open_router"
 
+#dataset metadata file
+DATASET_METADATA_FILE = "audiobench_datasets.json"
+
 #inference server types
 INFERENCE_SERVER_VLLM_CHAT_COMPLETION = "vllm"
 OPENAI_CHAT_COMPLETION = "openai"

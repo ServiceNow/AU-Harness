@@ -1,10 +1,15 @@
 import json
 from pathlib import Path
 import asyncio
-from datasets import load_dataset, DownloadConfig
+from datasets import load_dataset
 import yaml
 from tqdm import tqdm
 import importlib
+import tempfile
+import requests
+import zipfile
+import os
+import glob
 # Central logging setup
 import logger_setup
 logger_setup.configure()
@@ -12,47 +17,44 @@ import logging
 logger = logging.getLogger(__name__)
 from models.model import Model
 from metrics.metrics import Metrics
+from postprocessors.base import Postprocessor
+from utils.constants import DATASET_METADATA_FILE
+
 
 class Engine:
-    """Evaluate one or many models over the same dataset concurrently."""
-    def __init__(self, models: list[Model], dataset: list[dict], metric: Metrics, postprocessor):
+    #Evaluate one or many models over the same dataset concurrently
+    def __init__(self, models: list[Model], dataset: list[dict], metric: Metrics, postprocessor: Postprocessor):
         logger.info(f"[Engine.__init__] Initializing Engine with {len(models)} model(s), dataset size: {len(dataset)}, metric: {metric.name}")
         self.models = models
         self.dataset = dataset
         self.metric = metric
         self.postprocessor = postprocessor
 
-
-    # ---------------- internal helpers ----------------x
-    #infer by batch size, calling generate text with retry for each sample
+    # Infer single model over dataset asynchronously
     async def _infer_single_model(self, model: Model) -> list[str]:
         logger.info(f"[Engine._infer_single_model] Running model: {model.name()} on dataset of size {len(self.dataset)}")
         sem = asyncio.Semaphore(model.batch_size)  # Use per-model batch size
-        async def _call(idx: int, sample):
+        async def _call(idx: int, sample: dict):
             async with sem:
-                #logger.info(f"{sample.keys()}")
                 resp = await model._generate_text_with_retry(sample, {"chunk_size": model.chunk_size, "metric": self.metric.name})
                 return idx, (resp.llm_response if resp else "")
         # Create tasks paired with their original indexx
         tasks = [_call(i, ex) for i, ex in enumerate(self.dataset)]
         results: list[str | None] = [None] * len(tasks)
-        # Use tqdm for progress while filling results in the correct order
         for coro in tqdm(asyncio.as_completed(tasks), total=len(tasks), desc=f"Inference ({model.name()})"):
             idx, text = await coro
             results[idx] = text
         logger.info(f"[Engine._infer_single_model] Model {model.name()} finished inference.")
         return results
 
-    #infer all models concurrently
+    # Infer all models concurrently
     async def _infer_all(self):
         logger.info(f"[Engine._infer_all] Starting inference for all models: {[m.name() for m in self.models]}")
         tasks = {m.name(): asyncio.create_task(self._infer_single_model(m)) for m in self.models}
         results = {name: await t for name, t in tasks.items()}
         logger.info(f"[Engine._infer_all] All models finished inference.")
-        #logger.info(f"[Engine._infer_all] Results: {results}")
         return results
 
-    #main engine runner
     def run(self):
         logger.info("[Engine.run] Starting evaluation run.")
         predictions = asyncio.run(self._infer_all())
@@ -61,7 +63,6 @@ class Engine:
         model_targets = self.postprocessor.extract_model_targets(dataset=self.dataset)
         for model_name, outs in predictions.items():
             logger.info(f"[Engine.run] Scoring model: {model_name}")
-            # Log first 5 prediction/target pairs for quick sanity-check
             n_log = min(10, len(outs), len(model_targets))
             logger.info(f"[Engine.run] Logging first {n_log} prediction-target pairs for sanity-check\n\n")
             for i in range(n_log):
@@ -78,7 +79,6 @@ class Engine:
 
 
 
-#pre/post helper getter
 def get_class_from_module(module_prefix, module_name):
     try:
         module = importlib.import_module(f"{module_prefix}.{module_name}")
@@ -86,11 +86,24 @@ def get_class_from_module(module_prefix, module_name):
     except Exception as e:
         return None
 
-#load an preprocess(dataset specific)
-def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = [], zip=False):
+def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = None, zip=False):
+    """
+    Load a dataset from HuggingFace or a ZIP file.
+
+    Args:
+        repo: HuggingFace dataset repo or local path to ZIP file
+        subset: Optional subset of the dataset to load
+        num_samples: Optional number of samples to load
+        preprocessor_name: Name of preprocessor to use(defaults to AudiobenchPreprocessor)
+        user_prompt_add_ons: Optional list of user prompt add-ons
+        zip: Optional flag to load from a ZIP file
+
+    Returns:
+        Dataset loaded from HuggingFace or ZIP file
+    """
+    user_prompt_add_ons = user_prompt_add_ons or []
     if zip:
         try:
-            import tempfile, requests, zipfile, os, glob
             logger.info(f"[_load_dataset] ZIP flag set. Downloading archive from {repo}")
             tmpdir = tempfile.mkdtemp(prefix="ab_zip_")
             local_zip = os.path.join(tmpdir, "dataset.zip")
@@ -104,7 +117,6 @@ def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="Audiob
             logger.info(f"[_load_dataset] Extracting archive {local_zip} …")
             with zipfile.ZipFile(local_zip) as zf:
                 zf.extractall(tmpdir)
-            # Attempt to locate all JSON files inside extraction for automatic dataset loading
             json_files = glob.glob(os.path.join(tmpdir, "**", "*.json"), recursive=True)
             if not json_files:
                 raise RuntimeError("No JSON files discovered inside ZIP; cannot build dataset automatically.")
@@ -116,7 +128,6 @@ def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="Audiob
                 dset = dset[:num_samples]
             else:
                 dset = dset[:len(dset)]
-            # Preprocess
             PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
             processed = PreprocessorClass().process(dset, {"user_prompt_add_ons": user_prompt_add_ons})
             logger.info(f"[_load_dataset] Dataset loaded & processed from ZIP. Size: {len(processed)}")
@@ -126,10 +137,15 @@ def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="Audiob
             raise
 
     logger.info(f"[_load_dataset] Loading HuggingFace dataset repo: {repo}")
-    # If 'subset' or 'data_dir' is specified, pass as second arg or kwarg
-    # ----- robust split handling -----
     def _select_split(ds):
-        """Return desired split name or None if *ds* is already a Dataset."""
+        """
+        
+        Args:
+            ds: Dataset to select split from
+        
+        Returns:
+            str: Split name or None if *ds* is already a Dataset
+        """
         if isinstance(ds, dict):  # HuggingFace DatasetDict
             for cand in ("test", "data", "train"):
                 if cand in ds:
@@ -145,27 +161,22 @@ def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="Audiob
     chosen_split = _select_split(ds_builder)
     dset = ds_builder if chosen_split is None else ds_builder[chosen_split]
     logger.info(f"[_load_dataset] Using split: {chosen_split or 'single-dataset'}  |  Size before trunc: {len(dset)}")
-        #logger.info(f"[_load_dataset] Dataset loaded: {dset}")
     if num_samples is not None:
         logger.info(f"[_load_dataset] Truncating dataset to first {num_samples} samples.")
         dset = dset[:num_samples]
-    #Added to convert to dict
     else:
         logger.info(f"[_load_dataset] num_samples not provided; using full dataset length.")
         dset = dset[:len(dset)]
-    #logger.info(f"[_load_dataset] Dataset loaded after truncation: {dset}")
     logger.info(f"[_load_dataset] Preprocessing dataset using {preprocessor_name}...")
     PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
     processed = PreprocessorClass().process(dset, {"user_prompt_add_ons": user_prompt_add_ons})
     logger.info(f"[_load_dataset] Dataset loaded and processed. Size: {len(processed)}")
     return processed
 
-#load models from config
 def _load_models(cfg_list: list[dict]) -> list[Model]:
     logger.info(f"[_load_models] Instantiating models from config: {cfg_list}")
     models = []
     for cfg in cfg_list:
-        # chunk_size is now supported as an info attribute for each model (default 30s if not specified)
         model_name = cfg["info"].get("name")
         logger.info(f"[_load_models] Instantiating model for {model_name}")
         model_obj = Model(cfg["info"])
@@ -178,7 +189,6 @@ def _load_models(cfg_list: list[dict]) -> list[Model]:
     logger.info(f"[_load_models] Successfully instantiated {len(models)} model(s).")
     return models
 
-#load metric from name
 def _load_metric(name: str, language: str = "en", judge_concurrency: int | None = None, judge_model: str | None = None):
     logger.info(f"[_load_metric] Loading metric: {name} (judge_concurrency={judge_concurrency}, judge_model={judge_model})")
     if name == "word_error_rate":
@@ -201,7 +211,7 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
     logger.info(f"[_load_metric] Metric loaded: {metric.name}")
     return metric
 
-#hardcoded cfg path - need to implement command line override, add common configs, group by task type
+#TO-DO: need to implement command line override, add common configs, group by task type
 #main that runs
 def main(cfg_path='config.yaml'):
     logger.info("[main] Starting main function.")
@@ -210,7 +220,6 @@ def main(cfg_path='config.yaml'):
     cfg = yaml.safe_load(cfg_path.read_text())
     logger.info(f"[main] Config loaded: {cfg}")
 
-    # Reconfigure log file if provided
     log_file_path = cfg.get("log_file")
     if log_file_path:
         logger_setup.configure(log_file_path)
@@ -241,7 +250,7 @@ def main(cfg_path='config.yaml'):
     logger.info("[main] Loading models...")
     models = _load_models(cfg["models"])
     all_scores = {}
-    cfg_path = Path(__file__).with_name("audiobench_datasets.json")
+    cfg_path = Path(__file__).with_name(DATASET_METADATA_FILE)
     db = json.loads(cfg_path.read_text())
     for dname, metric_name in dataset_metric_pairs:
         logger.info(f"[main] Loading dataset '{dname}' with metric '{metric_name}' ...")

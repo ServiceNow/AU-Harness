@@ -42,7 +42,3 @@ class MetricMetadata(BaseModel):
             "range": self.range,
             "higher_is_better": self.higher_is_better,
         }
-
-    def metadata_info(self) -> dict:
-        """Return metadata info."""
-        return {}

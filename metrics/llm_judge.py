@@ -1,10 +1,9 @@
 from __future__ import annotations
-
 import asyncio, json, yaml, os
 from pathlib import Path
-
 from openai import AsyncAzureOpenAI
-from tqdm import tqdm  # progress bar
+from tqdm import tqdm
+
 import logging
 logger = logging.getLogger(__name__)
 
@@ -47,8 +46,16 @@ class _BaseLLMJudge(Metrics):
         )
 
     async def _score_once(self, system_prompt: str, user_prompt: str) -> float | dict:
-        #logger.info(f"system_prompt: {system_prompt}")
-        #logger.info(f"user_prompt: {user_prompt}")
+        """
+        Score a single candidate-reference pair.
+        
+        Args:
+            system_prompt: System prompt for the LLM
+            user_prompt: User prompt for the LLM
+        
+        Returns:
+            float | dict: Score or dictionary of scores
+        """
         resp = await self._client.chat.completions.create(
             model=self._model,
             messages=[
@@ -58,7 +65,6 @@ class _BaseLLMJudge(Metrics):
             temperature=0.1,
         )
         content = resp.choices[0].message.content.strip()
-        #logger.info(f"content: {content}")
         try:
             return json.loads(content)
         except Exception:
@@ -86,23 +92,22 @@ class _BaseLLMJudge(Metrics):
         # Create tasks for all candidate-reference pairs
         tasks = [_run(c, r) for c, r in zip(candidates, references)]
         results = []
-        # Use tqdm to monitor progress across asynchronous completions
         for coro in tqdm(asyncio.as_completed(tasks), total=len(tasks), desc=f"LLM Judge ({self._prompt_key})"):
             result = await coro
             results.append(result)
         return results
 
-# ---------------------------------------------------------------------------
-# Binary (yes/no) judge
-# ---------------------------------------------------------------------------
-
-class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
+class BinaryLLMJudgeMetric(_BaseLLMJudge):
+    """Binary LLM judge metric.
+    On a scale of 0 to 1, how well does the candidate text match the reference text?
+    Returns:
+        float: Overall score
+    """
     name: str = "llm_judge_binary"
     _prompt_key: str = "binary_judge_prompt"
 
     def __call__(self, candidates, references):
         """Return overall average dict and record-level details."""
-        #self.record_level_scores = self.compute_record_level_scores(candidates, references)
         overall = super().get_score(candidates, references)
         # Scale final overall score to 0–100
         if self.name in overall:
@@ -115,17 +120,17 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
         self.explanations = [r.get("explanation", "") if isinstance(r, dict) else "" for r in raw_scores]
         return {self.name: scores}
 
-# ---------------------------------------------------------------------------
-# Detailed judge – returns a 0-5 score and rationale
-# ---------------------------------------------------------------------------
-
-class DetailedLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
+class DetailedLLMJudgeMetric(_BaseLLMJudge):
+    """Detailed LLM judge metric.
+    On a scale of 0 to 5, how well does the candidate text match the reference text?
+    Returns:
+        float: Overall score
+    """
     name: str = "llm_judge_detailed"
     _prompt_key: str = "detailed_judge_prompt"
 
     def __call__(self, candidates, references):
         """Return overall average dict and record-level details."""
-        #self.record_level_scores = self.compute_record_level_scores(candidates, references)
         overall = super().get_score(candidates, references)
         # Scale final overall score to 0–100
         if self.name in overall:
@@ -137,10 +142,6 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
         scores = [float(r.get("score", 0)) if isinstance(r, dict) else 0.0 for r in raw_scores]
         self.explanations = [r.get("explanation", "") if isinstance(r, dict) else "" for r in raw_scores]
         return {self.name: scores}
-
-# ---------------------------------------------------------------------------
-# Original LLM judge
-# ---------------------------------------------------------------------------
 
 class LLMJudgeMetric(Metrics):  # noqa: D401
     name: str = "llm_judge"

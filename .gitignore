@@ -8,6 +8,9 @@ config.yaml
 *.log
 *.out
 
+#private datasets
+private_datasets
+
 # python cache files
 __pycache__/
 **/__pycache__/

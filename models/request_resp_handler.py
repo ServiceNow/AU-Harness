@@ -22,8 +22,6 @@ class RequestRespHandler:
         self.client = None
         self.timeout = timeout
         # Remove Bearer if present for vllm/openai
-        
-        # Strip 'Bearer ' ONLY for OpenAI flows – VLLM endpoints expect full 'Bearer <token>'
         if self.inference_type in [
             constants.OPENAI_TRANSCRIPTION,
             constants.OPENAI_CHAT_COMPLETION,

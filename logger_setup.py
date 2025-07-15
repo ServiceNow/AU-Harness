@@ -1,4 +1,4 @@
-"""Central logging setup for AudioBench.
+"""Central logging setup
 
 Call ``logger_setup.configure(log_file_path)`` once (e.g. from ``evaluate.py``)
 BEFORE importing other project modules that acquire loggers.  If you don’t call
