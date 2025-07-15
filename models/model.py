@@ -233,21 +233,30 @@ class Model(ABC):
                     else:
                         full_instruction = instruction
 
-                    message["model_inputs"] = [
-                        {
-                            "role": "user",
-                            "content": [
-                                {"type": "text", "text": full_instruction},
-                                {
-                                    "type": "input_audio",
-                                    "input_audio": {
-                                        "data": encoded,
-                                        "format": "wav",
+                    if encoded == "":
+                        message["model_inputs"] = [
+                            {
+                                "role": "user",
+                                "content": [{"type": "text", "text": full_instruction}],
+                            }
+                        ]
+                    else:
+                        message["model_inputs"] = [
+                            {
+                                "role": "user",
+                                "content": [
+                                    {"type": "text", "text": full_instruction},
+                                    {
+                                        "type": "input_audio",
+                                        "input_audio": {
+                                            "data": encoded,
+                                            "format": "wav",
+                                        },
                                     },
-                                },
-                            ],
-                        }
-                    ]
+                                ],
+                            }
+                        ]
+
                     resp = await self.req_resp_hndlr.request_server(message["model_inputs"])
                     logger.info(f"Requester response: {resp}")
                     concatenated_text += resp.llm_response or ""
@@ -291,21 +300,30 @@ class Model(ABC):
             chunk_array = audio_array[:max_samples]
             encoded = encode_audio_array_base64(chunk_array, sampling_rate)
 
-            message["model_inputs"] = [
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": instruction},
-                        {
-                            "type": "input_audio",
-                            "input_audio": {
-                                "data": encoded,
-                                "format": "wav",
-                            },
-                        }
-                    ],
-                }
-            ]
+            if encoded == "":
+                message["model_inputs"] = [
+                    {
+                        "role": "user",
+                        "content": [{"type": "text", "text": instruction}],
+                    }
+                ]
+            else:                
+                message["model_inputs"] = [
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "text", "text": instruction},
+                            {
+                                "type": "input_audio",
+                                "input_audio": {
+                                    "data": encoded,
+                                    "format": "wav",
+                                },
+                            }
+                        ],
+                    }
+                ]
+
             return await self.req_resp_hndlr.request_server(message["model_inputs"])
 
         #transcription
