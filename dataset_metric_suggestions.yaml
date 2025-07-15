@@ -56,3 +56,4 @@ dataset_metric:
   - "(voxceleb_gender_test, llm_judge_binary)"
   - "(wavcaps_qa_test, llm_judge_detailed)"
   - "(wavcaps_test, llm_judge_detailed)"
+  - "(big_bench_audio, llm_judge_big_bench_audio)"
