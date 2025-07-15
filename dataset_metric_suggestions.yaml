@@ -57,3 +57,4 @@ dataset_metric:
   - "(wavcaps_qa_test, llm_judge_detailed)"
   - "(wavcaps_test, llm_judge_detailed)"
   - "(big_bench_audio, llm_judge_big_bench_audio)"
+  - "(big_bench_audio_text_only, llm_judge_big_bench_audio)"
