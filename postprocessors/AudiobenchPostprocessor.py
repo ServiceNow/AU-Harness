@@ -1,3 +1,5 @@
+from postprocessors.base import Postprocessor
+
 class _SimpleMeta:  # stand-in for MetricMetadata
     def __init__(self, name, display_name=None, description=""):
         self.name = name

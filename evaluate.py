@@ -5,11 +5,6 @@ from datasets import load_dataset
 import yaml
 from tqdm import tqdm
 import importlib
-import tempfile
-import requests
-import zipfile
-import os
-import glob
 # Central logging setup
 import logger_setup
 logger_setup.configure()
@@ -18,8 +13,8 @@ logger = logging.getLogger(__name__)
 from models.model import Model
 from metrics.metrics import Metrics
 from postprocessors.base import Postprocessor
+from postprocessors.AudiobenchPostprocessor import AudiobenchPostprocessor
 from utils.constants import DATASET_METADATA_FILE
-
 
 class Engine:
     #Evaluate one or many models over the same dataset concurrently
@@ -86,55 +81,22 @@ def get_class_from_module(module_prefix, module_name):
     except Exception as e:
         return None
 
-def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = None, zip=False):
+def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = None):
     """
-    Load a dataset from HuggingFace or a ZIP file.
+    Load a dataset from HuggingFace.
 
     Args:
-        repo: HuggingFace dataset repo or local path to ZIP file
+        repo: HuggingFace dataset repo
         subset: Optional subset of the dataset to load
         num_samples: Optional number of samples to load
         preprocessor_name: Name of preprocessor to use(defaults to AudiobenchPreprocessor)
         user_prompt_add_ons: Optional list of user prompt add-ons
-        zip: Optional flag to load from a ZIP file
 
     Returns:
-        Dataset loaded from HuggingFace or ZIP file
+        Dataset loaded from HuggingFace
     """
     user_prompt_add_ons = user_prompt_add_ons or []
-    if zip:
-        try:
-            logger.info(f"[_load_dataset] ZIP flag set. Downloading archive from {repo}")
-            tmpdir = tempfile.mkdtemp(prefix="ab_zip_")
-            local_zip = os.path.join(tmpdir, "dataset.zip")
-            # Stream download to avoid large memory usage
-            with requests.get(repo, stream=True, timeout=60) as r:
-                r.raise_for_status()
-                with open(local_zip, "wb") as f:
-                    for chunk in r.iter_content(chunk_size=1024 * 1024):
-                        if chunk:
-                            f.write(chunk)
-            logger.info(f"[_load_dataset] Extracting archive {local_zip} …")
-            with zipfile.ZipFile(local_zip) as zf:
-                zf.extractall(tmpdir)
-            json_files = glob.glob(os.path.join(tmpdir, "**", "*.json"), recursive=True)
-            if not json_files:
-                raise RuntimeError("No JSON files discovered inside ZIP; cannot build dataset automatically.")
-            logger.info(f"[_load_dataset] Found {len(json_files)} JSON file(s); building HF dataset from them…")
-            dset = load_dataset("json", data_files=json_files, split="train")
-            # Apply any sampling/truncation logic
-            if num_samples is not None:
-                logger.info(f"[_load_dataset] Truncating dataset to first {num_samples} samples.")
-                dset = dset[:num_samples]
-            else:
-                dset = dset[:len(dset)]
-            PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
-            processed = PreprocessorClass().process(dset, {"user_prompt_add_ons": user_prompt_add_ons})
-            logger.info(f"[_load_dataset] Dataset loaded & processed from ZIP. Size: {len(processed)}")
-            return processed
-        except Exception as e:
-            logger.exception(f"[_load_dataset] Failed to load dataset from ZIP: {e}")
-            raise
+    
 
     logger.info(f"[_load_dataset] Loading HuggingFace dataset repo: {repo}")
     def _select_split(ds):
