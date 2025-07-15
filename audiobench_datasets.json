@@ -460,6 +460,14 @@
     "language": "multilingual",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
-  }
+  },
 
+
+  "big_bench_audio": {
+    "hf_repo": "fixie-ai/big_bench_audio",
+    "subset": "default",
+    "language": "english",
+    "preprocessor": "BigBenchAudioPreprocessor",
+    "postprocessor": "BigBenchAudioPostprocessor"
+  }
 }
