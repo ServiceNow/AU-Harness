@@ -1,0 +1,13 @@
+{
+    "mmau_mini": {
+    "hf_repo": "AudioLLMs/MMAU-mini",
+    "language": "english",
+    "preprocessor": "AudiobenchPreprocessor",
+    "postprocessor": "AudiobenchPostprocessor",
+    "tasks": [
+      "Spoken QA",
+      "Speaker Recognition",
+      "QA"
+    ]
+  }
+}

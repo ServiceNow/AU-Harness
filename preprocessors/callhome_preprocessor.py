@@ -1,16 +1,14 @@
 import logging
 import re
-import random
 import soundfile as sf
-import numpy as np
 from tqdm import tqdm
 from scipy.signal import resample
-
+from preprocessors.base import Preprocessor
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-class CallHomePreprocessor:
+class CallhomePreprocessor(Preprocessor):
     def process(self, dataset, num_samples=None, properties=None):
         """
         Processes a dataset for CallHome speaker diarization.
@@ -39,6 +37,7 @@ class CallHomePreprocessor:
             )
 
         dataset_path = Path(dataset).resolve()
+        logger.info(f"[CallhomePreprocessor] Resolved dataset path: {dataset_path}")
         transcripts_dir = dataset_path / "transcripts"
         audio_dir = dataset_path / "audio"
         if not transcripts_dir.exists() or not audio_dir.exists():

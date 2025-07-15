@@ -1,12 +1,11 @@
 import logger_setup
 logger_setup.configure()
 import logging
-import numpy as np
-from collections import defaultdict
+from postprocessors.base import Postprocessor
 logger = logging.getLogger(__name__)
 logger.propagate = True
 
-class CallHomePostprocessor():
+class CallhomePostprocessor(Postprocessor):
     """Postprocessor class to calculate the model scores for the model predictions."""
     def process(self, dataset: list[dict], predictions, metric=None) -> tuple:
 

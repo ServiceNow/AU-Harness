@@ -564,8 +564,8 @@
   },
   "callhome_eng": {
     "language": "english",
-    "preprocessor": "CallHomePreprocessor",
-    "postprocessor": "CallHomePostprocessor",
+    "preprocessor": "CallhomePreprocessor",
+    "postprocessor": "CallhomePostprocessor",
     "path": "private_datasets/CallHome_eng",
     "tasks": [
       "Long form ASR"
@@ -573,8 +573,8 @@
   },
   "callhome_deu": {
     "language": "german",
-    "preprocessor": "CallHomePreprocessor",
-    "postprocessor": "CallHomePostprocessor",
+    "preprocessor": "CallhomePreprocessor",
+    "postprocessor": "CallhomePostprocessor",
     "path": "private_datasets/CallHome_eng",
     "tasks": [
       "Long form ASR"
@@ -582,8 +582,8 @@
   },
   "callhome_jpn": {
     "language": "japanese",
-    "preprocessor": "CallHomePreprocessor",
-    "postprocessor": "CallHomePostprocessor",
+    "preprocessor": "CallhomePreprocessor",
+    "postprocessor": "CallhomePostprocessor",
     "path": "private_datasets/CallHome_eng",
     "tasks": [
       "Long form ASR"
@@ -591,8 +591,8 @@
   },
   "callhome_spa": {
     "language": "spanish",
-    "preprocessor": "CallHomePreprocessor",
-    "postprocessor": "CallHomePostprocessor",
+    "preprocessor": "CallhomePreprocessor",
+    "postprocessor": "CallhomePostprocessor",
     "path": "private_datasets/CallHome_eng",
     "tasks": [
       "Long form ASR"
@@ -600,8 +600,8 @@
   },
   "callhome_zho": {
     "language": "chinese",
-    "preprocessor": "CallHomePreprocessor",
-    "postprocessor": "CallHomePostprocessor",
+    "preprocessor": "CallhomePreprocessor",
+    "postprocessor": "CallhomePostprocessor",
     "path": "private_datasets/CallHome_eng",
     "tasks": [
       "Long form ASR"

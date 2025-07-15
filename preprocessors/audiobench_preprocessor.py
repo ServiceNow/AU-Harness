@@ -3,9 +3,9 @@ logger = logging.getLogger(__name__)
 from tqdm import tqdm
 from pathlib import Path
 import yaml
+from preprocessors.base import Preprocessor
 
-
-class AudiobenchPreprocessor():
+class AudiobenchPreprocessor(Preprocessor):
     """Preprocessor for Audio benchmarks from AudioBench on HF."""
 
     def process(self, dataset: dict, properties: dict | None) -> list[dict]:
@@ -56,23 +56,14 @@ class AudiobenchPreprocessor():
                 min_length, max_length = length_filter
                 if audio_duration < min_length or audio_duration > max_length:
                     continue
-
-            if "reference" in record:
-                record["model_target"] = record["reference"]
-            elif "answer" in record:
-                record["model_target"] = record["answer"]
-            elif "text" in record:
-                record["model_target"] = record["text"]
-            elif "transcription" in record:
-                record["model_target"] = record["transcription"]
-            elif "sentence" in record:
-                record["model_target"] = record["sentence"]
-            elif "transcript" in record:
-                record["model_target"] = record["transcript"]
-            elif "normalized_text" in record:
-                record["model_target"] = record["normalized_text"]
-            else:
-                record["model_target"] = "no reference - use your judgement"
+            
+            possible_keys = ["reference", "answer", "text", "transcription", "sentence", "transcript", "normalized_text"]
+            for key in possible_keys:
+                if key in record:
+                    record["model_target"] = record[key]
+                    break
+            if "model_target" not in record:
+                raise ValueError("No valid target key found in record")
 
             instruction = record.get("instruction") or record.get("question") or ""
             # Append any user-specified prompt add-ons
@@ -80,7 +71,6 @@ class AudiobenchPreprocessor():
                 add_on = prompt_add_ons.get(k)
                 if add_on:
                     instruction = f"{instruction} {add_on}"
-            #logger.info(f"[AudiobenchPreprocessor] Final instruction: {instruction}")
             record["instruction"] = instruction
             record["judge_type"] = properties.get("judge_type", "detailed")
             new_dataset.append(record)

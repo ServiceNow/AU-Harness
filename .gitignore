@@ -12,6 +12,7 @@ config.yaml
 __pycache__/
 **/__pycache__/
 *.py[cod]
+.DS_Store
 
 #datasets
 private_datasets/

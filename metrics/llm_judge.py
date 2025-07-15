@@ -112,7 +112,9 @@ class _BaseLLMJudge(Metrics):
             return
         def _slug(s):
             return re.sub(r"[^A-Za-z0-9_]+", "_", s)
-        log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
+        log_dir = Path("run_logs")
+        log_dir.mkdir(exist_ok=True)
+        log_path = log_dir / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
         explanations = getattr(self, "explanations", [""] * len(scores))
         with open(log_path, "w", encoding="utf-8") as f:
             for ref, cand, sc, expl in zip(refs, cands, scores, explanations):
@@ -126,7 +128,7 @@ class _BaseLLMJudge(Metrics):
         import json
         from pathlib import Path
         
-        run_path = Path(".") / "run.log"
+        run_path = Path("run_logs") / "run.log"
         
         # Get explanations if available
         explanations = getattr(self, "explanations", [""] * len(scores))
@@ -173,7 +175,9 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
         from pathlib import Path
         def _slug(s):
             return re.sub(r"[^A-Za-z0-9_]+", "_", s)
-        log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
+        log_dir = Path("run_logs")
+        log_dir.mkdir(exist_ok=True)
+        log_path = log_dir / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
         with open(log_path, "a", encoding="utf-8") as f:
             f.write(json.dumps({"final_score": overall}, ensure_ascii=False) + "\n")
     def compute_record_level_scores(self, candidates: list, references: list):

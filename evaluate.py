@@ -3,7 +3,8 @@ logger_setup.configure()
 import logging
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
-
+from postprocessors.base import Postprocessor
+from preprocessors.base import Preprocessor
 import os
 import json
 from pathlib import Path
@@ -82,41 +83,62 @@ class Engine:
 
 
 
-#pre/post helper getter
-def get_class_from_module(module_prefix, module_name):
+def get_class_from_module(module_prefix, module_name) -> Preprocessor | Postprocessor:
     try:
-        module = importlib.import_module(f"{module_prefix}.{module_name}")
+        # Convert class name (CamelCase) to filename (snake)
+        # Get pre or post processor
+        module_filename = ''.join(['_' + c.lower() if c.isupper() else c for c in module_name]).lstrip('_')
+        module = importlib.import_module(f"{module_prefix}.{module_filename}")
         return getattr(module, module_name)
     except Exception as e:
+        logger.warning(f"Could not import {module_name} from {module_prefix}: {e}")
         return None
 
-#load an preprocess(dataset specific)
-from preprocessors.CallHomePreprocessor import CallHomePreprocessor
 
-def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = [], length_filter=None, zip=False, dataset_config=None, metric=None):
+def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = [], length_filter=None, metric=None, split=None):
     """Load and preprocess a dataset from a local or remote path."""
     logger.info(f"[_load_dataset] Loading dataset {repo} with preprocessor {preprocessor_name}")
-    # We can load different formats of datasets
-    if repo and repo.startswith("/") or repo.startswith("./"): # Local path
+    
+    # Set up properties that will be passed to any preprocessor
+    properties = {"metric": metric}
+    if user_prompt_add_ons:
+        properties["user_prompt_add_ons"] = user_prompt_add_ons
+    if length_filter:
+        logger.info(f"[_load_dataset] Applying length filter: {length_filter}")
+        properties["length_filter"] = tuple(length_filter)  # Convert list to tuple
+    
+    # Special handling for local CallHome dataset
+    if preprocessor_name.startswith("Callhome"):
+        repo = Path(repo).resolve()
+        logger.info(f"[_load_dataset] Loading CallHome local dataset from {repo}")
+        # Dynamically load the preprocessor
+        PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
+        if PreprocessorClass is None:
+            error_msg = f"Could not load preprocessor {preprocessor_name}"
+            logger.error(error_msg)
+            raise ValueError(error_msg)
+        print(f"[_load_dataset] Using preprocessor {PreprocessorClass}")
+        print(type(repo))
+        print(type(num_samples))
+        print(type(properties))
+        dataset = PreprocessorClass().process(repo, num_samples=num_samples, properties=properties)
+        return dataset
+    
+    # For HuggingFace datasets
+    if repo and (repo.startswith("/") or repo.startswith(".//")):
         repo = Path(repo).resolve()
         logger.info(f"[_load_dataset] Loading local dataset from {repo}")
-    
-    if preprocessor_name.startswith("CallHome"):
-        # Special-case CallHome dataset
-        # Load CallHomePreprocessor from local preprocessor code
-        properties = {"metric": metric}
-        if user_prompt_add_ons:
-            properties["user_prompt_add_ons"] = user_prompt_add_ons
-        if length_filter:
-            logger.info(f"[_load_dataset] Applying length filter: {length_filter}")
-            properties["length_filter"] = tuple(length_filter)  # Convert list to tuple
-        logger.info(f"[_load_dataset] Loading CallHome from path: {repo}")
-        dataset = CallHomePreprocessor().process(repo, num_samples=num_samples, properties=properties)
-        return dataset
-
+        
     logger.info(f"[_load_dataset] Loading HuggingFace dataset repo: {repo}")
     # Determine the preferred split to load directly (more efficient)
-    preferred_splits = ["test", "data", "train"]
+    if split is not None:
+        logger.info(f"[_load_dataset] Using user-specified split: {split}")
+        if isinstance(split, str):
+            preferred_splits = [split]
+        else:
+            preferred_splits = list(split)
+    else:
+        preferred_splits = ["test", "data", "train"]
     
     # Try to load a specific split directly
     dset = None
@@ -150,6 +172,7 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="A
             else:
                 dset = load_dataset(repo, trust_remote_code=True)
         except Exception as e:
+            logger.info(f"[_load_dataset] Failed to load dataset: {str(e)}")
             error_msg = f"[_load_dataset] No valid dataset found in {repo}"
             logger.error(error_msg)
             raise ValueError(error_msg)
@@ -157,22 +180,18 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="A
     logger.info(f"[_load_dataset] Dataset loaded  |  Size before trunc: {len(dset)}")
 
 
-    #logger.info(f"[_load_dataset] Dataset loaded: {dset}")
     if num_samples is not None:
         logger.info(f"[_load_dataset] Truncating dataset to first {num_samples} samples.")
         dset = dset[:num_samples]
-    #Added to convert to dict
     else:
         dset = dset[:len(dset)]
-    #logger.info(f"[_load_dataset] Dataset loaded after truncation: {dset}")
+    logger.info(f"[_load_dataset] Dataset loaded after truncation: {dset}")
     logger.info(f"[_load_dataset] Preprocessing dataset using {preprocessor_name}...")
     PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
-    properties = {"metric": metric}
-    if user_prompt_add_ons:
-        properties["user_prompt_add_ons"] = user_prompt_add_ons
-    if length_filter:
-        logger.info(f"[_load_dataset] Applying length filter: {length_filter}")
-        properties["length_filter"] = tuple(length_filter)
+    if PreprocessorClass is None:
+        error_msg = f"Could not load preprocessor {preprocessor_name}"
+        logger.error(error_msg)
+        raise ValueError(error_msg)
     processed = PreprocessorClass().process(dset, properties)
     logger.info(f"[_load_dataset] Dataset loaded and processed. Size: {len(processed)}")
     return processed
@@ -318,12 +337,14 @@ def main(cfg_path='config.yaml'):
         postprocessor_name = db[dname]["postprocessor"]
         
         dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, 
-                             user_prompt_add_ons=user_prompt_add_ons, length_filter=length_filter, metric=metric_name)
+                             user_prompt_add_ons=user_prompt_add_ons, length_filter=length_filter, metric=metric_name, split=cfg.get("split"))
         metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
         # Dynamically import postprocessor class
         PostprocessorClass = get_class_from_module('postprocessors', postprocessor_name)
         if PostprocessorClass is None:
-            PostprocessorClass = AudiobenchPostprocessor
+            logger.warning(f"Could not load postprocessor {postprocessor_name}, using default AudiobenchPostprocessor")
+            # Try to load the default postprocessor
+            PostprocessorClass = get_class_from_module('postprocessors', 'AudiobenchPostprocessor')
         postprocessor = PostprocessorClass()
         logger.info("[main] Initializing Engine and running evaluation...")
         result = Engine(models, dataset, metric, postprocessor, dname).run()

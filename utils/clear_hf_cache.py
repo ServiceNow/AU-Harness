@@ -6,13 +6,11 @@ import time
 from datasets import config as datasets_config
 import logging
 
-# Set up logging
 logging.basicConfig(level=logging.INFO, 
                     format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 def clear_datasets_cache():
-    """Clear the HuggingFace datasets cache."""
     cache_dir = datasets_config.HF_DATASETS_CACHE
     logger.info(f"Datasets cache directory: {cache_dir}")
     
@@ -40,9 +38,7 @@ def clear_datasets_cache():
         logger.info("No datasets cache found.")
 
 def clear_models_cache():
-    """Clear the HuggingFace models cache."""
     try:
-        # Try the transformers way first
         from transformers.utils.hub import HUGGINGFACE_HUB_CACHE
         models_cache = HUGGINGFACE_HUB_CACHE
         
@@ -62,7 +58,6 @@ def clear_models_cache():
                 
                 logger.info(f"Found {file_count} files totaling {total_size / (1024*1024*1024):.2f} GB")
                 
-                # Delete the cache
                 shutil.rmtree(models_cache, ignore_errors=True)
                 logger.info("Models cache cleared successfully.")
             except Exception as e:
@@ -71,7 +66,6 @@ def clear_models_cache():
             logger.info("No models cache found.")
     except ImportError:
         logger.warning("Transformers not found, trying alternative methods")
-        # Try alternative location for models
         home = os.path.expanduser("~")
         alt_cache = os.path.join(home, ".cache", "huggingface", "transformers")
         if os.path.exists(alt_cache):
@@ -80,12 +74,10 @@ def clear_models_cache():
             logger.info("Alternative models cache cleared successfully.")
 
 def clear_temp_files():
-    """Clear temporary files that might be using space."""
     import tempfile
     temp_dir = tempfile.gettempdir()
     logger.info(f"Temp directory: {temp_dir}")
     
-    # Look for huggingface or dataset related temp files
     hf_temp_pattern = os.path.join(temp_dir, "tmphf_*")
     import glob
     hf_temp_files = glob.glob(hf_temp_pattern)
@@ -105,7 +97,6 @@ def clear_temp_files():
         logger.info("No HF temporary files found.")
 
 def print_disk_usage():
-    """Print current disk usage information."""
     try:
         import subprocess
         logger.info("Disk usage before cleaning:")
@@ -116,12 +107,10 @@ def print_disk_usage():
         logger.error(f"Error getting disk usage: {e}")
 
 def main():
-    """Main function to clear all caches."""
     logger.info("Starting cache cleanup process")
     
     print_disk_usage()
     
-    # Perform cleaning operations
     clear_datasets_cache()
     clear_models_cache()
     clear_temp_files()
