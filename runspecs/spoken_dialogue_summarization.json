@@ -5,10 +5,6 @@
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor",
-    "tasks": [
-      "Spoken Dialogue Summarization",
-      "QA"
-    ],
     "accented": true
   },
   "mnsc_sds_part4_test": {
@@ -17,10 +13,6 @@
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor",
-    "tasks": [
-      "Spoken Dialogue Summarization",
-      "QA"
-    ],
     "accented": true
   },
   "mnsc_sds_part5_test": {
@@ -29,10 +21,6 @@
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor",
-    "tasks": [
-      "Spoken Dialogue Summarization",
-      "QA"
-    ],
     "accented": true
   }
 }

@@ -9,6 +9,8 @@ judge_model: "gpt-4o-mini" #optional(only supported model right no2)
 user_prompt_add_ons: ["asr_clean_output"] #optional - additional prompting in text instructions for each sample
 length_filter: [1.0, 3.0] #optional - filters for only audio samples in this length(seconds)
 accented: false #optional - filters for only audio samples in this length(seconds)
+language: "english" #optional - filters for only audio samples in this language
+
 models:
   - info:
       name: "gpt-4o-mini-audio-preview-1" 

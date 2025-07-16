@@ -3,9 +3,6 @@
     "hf_repo": "AudioLLMs/seame_dev_sge",
     "language": "chinese/english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor",
-    "tasks": [
-      "Code-Switching ASR"
-    ]
+    "postprocessor": "AudiobenchPostprocessor"
   }
 }

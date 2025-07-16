@@ -3,20 +3,12 @@
     "hf_repo": "AudioLLMs/alpaca_audio_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor",
-    "tasks": [
-      "Speech Instruction",
-      "QA"
-    ]
+    "postprocessor": "AudiobenchPostprocessor"
   },
   "openhermes_instruction_test": {
     "hf_repo": "AudioLLMs/openhermes_instruction_test",
     "language": "english",
     "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor",
-    "tasks": [
-      "Speech Instruction",
-      "QA"
-    ]
+    "postprocessor": "AudiobenchPostprocessor"
   }
 }
