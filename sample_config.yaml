@@ -1,13 +1,14 @@
 
-dataset_metric: #tuple of dataset, metric
+dataset_metric: #tuple of dataset, metric(can run by task or dataset)
   - "(wavcaps_qa_test, word_error_rate)"
   - "(alpaca_audio_test, word_error_rate)"
+  - "(emotion_recognition, llm_judge_binary)"
 num_samples: 100 #number of samples to run(remove for all)
 judge_concurrency: 8 #judge call(optional)
 judge_model: "gpt-4o-mini" #optional(only supported model right no2)
 user_prompt_add_ons: ["asr_clean_output"] #optional - additional prompting in text instructions for each sample
 length_filter: [1.0, 3.0] #optional - filters for only audio samples in this length(seconds)
-
+accented: false #optional - filters for only audio samples in this length(seconds)
 models:
   - info:
       name: "gpt-4o-mini-audio-preview-1" 

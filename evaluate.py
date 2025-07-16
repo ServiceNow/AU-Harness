@@ -338,6 +338,11 @@ def main(cfg_path='config.yaml'):
         accented_filter = cfg.get("accented", None)
         if accented_filter is not None:
             logger.info(f"[main] Applying accented filter setting: {accented_filter}")
+            
+        # Check for language filter setting
+        language_filter = cfg.get("language", None)
+        if language_filter is not None:
+            logger.info(f"[main] Applying language filter setting: {language_filter}")
         
         # Process each selected dataset
         for dataset_name, dataset_info in selected_datasets.items():
@@ -345,6 +350,13 @@ def main(cfg_path='config.yaml'):
             if accented_filter is False and dataset_info.get("accented", False) is True:
                 logger.info(f"[main] Skipping dataset '{dataset_name}' because it is accented and accented filter is False")
                 continue
+                
+            # Check if we need to filter by language
+            if language_filter is not None:
+                dataset_language = dataset_info.get("language", "").lower()
+                if dataset_language and language_filter.lower() != dataset_language:
+                    logger.info(f"[main] Skipping dataset '{dataset_name}' because its language '{dataset_language}' doesn't match filter '{language_filter}'")
+                    continue
             
             logger.info(f"[main] Loading dataset '{dataset_name}' with metric '{metric_name}' ...")
             
