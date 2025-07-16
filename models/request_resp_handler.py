@@ -122,6 +122,8 @@ class RequestRespHandler:
 
             #openai chat completions, vllm chat completions
             elif self.inference_type in [constants.OPENAI_CHAT_COMPLETION, constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION]:
+                logger.info(f"model name: {model_name}, msg body: {msg_body}")
+                logger.info(f"my client: {self.client}")
                 prediction = await self.client.chat.completions.create(
                     model=model_name, messages=msg_body
                 )
