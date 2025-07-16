@@ -1,6 +1,6 @@
 import time
 import httpx
-from openai import AsyncOpenAI
+from openai import AsyncAzureOpenAI, AsyncOpenAI
 from models.model_response import ModelResponse
 from utils import constants
 import logging
@@ -18,8 +18,11 @@ class RequestRespHandler:
         self.model_info = model_info
         self.api = model_info.get("url")
         self.auth = model_info.get("auth_token", "")
+        self.api_version = model_info.get("api_version", "")
         self.client = None
         self.timeout = timeout
+        # current retry attempt (set by caller). Default 1.
+        self.current_attempt: int = 1
         # Remove Bearer if present for vllm/openai
         
         # Strip 'Bearer ' ONLY for OpenAI flows – VLLM endpoints expect full 'Bearer <token>'
@@ -36,10 +39,22 @@ class RequestRespHandler:
         #vllm chat completions compatibility
         if self.inference_type in [
             constants.OPENAI_CHAT_COMPLETION,
-            constants.OPENAI_TRANSCRIPTION, 
-            constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION,
+            constants.OPENAI_TRANSCRIPTION
         ]:
-
+            # Azure OpenAI endpoints
+            self.client = (
+                AsyncAzureOpenAI(
+                    azure_endpoint=self.api,
+                    api_key=self.auth,
+                    api_version=self.api_version,
+                    timeout=timeout,
+                    max_retries=0,
+                    default_headers={"Connection": "close"},
+                    http_client=httpx.AsyncClient(verify=verify_ssl),
+                )
+            )
+        elif self.inference_type == constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION:
+            # vLLM endpoints (OpenAI-compatible, no api_version)
             self.client = (
                 AsyncOpenAI(
                     base_url=self.api,
@@ -96,7 +111,7 @@ class RequestRespHandler:
                 llm_response = self.get_response_text(raw_response)
                 response_code = 200
                 elapsed_time: float = time.time() - start_time
-                logger.info(f"Successful post request: {response_code}")
+                #logger.info(f"Successful post request: {response_code}")
                 return ModelResponse (
                 input_prompt=str(msg_body),
                 llm_response=llm_response if llm_response else " ",
@@ -108,16 +123,15 @@ class RequestRespHandler:
 
             #openai chat completions, vllm chat completions
             elif self.inference_type in [constants.OPENAI_CHAT_COMPLETION, constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION]:
-                logger.info(f"incoming message body {msg_body}")
                 prediction = await self.client.chat.completions.create(
                     model=model_name, messages=msg_body
                 )
                 response_data = prediction.model_dump()
                 raw_response: str = response_data
                 llm_response: str = response_data['choices'][0]['message']['content'] or " "
-                logger.info(f"llm response{llm_response}")
                 response_code: int = 200
                 logger.info(f"Successful post request: {response_code}")
+                logger.info(f"LLM response: {llm_response}")
                 elapsed_time: float = time.time() - start_time
 
                 return ModelResponse (
@@ -138,7 +152,7 @@ class RequestRespHandler:
                 raw_response: str = response_data
                 llm_response: str = response_data['text'] or " "
                 response_code: int = 200
-                logger.info(f"Successful post request: {response_code}")
+                #logger.info(f"Successful post request: {response_code}")
                 elapsed_time: float = time.time() - start_time
 
                 return ModelResponse (
@@ -151,11 +165,11 @@ class RequestRespHandler:
                 )
 
         except Exception as e:
-            logger.error(f"audio_raw_response={e!r}")
+            logger.error(f"Attempt {self.current_attempt}: audio_raw_response={e!r}")
             # First attempt to wrap the error in ModelResponse
             try:
                 return ModelResponse(
-                    input_prompt=str(msg_body),
+                    input_prompt=str(msg_body) if msg_body is not None else "error",
                     llm_response="",
                     raw_response=str(e),
                     response_code=500,

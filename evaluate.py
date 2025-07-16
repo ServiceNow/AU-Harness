@@ -1,3 +1,10 @@
+import logger_setup
+logger_setup.configure()
+import logging
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logger = logging.getLogger(__name__)
+
+import re
 import json
 from pathlib import Path
 import asyncio
@@ -6,21 +13,19 @@ import yaml
 from tqdm import tqdm
 import importlib
 # Central logging setup
-import logger_setup
-logger_setup.configure()
-import logging
-logger = logging.getLogger(__name__)
 from models.model import Model
 from metrics.metrics import Metrics
 
 class Engine:
     """Evaluate one or many models over the same dataset concurrently."""
-    def __init__(self, models: list[Model], dataset: list[dict], metric: Metrics, postprocessor):
+    def __init__(self, models: list[Model], dataset: list[dict], metric: Metrics, postprocessor, dataset_name: str):
         logger.info(f"[Engine.__init__] Initializing Engine with {len(models)} model(s), dataset size: {len(dataset)}, metric: {metric.name}")
         self.models = models
         self.dataset = dataset
         self.metric = metric
         self.postprocessor = postprocessor
+        # Keep track of dataset name so we can create per-dataset log files
+        self.dataset_name = dataset_name
 
 
     # ---------------- internal helpers ----------------x
@@ -30,8 +35,7 @@ class Engine:
         sem = asyncio.Semaphore(model.batch_size)  # Use per-model batch size
         async def _call(idx: int, sample):
             async with sem:
-                #logger.info(f"{sample.keys()}")
-                resp = await model._generate_text_with_retry(sample, {"chunk_size": model.chunk_size})
+                resp = await model._generate_text_with_retry(sample, {"chunk_size": model.chunk_size, "metric": self.metric.name})
                 return idx, (resp.llm_response if resp else "")
         # Create tasks paired with their original indexx
         tasks = [_call(i, ex) for i, ex in enumerate(self.dataset)]
@@ -49,7 +53,6 @@ class Engine:
         tasks = {m.name(): asyncio.create_task(self._infer_single_model(m)) for m in self.models}
         results = {name: await t for name, t in tasks.items()}
         logger.info(f"[Engine._infer_all] All models finished inference.")
-        #logger.info(f"[Engine._infer_all] Results: {results}")
         return results
 
     #main engine runner
@@ -58,19 +61,21 @@ class Engine:
         predictions = asyncio.run(self._infer_all())
         logger.info(f"[Engine.run] Predictions complete. Calculating scores...")
         scores = {}
-        model_targets = self.postprocessor.extract_model_targets(dataset=self.dataset)
+        
+        # Pass the metric name to the postprocessor
+        process_result = self.postprocessor.process(dataset=self.dataset, predictions=predictions, metric=self.metric.name)
+        
+        model_targets, predictions, ids, lengths = process_result
+
         for model_name, outs in predictions.items():
-            logger.info(f"[Engine.run] Scoring model: {model_name}")
-            # Log first 5 prediction/target pairs for quick sanity-check
-            n_log = min(10, len(outs), len(model_targets))
-            logger.info(f"[Engine.run] Logging first {n_log} prediction-target pairs for sanity-check\n\n")
-            for i in range(n_log):
-                logger.info(
-                    f"[Engine.run] Example {i}: Prediction = {outs[i]!r} | Target = {model_targets[i]!r}"
-                )
-            logger.info("\n")
-            scores[model_name] = self.metric(outs, model_targets)
-        logger.info(f"[Engine.run] Evaluation complete. Returning scoresz.")
+            # Let the metric handle per-record logging internally
+            if ids and lengths:
+                model_score = self.metric(outs, model_targets, ids, lengths, dataset_name=self.dataset_name, model_name=model_name)
+            else:
+                model_score = self.metric(outs, model_targets, dataset_name=self.dataset_name, model_name=model_name)
+            scores[model_name] = model_score
+        logger.info(f"[Engine.run] Evaluation complete. Returning scores.")
+        logger.info(f"[Engine.run] Scores: {scores}")
         return {self.metric.name: scores}
 
 
@@ -86,30 +91,66 @@ def get_class_from_module(module_prefix, module_name):
         return None
 
 #load an preprocess(dataset specific)
-def _load_dataset(repo, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = []):
+from preprocessors.CallHomePreprocessor import CallHomePreprocessor
+
+def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = [], length_filter=None, zip=False, dataset_config=None, metric=None):
+    """Load and preprocess a dataset from a local or remote path."""
+    logger.info(f"[_load_dataset] Loading dataset {repo} with preprocessor {preprocessor_name}")
+    # We can load different formats of datasets
+    if repo and repo.startswith("/") or repo.startswith("./"): # Local path
+        repo = Path(repo).resolve()
+        logger.info(f"[_load_dataset] Loading local dataset from {repo}")
+    
+    if preprocessor_name.startswith("CallHome"):
+        # Special-case CallHome dataset
+        # Load CallHomePreprocessor from local preprocessor code
+        properties = {"metric": metric}
+        if user_prompt_add_ons:
+            properties["user_prompt_add_ons"] = user_prompt_add_ons
+        if length_filter:
+            logger.info(f"[_load_dataset] Applying length filter: {length_filter}")
+            properties["length_filter"] = tuple(length_filter)  # Convert list to tuple
+        logger.info(f"[_load_dataset] Loading CallHome from path: {repo}")
+        dataset = CallHomePreprocessor().process(repo, num_samples=num_samples, properties=properties)
+        return dataset
+
     logger.info(f"[_load_dataset] Loading HuggingFace dataset repo: {repo}")
     # If 'subset' or 'data_dir' is specified, pass as second arg or kwarg
+    # ----- robust split handling -----
+    def _select_split(ds):
+        """Return desired split name or None if *ds* is already a Dataset."""
+        if isinstance(ds, dict):  # HuggingFace DatasetDict
+            for cand in ("test", "data", "train"):
+                if cand in ds:
+                    return cand
+        return None  # single-split Dataset
+
     if subset:
         logger.info(f"[_load_dataset] Loading subset: {subset}")
-        dset = load_dataset(repo, subset, split="test" if "test" in load_dataset(repo, subset).keys() else "data" if "data" in load_dataset(repo, subset).keys() else "train") # edge case for CallHome and MNSC datasets
-        if dset is None:
-            raise ValueError(f"Test subset '{subset}' not found in dataset '{repo}'.")
+        ds_builder = load_dataset(repo, subset)
     else:
-        dset = load_dataset(repo, split="test" if "test" in load_dataset(repo).keys() else "data" if "data" in load_dataset(repo).keys() else "train") # edge case for CallHome and MNSC datasets
+        ds_builder = load_dataset(repo)
+
+    chosen_split = _select_split(ds_builder)
+    dset = ds_builder if chosen_split is None else ds_builder[chosen_split]
+    logger.info(f"[_load_dataset] Using split: {chosen_split or 'single-dataset'}  |  Size before trunc: {len(dset)}")
         #logger.info(f"[_load_dataset] Dataset loaded: {dset}")
     if num_samples is not None:
         logger.info(f"[_load_dataset] Truncating dataset to first {num_samples} samples.")
         dset = dset[:num_samples]
     #Added to convert to dict
     else:
-        logger.info(f"[_load_dataset] num_samples not provided; using full dataset length.")
         dset = dset[:len(dset)]
     #logger.info(f"[_load_dataset] Dataset loaded after truncation: {dset}")
     logger.info(f"[_load_dataset] Preprocessing dataset using {preprocessor_name}...")
     PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
-    if PreprocessorClass is None:
-        PreprocessorClass = AudiobenchPreprocessor
-    processed = PreprocessorClass().process(dset, {"user_prompt_add_ons": user_prompt_add_ons})
+    properties = {"metric": metric}
+    if user_prompt_add_ons:
+        properties["user_prompt_add_ons"] = user_prompt_add_ons
+    if length_filter:
+        logger.info(f"[_load_dataset] Applying length filter: {length_filter}")
+        properties["length_filter"] = tuple(length_filter)
+    processed = PreprocessorClass().process(dset, properties)
     logger.info(f"[_load_dataset] Dataset loaded and processed. Size: {len(processed)}")
     return processed
 
@@ -146,9 +187,15 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
     elif name == "llm_judge_detailed":
         from metrics.llm_judge import DetailedLLMJudgeMetric
         metric = DetailedLLMJudgeMetric(max_concurrency=judge_concurrency, model=judge_model)
+    elif name == "llm_judge_callhome":
+        from metrics.llm_judge import CallHomeLLMJudgeMetric
+        metric = CallHomeLLMJudgeMetric(max_concurrency=judge_concurrency, model=judge_model)
     elif name == "meteor":
         from metrics.meteor_score import MeteorScore
         metric = MeteorScore()
+    elif name == 'diarization_error_rate':
+        from metrics.diarization_error_rate_metrics import DERMetrics
+        metric = DERMetrics()
     else:
         raise ValueError(f"Unknown metric: {name}")
     logger.info(f"[_load_metric] Metric loaded: {metric.name}")
@@ -172,7 +219,9 @@ def main(cfg_path='config.yaml'):
     num_samples = cfg.get("num_samples", None)
     judge_concurrency = cfg.get("judge_concurrency", None)
     judge_model = cfg.get("judge_model", None)
+    api_version = cfg.get("api_version", None)
     user_prompt_add_ons: list[str] = cfg.get("user_prompt_add_ons", []) or []
+    length_filter = cfg.get("length_filter", None)  # Get the length_filter from config
     
     # --- Build (dataset, metric) pairs ---
     raw_pairs_seq = cfg["dataset_metric"]
@@ -199,12 +248,16 @@ def main(cfg_path='config.yaml'):
         logger.info(f"[main] Loading dataset '{dname}' with metric '{metric_name}' ...")
         if dname not in db:
             raise ValueError(f"Dataset '{dname}' not found in {cfg_path}.")
-        repo = db[dname]["hf_repo"]
+        repo = db[dname].get("hf_repo", None)
+        if not repo:
+            repo = db[dname].get("path", None)
         subset = db[dname].get("subset", "")
         language = db[dname].get("language", "en")
         preprocessor_name = db[dname]["preprocessor"]
         postprocessor_name = db[dname]["postprocessor"]
-        dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, user_prompt_add_ons=user_prompt_add_ons)
+        
+        dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, 
+                             user_prompt_add_ons=user_prompt_add_ons, length_filter=length_filter, metric=metric_name)
         metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
         # Dynamically import postprocessor class
         PostprocessorClass = get_class_from_module('postprocessors', postprocessor_name)
@@ -212,7 +265,7 @@ def main(cfg_path='config.yaml'):
             PostprocessorClass = AudiobenchPostprocessor
         postprocessor = PostprocessorClass()
         logger.info("[main] Initializing Engine and running evaluation...")
-        result = Engine(models, dataset, metric, postprocessor).run()
+        result = Engine(models, dataset, metric, postprocessor, dname).run()
         all_scores[dname] = result
     logger.info("[main] Evaluation scores:")
     logger.info(json.dumps(all_scores, indent=2))

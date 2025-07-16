@@ -12,6 +12,7 @@ from collections.abc import Iterator
 from typing import Match
 
 from .basic import remove_symbols_and_diacritics
+from more_itertools import windowed
 
 
 class EnglishNumberNormalizer:

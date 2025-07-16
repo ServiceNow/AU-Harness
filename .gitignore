@@ -12,3 +12,5 @@ config.yaml
 __pycache__/
 **/__pycache__/
 *.py[cod]
+
+talkbank/**
