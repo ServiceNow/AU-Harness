@@ -19,7 +19,9 @@ class AudiobenchPreprocessor(Preprocessor):
         logger.info("In [AudiobenchPreprocessor] Processing dataset...")
         #logger.info(dataset)
         user_prompt_add_ons = properties.get("user_prompt_add_ons", [])
+        system_prompts = properties.get("system_prompts", [])
         length_filter = properties.get("length_filter", None)  # Optional (min_seconds, max_seconds) tuple
+        
         # Load prompt add-ons mapping
         prompt_yaml_path = Path(__file__).resolve().parent.parent / "prompts" / "prompt_add_ons.yaml"
         try:
@@ -28,6 +30,15 @@ class AudiobenchPreprocessor(Preprocessor):
         except FileNotFoundError:
             logger.warning(f"Prompt add-ons file not found at {prompt_yaml_path}. Proceeding without add-ons.")
             prompt_add_ons = {}
+            
+        # Load system prompts mapping
+        system_prompts_path = Path(__file__).resolve().parent.parent / "prompts" / "system_prompts.yaml"
+        try:
+            with open(system_prompts_path, "r") as f:
+                system_prompts_mapping = yaml.safe_load(f) or {}
+        except FileNotFoundError:
+            logger.warning(f"System prompts file not found at {system_prompts_path}. Proceeding without system prompts.")
+            system_prompts_mapping = {}
 
         total_duration = 0
         new_dataset = []
@@ -72,6 +83,19 @@ class AudiobenchPreprocessor(Preprocessor):
                 if add_on:
                     instruction = f"{instruction} {add_on}"
             record["instruction"] = instruction
+            
+            # Process system prompts
+            system_prompt_text = ""
+            for k in system_prompts:
+                prompt = system_prompts_mapping.get(k)
+                if prompt:
+                    if system_prompt_text:
+                        system_prompt_text += "\n\n" + prompt
+                    else:
+                        system_prompt_text = prompt
+            if system_prompt_text:
+                record["system_prompt"] = system_prompt_text
+                
             record["judge_type"] = properties.get("judge_type", "detailed")
             new_dataset.append(record)
 

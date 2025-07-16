@@ -95,7 +95,7 @@ def get_class_from_module(module_prefix, module_name) -> Preprocessor | Postproc
         return None
 
 
-def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = [], length_filter=None, metric=None, split=None):
+def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = [], system_prompts: list[str] = [], length_filter=None, metric=None, split=None):
     """Load and preprocess a dataset from a local or remote path."""
     logger.info(f"[_load_dataset] Loading dataset {repo} with preprocessor {preprocessor_name}")
     
@@ -103,6 +103,8 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="A
     properties = {"metric": metric}
     if user_prompt_add_ons:
         properties["user_prompt_add_ons"] = user_prompt_add_ons
+    if system_prompts:
+        properties["system_prompts"] = system_prompts
     if length_filter:
         logger.info(f"[_load_dataset] Applying length filter: {length_filter}")
         properties["length_filter"] = tuple(length_filter)  # Convert list to tuple
@@ -268,6 +270,7 @@ def main(cfg_path='config.yaml'):
     judge_concurrency = cfg.get("judge_concurrency", 1)
     judge_model = cfg.get("judge_model", None)
     user_prompt_add_ons = cfg.get("user_prompt_add_ons", [])
+    system_prompts = cfg.get("system_prompts", [])
     length_filter = cfg.get("length_filter", None)
     num_samples = cfg.get("num_samples", None)
     
@@ -369,7 +372,7 @@ def main(cfg_path='config.yaml'):
             postprocessor_name = dataset_info["postprocessor"]
             
             dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, 
-                                 user_prompt_add_ons=user_prompt_add_ons, length_filter=length_filter, metric=metric_name, split=cfg.get("split"))
+                                  user_prompt_add_ons=user_prompt_add_ons, system_prompts=system_prompts, length_filter=length_filter, metric=metric_name, split=cfg.get("split"))
             metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
             
             # Dynamically import postprocessor class

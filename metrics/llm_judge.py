@@ -43,8 +43,8 @@ class _BaseLLMJudge(Metrics):
         # Azure OpenAI async client
         self._client = AsyncAzureOpenAI(
             api_key=os.environ.get("AZURE_OPENAI_KEY"),  # set in your shell
-            api_version="2025-01-01-preview",
-            azure_endpoint="https://corelmm-gpt-4t.openai.azure.com",
+            api_version=os.environ.get("AZURE_OPENAI_VERSION", "2025-01-01-preview"),
+            azure_endpoint=os.environ.get("AZURE_OPENAI_ENDPOINT", "https://corelmm-gpt-4t.openai.azure.com"),
         )
 
     async def _score_once(self, system_prompt: str, user_prompt: str) -> float | dict | None:
@@ -91,17 +91,27 @@ class _BaseLLMJudge(Metrics):
         sys_prompt_template = _get_prompt(self._prompt_key)
 
         async def _run(cand, ref):
-            user_prompt = sys_prompt_template.format(prediction=cand, reference=ref)
+            # Use the prompt template as system prompt
+            sys_prompt = sys_prompt_template
+            # Format candidate and reference as user prompt
+            user_prompt = f"candidate: {cand}\nreference: {ref}"
             async with sem:
-                return await self._score_once("", user_prompt)  # no base system prompt
+                return await self._score_once(sys_prompt, user_prompt)  # Use sys_prompt_template as system prompt
 
-        # Create tasks for all candidate-reference pairs
-        tasks = [_run(c, r) for c, r in zip(candidates, references)]
-        results = []
+        # Create tasks for all candidate-reference pairs and track their indices
+        tasks_with_indices = [(i, _run(c, r)) for i, (c, r) in enumerate(zip(candidates, references))]
+        pending = {asyncio.create_task(coro): i for i, coro in tasks_with_indices}
+        results = [None] * len(tasks_with_indices)  # Pre-allocate results list
+        
         # Use tqdm to monitor progress across asynchronous completions
-        for coro in tqdm(asyncio.as_completed(tasks), total=len(tasks), desc=f"LLM Judge ({self._prompt_key})"):
-            result = await coro
-            results.append(result)
+        with tqdm(total=len(pending), desc=f"LLM Judge ({self._prompt_key})") as progress:
+            while pending:
+                done, _ = await asyncio.wait(pending.keys(), return_when=asyncio.FIRST_COMPLETED)
+                for task in done:
+                    index = pending.pop(task)
+                    result = task.result()
+                    results[index] = result  # Store result at the correct index
+                    progress.update(1)
         return results
 
     # ---------------------------------------------------

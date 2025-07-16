@@ -122,7 +122,6 @@ class Model(ABC):
                         # All data prep is now in _generate_text
                         # Set attempt number for downstream logging
                         self.req_resp_hndlr.current_attempt = attempt.retry_state.attempt_number
-                        #logger.info(f"[{self.name()}] Generating text for input: {message}")
                         result: ModelResponse = await self._generate_text(message, run_params)
                         await self._mark_errors(result)
                     except Exception as e:
@@ -233,21 +232,34 @@ class Model(ABC):
                     else:
                         full_instruction = instruction
 
-                    message["model_inputs"] = [
-                        {
-                            "role": "user",
-                            "content": [
-                                {"type": "text", "text": full_instruction},
-                                {
-                                    "type": "input_audio",
-                                    "input_audio": {
-                                        "data": encoded,
-                                        "format": "wav",
-                                    },
+                    # Prepare messages list starting with system prompt if available
+                    messages = []
+                    
+                    # Add system prompt if available
+                    system_prompt = message.get("system_prompt")
+                    if system_prompt:
+                        messages.append({
+                            "role": "system",
+                            "content": system_prompt
+                        })
+                    
+                    # Add user message with instruction and audio
+                    messages.append({
+                        "role": "user",
+                        "content": [
+                            {"type": "text", "text": full_instruction},
+                            {
+                                "type": "input_audio",
+                                "input_audio": {
+                                    "data": encoded,
+                                    "format": "wav",
                                 },
-                            ],
-                        }
-                    ]
+                            },
+                        ],
+                    })
+                    
+                    message["model_inputs"] = messages
+                    
                     resp = await self.req_resp_hndlr.request_server(message["model_inputs"])
                     logger.info(f"Requester response: {resp}")
                     concatenated_text += resp.llm_response or ""
@@ -291,21 +303,34 @@ class Model(ABC):
             chunk_array = audio_array[:max_samples]
             encoded = encode_audio_array_base64(chunk_array, sampling_rate)
 
-            message["model_inputs"] = [
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": instruction},
-                        {
-                            "type": "input_audio",
-                            "input_audio": {
-                                "data": encoded,
-                                "format": "wav",
-                            },
-                        }
-                    ],
-                }
-            ]
+            # Prepare messages list starting with system prompt if available
+            messages = []
+            
+            # Add system prompt if available
+            system_prompt = message.get("system_prompt")
+            if system_prompt:
+                messages.append({
+                    "role": "system",
+                    "content": system_prompt
+                })
+            
+            # Add user message with instruction and audio
+            messages.append({
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": instruction},
+                    {
+                        "type": "input_audio",
+                        "input_audio": {
+                            "data": encoded,
+                            "format": "wav",
+                        },
+                    }
+                ],
+            })
+            
+            message["model_inputs"] = messages
+            
             return await self.req_resp_hndlr.request_server(message["model_inputs"])
 
         #transcription

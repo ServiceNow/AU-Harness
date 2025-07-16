@@ -122,8 +122,6 @@ class RequestRespHandler:
 
             #openai chat completions, vllm chat completions
             elif self.inference_type in [constants.OPENAI_CHAT_COMPLETION, constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION]:
-                logger.info(f"model name: {model_name}, msg body: {msg_body}")
-                logger.info(f"my client: {self.client}")
                 prediction = await self.client.chat.completions.create(
                     model=model_name, messages=msg_body
                 )
@@ -133,8 +131,19 @@ class RequestRespHandler:
                 response_code: int = 200
                 elapsed_time: float = time.time() - start_time
 
+                # Find the user message to extract input prompt
+                user_prompt = ""
+                for message in msg_body:
+                    if message["role"] == "user" and "content" in message and isinstance(message["content"], list):
+                        for content_item in message["content"]:
+                            if content_item.get("type") == "text":
+                                user_prompt = content_item.get("text", "")
+                                break
+                        if user_prompt:
+                            break
+                
                 return ModelResponse (
-                input_prompt=str(msg_body[0]["content"][0]["text"]),
+                input_prompt=user_prompt,
                 llm_response=llm_response if llm_response else " ",
                 raw_response=raw_response,
                 response_code=response_code,
@@ -151,7 +160,6 @@ class RequestRespHandler:
                 raw_response: str = response_data
                 llm_response: str = response_data['text'] or " "
                 response_code: int = 200
-                #logger.info(f"Successful post request: {response_code}")
                 elapsed_time: float = time.time() - start_time
 
                 return ModelResponse (
