@@ -54,12 +54,11 @@ class ModelResponse(BaseModel):
 
     input_prompt: str | list | dict
     llm_response: str
-    raw_response: str
+    raw_response: Any
     response_code: int
     performance: Performance | None
     wait_time: int | float | None = None
     error_tracker: ErrorTracker | None = None
-    model_parameters: dict[str, Any] | list
 
     def __init__(self, **data):
         super().__init__(**data)

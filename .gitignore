@@ -1,13 +1,17 @@
 #env
 lite
 
-
 #config files
-test_config.yaml
+config.yaml
 
 #log files
 *.log
+*.out
+
+#private datasets
+private_datasets
 
 # python cache files
 __pycache__/
+**/__pycache__/
 *.py[cod]

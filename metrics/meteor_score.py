@@ -29,8 +29,9 @@ class MeteorScore(Metrics):
         Returns:
             Scores for each record. The keys should be the column names that will be saved in the record level file.
         """
+        from tqdm import tqdm
         score_list = []
-        for i in range(len(candidates)):
+        for i in tqdm(range(len(candidates)), desc="METEOR"):
             # default preprocess is str.lower()
             # default stemmer is PorterStemmer()
             # default wordnet is nltk.corpus.wordnet

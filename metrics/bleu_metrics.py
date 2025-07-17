@@ -1,5 +1,5 @@
+from tqdm import tqdm
 from sacrebleu.metrics import BLEU
-
 from metrics.metrics import Metrics
 
 class BleuMetrics(Metrics):
@@ -38,4 +38,5 @@ class BleuMetrics(Metrics):
             Scores for each record. The keys should be the column names that will be saved in the record level file.
         """
         self.scorer = BLEU(effective_order=True, max_ngram_order=self.max_ngram_order)
-        return {self.name: [self.scorer.sentence_score(c, [r]).score for c, r in zip(candidates, references)]}
+        scores = [self.scorer.sentence_score(c, [r]).score for c, r in tqdm(zip(candidates, references), desc="BLEU", total=len(candidates))]
+        return {self.name: scores}

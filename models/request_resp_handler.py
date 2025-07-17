@@ -1,10 +1,14 @@
 import time
 import httpx
-from openai import AsyncOpenAI, OpenAI
+from openai import AsyncAzureOpenAI, AsyncOpenAI
 from models.model_response import ModelResponse
 from utils import constants
 import logging
+import requests
 logger = logging.getLogger(__name__)  # handlers configured in logger_setup.py
+import json
+import os
+import httpx
 
 class RequestRespHandler:
     """Class responsible for creating request and processing response for each type of inference server."""
@@ -14,23 +18,39 @@ class RequestRespHandler:
         self.model_info = model_info
         self.api = model_info.get("url")
         self.auth = model_info.get("auth_token", "")
+        self.api_version = model_info.get("api_version", "")
         self.client = None
         self.timeout = timeout
-        self.set_client(verify_ssl=True, timeout=self.timeout)
         # Remove Bearer if present for vllm/openai
         if self.inference_type in [
-            constants.INFERENCE_SERVER_VLLM,
-            constants.INFERENCE_SERVER_VLLM_COMPLETIONS,
-        ] and self.auth.startswith("Bearer"):
+            constants.OPENAI_TRANSCRIPTION,
+            constants.OPENAI_CHAT_COMPLETION,
+            constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION,
+        ] and self.auth.startswith("Bearer "):
             self.auth = self.auth.replace("Bearer ", "")
+        self.set_client(verify_ssl=True, timeout=self.timeout)
 
     def set_client(self, verify_ssl: bool, timeout: int):
-        """Create HTTP/vLLM client for audio-to-text APIs."""
+        #use python client wrapper
+        #vllm chat completions compatibility
         if self.inference_type in [
-            constants.INFERENCE_SERVER_VLLM,
-            constants.INFERENCE_SERVER_VLLM_COMPLETIONS,
-            constants.INFERENCE_SERVER_OPENAI,
+            constants.OPENAI_CHAT_COMPLETION,
+            constants.OPENAI_TRANSCRIPTION
         ]:
+            # Azure OpenAI endpoints
+            self.client = (
+                AsyncAzureOpenAI(
+                    azure_endpoint=self.api,
+                    api_key=self.auth,
+                    api_version=self.api_version,
+                    timeout=timeout,
+                    max_retries=0,
+                    default_headers={"Connection": "close"},
+                    http_client=httpx.AsyncClient(verify=verify_ssl),
+                )
+            )
+        elif self.inference_type == constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION:
+            # vLLM endpoints (OpenAI-compatible, no api_version)
             self.client = (
                 AsyncOpenAI(
                     base_url=self.api,
@@ -41,87 +61,129 @@ class RequestRespHandler:
                     http_client=httpx.AsyncClient(verify=verify_ssl),
                 )
             )
-        else:
-            # Generic HTTP client fallback (for OpenAI or similar APIs)
+        #basic post
+        elif self.inference_type in [
+            constants.INFERENCE_SERVER_VLLM_TRANSCRIPTION,
+        ]:
             self.client = httpx.AsyncClient(timeout=timeout, verify=verify_ssl)
+        else:
+            raise ValueError(f"Invalid inference type: {self.inference_type}")
 
-    async def request_server(self, url, auth, msg_body, formatted_messages) -> ModelResponse:
-        """Send a request to the inference server and return a `ModelResponse`.
+    async def request_server(self, msg_body) -> ModelResponse:
+        """Send a request to the inference server and return a `Model Response`.
 
         Logic:
         1. vLLM* servers – handled through the OpenAI-compatible SDK (`self.client.chat.completions`).
-        2. Generic HTTP endpoint – we issue a POST request with an `Authorization` header derived from
-           the supplied ``auth`` (if any).
-        3. Any exception is wrapped in a `ModelResponse` with ``response_code = 500``.
+        2. Any exception is wrapped in a `ModelResponse` with ``response_code = 500``.
         """
         model_name: str | None = self.model_info.get("model")
-        params: dict = msg_body.get("parameters", {})
-        messages = msg_body.get("messages", msg_body)
 
         start_time = time.time()
+        # Re-create a fresh client for this request to avoid closed-loop issues
+        self.set_client(verify_ssl=True, timeout=self.timeout)
+
+
+        #same input, different calls
         try:
-            # -------- vLLM path --------------------------------------------------
-            if self.inference_type in [
-                constants.INFERENCE_SERVER_VLLM,
-                constants.INFERENCE_SERVER_VLLM_COMPLETIONS,
-                constants.INFERENCE_SERVER_OPENAI,
-            ]:
-                logger.info("vLLM xpath")
-                # NOTE: `self.client` is an (A)syncOpenAI instance created in `set_client`.
-                prediction = await self.client.chat.completions.create(
-                    model=model_name, messages=messages, **params
-                )
-                raw_response: str = prediction.choices[0].message.content or " "
-                llm_response: str = raw_response
-                response_code: int = 200
+            # -------- vLLM transcription path --------------------------------------------------
+            #vllm transcription
+            if self.inference_type == constants.INFERENCE_SERVER_VLLM_TRANSCRIPTION:
 
-            # -------- Generic HTTP path -----------------------------------------
-            elif self.inference_type == constants.INFERENCE_SERVER:
-                #logger.info("audio http")
-                logger.info(f"URL: {url}")
-                #logger.info(f"Message body: {msg_body}")
-                headers = {"Authorization": auth} if auth else {}
-                #logger.info(f"Headers: {headers}")
+                # Ensure 'Bearer' prefix for VLLM
+                if self.auth and not self.auth.startswith("Bearer "):
+                    auth_header = f"Bearer {self.auth}"
+                else:
+                    auth_header = self.auth
+                headers = {"Authorization": auth_header} if auth_header else {}
 
-                resp = await self.client.post(url, headers=headers, files=msg_body)
+                if isinstance(msg_body, str) and msg_body.endswith('.wav'):
+                    with open(msg_body, "rb") as f:
+                        files = {"file": (os.path.basename(msg_body), f, "audio/wav")}
+                        async with httpx.AsyncClient(timeout=self.timeout, verify=True) as _client:
+                            resp = await _client.post(self.api, headers=headers, files=files)
+                else:
+                    raise ValueError("Invalid input: msg_body must be a wav file path")
                 raw_response = resp.text
                 llm_response = self.get_response_text(raw_response)
-                response_code = resp.status_code
-            else:
-                raise ValueError(f"Invalid inference type: {self.inference_type}")
-
-            elapsed_time: float = time.time() - start_time
-            if response_code == 200:
-                logger.info(f"Successful Response")
-            else:
-                logger.error(f"Failed Response with code {response_code} and message {raw_response}")
-            return ModelResponse(
-                input_prompt=formatted_messages,
+                response_code = 200
+                elapsed_time: float = time.time() - start_time
+                logger.info(f"Successful post request: {response_code}")
+                return ModelResponse (
+                input_prompt=str(msg_body),
                 llm_response=llm_response if llm_response else " ",
                 raw_response=raw_response,
                 response_code=response_code,
                 performance=None,
                 wait_time=elapsed_time,
-                model_parameters=params,
-            )
+                )
+
+            #openai chat completions, vllm chat completions
+            elif self.inference_type in [constants.OPENAI_CHAT_COMPLETION, constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION]:
+                prediction = await self.client.chat.completions.create(
+                    model=model_name, messages=msg_body
+                )
+                response_data = prediction.model_dump()
+                raw_response: str = response_data
+                llm_response: str = response_data['choices'][0]['message']['content'] or " "
+                response_code: int = 200
+                logger.info(f"Successful post request: {response_code}")
+                elapsed_time: float = time.time() - start_time
+
+                return ModelResponse (
+                input_prompt=str(msg_body[0]["content"][0]["text"]),
+                llm_response=llm_response if llm_response else " ",
+                raw_response=raw_response,
+                response_code=response_code,
+                performance=None,
+                wait_time=elapsed_time,
+                )
+
+            #openai transcription
+            elif self.inference_type == constants.OPENAI_TRANSCRIPTION:
+                prediction = await self.client.audio.transcriptions.create(
+                    model=model_name, file=f
+                )
+                response_data = prediction.model_dump_json()
+                raw_response: str = response_data
+                llm_response: str = response_data['text'] or " "
+                response_code: int = 200
+                logger.info(f"Successful post request: {response_code}")
+                elapsed_time: float = time.time() - start_time
+
+                return ModelResponse (
+                input_prompt=str(msg_body),
+                llm_response=llm_response if llm_response else " ",
+                raw_response=raw_response,
+                response_code=response_code,
+                performance=None,
+                wait_time=elapsed_time,
+                )
 
         except Exception as e:
-            # inside RequestRespHandler before returning on error
-            logger.error(f"audio_raw_response={e}")  
-            # Failure – wrap the error and return early
-            return ModelResponse(
-                input_prompt=formatted_messages,
-                llm_response="",
-                raw_response=str(e),
-                response_code=500,
-                performance=None,
-                wait_time=None,
-                model_parameters=params,
-            )
-
+            logger.error(f"audio_raw_response={e!r}")
+            # First attempt to wrap the error in ModelResponse
+            try:
+                return ModelResponse(
+                    input_prompt=str(msg_body) if msg_body is not None else "error",
+                    llm_response="",
+                    raw_response=str(e),
+                    response_code=500,
+                    performance=None,
+                    wait_time=0,
+                )
+            except Exception as inner:
+                logger.error(f"ModelResponse construction failed: {inner!r}")
+                # Second ultra-safe fallback with hard-coded fields
+                return ModelResponse(
+                    input_prompt="error",
+                    llm_response="",
+                    raw_response="special error",
+                    response_code=500,
+                    performance=None,
+                    wait_time=0,
+                )
     def get_response_text(self, resp_text):
         """Extract transcription text from the response."""
-        import json
         try:
             json_resp = json.loads(resp_text)
             for key in ["text", "generated_text", "transcript", "output"]:

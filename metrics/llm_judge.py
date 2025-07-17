@@ -1,9 +1,11 @@
 from __future__ import annotations
-
 import asyncio, json, yaml, os
 from pathlib import Path
-
 from openai import AsyncAzureOpenAI
+from tqdm import tqdm
+
+import logging
+logger = logging.getLogger(__name__)
 
 from metrics.metrics import Metrics
 
@@ -44,6 +46,16 @@ class _BaseLLMJudge(Metrics):
         )
 
     async def _score_once(self, system_prompt: str, user_prompt: str) -> float | dict:
+        """
+        Score a single candidate-reference pair.
+        
+        Args:
+            system_prompt: System prompt for the LLM
+            user_prompt: User prompt for the LLM
+        
+        Returns:
+            float | dict: Score or dictionary of scores
+        """
         resp = await self._client.chat.completions.create(
             model=self._model,
             messages=[
@@ -77,19 +89,30 @@ class _BaseLLMJudge(Metrics):
             async with sem:
                 return await self._score_once("", user_prompt)  # no base system prompt
 
-        return await asyncio.gather(*[_run(c, r) for c, r in zip(candidates, references)])
+        # Create tasks for all candidate-reference pairs
+        tasks = [_run(c, r) for c, r in zip(candidates, references)]
+        results = []
+        for coro in tqdm(asyncio.as_completed(tasks), total=len(tasks), desc=f"LLM Judge ({self._prompt_key})"):
+            result = await coro
+            results.append(result)
+        return results
 
-# ---------------------------------------------------------------------------
-# Binary (yes/no) judge
-# ---------------------------------------------------------------------------
-
-class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
+class BinaryLLMJudgeMetric(_BaseLLMJudge):
+    """Binary LLM judge metric.
+    On a scale of 0 to 1, how well does the candidate text match the reference text?
+    Returns:
+        float: Overall score
+    """
     name: str = "llm_judge_binary"
     _prompt_key: str = "binary_judge_prompt"
 
     def __call__(self, candidates, references):
-        # Binary judge returns a 0/1 style score list, we expose record-level directly
-        return self.compute_record_level_scores(candidates, references)
+        """Return overall average dict and record-level details."""
+        overall = super().get_score(candidates, references)
+        # Scale final overall score to 0–100
+        if self.name in overall:
+            overall[self.name] *= (100 if self.name == "llm_judge_binary" else 20)
+        return overall
     def compute_record_level_scores(self, candidates: list, references: list):
         raw_scores = asyncio.run(self._judge_all(candidates, references))
         # Expect {"score": number, "explanation": str}
@@ -97,27 +120,28 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
         self.explanations = [r.get("explanation", "") if isinstance(r, dict) else "" for r in raw_scores]
         return {self.name: scores}
 
-# ---------------------------------------------------------------------------
-# Detailed judge – returns a 0-10 score and rationale
-# ---------------------------------------------------------------------------
-
-class DetailedLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
+class DetailedLLMJudgeMetric(_BaseLLMJudge):
+    """Detailed LLM judge metric.
+    On a scale of 0 to 5, how well does the candidate text match the reference text?
+    Returns:
+        float: Overall score
+    """
     name: str = "llm_judge_detailed"
     _prompt_key: str = "detailed_judge_prompt"
 
     def __call__(self, candidates, references):
-        # Detailed judge returns 0-10 score list with explanations
-        return self.compute_record_level_scores(candidates, references)
+        """Return overall average dict and record-level details."""
+        overall = super().get_score(candidates, references)
+        # Scale final overall score to 0–100
+        if self.name in overall:
+            overall[self.name] *= (100 if self.name == "llm_judge_binary" else 20)
+        return overall
     def compute_record_level_scores(self, candidates: list, references: list):
         raw_scores = asyncio.run(self._judge_all(candidates, references))
         # Expect {"score": number, "explanation": str}
         scores = [float(r.get("score", 0)) if isinstance(r, dict) else 0.0 for r in raw_scores]
         self.explanations = [r.get("explanation", "") if isinstance(r, dict) else "" for r in raw_scores]
         return {self.name: scores}
-
-# ---------------------------------------------------------------------------
-# Original LLM judge
-# ---------------------------------------------------------------------------
 
 class LLMJudgeMetric(Metrics):  # noqa: D401
     name: str = "llm_judge"
