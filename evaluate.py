@@ -187,7 +187,7 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="A
         dset = dset[:num_samples]
     else:
         dset = dset[:len(dset)]
-    logger.info(f"[_load_dataset] Dataset loaded after truncation: {dset}")
+    #logger.info(f"[_load_dataset] Dataset loaded after truncation: {dset}")
     logger.info(f"[_load_dataset] Preprocessing dataset using {preprocessor_name}...")
     PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
     if PreprocessorClass is None:

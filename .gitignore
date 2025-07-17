@@ -17,5 +17,6 @@ __pycache__/
 #datasets
 private_datasets/
 
-#extras
+#tests
 test.py
+client_test.py
