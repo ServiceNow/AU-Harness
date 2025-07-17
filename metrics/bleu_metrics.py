@@ -18,7 +18,9 @@ class BleuMetrics(Metrics):
         from pathlib import Path
         def _slug(s):
             return re.sub(r"[^A-Za-z0-9_]+", "_", s)
-        log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
+        log_dir = Path("run_logs")
+        log_dir.mkdir(exist_ok=True)
+        log_path = log_dir / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
         with open(log_path, "a", encoding="utf-8") as f:
             f.write(json.dumps({"final_score": overall}, ensure_ascii=False) + "\n")
     """TODO: Need SME to add."""
@@ -35,7 +37,7 @@ class BleuMetrics(Metrics):
         from pathlib import Path
         from itertools import zip_longest
         
-        run_path = Path(".") / "run.log"
+        run_path = Path("run_logs") / "run.log"
         
         # Open run.log in append mode
         with open(run_path, "a", encoding="utf-8") as f:
@@ -73,7 +75,9 @@ class BleuMetrics(Metrics):
         from itertools import zip_longest
         def _slug(s):
             return re.sub(r"[^A-Za-z0-9_]+", "_", s)
-        log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
+        log_dir = Path("run_logs")
+        log_dir.mkdir(exist_ok=True)
+        log_path = log_dir / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
         with open(log_path, "w", encoding="utf-8") as f:
             for ref, cand, sc in zip_longest(refs, cands, scores, fillvalue=None):
                 entry = {"reference": ref, "candidate": cand}

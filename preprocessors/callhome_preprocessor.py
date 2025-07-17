@@ -1,16 +1,16 @@
 import logging
 import re
-import random
+import yaml
+import logging
 import soundfile as sf
-import numpy as np
 from tqdm import tqdm
 from scipy.signal import resample
-
+from preprocessors.base import Preprocessor
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-class CallHomePreprocessor:
+class CallhomePreprocessor(Preprocessor):
     def process(self, dataset, num_samples=None, properties=None):
         """
         Processes a dataset for CallHome speaker diarization.
@@ -23,6 +23,8 @@ class CallHomePreprocessor:
         if properties is None:
             properties = {}
         metric = properties.get("metric", None)
+        user_prompt_add_ons = properties.get("user_prompt_add_ons", [])
+        system_prompts = properties.get("system_prompts", [])
         length_filter = properties.get("length_filter", None)  # Optional (min_seconds, max_seconds) tuple
 
         # Set base instruction depending on metric
@@ -39,6 +41,7 @@ class CallHomePreprocessor:
             )
 
         dataset_path = Path(dataset).resolve()
+        logger.info(f"[CallhomePreprocessor] Resolved dataset path: {dataset_path}")
         transcripts_dir = dataset_path / "transcripts"
         audio_dir = dataset_path / "audio"
         if not transcripts_dir.exists() or not audio_dir.exists():
@@ -52,7 +55,7 @@ class CallHomePreprocessor:
         if num_samples is not None:
             cha_files = cha_files[:num_samples]
         for cha_path in tqdm(cha_files, desc="Processing CallHome"):
-            result = process_one(cha_path, audio_dir, base_instruction, metric, length_filter)
+            result = process_one(cha_path, audio_dir, base_instruction, metric, length_filter, user_prompt_add_ons, system_prompts)
             if result is not None:
                 if metric and metric.lower() == "word_error_rate" and isinstance(result, list):
                     input_data.extend(result)  # flatten
@@ -62,7 +65,7 @@ class CallHomePreprocessor:
         return input_data
 
 
-def process_one(cha_path, audio_dir, base_instruction, metric=None, length_filter=None):
+def process_one(cha_path, audio_dir, base_instruction, metric=None, length_filter=None, user_prompt_add_ons=None, system_prompts=None):
     logger.info(f"Processing {cha_path}")
     # Allow optional leading '*' and whitespace before the speaker code
     # We capture the speaker code and the entire remainder of the line (which may contain a \x15<start>_<end>\x15 timestamp)
@@ -141,16 +144,56 @@ def process_one(cha_path, audio_dir, base_instruction, metric=None, length_filte
                     continue
             
             sample_id = f"{cha_id}_{idx}"
-            samples.append({
+            # Load prompt add-ons mapping
+            prompt_yaml_path = Path(__file__).resolve().parent.parent / "prompts" / "prompt_add_ons.yaml"
+            try:
+                with open(prompt_yaml_path, "r") as f:
+                    prompt_add_ons = yaml.safe_load(f) or {}
+            except FileNotFoundError:
+                logger.warning(f"Prompt add-ons file not found at {prompt_yaml_path}. Proceeding without add-ons.")
+                prompt_add_ons = {}
+            
+            # Load system prompts mapping
+            system_prompts_path = Path(__file__).resolve().parent.parent / "prompts" / "system_prompts.yaml"
+            try:
+                with open(system_prompts_path, "r") as f:
+                    system_prompts_mapping = yaml.safe_load(f) or {}
+            except FileNotFoundError:
+                logger.warning(f"System prompts file not found at {system_prompts_path}. Proceeding without system prompts.")
+                system_prompts_mapping = {}
+            
+            # Build instruction with prompt add-ons
+            instruction = base_instruction
+            for k in user_prompt_add_ons:
+                add_on = prompt_add_ons.get(k)
+                if add_on:
+                    instruction = f"{instruction} {add_on}"
+                    
+            # Process system prompts
+            system_prompt_text = ""
+            for k in system_prompts:
+                prompt = system_prompts_mapping.get(k)
+                if prompt:
+                    if system_prompt_text:
+                        system_prompt_text += "\n\n" + prompt
+                    else:
+                        system_prompt_text = prompt
+                        
+            sample_dict = {
                 "array": audio_segment,
                 "sampling_rate": sr,
-                "instruction": base_instruction,
+                "instruction": instruction,
                 # No chunk instructions for this case
                 "chunk_instructions": [],
                 "model_target": text,
                 "id": sample_id,
-                "task_type": "Turn-based WER",
-            })
+                "task_type": "Turn-based WER"
+            }
+            
+            if system_prompt_text:
+                sample_dict["system_prompt"] = system_prompt_text
+                
+            samples.append(sample_dict)
         if filtered_count > 0:
             logger.info(f"Filtered out {filtered_count} samples that didn't meet length criteria {length_filter}")
         if not samples:
@@ -206,12 +249,52 @@ def process_one(cha_path, audio_dir, base_instruction, metric=None, length_filte
         elif line.startswith('B:'):
             b_words.append(line[2:].strip())
     reference_txt = f"A: {' '.join(a_words)}\nB: {' '.join(b_words)}"
-    return {
+    # Build instruction with prompt add-ons
+    instruction = base_instruction
+    for k in user_prompt_add_ons:
+        add_on = prompt_add_ons.get(k)
+        if add_on:
+            instruction = f"{instruction} {add_on}"
+            
+    # Load prompt add-ons mapping
+    prompt_yaml_path = Path(__file__).resolve().parent.parent / "prompts" / "prompt_add_ons.yaml"
+    try:
+        with open(prompt_yaml_path, "r") as f:
+            prompt_add_ons = yaml.safe_load(f) or {}
+    except FileNotFoundError:
+        logger.warning(f"Prompt add-ons file not found at {prompt_yaml_path}. Proceeding without add-ons.")
+        prompt_add_ons = {}
+    
+    # Load system prompts mapping
+    system_prompts_path = Path(__file__).resolve().parent.parent / "prompts" / "system_prompts.yaml"
+    try:
+        with open(system_prompts_path, "r") as f:
+            system_prompts_mapping = yaml.safe_load(f) or {}
+    except FileNotFoundError:
+        logger.warning(f"System prompts file not found at {system_prompts_path}. Proceeding without system prompts.")
+        system_prompts_mapping = {}
+    
+    # Process system prompts
+    system_prompt_text = ""
+    for k in system_prompts:
+        prompt = system_prompts_mapping.get(k)
+        if prompt:
+            if system_prompt_text:
+                system_prompt_text += "\n\n" + prompt
+            else:
+                system_prompt_text = prompt
+                
+    result = {
         "array": audio_array,
         "sampling_rate": sr,
-        "instruction": base_instruction,
+        "instruction": instruction,
         "chunk_instructions": chunk_instructions,
         "model_target": reference_txt,
         "id": cha_id,
         "task_type": "Turn Transcription",
     }
+    
+    if system_prompt_text:
+        result["system_prompt"] = system_prompt_text
+        
+    return result

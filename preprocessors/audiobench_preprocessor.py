@@ -3,9 +3,9 @@ logger = logging.getLogger(__name__)
 from tqdm import tqdm
 from pathlib import Path
 import yaml
+from preprocessors.base import Preprocessor
 
-
-class AudiobenchPreprocessor():
+class AudiobenchPreprocessor(Preprocessor):
     """Preprocessor for Audio benchmarks from AudioBench on HF."""
 
     def process(self, dataset: dict, properties: dict | None) -> list[dict]:
@@ -19,7 +19,9 @@ class AudiobenchPreprocessor():
         logger.info("In [AudiobenchPreprocessor] Processing dataset...")
         #logger.info(dataset)
         user_prompt_add_ons = properties.get("user_prompt_add_ons", [])
+        system_prompts = properties.get("system_prompts", [])
         length_filter = properties.get("length_filter", None)  # Optional (min_seconds, max_seconds) tuple
+        
         # Load prompt add-ons mapping
         prompt_yaml_path = Path(__file__).resolve().parent.parent / "prompts" / "prompt_add_ons.yaml"
         try:
@@ -28,6 +30,15 @@ class AudiobenchPreprocessor():
         except FileNotFoundError:
             logger.warning(f"Prompt add-ons file not found at {prompt_yaml_path}. Proceeding without add-ons.")
             prompt_add_ons = {}
+            
+        # Load system prompts mapping
+        system_prompts_path = Path(__file__).resolve().parent.parent / "prompts" / "system_prompts.yaml"
+        try:
+            with open(system_prompts_path, "r") as f:
+                system_prompts_mapping = yaml.safe_load(f) or {}
+        except FileNotFoundError:
+            logger.warning(f"System prompts file not found at {system_prompts_path}. Proceeding without system prompts.")
+            system_prompts_mapping = {}
 
         total_duration = 0
         new_dataset = []
@@ -56,22 +67,35 @@ class AudiobenchPreprocessor():
                 min_length, max_length = length_filter
                 if audio_duration < min_length or audio_duration > max_length:
                     continue
+            
+            possible_keys = ["reference", "answer", "text", "transcription", "sentence", "transcript", "normalized_text"]
+            for key in possible_keys:
+                if key in record:
+                    record["model_target"] = record[key]
+                    break
+            if "model_target" not in record:
+                raise ValueError("No valid target key found in record")
 
-            if "reference" in record:
-                record["model_target"] = record["reference"]
-            elif "answer" in record:
-                record["model_target"] = record["answer"]
-            else:
-                record["model_target"] = "no reference - use your judgement"
-
-            instruction = record.get("instruction") or record.get("question") or "no instruction - use your judgement"
+            instruction = record.get("instruction") or record.get("question") or ""
             # Append any user-specified prompt add-ons
             for k in user_prompt_add_ons:
                 add_on = prompt_add_ons.get(k)
                 if add_on:
                     instruction = f"{instruction} {add_on}"
-            #logger.info(f"[AudiobenchPreprocessor] Final instruction: {instruction}")
             record["instruction"] = instruction
+            
+            # Process system prompts
+            system_prompt_text = ""
+            for k in system_prompts:
+                prompt = system_prompts_mapping.get(k)
+                if prompt:
+                    if system_prompt_text:
+                        system_prompt_text += "\n\n" + prompt
+                    else:
+                        system_prompt_text = prompt
+            if system_prompt_text:
+                record["system_prompt"] = system_prompt_text
+                
             record["judge_type"] = properties.get("judge_type", "detailed")
             new_dataset.append(record)
 

@@ -3,8 +3,9 @@ logger_setup.configure()
 import logging
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
-
-import re
+from postprocessors.base import Postprocessor
+from preprocessors.base import Preprocessor
+import os
 import json
 from pathlib import Path
 import asyncio
@@ -82,74 +83,117 @@ class Engine:
 
 
 
-#pre/post helper getter
-def get_class_from_module(module_prefix, module_name):
+def get_class_from_module(module_prefix, module_name) -> Preprocessor | Postprocessor:
     try:
-        module = importlib.import_module(f"{module_prefix}.{module_name}")
+        # Convert class name (CamelCase) to filename (snake)
+        # Get pre or post processor
+        module_filename = ''.join(['_' + c.lower() if c.isupper() else c for c in module_name]).lstrip('_')
+        module = importlib.import_module(f"{module_prefix}.{module_filename}")
         return getattr(module, module_name)
     except Exception as e:
+        logger.warning(f"Could not import {module_name} from {module_prefix}: {e}")
         return None
 
-#load an preprocess(dataset specific)
-from preprocessors.CallHomePreprocessor import CallHomePreprocessor
 
-def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = [], length_filter=None, zip=False, dataset_config=None, metric=None):
+def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = [], system_prompts: list[str] = [], length_filter=None, metric=None, split=None):
     """Load and preprocess a dataset from a local or remote path."""
     logger.info(f"[_load_dataset] Loading dataset {repo} with preprocessor {preprocessor_name}")
-    # We can load different formats of datasets
-    if repo and repo.startswith("/") or repo.startswith("./"): # Local path
+    
+    # Set up properties that will be passed to any preprocessor
+    properties = {"metric": metric}
+    if user_prompt_add_ons:
+        properties["user_prompt_add_ons"] = user_prompt_add_ons
+    if system_prompts:
+        properties["system_prompts"] = system_prompts
+    if length_filter:
+        logger.info(f"[_load_dataset] Applying length filter: {length_filter}")
+        properties["length_filter"] = tuple(length_filter)  # Convert list to tuple
+    
+    # Special handling for local CallHome dataset
+    if preprocessor_name.startswith("Callhome"):
+        repo = Path(repo).resolve()
+        logger.info(f"[_load_dataset] Loading CallHome local dataset from {repo}")
+        # Dynamically load the preprocessor
+        PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
+        if PreprocessorClass is None:
+            error_msg = f"Could not load preprocessor {preprocessor_name}"
+            logger.error(error_msg)
+            raise ValueError(error_msg)
+        print(f"[_load_dataset] Using preprocessor {PreprocessorClass}")
+        print(type(repo))
+        print(type(num_samples))
+        print(type(properties))
+        dataset = PreprocessorClass().process(repo, num_samples=num_samples, properties=properties)
+        return dataset
+    
+    # For HuggingFace datasets
+    if repo and (repo.startswith("/") or repo.startswith(".//")):
         repo = Path(repo).resolve()
         logger.info(f"[_load_dataset] Loading local dataset from {repo}")
-    
-    if preprocessor_name.startswith("CallHome"):
-        # Special-case CallHome dataset
-        # Load CallHomePreprocessor from local preprocessor code
-        properties = {"metric": metric}
-        if user_prompt_add_ons:
-            properties["user_prompt_add_ons"] = user_prompt_add_ons
-        if length_filter:
-            logger.info(f"[_load_dataset] Applying length filter: {length_filter}")
-            properties["length_filter"] = tuple(length_filter)  # Convert list to tuple
-        logger.info(f"[_load_dataset] Loading CallHome from path: {repo}")
-        dataset = CallHomePreprocessor().process(repo, num_samples=num_samples, properties=properties)
-        return dataset
-
+        
     logger.info(f"[_load_dataset] Loading HuggingFace dataset repo: {repo}")
-    # If 'subset' or 'data_dir' is specified, pass as second arg or kwarg
-    # ----- robust split handling -----
-    def _select_split(ds):
-        """Return desired split name or None if *ds* is already a Dataset."""
-        if isinstance(ds, dict):  # HuggingFace DatasetDict
-            for cand in ("test", "data", "train"):
-                if cand in ds:
-                    return cand
-        return None  # single-split Dataset
-
-    if subset:
-        logger.info(f"[_load_dataset] Loading subset: {subset}")
-        ds_builder = load_dataset(repo, subset)
+    # Determine the preferred split to load directly (more efficient)
+    if split is not None:
+        logger.info(f"[_load_dataset] Using user-specified split: {split}")
+        if isinstance(split, str):
+            preferred_splits = [split]
+        else:
+            preferred_splits = list(split)
     else:
-        ds_builder = load_dataset(repo)
+        preferred_splits = ["test", "data", "train"]
+    
+    # Try to load a specific split directly
+    dset = None
+    # Try the preferred splits in order
+    token=os.getenv("HF_TOKEN")
+    for split_name in preferred_splits:
+        try:
+            if subset:
+                logger.info(f"[_load_dataset] Attempting to load subset: {subset}, split: {split_name}")
+                if token:
+                    dset = load_dataset(repo, subset, split=split_name, trust_remote_code=True, token=token)
+                else:
+                    dset = load_dataset(repo, subset, split=split_name, trust_remote_code=True)
+            else:
+                logger.info(f"[_load_dataset] Attempting to load split: {split_name}")
+                if token:
+                    dset = load_dataset(repo, split=split_name, trust_remote_code=True, token=token)
+                else:
+                    dset = load_dataset(repo, split=split_name, trust_remote_code=True)
+            logger.info(f"[_load_dataset] Successfully loaded split: {split_name}")
+            break
+        except Exception as e:
+            logger.info(f"[_load_dataset] Split {split_name} not available: {str(e)}")
+    
+    # Raise an error if no valid split was found
+    if dset is None:
+        logger.info(f"[_load_dataset] Attempting to load no split")
+        try:
+            if subset:
+                dset = load_dataset(repo, subset, trust_remote_code=True)
+            else:
+                dset = load_dataset(repo, trust_remote_code=True)
+        except Exception as e:
+            logger.info(f"[_load_dataset] Failed to load dataset: {str(e)}")
+            error_msg = f"[_load_dataset] No valid dataset found in {repo}"
+            logger.error(error_msg)
+            raise ValueError(error_msg)
+    
+    logger.info(f"[_load_dataset] Dataset loaded  |  Size before trunc: {len(dset)}")
 
-    chosen_split = _select_split(ds_builder)
-    dset = ds_builder if chosen_split is None else ds_builder[chosen_split]
-    logger.info(f"[_load_dataset] Using split: {chosen_split or 'single-dataset'}  |  Size before trunc: {len(dset)}")
-        #logger.info(f"[_load_dataset] Dataset loaded: {dset}")
+
     if num_samples is not None:
         logger.info(f"[_load_dataset] Truncating dataset to first {num_samples} samples.")
         dset = dset[:num_samples]
-    #Added to convert to dict
     else:
         dset = dset[:len(dset)]
     #logger.info(f"[_load_dataset] Dataset loaded after truncation: {dset}")
     logger.info(f"[_load_dataset] Preprocessing dataset using {preprocessor_name}...")
     PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
-    properties = {"metric": metric}
-    if user_prompt_add_ons:
-        properties["user_prompt_add_ons"] = user_prompt_add_ons
-    if length_filter:
-        logger.info(f"[_load_dataset] Applying length filter: {length_filter}")
-        properties["length_filter"] = tuple(length_filter)
+    if PreprocessorClass is None:
+        error_msg = f"Could not load preprocessor {preprocessor_name}"
+        logger.error(error_msg)
+        raise ValueError(error_msg)
     processed = PreprocessorClass().process(dset, properties)
     logger.info(f"[_load_dataset] Dataset loaded and processed. Size: {len(processed)}")
     return processed
@@ -201,69 +245,148 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
 #hardcoded cfg path - need to implement command line override, add common configs, group by task type
 #main that runs
 def main(cfg_path='config.yaml'):
-    logger.info("[main] Starting main function.")
-    cfg_path = Path(cfg_path)
-    logger.info(f"[main] Loading config file: {cfg_path}")
-    cfg = yaml.safe_load(cfg_path.read_text())
-    logger.info(f"[main] Config loaded: {cfg}")
-
-    # Reconfigure log file if provided
-    log_file_path = cfg.get("log_file")
-    if log_file_path:
-        logger_setup.configure(log_file_path)
-        logger.info(f"[main] Reconfigured logging to file: {log_file_path}")
-    batch_size = cfg.get("batch_size", 4)
-    num_samples = cfg.get("num_samples", None)
-    judge_concurrency = cfg.get("judge_concurrency", None)
-    judge_model = cfg.get("judge_model", None)
-    api_version = cfg.get("api_version", None)
-    user_prompt_add_ons: list[str] = cfg.get("user_prompt_add_ons", []) or []
-    length_filter = cfg.get("length_filter", None)  # Get the length_filter from config
+    logger.info(f"[main] Loading config from {cfg_path}")
+    with open(cfg_path, 'r') as f:
+        cfg = yaml.safe_load(f)
     
-    # --- Build (dataset, metric) pairs ---
-    raw_pairs_seq = cfg["dataset_metric"]
-    if not isinstance(raw_pairs_seq, list):
-        raise ValueError("'dataset_metric' must be a YAML list, each element like '(dataset_name, metric_name)'.")
-    dataset_metric_pairs: list[tuple[str, str]] = []
-    for raw in raw_pairs_seq:
-        if not isinstance(raw, str):
-            raise ValueError("Each element in 'dataset_metric' must be a plain string of the form '(dataset, metric)'.")
-        raw = raw.strip()
-        if not (raw.startswith("(") and raw.endswith(")")):
-            raise ValueError(f"Invalid tuple format: {raw}. Expected '(dataset, metric)'.")
-        inner = raw[1:-1]
-        parts = [p.strip() for p in inner.split(",")]
-        if len(parts) != 2 or not all(parts):
-            raise ValueError(f"Invalid tuple contents: {raw}. Expect exactly two comma-separated values.")
-        dataset_metric_pairs.append((parts[0], parts[1]))
-    logger.info("[main] Loading models...")
-    models = _load_models(cfg["models"])
+    # Load database of datasets from runspecs directory
+    runspecs_dir = Path("runspecs")
+    all_json_path = runspecs_dir / "all.json"
+    
+    # Check if all.json exists
+    if all_json_path.exists():
+        logger.info(f"[main] Loading database from {all_json_path}")
+        with open(all_json_path, 'r') as f:
+            all_db = json.load(f)
+    else:
+        logger.warning(f"[main] No database found at {all_json_path}")
+        all_db = {}
+    
+    # Get list of all runspec files in the runspecs directory
+    runspec_files = [f for f in runspecs_dir.glob("*.json") if f.name != "all.json"]
+    logger.info(f"[main] Found {len(runspec_files)} runspec files")
+    
+    # Load metric and model settings
+    judge_concurrency = cfg.get("judge_concurrency", 1)
+    judge_model = cfg.get("judge_model", None)
+    user_prompt_add_ons = cfg.get("user_prompt_add_ons", [])
+    system_prompts = cfg.get("system_prompts", [])
+    length_filter = cfg.get("length_filter", None)
+    num_samples = cfg.get("num_samples", None)
+    
+    # Load models
+    logger.info(f"[main] Loading models...")
+    models = _load_models(cfg.get("models", []))
+    logger.info(f"[main] Loaded {len(models)} model(s).")
+    
+    if len(models) == 0:
+        raise ValueError(f"No models found in {cfg_path}")
+    
+    # Get dataset-metric pairs from config.yaml
+    dataset_metric_pairs = []
+    for pair_str in cfg.get("dataset_metric", []):
+        # Remove parentheses and split by comma
+        pair_str = pair_str.strip().strip("()").strip()
+        items = [x.strip() for x in pair_str.split(",")]
+        if len(items) != 2:
+            raise ValueError(f"Invalid dataset_metric pair: {pair_str}. Must be in format '(dataset, metric)'")
+        dataset_name, metric_name = items
+        dataset_metric_pairs.append((dataset_name, metric_name))
+    
+    logger.info(f"[main] Dataset-metric pairs from config: {dataset_metric_pairs}")
+    
+    # Dictionary to store all evaluation scores
     all_scores = {}
-    cfg_path = Path(__file__).with_name("audiobench_datasets.json")
-    db = json.loads(cfg_path.read_text())
+    
+    # Process each dataset-metric pair
     for dname, metric_name in dataset_metric_pairs:
-        logger.info(f"[main] Loading dataset '{dname}' with metric '{metric_name}' ...")
-        if dname not in db:
-            raise ValueError(f"Dataset '{dname}' not found in {cfg_path}.")
-        repo = db[dname].get("hf_repo", None)
-        if not repo:
-            repo = db[dname].get("path", None)
-        subset = db[dname].get("subset", "")
-        language = db[dname].get("language", "en")
-        preprocessor_name = db[dname]["preprocessor"]
-        postprocessor_name = db[dname]["postprocessor"]
+        logger.info(f"[main] Processing dataset '{dname}' with metric '{metric_name}' ...")
         
-        dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, 
-                             user_prompt_add_ons=user_prompt_add_ons, length_filter=length_filter, metric=metric_name)
-        metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
-        # Dynamically import postprocessor class
-        PostprocessorClass = get_class_from_module('postprocessors', postprocessor_name)
-        if PostprocessorClass is None:
-            PostprocessorClass = AudiobenchPostprocessor
-        postprocessor = PostprocessorClass()
-        logger.info("[main] Initializing Engine and running evaluation...")
-        result = Engine(models, dataset, metric, postprocessor, dname).run()
-        all_scores[dname] = result
+        # Step 1: Look for a matching runspec file (excluding suffixes like ASR, emotion_recognition)
+        found_runspec = False
+        selected_datasets = {}
+        
+        # Try to match the dataset name with one of the runspec files
+        for runspec_file in runspec_files:
+            runspec_name = runspec_file.stem
+            
+            # Check if dataset name matches the runspec file name (excluding suffixes)
+            if dname.endswith(runspec_name) or dname == runspec_name:
+                logger.info(f"[main] Found matching runspec file: {runspec_file}")
+                found_runspec = True
+                
+                # Load the runspec file
+                with open(runspec_file, 'r') as f:
+                    runspec_db = json.load(f)
+                
+                # Use all datasets in this runspec
+                selected_datasets = runspec_db
+                logger.info(f"[main] Using all {len(runspec_db)} datasets from {runspec_file}")
+                break
+        
+        # Step 2: If no matching runspec file, look for the dataset in all.json
+        if not found_runspec:
+            logger.info(f"[main] No matching runspec file for '{dname}'. Checking in all.json...")
+            
+            if dname in all_db:
+                logger.info(f"[main] Found dataset '{dname}' in all.json")
+                # Use only this specific dataset
+                selected_datasets = {dname: all_db[dname]}
+            else:
+                logger.warning(f"[main] Dataset '{dname}' not found in any runspec or all.json")
+                logger.info(f"[main] Dataset not found: {dname}")
+                continue
+        
+        # Check for accented filter setting
+        accented_filter = cfg.get("accented", None)
+        if accented_filter is not None:
+            logger.info(f"[main] Applying accented filter setting: {accented_filter}")
+            
+        # Check for language filter setting
+        language_filter = cfg.get("language", None)
+        if language_filter is not None:
+            logger.info(f"[main] Applying language filter setting: {language_filter}")
+        
+        # Process each selected dataset
+        for dataset_name, dataset_info in selected_datasets.items():
+            # Check if we need to filter out accented datasets
+            if accented_filter is False and dataset_info.get("accented", False) is True:
+                logger.info(f"[main] Skipping dataset '{dataset_name}' because it is accented and accented filter is False")
+                continue
+                
+            # Check if we need to filter by language
+            if language_filter is not None:
+                dataset_language = dataset_info.get("language", "").lower()
+                if dataset_language and language_filter.lower() != dataset_language:
+                    logger.info(f"[main] Skipping dataset '{dataset_name}' because its language '{dataset_language}' doesn't match filter '{language_filter}'")
+                    continue
+            
+            logger.info(f"[main] Loading dataset '{dataset_name}' with metric '{metric_name}' ...")
+            
+            repo = dataset_info.get("hf_repo", None)
+            if not repo:
+                repo = dataset_info.get("path", None)
+            subset = dataset_info.get("subset", "")
+            language = dataset_info.get("language", "en")
+            preprocessor_name = dataset_info["preprocessor"]
+            postprocessor_name = dataset_info["postprocessor"]
+            
+            dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, 
+                                  user_prompt_add_ons=user_prompt_add_ons, system_prompts=system_prompts, length_filter=length_filter, metric=metric_name, split=cfg.get("split"))
+            metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
+            
+            # Dynamically import postprocessor class
+            PostprocessorClass = get_class_from_module('postprocessors', postprocessor_name)
+            if PostprocessorClass is None:
+                logger.warning(f"Could not load postprocessor {postprocessor_name}, using default AudiobenchPostprocessor")
+                # Try to load the default postprocessor
+                PostprocessorClass = get_class_from_module('postprocessors', 'AudiobenchPostprocessor')
+            postprocessor = PostprocessorClass()
+            
+            logger.info("[main] Initializing Engine and running evaluation...")
+            result = Engine(models, dataset, metric, postprocessor, dataset_name).run()
+            all_scores[dataset_name] = result
+    
     logger.info("[main] Evaluation scores:")
     logger.info(json.dumps(all_scores, indent=2))
 
