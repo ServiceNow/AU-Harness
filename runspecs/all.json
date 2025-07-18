@@ -373,6 +373,20 @@
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor"
   },
+  "big_bench_audio": {
+    "hf_repo": "fixie-ai/big_bench_audio",
+    "subset": "default",
+    "language": "english",
+    "preprocessor": "BigBenchAudioPreprocessor",
+    "postprocessor": "BigBenchAudioPostprocessor"
+  },
+  "big_bench_audio_text_only": {
+    "hf_repo": "fixie-ai/big_bench_audio",
+    "subset": "default",
+    "language": "english",
+    "preprocessor": "BigBenchAudioTextOnlyPreprocessor",
+    "postprocessor": "BigBenchAudioPostprocessor"
+  },
   "callhome_eng": {
     "language": "english",
     "preprocessor": "CallhomePreprocessor",

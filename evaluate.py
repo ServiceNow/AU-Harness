@@ -119,10 +119,6 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="A
             error_msg = f"Could not load preprocessor {preprocessor_name}"
             logger.error(error_msg)
             raise ValueError(error_msg)
-        print(f"[_load_dataset] Using preprocessor {PreprocessorClass}")
-        print(type(repo))
-        print(type(num_samples))
-        print(type(properties))
         dataset = PreprocessorClass().process(repo, num_samples=num_samples, properties=properties)
         return dataset
     
@@ -146,6 +142,7 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="A
     dset = None
     # Try the preferred splits in order
     token=os.getenv("HF_TOKEN")
+    logger.info(f"[_load_dataset] Using token: {token}")
     for split_name in preferred_splits:
         try:
             if subset:
@@ -170,9 +167,15 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="A
         logger.info(f"[_load_dataset] Attempting to load no split")
         try:
             if subset:
-                dset = load_dataset(repo, subset, trust_remote_code=True)
+                if token:
+                    dset = load_dataset(repo, subset, trust_remote_code=True, token=token)
+                else:
+                    dset = load_dataset(repo, subset, trust_remote_code=True)
             else:
-                dset = load_dataset(repo, trust_remote_code=True)
+                if token:
+                    dset = load_dataset(repo, trust_remote_code=True, token=token)
+                else:
+                    dset = load_dataset(repo, trust_remote_code=True)
         except Exception as e:
             logger.info(f"[_load_dataset] Failed to load dataset: {str(e)}")
             error_msg = f"[_load_dataset] No valid dataset found in {repo}"
@@ -194,7 +197,7 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="A
         error_msg = f"Could not load preprocessor {preprocessor_name}"
         logger.error(error_msg)
         raise ValueError(error_msg)
-    processed = PreprocessorClass().process(dset, properties)
+    processed = PreprocessorClass().process(dset, num_samples, properties)
     logger.info(f"[_load_dataset] Dataset loaded and processed. Size: {len(processed)}")
     return processed
 
@@ -237,6 +240,9 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
     elif name == "meteor":
         from metrics.meteor_score import MeteorScore
         metric = MeteorScore()
+    elif name == "llm_judge_big_bench_audio":
+        from metrics.llm_judge import BigBenchAudioLLMJudgeMetric
+        metric = BigBenchAudioLLMJudgeMetric(max_concurrency=judge_concurrency, model=judge_model)
     else:
         raise ValueError(f"Unknown metric: {name}")
     logger.info(f"[_load_metric] Metric loaded: {metric.name}")

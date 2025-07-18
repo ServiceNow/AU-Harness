@@ -1,7 +1,5 @@
 import asyncio
-import re
 from abc import ABC
-import os
 from tenacity import (
     AsyncRetrying,
     RetryError,
@@ -242,26 +240,32 @@ class Model(ABC):
                             "role": "system",
                             "content": system_prompt
                         })
-                    
-                    # Add user message with instruction and audio
-                    messages.append({
-                        "role": "user",
-                        "content": [
-                            {"type": "text", "text": full_instruction},
-                            {
-                                "type": "input_audio",
-                                "input_audio": {
-                                    "data": encoded,
-                                    "format": "wav",
+                
+                    # Handle text-only vs audio+text scenarios
+                    if encoded == "":
+                        # Text-only case
+                        messages.append({
+                            "role": "user",
+                            "content": [{"type": "text", "text": full_instruction}]
+                        })
+                    else:
+                        # Audio + text case
+                        messages.append({
+                            "role": "user",
+                            "content": [
+                                {"type": "text", "text": full_instruction},
+                                {
+                                    "type": "input_audio",
+                                    "input_audio": {
+                                        "data": encoded,
+                                        "format": "wav",
+                                    },
                                 },
-                            },
-                        ],
-                    })
+                            ],
+                        })
                     
                     message["model_inputs"] = messages
-                    
                     resp = await self.req_resp_hndlr.request_server(message["model_inputs"])
-                    logger.info(f"Requester response: {resp}")
                     concatenated_text += resp.llm_response or ""
                     responses.append(resp)
                 # Merge responses
@@ -314,23 +318,30 @@ class Model(ABC):
                     "content": system_prompt
                 })
             
-            # Add user message with instruction and audio
-            messages.append({
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": instruction},
-                    {
-                        "type": "input_audio",
-                        "input_audio": {
-                            "data": encoded,
-                            "format": "wav",
-                        },
-                    }
-                ],
-            })
+            # Handle text-only vs audio+text scenarios
+            if encoded == "":
+                # Text-only case
+                messages.append({
+                    "role": "user",
+                    "content": [{"type": "text", "text": instruction}]
+                })
+            else:
+                # Audio + text case
+                messages.append({
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": instruction},
+                        {
+                            "type": "input_audio",
+                            "input_audio": {
+                                "data": encoded,
+                                "format": "wav",
+                            },
+                        }
+                    ],
+                })
             
             message["model_inputs"] = messages
-            
             return await self.req_resp_hndlr.request_server(message["model_inputs"])
 
         #transcription

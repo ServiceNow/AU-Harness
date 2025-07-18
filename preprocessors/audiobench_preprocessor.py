@@ -8,7 +8,7 @@ from preprocessors.base import Preprocessor
 class AudiobenchPreprocessor(Preprocessor):
     """Preprocessor for Audio benchmarks from AudioBench on HF."""
 
-    def process(self, dataset: dict, properties: dict | None) -> list[dict]:
+    def process(self, dataset: dict, num_samples: int = None, properties: dict = None) -> list[dict]:
         """Process the dataset and flatten audio/context structure (expects dict-of-lists).
         
         Args:

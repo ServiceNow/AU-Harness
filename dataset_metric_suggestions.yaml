@@ -1,5 +1,4 @@
 dataset_metric:
-  - "(earnings22_test, word_error_rate)"
   - "(alpaca_audio_test, llm_judge_detailed)"
   - "(aishell_1_test, word_error_rate)"
   - "(audiocaps_qa_test, llm_judge_detailed)"
@@ -15,6 +14,7 @@ dataset_metric:
   - "(covost2_en_id_test, word_error_rate)"
   - "(dream_tts_mcq_test, word_error_rate)"
   - "(earnings21_test, word_error_rate)"
+  - "(earnings22_test, word_error_rate)"
   - "(gigaspeech_test, word_error_rate)"
   - "(gigaspeech2_id_test, word_error_rate)"
   - "(gigaspeech2_th_test, word_error_rate)"
@@ -56,6 +56,8 @@ dataset_metric:
   - "(voxceleb_gender_test, llm_judge_binary)"
   - "(wavcaps_qa_test, llm_judge_detailed)"
   - "(wavcaps_test, llm_judge_detailed)"
+  - "(big_bench_audio, llm_judge_big_bench_audio)"
+  - "(big_bench_audio_text_only, llm_judge_big_bench_audio)"
   - "(librispeech_multilingual_dutch, word_error_rate)"
   - "(librispeech_multilingual_french, word_error_rate)"
   - "(librispeech_multilingual_german, word_error_rate)"
