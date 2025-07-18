@@ -1,5 +1,6 @@
 #env
 lite
+env
 
 #config files
 config.yaml
@@ -22,4 +23,3 @@ private_datasets/
 
 #tests
 test.py
-client_test.py

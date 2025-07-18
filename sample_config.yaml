@@ -47,3 +47,5 @@ models:
       chunk_size: 45 #max audio length in seconds fed to model
 
       #If two models have same "model" attribute, we implement dataset sharding
+
+#In command line you can also pass custom config file name to read from with bash evaluate.sh --config <config_file>

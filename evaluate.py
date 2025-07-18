@@ -13,6 +13,7 @@ from datasets import load_dataset
 import yaml
 from tqdm import tqdm
 import importlib
+import argparse
 # Central logging setup
 from models.model import Model
 from metrics.metrics import Metrics
@@ -390,4 +391,10 @@ def main(cfg_path='config.yaml'):
     logger.info(json.dumps(all_scores, indent=2))
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description='Run audio evaluation benchmark')
+    parser.add_argument('--config', '-c', default='config.yaml', 
+                        help='Path to configuration file (default: config.yaml)')
+    args = parser.parse_args()
+    
+    # Pass the config path to main
+    main(cfg_path=args.config)

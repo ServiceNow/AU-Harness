@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python evaluate.py
+python evaluate.py "$@"
