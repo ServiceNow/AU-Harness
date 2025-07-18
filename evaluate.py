@@ -253,21 +253,11 @@ def main(cfg_path='config.yaml'):
     with open(cfg_path, 'r') as f:
         cfg = yaml.safe_load(f)
     
-    # Load database of datasets from runspecs directory
+    # Load runspec files from the runspecs directory
     runspecs_dir = Path("runspecs")
-    all_json_path = runspecs_dir / "all.json"
-    
-    # Check if all.json exists
-    if all_json_path.exists():
-        logger.info(f"[main] Loading database from {all_json_path}")
-        with open(all_json_path, 'r') as f:
-            all_db = json.load(f)
-    else:
-        logger.warning(f"[main] No database found at {all_json_path}")
-        all_db = {}
     
     # Get list of all runspec files in the runspecs directory
-    runspec_files = [f for f in runspecs_dir.glob("*.json") if f.name != "all.json"]
+    runspec_files = list(runspecs_dir.glob("*.json"))
     logger.info(f"[main] Found {len(runspec_files)} runspec files")
     
     # Load metric and model settings
@@ -306,7 +296,7 @@ def main(cfg_path='config.yaml'):
     for dname, metric_name in dataset_metric_pairs:
         logger.info(f"[main] Processing dataset '{dname}' with metric '{metric_name}' ...")
         
-        # Step 1: Look for a matching runspec file (excluding suffixes like ASR, emotion_recognition)
+        # Step 1: Look for a matching runspec file
         found_runspec = False
         selected_datasets = {}
         
@@ -314,8 +304,8 @@ def main(cfg_path='config.yaml'):
         for runspec_file in runspec_files:
             runspec_name = runspec_file.stem
             
-            # Check if dataset name matches the runspec file name (excluding suffixes)
-            if dname.endswith(runspec_name) or dname == runspec_name:
+            # First, check if dataset name exactly matches the runspec file name
+            if dname == runspec_name:
                 logger.info(f"[main] Found matching runspec file: {runspec_file}")
                 found_runspec = True
                 
@@ -328,16 +318,24 @@ def main(cfg_path='config.yaml'):
                 logger.info(f"[main] Using all {len(runspec_db)} datasets from {runspec_file}")
                 break
         
-        # Step 2: If no matching runspec file, look for the dataset in all.json
+        # Step 2: If no matching runspec file by name, search within all runspec files for the specific dataset
         if not found_runspec:
-            logger.info(f"[main] No matching runspec file for '{dname}'. Checking in all.json...")
+            logger.info(f"[main] No matching runspec file for '{dname}'. Searching within individual runspec files...")
             
-            if dname in all_db:
-                logger.info(f"[main] Found dataset '{dname}' in all.json")
-                # Use only this specific dataset
-                selected_datasets = {dname: all_db[dname]}
-            else:
-                logger.warning(f"[main] Dataset '{dname}' not found in any runspec or all.json")
+            # Search through all runspec files to find the dataset
+            for runspec_file in runspec_files:
+                with open(runspec_file, 'r') as f:
+                    runspec_db = json.load(f)
+                
+                if dname in runspec_db:
+                    logger.info(f"[main] Found dataset '{dname}' in {runspec_file}")
+                    # Use only this specific dataset
+                    selected_datasets = {dname: runspec_db[dname]}
+                    found_runspec = True
+                    break
+            
+            if not found_runspec:
+                logger.warning(f"[main] Dataset '{dname}' not found in any runspec file")
                 logger.info(f"[main] Dataset not found: {dname}")
                 continue
         
