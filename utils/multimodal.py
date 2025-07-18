@@ -10,14 +10,17 @@ TRUNCATION_LENGTH = 60
 #normalize to 16000
 def encode_audio_array_base64(audio_array, sampling_rate):
     try:
-        audio_array = librosa.resample(audio_array, orig_sr=sampling_rate, target_sr=16000)
-        sampling_rate = 16000
+        if audio_array is None or len(audio_array) == 0:
+            return ""
+        else:
+            audio_array = librosa.resample(audio_array, orig_sr=sampling_rate, target_sr=16000)
+            sampling_rate = 16000
 
-        buffer = BytesIO()
-        sf.write(buffer, audio_array, sampling_rate, format='WAV')
-        buffer.seek(0)
-        audio_base64 = base64.b64encode(buffer.read()).decode('utf-8')
-        return audio_base64
+            buffer = BytesIO()
+            sf.write(buffer, audio_array, sampling_rate, format='WAV')
+            buffer.seek(0)
+            audio_base64 = base64.b64encode(buffer.read()).decode('utf-8')
+            return audio_base64
     except Exception as e:
         raise RuntimeError(f"Failed to encode audio: {e}")
 

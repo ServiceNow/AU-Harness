@@ -1,7 +1,5 @@
 import asyncio
-import re
 from abc import ABC
-import os
 from tenacity import (
     AsyncRetrying,
     RetryError,
@@ -11,8 +9,8 @@ from tenacity import (
     wait_random_exponential,
 )
 
-import logger_setup
-logger_setup.configure()
+from utils.logging import configure
+configure()
 import logging
 logger = logging.getLogger(__name__)
 logger.propagate = True
@@ -120,7 +118,8 @@ class Model(ABC):
                 with attempt:
                     try:
                         # All data prep is now in _generate_text
-                        #logger.info(f"[{self.name()}] Generating text for input: {message}")
+                        # Set attempt number for downstream logging
+                        self.req_resp_hndlr.current_attempt = attempt.retry_state.attempt_number
                         result: ModelResponse = await self._generate_text(message, run_params)
                         await self._mark_errors(result)
                     except Exception as e:
@@ -223,11 +222,38 @@ class Model(ABC):
                     chunk_array = audio_array[start:end]
                     encoded = encode_audio_array_base64(chunk_array, sampling_rate)
 
-                    message["model_inputs"] = [
-                        {
+                    # Compose chunk-specific instruction
+                    chunk_instructions = message.get("chunk_instructions")
+                    if chunk_instructions and i < len(chunk_instructions):
+                        chunk_instruction = chunk_instructions[i]
+                        full_instruction = instruction + "\n" + chunk_instruction
+                    else:
+                        full_instruction = instruction
+
+                    # Prepare messages list starting with system prompt if available
+                    messages = []
+                    
+                    # Add system prompt if available
+                    system_prompt = message.get("system_prompt")
+                    if system_prompt:
+                        messages.append({
+                            "role": "system",
+                            "content": system_prompt
+                        })
+                
+                    # Handle text-only vs audio+text scenarios
+                    if encoded == "":
+                        # Text-only case
+                        messages.append({
+                            "role": "user",
+                            "content": [{"type": "text", "text": full_instruction}]
+                        })
+                    else:
+                        # Audio + text case
+                        messages.append({
                             "role": "user",
                             "content": [
-                                {"type": "text", "text": instruction},
+                                {"type": "text", "text": full_instruction},
                                 {
                                     "type": "input_audio",
                                     "input_audio": {
@@ -236,8 +262,9 @@ class Model(ABC):
                                     },
                                 },
                             ],
-                        }
-                    ]
+                        })
+                    
+                    message["model_inputs"] = messages
                     resp = await self.req_resp_hndlr.request_server(message["model_inputs"])
                     concatenated_text += resp.llm_response or ""
                     responses.append(resp)
@@ -280,8 +307,27 @@ class Model(ABC):
             chunk_array = audio_array[:max_samples]
             encoded = encode_audio_array_base64(chunk_array, sampling_rate)
 
-            message["model_inputs"] = [
-                {
+            # Prepare messages list starting with system prompt if available
+            messages = []
+            
+            # Add system prompt if available
+            system_prompt = message.get("system_prompt")
+            if system_prompt:
+                messages.append({
+                    "role": "system",
+                    "content": system_prompt
+                })
+            
+            # Handle text-only vs audio+text scenarios
+            if encoded == "":
+                # Text-only case
+                messages.append({
+                    "role": "user",
+                    "content": [{"type": "text", "text": instruction}]
+                })
+            else:
+                # Audio + text case
+                messages.append({
                     "role": "user",
                     "content": [
                         {"type": "text", "text": instruction},
@@ -293,8 +339,9 @@ class Model(ABC):
                             },
                         }
                     ],
-                }
-            ]
+                })
+            
+            message["model_inputs"] = messages
             return await self.req_resp_hndlr.request_server(message["model_inputs"])
 
         #transcription

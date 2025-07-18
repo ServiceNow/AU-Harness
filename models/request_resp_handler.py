@@ -5,7 +5,7 @@ from models.model_response import ModelResponse
 from utils import constants
 import logging
 import requests
-logger = logging.getLogger(__name__)  # handlers configured in logger_setup.py
+logger = logging.getLogger(__name__)  # handlers configured in utils/logging.py
 import json
 import os
 import httpx
@@ -21,6 +21,8 @@ class RequestRespHandler:
         self.api_version = model_info.get("api_version", "")
         self.client = None
         self.timeout = timeout
+        # current retry attempt (set by caller). Default 1.
+        self.current_attempt: int = 1
         # Remove Bearer if present for vllm/openai
         if self.inference_type in [
             constants.OPENAI_TRANSCRIPTION,
@@ -107,7 +109,6 @@ class RequestRespHandler:
                 llm_response = self.get_response_text(raw_response)
                 response_code = 200
                 elapsed_time: float = time.time() - start_time
-                logger.info(f"Successful post request: {response_code}")
                 return ModelResponse (
                 input_prompt=str(msg_body),
                 llm_response=llm_response if llm_response else " ",
@@ -126,11 +127,21 @@ class RequestRespHandler:
                 raw_response: str = response_data
                 llm_response: str = response_data['choices'][0]['message']['content'] or " "
                 response_code: int = 200
-                logger.info(f"Successful post request: {response_code}")
                 elapsed_time: float = time.time() - start_time
 
+                # Find the user message to extract input prompt
+                user_prompt = ""
+                for message in msg_body:
+                    if message["role"] == "user" and "content" in message and isinstance(message["content"], list):
+                        for content_item in message["content"]:
+                            if content_item.get("type") == "text":
+                                user_prompt = content_item.get("text", "")
+                                break
+                        if user_prompt:
+                            break
+                
                 return ModelResponse (
-                input_prompt=str(msg_body[0]["content"][0]["text"]),
+                input_prompt=user_prompt,
                 llm_response=llm_response if llm_response else " ",
                 raw_response=raw_response,
                 response_code=response_code,
@@ -147,7 +158,6 @@ class RequestRespHandler:
                 raw_response: str = response_data
                 llm_response: str = response_data['text'] or " "
                 response_code: int = 200
-                logger.info(f"Successful post request: {response_code}")
                 elapsed_time: float = time.time() - start_time
 
                 return ModelResponse (
@@ -160,7 +170,7 @@ class RequestRespHandler:
                 )
 
         except Exception as e:
-            logger.error(f"audio_raw_response={e!r}")
+            logger.error(f"Attempt {self.current_attempt}: audio_raw_response={e!r}")
             # First attempt to wrap the error in ModelResponse
             try:
                 return ModelResponse(
