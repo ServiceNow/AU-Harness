@@ -32,7 +32,6 @@ num2words==0.5.14
 jaconv==0.4.0
 more-itertools==10.7.0
 
-# Extra inferred dependencies
 scikit-learn==1.7.0      # jiwer, librosa metrics
 scipy==1.15.3            # librosa, scikit-learn
 joblib==1.5.1            # scikit-learn

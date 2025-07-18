@@ -1,5 +1,5 @@
-import logger_setup
-logger_setup.configure()
+from utils.logging import configure
+configure()
 import logging
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)

@@ -1,8 +1,8 @@
 import re
 import logging
-import logger_setup
+from utils.logging import configure
 
-logger_setup.configure()
+configure()
 logger = logging.getLogger(__name__)
 logger.propagate = True
 

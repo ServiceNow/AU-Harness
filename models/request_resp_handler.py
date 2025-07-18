@@ -5,7 +5,7 @@ from models.model_response import ModelResponse
 from utils import constants
 import logging
 import requests
-logger = logging.getLogger(__name__)  # handlers configured in logger_setup.py
+logger = logging.getLogger(__name__)  # handlers configured in utils/logging.py
 import json
 import os
 import httpx

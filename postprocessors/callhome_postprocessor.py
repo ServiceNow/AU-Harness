@@ -1,5 +1,5 @@
-import logger_setup
-logger_setup.configure()
+from utils.logging import configure
+configure()
 import logging
 from postprocessors.base import Postprocessor
 logger = logging.getLogger(__name__)

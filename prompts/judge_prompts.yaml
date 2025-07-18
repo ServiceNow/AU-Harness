@@ -7,7 +7,7 @@ binary_judge_prompt: |-
   Rate the candidate answer based on its alignment with the reference answer, focusing on accuracy and relevance to the reference provided. Please be critical on the details. If the model response is something like “cannot decide”, please rate as 0.
   Criteria: Assess if the candidate response mirrors the reference in terms of content, accuracy, and relevance. Please give a score of 0 or 1. 
   Score0: The candidate answer is refusing to give concrete results, providing something like 'cannot decide'.
-  Score0: The candidate answer is wrong, providing incorrect or irrelevant information compared to the reference. 
+  Score0: The candidate answer is wrong, providing incorrect or completely irrelevant information compared to the reference. 
   Score1: The candidate answer is correct, capturing or covering the meaning from the reference.
 
   **Note**: Do not punish the candidate answer for providing too much detail of information, unless directly conflicting with the reference. Only focus on if the information in the reference is present in the candidate answer.
@@ -28,14 +28,14 @@ detailed_judge_prompt: |-
   Criteria: Assess if the candidate response mirrors the reference in terms of content, accuracy, and relevance.
 
   Score0: The candidate answer is refusing to give concrete results, providing something like “cannot decide”.
-  Score0: The candidate answer is completely mis-aligned, providing incorrect or irrelevant information compared to the reference.
-  Score1: The candidate answer shows minimal alignment, often misunderstanding or providing irrelevant details unrelated to the reference.
+  Score0: The candidate answer is completely mis-aligned, providing incorrect information compared to the reference or not answering the question.
+  Score1: The candidate answer shows minimal alignment, misunderstanding the question and/or providing incorrect information.
   Score2: The candidate answer recognizes the topic but diverges significantly from the reference in accuracy or relevance.
   Score3: The candidate answer aligns with the reference generally but lacks detail or precise accuracy in some aspects.
   Score4: The candidate answer is mostly accurate and relevant, closely following the reference but could be missing small details.
   Score5: The candidate answer is highly accurate, detailed, and contains all the information from the reference
 
-  **Note**: Do not punish the candidate answer for providing too much detail of information, unless directly conflicting with the reference. Only focus on if the information in the reference is present in the candidate answer.
+  **Note**: Do not punish the candidate answer for providing too much detail or being too verbose, unless directly conflicting with the reference. Only focus on if the information in the reference is present in the candidate answer.
 
   Your response MUST be a single valid JSON object with the following fields and nothing else:
   {{

@@ -9,8 +9,8 @@ from tenacity import (
     wait_random_exponential,
 )
 
-import logger_setup
-logger_setup.configure()
+from utils.logging import configure
+configure()
 import logging
 logger = logging.getLogger(__name__)
 logger.propagate = True

@@ -1,15 +1,14 @@
 from __future__ import annotations
-
 import asyncio, json, yaml, os, re
 from pathlib import Path
 from typing import List, Tuple, Optional
-
+import httpx
 from openai import AsyncAzureOpenAI
-from tqdm import tqdm  # progress bar
+from tqdm import tqdm
 import logging
 logger = logging.getLogger(__name__)
-
 from metrics.metrics import Metrics
+from utils.logging import write_record_log, append_final_score
 
 # ---------------------------------------------------------------------------
 # Helper to load prompt templates shipped with the package
@@ -47,9 +46,7 @@ class _BaseLLMJudge(Metrics):
         )
 
     async def _score_once(self, system_prompt: str, user_prompt: str) -> float | dict | None:
-        import asyncio
-        import httpx
-        import openai
+
         max_retries = 8
         for attempt in range(max_retries):
             try:
@@ -116,47 +113,6 @@ class _BaseLLMJudge(Metrics):
     # ---------------------------------------------------
     # Internal helper for per-record logging
     # ---------------------------------------------------
-    def _write_record_log(self, refs, cands, scores, dataset_name, model_name):
-        if not refs or not scores:
-            return
-        def _slug(s):
-            return re.sub(r"[^A-Za-z0-9_]+", "_", s)
-        log_dir = Path("run_logs")
-        log_dir.mkdir(exist_ok=True)
-        log_path = log_dir / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
-        explanations = getattr(self, "explanations", [""] * len(scores))
-        with open(log_path, "w", encoding="utf-8") as f:
-            for ref, cand, sc, expl in zip(refs, cands, scores, explanations):
-                f.write(json.dumps({"reference": ref, "candidate": cand, "score": sc, "explanation": expl}, ensure_ascii=False) + "\n")
-        
-        # Write to shared run.json
-        self._write_to_run_json(refs, cands, scores, dataset_name, model_name)
-        
-    def _write_to_run_json(self, refs, cands, scores, dataset_name, model_name):
-        """Write each sample's prediction to a shared run.log file that resets with every run."""
-        import json
-        from pathlib import Path
-        
-        run_path = Path("run_logs") / "run.log"
-        
-        # Get explanations if available
-        explanations = getattr(self, "explanations", [""] * len(scores))
-        
-        # Open run.log in append mode
-        with open(run_path, "a", encoding="utf-8") as f:
-            # Add entries for this metric/dataset/model
-            for ref, cand, sc, expl in zip(refs, cands, scores, explanations):
-                entry = {
-                    "dataset": dataset_name,
-                    "metric": self.name,
-                    "model": model_name,
-                    "reference": ref,
-                    "candidate": cand,
-                    "score": sc,
-                    "explanation": expl
-                }
-                f.write(json.dumps(entry, ensure_ascii=False) + "\n")
-
 
 #All of these judges always return on a scale of 100
 
@@ -175,20 +131,14 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
             overall[self.name] *= 100
         if dataset_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
-            self._write_record_log(references, candidates, scores, dataset_name, model_name)
-            self._append_final_score(overall, dataset_name, model_name)
+            # write_record_log will also write to run.log internally
+            explanations = getattr(self, "explanations", None)
+            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations)
+            # Directly call append_final_score
+            append_final_score(self, overall, dataset_name, model_name)
         return overall
 
-    def _append_final_score(self, overall, dataset_name, model_name):
-        import json, re
-        from pathlib import Path
-        def _slug(s):
-            return re.sub(r"[^A-Za-z0-9_]+", "_", s)
-        log_dir = Path("run_logs")
-        log_dir.mkdir(exist_ok=True)
-        log_path = log_dir / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
-        with open(log_path, "a", encoding="utf-8") as f:
-            f.write(json.dumps({"final_score": overall}, ensure_ascii=False) + "\n")
+
     def compute_record_level_scores(self, candidates: list, references: list):
         raw_scores = asyncio.run(self._judge_all(candidates, references))
         # Expect {"score": number, "explanation": str}
@@ -211,18 +161,13 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
             overall[self.name] *= 20
         if dataset_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
-            self._write_record_log(references, candidates, scores, dataset_name, model_name)
-            self._append_final_score(overall, dataset_name, model_name)
+            # write_record_log will also write to run.log internally
+            explanations = getattr(self, "explanations", None)
+            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations)
+            # Directly call append_final_score
+            append_final_score(self, overall, dataset_name, model_name)
         return overall
 
-    def _append_final_score(self, overall, dataset_name, model_name):
-        import json, re
-        from pathlib import Path
-        def _slug(s):
-            return re.sub(r"[^A-Za-z0-9_]+", "_", s)
-        log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
-        with open(log_path, "a", encoding="utf-8") as f:
-            f.write(json.dumps({"final_score": overall}, ensure_ascii=False) + "\n")   
     def compute_record_level_scores(self, candidates: list, references: list):
         raw_scores = asyncio.run(self._judge_all(candidates, references))
         # Expect {"score": number, "explanation": str}
@@ -243,18 +188,13 @@ class CallHomeLLMJudgeMetric(_BaseLLMJudge):
             overall[self.name] *= 10
         if dataset_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
-            self._write_record_log(references, candidates, scores, dataset_name, model_name)
-            self._append_final_score(overall, dataset_name, model_name)
+            # write_record_log will also write to run.log internally
+            explanations = getattr(self, "explanations", None)
+            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations)
+            # Directly call append_final_score
+            append_final_score(self, overall, dataset_name, model_name)
         return overall
 
-    def _append_final_score(self, overall, dataset_name, model_name):
-        import json, re
-        from pathlib import Path
-        def _slug(s):
-            return re.sub(r"[^A-Za-z0-9_]+", "_", s)
-        log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
-        with open(log_path, "a", encoding="utf-8") as f:
-            f.write(json.dumps({"final_score": overall}, ensure_ascii=False) + "\n")   
     def compute_record_level_scores(self, candidates: list, references: list):
         raw_scores = asyncio.run(self._judge_all(candidates, references))
         # Expect {"score": number, "explanation": str}
@@ -320,8 +260,10 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
         }
 
         if dataset_name and model_name:
-            self._write_record_log(references, candidates, all_scores, dataset_name, model_name)
-            self._append_final_score(overall, dataset_name, model_name)
+            # write_record_log will also write to run.log internally
+            write_record_log(self, references, candidates, all_scores, dataset_name, model_name)
+            # Directly call append_final_score
+            append_final_score(self, overall, dataset_name, model_name)
 
         return overall
 
