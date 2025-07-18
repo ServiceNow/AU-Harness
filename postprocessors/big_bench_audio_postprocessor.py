@@ -1,13 +1,14 @@
 import re
 import logging
 from utils.logging import configure
+from postprocessors.base import Postprocessor
 
 configure()
 logger = logging.getLogger(__name__)
 logger.propagate = True
 
 
-class BigBenchAudioPostprocessor:
+class BigBenchAudioPostprocessor(Postprocessor):
     """
     Postprocessor for BigBenchAudio model predictions.
     
@@ -39,7 +40,7 @@ class BigBenchAudioPostprocessor:
         dataset: list[dict],
         predictions: dict[str, list[str]],
         metric
-    ) -> tuple[list[tuple[str, str]], dict[str, list[str]], list, list]:
+    ) -> dict:
         """
         Process and clean model predictions and prepare target-label pairs.
 
@@ -74,4 +75,10 @@ class BigBenchAudioPostprocessor:
 
         logger.info(f"Extracted {len(targets)} target-reference pairs from dataset.")
 
-        return targets, processed_predictions, [], []
+        output = {
+            "model_targets": targets,
+            "processed_predictions": processed_predictions,
+        }
+        
+        self.validate_output(output)
+        return output

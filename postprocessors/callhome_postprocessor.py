@@ -7,7 +7,7 @@ logger.propagate = True
 
 class CallhomePostprocessor(Postprocessor):
     """Postprocessor class to calculate the model scores for the model predictions."""
-    def process(self, dataset: list[dict], predictions, metric=None) -> tuple:
+    def process(self, dataset: list[dict], predictions, metric=None) -> dict:
 
         import re
         def split_inline_speaker_labels(text: str) -> str:
@@ -37,6 +37,20 @@ class CallhomePostprocessor(Postprocessor):
                     lengths.append(length)
                 else:
                     lengths.append(0)
-            return model_targets, processed_predictions, ids, lengths
+            output = {
+                "model_targets": model_targets,
+                "processed_predictions": processed_predictions,
+                "ids": ids,
+                "lengths": lengths
+            }
+            
+            self.validate_output(output)
+            return output
 
-        return model_targets, processed_predictions, [], []
+        output = {
+            "model_targets": model_targets,
+            "processed_predictions": processed_predictions
+        }
+        
+        self.validate_output(output)
+        return output

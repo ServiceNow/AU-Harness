@@ -64,7 +64,11 @@ class Engine:
         # Pass the metric name to the postprocessor
         process_result = self.postprocessor.process(dataset=self.dataset, predictions=predictions, metric=self.metric.name)
         
-        model_targets, predictions, ids, lengths = process_result
+        # Extract values from the dictionary returned by the postprocessor
+        model_targets = process_result["model_targets"]
+        predictions = process_result["processed_predictions"]
+        ids = process_result.get("ids", [])
+        lengths = process_result.get("lengths", [])
 
         for model_name, outs in predictions.items():
             # Let the metric handle per-record logging internally
