@@ -36,7 +36,7 @@ class BertScore(Metrics):
             Scores for each record. The keys should be the column names that will be saved in the record level file.
         """
 
-        # Optimizing for batch processing (more efficient with GPU)
+        # TODO: Optimizing for batch processing (more efficient with GPU) later
         from tqdm import tqdm
         score_list = []
         for i in tqdm(range(len(candidates)), desc="BERTSCORE"):
