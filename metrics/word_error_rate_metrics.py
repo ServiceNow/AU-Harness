@@ -1,3 +1,5 @@
+
+import re
 import unicodedata
 from collections import defaultdict
 import re
@@ -58,6 +60,13 @@ def convert_unicode_to_characters(text: str) -> str:
         # Optionally log the error
         logger.warning(f"Unicode normalization failed: {e}. Returning original text.")
         return text
+    """Convert unicode to composed form."""
+    try:
+        return unicodedata.normalize("NFC", text)
+    except Exception as e:
+        # Optionally log the error
+        logger.warning(f"Unicode normalization failed: {e}. Returning original text.")
+        return text
 
 
 def convert_digits_to_words(text: str, language: str):
@@ -72,7 +81,7 @@ def convert_digits_to_words(text: str, language: str):
         return text
 
 
-def normalize_text(text: str, language: str) -> str:
+def normalize_text(text: str, language: str = 'en') -> str:
     """Normalize text based on language.
 
     Args:

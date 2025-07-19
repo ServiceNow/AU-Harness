@@ -16,6 +16,7 @@ soundfile==0.13.1        # depends on system libsndfile
 # Evaluation / metrics
 sacrebleu==2.5.1
 nltk==3.9.1
+bert-score
 
 # Misc utilities
 PyYAML==6.0.2
