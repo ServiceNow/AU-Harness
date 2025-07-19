@@ -109,7 +109,7 @@ def _load_callhome_dataset(repo, preprocessor_name, num_samples, properties):
     dataset = PreprocessorClass().process(repo, num_samples=num_samples, properties=properties)
     return dataset
 
-def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="GeneralPreprocessor", user_prompt_add_ons: list[str] = [], system_prompts: list[str] = [], length_filter=None, metric=None, split=None):
+def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = [], system_prompts: list[str] = [], length_filter=None, metric=None, split=None, dataset_info=None):
     """Load and preprocess a dataset from a local or remote path."""
     logger.info(f"[_load_dataset] Loading dataset {repo} with preprocessor {preprocessor_name}")
     
@@ -122,6 +122,8 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="G
     if length_filter:
         logger.info(f"[_load_dataset] Applying length filter: {length_filter}")
         properties["length_filter"] = tuple(length_filter)  # Convert list to tuple
+    if dataset_info:
+        properties["dataset_info"] = dataset_info
     
     # Special handling for local CallHome dataset
     if preprocessor_name.startswith("Callhome"):
@@ -382,7 +384,7 @@ def main(cfg_path='config.yaml'):
             postprocessor_name = dataset_info["postprocessor"]
             
             dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, 
-                                  user_prompt_add_ons=user_prompt_add_ons, system_prompts=system_prompts, length_filter=length_filter, metric=metric_name, split=cfg.get("split"))
+                                  user_prompt_add_ons=user_prompt_add_ons, system_prompts=system_prompts, length_filter=length_filter, metric=metric_name, split=cfg.get("split"), dataset_info=dataset_info)
             metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
             
             # Dynamically import postprocessor class
