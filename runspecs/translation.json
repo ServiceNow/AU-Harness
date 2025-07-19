@@ -1,0 +1,38 @@
+{
+  "covost2_ta_en_test": {
+    "hf_repo": "AudioLLMs/covost2_ta_en_test",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "covost2_zh_en_test": {
+    "hf_repo": "AudioLLMs/covost2_zh_en_test",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "covost2_id_en_test": {
+    "hf_repo": "AudioLLMs/covost2_id_en_test",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "covost2_en_ta_test": {
+    "hf_repo": "AudioLLMs/covost2_en_ta_test",
+    "language": "tamil",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "covost2_en_zh_test": {
+    "hf_repo": "AudioLLMs/covost2_en_zh_test",
+    "language": "chinese",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "covost2_en_id_test": {
+    "hf_repo": "AudioLLMs/covost2_en_id_test",
+    "language": "indonesian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  }
+}

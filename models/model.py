@@ -1,7 +1,5 @@
 import asyncio
-import re
 from abc import ABC
-import os
 from tenacity import (
     AsyncRetrying,
     RetryError,
@@ -11,14 +9,10 @@ from tenacity import (
     wait_random_exponential,
 )
 
+from utils.custom_logging import configure
+configure()
 import logging
 logger = logging.getLogger(__name__)
-if not logger.handlers:
-    fh = logging.FileHandler("audiobench.log")
-    fh.setLevel(logging.INFO)
-    fh.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
-    logger.addHandler(fh)
-logging.basicConfig(level=logging.INFO)
 logger.propagate = True
 from models.model_response import ErrorTracker, ModelResponse
 from models.request_resp_handler import RequestRespHandler
@@ -40,6 +34,7 @@ class Model(ABC):
         self.model = model_info["model"]
         self.api_key = model_info.get("auth_token", "")
         self.model_url = model_info.get("url", "")
+        self.api_version = model_info.get("api_version", "")  # Optional API version
         self.inference_type = model_info["inference_type"]
         self.batch_size = model_info.get("batch_size", 1)
         # sleep before every call - in ms
@@ -123,7 +118,8 @@ class Model(ABC):
                 with attempt:
                     try:
                         # All data prep is now in _generate_text
-                        #logger.info(f"[{self.name()}] Generating text for input: {message}")
+                        # Set attempt number for downstream logging
+                        self.req_resp_hndlr.current_attempt = attempt.retry_state.attempt_number
                         result: ModelResponse = await self._generate_text(message, run_params)
                         await self._mark_errors(result)
                     except Exception as e:
@@ -196,9 +192,16 @@ class Model(ABC):
         audio_array = message.get("array")
         sampling_rate = message.get("sampling_rate")
         chunk_seconds: int = int(run_params.get("chunk_size", 30))  # default to 30s
+        metric_name: str | None = run_params.get("metric")
         max_samples: int = int(chunk_seconds * sampling_rate) if sampling_rate else 0
         total_samples: int = len(audio_array) if audio_array is not None else 0
         instruction = message.get("instruction")
+
+        # If metric is judge types, only use first chunk (30s) regardless of length
+        judge_metrics = {"llm_judge_binary", "llm_judge_detailed"}
+        if metric_name in judge_metrics:
+            total_samples = max_samples  # force single chunk
+
 
 
 
@@ -208,31 +211,67 @@ class Model(ABC):
             responses: list[ModelResponse] = []
             num_chunks = (total_samples + max_samples - 1) // max_samples
 
-            #chat completion
+            # chat completion – process each chunk and concatenate
             if self.inference_type in (
                 constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION,
                 constants.OPENAI_CHAT_COMPLETION,
             ):
-                # Cut to first 30s, then process as chat completion
-                chunk_array = audio_array[:max_samples]
-                encoded = encode_audio_array_base64(chunk_array, sampling_rate)
+                for i in range(num_chunks):
+                    start = i * max_samples
+                    end = min((i + 1) * max_samples, total_samples)
+                    chunk_array = audio_array[start:end]
+                    encoded = encode_audio_array_base64(chunk_array, sampling_rate)
 
-                message["model_inputs"] = [
-                    {
-                        "role": "user",
-                        "content": [
-                            {"type": "text", "text": instruction},
-                            {
-                                "type": "input_audio",
-                                "input_audio": {
-                                    "data": encoded,
-                                    "format": "wav",
+                    # Compose chunk-specific instruction
+                    chunk_instructions = message.get("chunk_instructions")
+                    if chunk_instructions and i < len(chunk_instructions):
+                        chunk_instruction = chunk_instructions[i]
+                        full_instruction = instruction + "\n" + chunk_instruction
+                    else:
+                        full_instruction = instruction
+
+                    # Prepare messages list starting with system prompt if available
+                    messages = []
+                    
+                    # Add system prompt if available
+                    system_prompt = message.get("system_prompt")
+                    if system_prompt:
+                        messages.append({
+                            "role": "system",
+                            "content": system_prompt
+                        })
+                
+                    # Handle text-only vs audio+text scenarios
+                    if encoded == "":
+                        # Text-only case
+                        messages.append({
+                            "role": "user",
+                            "content": [{"type": "text", "text": full_instruction}]
+                        })
+                    else:
+                        # Audio + text case
+                        messages.append({
+                            "role": "user",
+                            "content": [
+                                {"type": "text", "text": full_instruction},
+                                {
+                                    "type": "input_audio",
+                                    "input_audio": {
+                                        "data": encoded,
+                                        "format": "wav",
+                                    },
                                 },
-                            },
-                        ],
-                    }
-                ]
-                return await self.req_resp_hndlr.request_server(message["model_inputs"])
+                            ],
+                        })
+                    
+                    message["model_inputs"] = messages
+                    resp = await self.req_resp_hndlr.request_server(message["model_inputs"])
+                    concatenated_text += resp.llm_response or ""
+                    responses.append(resp)
+                # Merge responses
+                final_resp = responses[-1]
+                final_resp.llm_response = concatenated_text
+                return final_resp
 
             #audio transcription - append values
             elif self.inference_type in (
@@ -268,8 +307,27 @@ class Model(ABC):
             chunk_array = audio_array[:max_samples]
             encoded = encode_audio_array_base64(chunk_array, sampling_rate)
 
-            message["model_inputs"] = [
-                {
+            # Prepare messages list starting with system prompt if available
+            messages = []
+            
+            # Add system prompt if available
+            system_prompt = message.get("system_prompt")
+            if system_prompt:
+                messages.append({
+                    "role": "system",
+                    "content": system_prompt
+                })
+            
+            # Handle text-only vs audio+text scenarios
+            if encoded == "":
+                # Text-only case
+                messages.append({
+                    "role": "user",
+                    "content": [{"type": "text", "text": instruction}]
+                })
+            else:
+                # Audio + text case
+                messages.append({
                     "role": "user",
                     "content": [
                         {"type": "text", "text": instruction},
@@ -281,8 +339,9 @@ class Model(ABC):
                             },
                         }
                     ],
-                }
-            ]
+                })
+            
+            message["model_inputs"] = messages
             return await self.req_resp_hndlr.request_server(message["model_inputs"])
 
         #transcription

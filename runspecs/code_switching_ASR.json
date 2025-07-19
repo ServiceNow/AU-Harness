@@ -1,0 +1,8 @@
+{
+    "seame_dev_sge": {
+    "hf_repo": "AudioLLMs/seame_dev_sge",
+    "language": "chinese/english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  }
+}

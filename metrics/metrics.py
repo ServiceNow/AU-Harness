@@ -17,8 +17,10 @@ class Metrics(ABC, MetricMetadata):
     record_level_scores: dict = Field(default_factory=dict, exclude=True, description="Record level scores")
     contexts: list[dict] = Field(default_factory=list, exclude=True, description="Contexts for the metric")
     params: dict = Field(default_factory=dict, exclude=True, description="Parameters for the metric")
+    
     def __init__(self, **data):
         super().__init__(**data)
+
     def set_params(self, params: dict):
         """Set parameters for the metric.
 
@@ -128,24 +130,3 @@ class Metrics(ABC, MetricMetadata):
             all_scores["id"] = ids
             df = pd.DataFrame(all_scores)
         return df
-
-    def get_metadata(self) -> dict:
-        """Get metadata of the metric.
-
-        Returns:
-            dict: metadata of the metric
-        """
-        return self.model_dump()
-
-    def get_reporting_summary_score(self, overall_score: dict[str, float]) -> dict:
-        """Gets the score to display in wandb. If a metric says lower-is-better, highlight with an ↓.
-
-        Args:
-            overall_score: The overall score that was computed for the metric
-        Returns:
-            The dictionary of columns and values to actually present in wandb
-        """
-        higher_is_better = self.get_metadata().get("higher_is_better", True)
-        if not higher_is_better:
-            return {f"↓ {k}": v for k, v in overall_score.items()}
-        return overall_score

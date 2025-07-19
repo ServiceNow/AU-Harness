@@ -1,16 +1,25 @@
 #env
 lite
-
+env
 
 #config files
 config.yaml
 
 #log files
 *.log
+*.out
+
+#private datasets
+private_datasets
 
 # python cache files
 __pycache__/
 **/__pycache__/
 *.py[cod]
+.DS_Store
 
-talkbank/**
+#datasets
+private_datasets/
+
+#tests
+test.py

@@ -2,7 +2,7 @@
 import re
 import unicodedata
 from collections import defaultdict
-
+import re
 from jiwer import (
     Compose,
     ReduceToListOfListOfChars,
@@ -12,8 +12,8 @@ from jiwer import (
     ToLowerCase,
     process_words,
 )
+from tqdm import tqdm
 from num2words import num2words
-
 import logging
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -22,10 +22,17 @@ from metrics.metrics import Metrics
 from metrics.wer.normalizers import JapaneseTextNormalizer
 from metrics.wer.whisper_normalizer.english import EnglishTextNormalizer
 from metrics.wer.whisper_normalizer.basic import BasicTextNormalizer
+from utils.custom_logging import write_record_log, append_final_score
 
 from utils import constants
-from utils.util import smart_round
 
+# Mapping to normalize language codes
+language_map = {
+    "en": "en",
+    "english": "en",
+    "ja": "ja", 
+    "japanese": "ja",
+}
 NORMALIZERS = {"en": EnglishTextNormalizer(), "ja": JapaneseTextNormalizer()}
 DEFAULT_NORMALIZER = BasicTextNormalizer()
 BASIC_TRANSFORMATIONS = Compose(
@@ -53,15 +60,23 @@ def convert_unicode_to_characters(text: str) -> str:
         # Optionally log the error
         logger.warning(f"Unicode normalization failed: {e}. Returning original text.")
         return text
+    """Convert unicode to composed form."""
+    try:
+        return unicodedata.normalize("NFC", text)
+    except Exception as e:
+        # Optionally log the error
+        logger.warning(f"Unicode normalization failed: {e}. Returning original text.")
+        return text
 
 
 def convert_digits_to_words(text: str, language: str):
-    if language is "":
+    if not language:
         return text
     """Convert numbers to words (e.g., "3" to "three")."""
     try:
         return re.sub(r"\d+", lambda m: num2words(int(m.group()), lang=language), text)
     except Exception as e:
+        logger.info(f"Failed to convert digits to words for language {language} - continuing...")
         logger.warning(f"Non-fatal error: {e} - continuing...")
         return text
 
@@ -71,58 +86,44 @@ def normalize_text(text: str, language: str = 'en') -> str:
 
     Args:
         text: input text
-        language: language code
+        language: language code or full name (e.g. 'en', 'english')
     """
-    normalizer = NORMALIZERS.get(language, DEFAULT_NORMALIZER)
+    # Convert language to lowercase for case-insensitive matching
+    if isinstance(language, str):
+        language = language.lower()
+    
+    # Normalize language code
+    normalized_language = language_map.get(language, '')
+    
+    # Get the appropriate normalizer
+    normalizer = NORMALIZERS.get(normalized_language, DEFAULT_NORMALIZER)
+    
+    # Process the text
     text = convert_unicode_to_characters(text)
-    text = convert_digits_to_words(text, language)
+    text = convert_digits_to_words(text, normalized_language)
     return BASIC_TRANSFORMATIONS([normalizer(text)])[0]
 
 
 class WERMetrics(Metrics):
-    def __call__(self, candidates, references, ids=None, lengths=None, *, dataset_name: str | None = None, model_name: str | None = None):
+    def __call__(self, candidates, references, ids=None, lengths=None, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None):
+        # Store instructions for potential later use
+        self.instructions = instructions
         overall = self.get_score(candidates, references, ids, lengths)
         if dataset_name and model_name:
             # WER record scores are stored under 'wer_per_row'
             scores = self.record_level_scores.get("wer_per_row", [])
-            self._write_record_log(references, candidates, scores, dataset_name, model_name)
-            # Append overall metric at the end
-            self._append_final_score(overall, dataset_name, model_name)
+            # write_record_log will also write to run.log internally
+            write_record_log(self, references, candidates, scores, dataset_name, model_name, instructions=self.instructions)
+            # Directly call append_final_score for the overall metric
+            append_final_score(self, overall, dataset_name, model_name)
         return overall
 
-    def _append_final_score(self, overall, dataset_name, model_name):
-        import json, re
-        from pathlib import Path
-        def _slug(s):
-            return re.sub(r"[^A-Za-z0-9_]+", "_", s)
-        log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
-        with open(log_path, "a", encoding="utf-8") as f:
-            f.write(json.dumps({"final_score": overall}, ensure_ascii=False) + "\n")
 
-    def _write_record_log(self, refs, cands, scores, dataset_name, model_name):
-        import json, re
-        from pathlib import Path
-        from itertools import zip_longest
-        def _slug(s):
-            return re.sub(r"[^A-Za-z0-9_]+", "_", s)
-        log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
-        with open(log_path, "w", encoding="utf-8") as f:
-            for ref, cand, sc in zip_longest(refs, cands, scores, fillvalue=None):
-                entry = {"reference": ref, "candidate": cand}
-                if sc is not None:
-                    entry["score"] = sc
-                f.write(json.dumps(entry, ensure_ascii=False) + "\n")
-        # Always write to shared run.log
-        self._write_to_run_json(refs, cands, scores, dataset_name, model_name)
-        logger.info(f"Wrote record-level log to {log_path}")
-        # Write to shared run.json
-        # self._write_to_run_json(refs, cands, scores, dataset_name, model_name)
-    """Word Error Rate metric class, used for transcription tasks."""
 
     def __init__(self, language="en"):
         super().__init__()
         self.name = "word_error_rate"
-        self.display_name = "Word Error Rate"
+        self.lower_better = True
         self.description = "The proportion of words that are incorrectly predicted, when compared to the reference text. The dataset is considered as one big conversation."
         self.language = language
 
@@ -271,7 +272,6 @@ class WERMetrics(Metrics):
         Returns:
             Scores for each record. The keys should be the column names that will be saved in the record level file.
         """
-        from tqdm import tqdm
         incorrect_scores = []
         total_scores = []
         scores = []

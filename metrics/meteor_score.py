@@ -1,16 +1,30 @@
 import nltk
-
+import json
+from pathlib import Path
+from itertools import zip_longest
+import json, re
+from pathlib import Path
 from nltk.translate.meteor_score import single_meteor_score
-
 from metrics.metrics import Metrics
 from utils import util
-from metrics.word_error_rate_metrics import normalize_text
+from tqdm import tqdm
+from utils.custom_logging import write_record_log, append_final_scorefrom metrics.word_error_rate_metrics import normalize_text
 
 
 class MeteorScore(Metrics):
-    def __call__(self, candidates, references, dataset_name: str | None = None, model_name: str | None = None):
-        return self.compute_record_level_scores(candidates, references)
-    """MeteorScore using nltk tokenizer."""
+    def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None):
+        # Store instructions for potential later use
+        self.instructions = instructions
+        overall = self.compute_record_level_scores(candidates, references)
+        if dataset_name and model_name:
+            scores = overall.get(self.name, [])
+            # write_record_log will also write to run.log internally
+            write_record_log(self, references, candidates, scores, dataset_name, model_name, instructions=self.instructions)
+            # Directly call append_final_score
+            append_final_score(self, overall, dataset_name, model_name)
+        return overall
+
+
 
     def __init__(self):
         super().__init__()
@@ -19,8 +33,10 @@ class MeteorScore(Metrics):
         nltk.download("wordnet")
         nltk.download('punkt')
         nltk.download('punkt_tab')
+        
 
     def compute_record_level_scores(self, candidates: list, references: list) -> dict[str, list | None]:
+        # Here we can use self.instructions if needed
         """Compute the scores that should be saved in the record level file.
 
         Args:
@@ -30,7 +46,6 @@ class MeteorScore(Metrics):
         Returns:
             Scores for each record. The keys should be the column names that will be saved in the record level file.
         """
-        from tqdm import tqdm
         score_list = []
         for i in tqdm(range(len(candidates)), desc="METEOR"):
             # default preprocess is str.lower()

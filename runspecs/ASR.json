@@ -1,0 +1,1773 @@
+{
+  "aishell_1_test": {
+    "hf_repo": "AudioLLMs/aishell_1_zh_test",
+    "language": "chinese",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "gigaspeech2_test": {
+    "hf_repo": "AudioLLMs/gigaspeech2-test",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "gigaspeech2_id_test": {
+    "hf_repo": "AudioLLMs/gigaspeech2-test",
+    "subset": "id-test",
+    "language": "indonesian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "gigaspeech2_th_test": {
+    "hf_repo": "AudioLLMs/gigaspeech2-test",
+    "subset": "th-test",
+    "language": "thai",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "gigaspeech2_vi_test": {
+    "hf_repo": "AudioLLMs/gigaspeech2-test",
+    "subset": "vi-test",
+    "language": "vietnamese",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "librispeech_test_clean": {
+    "hf_repo": "AudioLLMs/librispeech_test_clean",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "librispeech_test_other": {
+    "hf_repo": "AudioLLMs/librispeech_test_other",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "mnsc_asr_part1_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "ASR-PART1-Test",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true
+  },
+  "mnsc_asr_part2_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "ASR-PART2-Test",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true
+  },
+  "mnsc_asr_part3_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "ASR-PART3-Test",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true
+  },
+  "mnsc_asr_part4_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "ASR-PART4-Test",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true
+  },
+  "mnsc_asr_part5_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "ASR-PART5-Test",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true
+  },
+  "mnsc_asr_part6_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "ASR-PART6-Test",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true
+  },
+  "peoples_speech_test": {
+    "hf_repo": "AudioLLMs/peoples_speech_test",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "tedlium3_test": {
+    "hf_repo": "AudioLLMs/tedlium3_test",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "ami_sdm": {
+    "hf_repo": "edinburghcstr/ami",
+    "subset": "sdm",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "ami_ihm": {
+    "hf_repo": "edinburghcstr/ami",
+    "subset": "ihm",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "spgispeech_test": {
+    "hf_repo": "kensho/spgispeech",
+    "subset": "test",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "voxpopuli_en": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "en",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "voxpopuli_de": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "de",
+    "language": "german",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "voxpopuli_fr": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "fr",
+    "language": "french",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "voxpopuli_es": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "es",
+    "language": "spanish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "voxpopuli_en_accented": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "en_accented",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true
+  },
+  "voxpopuli_pl": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "pl",
+    "language": "polish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "voxpopuli_it": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "it",
+    "language": "italian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "voxpopuli_ro": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "ro",
+    "language": "romanian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "voxpopuli_hu": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "hu",
+    "language": "hungarian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "voxpopuli_cs": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "cs",
+    "language": "czech",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "voxpopuli_nl": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "nl",
+    "language": "dutch",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "voxpopuli_fi": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "fi",
+    "language": "finnish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "voxpopuli_hr": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "hr",
+    "language": "croatian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "voxpopuli_sk": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "sk",
+    "language": "slovak",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "voxpopuli_sl": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "sl",
+    "language": "slovene",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "voxpopuli_et": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "et",
+    "language": "estonian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "voxpopuli_lt": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "lt",
+    "language": "lithuanian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "librispeech_multilingual_dutch": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "language": "dutch",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "librispeech_multilingual_french": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "subset": "french",
+    "language": "french",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "librispeech_multilingual_german": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "subset": "german",
+    "language": "german",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "librispeech_multilingual_italian": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "subset": "italian",
+    "language": "italian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "librispeech_multilingual_spanish": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "subset": "spanish",
+    "language": "spanish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "librispeech_multilingual_polish": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "subset": "polish",
+    "language": "polish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "librispeech_multilingual_portuguese": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "subset": "portuguese",
+    "language": "portuguese",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ab": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ab",
+    "language": "abkhaz",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_af": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "af",
+    "language": "afrikaans",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_am": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "am",
+    "language": "amharic",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ar": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ar",
+    "language": "arabic",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_as": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "as",
+    "language": "assamese",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ast": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ast",
+    "language": "asturian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_az": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "az",
+    "language": "azerbaijani",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ba": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ba",
+    "language": "bashkir",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_bas": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "bas",
+    "language": "basaa",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_be": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "be",
+    "language": "belarusian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_bg": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "bg",
+    "language": "bulgarian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_bn": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "bn",
+    "language": "bengali",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_br": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "br",
+    "language": "breton",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ca": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ca",
+    "language": "catalan",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ckb": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ckb",
+    "language": "central kurdish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_cnh": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "cnh",
+    "language": "hakha chin",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_cs": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "cs",
+    "language": "czech",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_cv": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "cv",
+    "language": "chuvash",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_cy": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "cy",
+    "language": "welsh",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_da": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "da",
+    "language": "danish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_de": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "de",
+    "language": "german",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_dv": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "dv",
+    "language": "dhivehi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_dyu": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "dyu",
+    "language": "dioula",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_el": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "el",
+    "language": "greek",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_en": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "en",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_eo": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "eo",
+    "language": "esperanto",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_es": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "es",
+    "language": "spanish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_et": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "et",
+    "language": "estonian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_eu": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "eu",
+    "language": "basque",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_fa": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "fa",
+    "language": "persian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_fi": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "fi",
+    "language": "finnish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_fr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "fr",
+    "language": "french",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_fy-NL": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "fy-NL",
+    "language": "frisian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ga-IE": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ga-IE",
+    "language": "irish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_gl": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "gl",
+    "language": "galician",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_gn": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "gn",
+    "language": "guarani",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ha": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ha",
+    "language": "hausa",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_he": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "he",
+    "language": "hebrew",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_hi": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "hi",
+    "language": "hindi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_hsb": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "hsb",
+    "language": "sorbian, upper",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_hu": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "hu",
+    "language": "hungarian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_hy-AM": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "hy-AM",
+    "language": "armenian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ia": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ia",
+    "language": "interlingua",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_id": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "id",
+    "language": "indonesian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ig": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ig",
+    "language": "igbo",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_is": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "is",
+    "language": "icelandic",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_it": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "it",
+    "language": "italian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ja": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ja",
+    "language": "japanese",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ka": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ka",
+    "language": "georgian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_kab": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "kab",
+    "language": "kabyle",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_kk": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "kk",
+    "language": "kazakh",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_kmr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "kmr",
+    "language": "kurmanji kurdish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ko": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ko",
+    "language": "korean",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ky": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ky",
+    "language": "kyrgyz",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_lg": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "lg",
+    "language": "luganda",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_lo": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "lo",
+    "language": "lao",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_lt": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "lt",
+    "language": "lithuanian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_lv": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "lv",
+    "language": "latvian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_mdf": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mdf",
+    "language": "moksha",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_mhr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mhr",
+    "language": "meadow mari",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_mk": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mk",
+    "language": "macedonian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ml": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ml",
+    "language": "malayalam",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_mn": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mn",
+    "language": "mongolian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_mr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mr",
+    "language": "marathi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_mrj": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mrj",
+    "language": "hill mari",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_mt": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mt",
+    "language": "maltese",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_myv": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "myv",
+    "language": "erzya",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_nan-tw": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "nan-tw",
+    "language": "taiwanese (minnan)",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ne-NP": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ne-NP",
+    "language": "nepali",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_nl": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "nl",
+    "language": "dutch",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_nn-NO": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "nn-NO",
+    "language": "norwegian nynorsk",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_oc": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "oc",
+    "language": "occitan",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_or": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "or",
+    "language": "odia",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_pa-IN": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "pa-IN",
+    "language": "punjabi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_pl": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "pl",
+    "language": "polish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ps": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ps",
+    "language": "pashto",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_pt": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "pt",
+    "language": "portuguese",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ro": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ro",
+    "language": "romanian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ru": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ru",
+    "language": "russian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_rw": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "rw",
+    "language": "kinyarwanda",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_sah": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sah",
+    "language": "sakha",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_sat": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sat",
+    "language": "santali (ol chiki)",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_sc": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sc",
+    "language": "sardinian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_sk": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sk",
+    "language": "slovak",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_skr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "skr",
+    "language": "saraiki",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_sl": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sl",
+    "language": "slovenian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_sq": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sq",
+    "language": "albanian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_sr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sr",
+    "language": "serbian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_sv-SE": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sv-SE",
+    "language": "swedish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_sw": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sw",
+    "language": "swahili",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ta": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ta",
+    "language": "tamil",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_th": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "th",
+    "language": "thai",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ti": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ti",
+    "language": "tigrinya",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_tig": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "tig",
+    "language": "tigre",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_tk": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "tk",
+    "language": "turkmen",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_tok": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "tok",
+    "language": "toki pona",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_tr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "tr",
+    "language": "turkish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_tt": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "tt",
+    "language": "tatar",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_tw": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "tw",
+    "language": "twi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ug": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ug",
+    "language": "uyghur",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_uk": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "uk",
+    "language": "ukrainian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ur": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ur",
+    "language": "urdu",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_uz": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "uz",
+    "language": "uzbek",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_vi": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "vi",
+    "language": "vietnamese",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_vot": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "vot",
+    "language": "votic",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_yue": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "yue",
+    "language": "cantonese",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_zh-CN": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "zh-CN",
+    "language": "chinese (china)",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_zh-HK": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "zh-HK",
+    "language": "chinese (hong kong)",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_zh-TW": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "zh-TW",
+    "language": "chinese (taiwan)",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_af": {
+    "hf_repo": "google/fleurs",
+    "subset": "af_za",
+    "language": "Afrikaans",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_am": {
+    "hf_repo": "google/fleurs",
+    "subset": "am_et",
+    "language": "Amharic",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ar": {
+    "hf_repo": "google/fleurs",
+    "subset": "ar_eg",
+    "language": "Arabic",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_hy": {
+    "hf_repo": "google/fleurs",
+    "subset": "hy_am",
+    "language": "Armenian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_as": {
+    "hf_repo": "google/fleurs",
+    "subset": "as_in",
+    "language": "Assamese",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ast": {
+    "hf_repo": "google/fleurs",
+    "subset": "ast_es",
+    "language": "Asturian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_az": {
+    "hf_repo": "google/fleurs",
+    "subset": "az_az",
+    "language": "Azerbaijani",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_be": {
+    "hf_repo": "google/fleurs",
+    "subset": "be_by",
+    "language": "Belarusian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_bn": {
+    "hf_repo": "google/fleurs",
+    "subset": "bn_in",
+    "language": "Bengali",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_bs": {
+    "hf_repo": "google/fleurs",
+    "subset": "bs_ba",
+    "language": "Bosnian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_bg": {
+    "hf_repo": "google/fleurs",
+    "subset": "bg_bg",
+    "language": "Bulgarian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_my": {
+    "hf_repo": "google/fleurs",
+    "subset": "my_mm",
+    "language": "Burmese",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ca": {
+    "hf_repo": "google/fleurs",
+    "subset": "ca_es",
+    "language": "Catalan",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ceb": {
+    "hf_repo": "google/fleurs",
+    "subset": "ceb_ph",
+    "language": "Cebuano",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_cmn_hans": {
+    "hf_repo": "google/fleurs",
+    "subset": "cmn_hans_cn",
+    "language": "Mandarin Chinese",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_yue_hant": {
+    "hf_repo": "google/fleurs",
+    "subset": "yue_hant_hk",
+    "language": "Cantonese Chinese",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_hr": {
+    "hf_repo": "google/fleurs",
+    "subset": "hr_hr",
+    "language": "Croatian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_cs": {
+    "hf_repo": "google/fleurs",
+    "subset": "cs_cz",
+    "language": "Czech",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_da": {
+    "hf_repo": "google/fleurs",
+    "subset": "da_dk",
+    "language": "Danish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_nl": {
+    "hf_repo": "google/fleurs",
+    "subset": "nl_nl",
+    "language": "Dutch",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_en": {
+    "hf_repo": "google/fleurs",
+    "subset": "en_us",
+    "language": "English",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_et": {
+    "hf_repo": "google/fleurs",
+    "subset": "et_ee",
+    "language": "Estonian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_fil": {
+    "hf_repo": "google/fleurs",
+    "subset": "fil_ph",
+    "language": "Filipino",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_fi": {
+    "hf_repo": "google/fleurs",
+    "subset": "fi_fi",
+    "language": "Finnish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_fr": {
+    "hf_repo": "google/fleurs",
+    "subset": "fr_fr",
+    "language": "French",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ff": {
+    "hf_repo": "google/fleurs",
+    "subset": "ff_sn",
+    "language": "Fula",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_gl": {
+    "hf_repo": "google/fleurs",
+    "subset": "gl_es",
+    "language": "Galician",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_lg": {
+    "hf_repo": "google/fleurs",
+    "subset": "lg_ug",
+    "language": "Ganda",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ka": {
+    "hf_repo": "google/fleurs",
+    "subset": "ka_ge",
+    "language": "Georgian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_de": {
+    "hf_repo": "google/fleurs",
+    "subset": "de_de",
+    "language": "German",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_el": {
+    "hf_repo": "google/fleurs",
+    "subset": "el_gr",
+    "language": "Greek",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_gu": {
+    "hf_repo": "google/fleurs",
+    "subset": "gu_in",
+    "language": "Gujarati",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ha": {
+    "hf_repo": "google/fleurs",
+    "subset": "ha_ng",
+    "language": "Hausa",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_he": {
+    "hf_repo": "google/fleurs",
+    "subset": "he_il",
+    "language": "Hebrew",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_hi": {
+    "hf_repo": "google/fleurs",
+    "subset": "hi_in",
+    "language": "Hindi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_hu": {
+    "hf_repo": "google/fleurs",
+    "subset": "hu_hu",
+    "language": "Hungarian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_is": {
+    "hf_repo": "google/fleurs",
+    "subset": "is_is",
+    "language": "Icelandic",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ig": {
+    "hf_repo": "google/fleurs",
+    "subset": "ig_ng",
+    "language": "Igbo",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_id": {
+    "hf_repo": "google/fleurs",
+    "subset": "id_id",
+    "language": "Indonesian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ga": {
+    "hf_repo": "google/fleurs",
+    "subset": "ga_ie",
+    "language": "Irish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_it": {
+    "hf_repo": "google/fleurs",
+    "subset": "it_it",
+    "language": "Italian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ja": {
+    "hf_repo": "google/fleurs",
+    "subset": "ja_jp",
+    "language": "Japanese",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_jv": {
+    "hf_repo": "google/fleurs",
+    "subset": "jv_id",
+    "language": "Javanese",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_kea": {
+    "hf_repo": "google/fleurs",
+    "subset": "kea_cv",
+    "language": "Kabuverdianu",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_kam": {
+    "hf_repo": "google/fleurs",
+    "subset": "kam_ke",
+    "language": "Kamba",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_kn": {
+    "hf_repo": "google/fleurs",
+    "subset": "kn_in",
+    "language": "Kannada",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_kk": {
+    "hf_repo": "google/fleurs",
+    "subset": "kk_kz",
+    "language": "Kazakh",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_km": {
+    "hf_repo": "google/fleurs",
+    "subset": "km_kh",
+    "language": "Khmer",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ko": {
+    "hf_repo": "google/fleurs",
+    "subset": "ko_kr",
+    "language": "Korean",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ky": {
+    "hf_repo": "google/fleurs",
+    "subset": "ky_kg",
+    "language": "Kyrgyz",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_lo": {
+    "hf_repo": "google/fleurs",
+    "subset": "lo_la",
+    "language": "Lao",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_lv": {
+    "hf_repo": "google/fleurs",
+    "subset": "lv_lv",
+    "language": "Latvian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ln": {
+    "hf_repo": "google/fleurs",
+    "subset": "ln_cd",
+    "language": "Lingala",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_lt": {
+    "hf_repo": "google/fleurs",
+    "subset": "lt_lt",
+    "language": "Lithuanian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_luo": {
+    "hf_repo": "google/fleurs",
+    "subset": "luo_ke",
+    "language": "Luo",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_lb": {
+    "hf_repo": "google/fleurs",
+    "subset": "lb_lu",
+    "language": "Luxembourgish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_mk": {
+    "hf_repo": "google/fleurs",
+    "subset": "mk_mk",
+    "language": "Macedonian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ms": {
+    "hf_repo": "google/fleurs",
+    "subset": "ms_my",
+    "language": "Malay",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ml": {
+    "hf_repo": "google/fleurs",
+    "subset": "ml_in",
+    "language": "Malayalam",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_mt": {
+    "hf_repo": "google/fleurs",
+    "subset": "mt_mt",
+    "language": "Maltese",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_mi": {
+    "hf_repo": "google/fleurs",
+    "subset": "mi_nz",
+    "language": "Maori",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_mr": {
+    "hf_repo": "google/fleurs",
+    "subset": "mr_in",
+    "language": "Marathi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_mn": {
+    "hf_repo": "google/fleurs",
+    "subset": "mn_mn",
+    "language": "Mongolian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ne": {
+    "hf_repo": "google/fleurs",
+    "subset": "ne_np",
+    "language": "Nepali",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_nso": {
+    "hf_repo": "google/fleurs",
+    "subset": "nso_za",
+    "language": "Northern-Sotho",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_nb": {
+    "hf_repo": "google/fleurs",
+    "subset": "nb_no",
+    "language": "Norwegian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ny": {
+    "hf_repo": "google/fleurs",
+    "subset": "ny_mw",
+    "language": "Nyanja",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_oc": {
+    "hf_repo": "google/fleurs",
+    "subset": "oc_fr",
+    "language": "Occitan",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_or": {
+    "hf_repo": "google/fleurs",
+    "subset": "or_in",
+    "language": "Oriya",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_om": {
+    "hf_repo": "google/fleurs",
+    "subset": "om_et",
+    "language": "Oromo",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ps": {
+    "hf_repo": "google/fleurs",
+    "subset": "ps_pk",
+    "language": "Pashto",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_fa": {
+    "hf_repo": "google/fleurs",
+    "subset": "fa_ir",
+    "language": "Persian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_pl": {
+    "hf_repo": "google/fleurs",
+    "subset": "pl_pl",
+    "language": "Polish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_pt": {
+    "hf_repo": "google/fleurs",
+    "subset": "pt_pt",
+    "language": "Portuguese",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_pa": {
+    "hf_repo": "google/fleurs",
+    "subset": "pa_in",
+    "language": "Punjabi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ro": {
+    "hf_repo": "google/fleurs",
+    "subset": "ro_ro",
+    "language": "Romanian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ru": {
+    "hf_repo": "google/fleurs",
+    "subset": "ru_ru",
+    "language": "Russian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_sr": {
+    "hf_repo": "google/fleurs",
+    "subset": "sr_rs",
+    "language": "Serbian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_sn": {
+    "hf_repo": "google/fleurs",
+    "subset": "sn_zw",
+    "language": "Shona",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_sd": {
+    "hf_repo": "google/fleurs",
+    "subset": "sd_in",
+    "language": "Sindhi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_sk": {
+    "hf_repo": "google/fleurs",
+    "subset": "sk_sk",
+    "language": "Slovak",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_sl": {
+    "hf_repo": "google/fleurs",
+    "subset": "sl_si",
+    "language": "Slovenian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_so": {
+    "hf_repo": "google/fleurs",
+    "subset": "so_so",
+    "language": "Somali",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ckb": {
+    "hf_repo": "google/fleurs",
+    "subset": "ckb_iq",
+    "language": "Sorani-Kurdish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_es": {
+    "hf_repo": "google/fleurs",
+    "subset": "es_es",
+    "language": "Spanish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_sw": {
+    "hf_repo": "google/fleurs",
+    "subset": "sw_ke",
+    "language": "Swahili",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_sv": {
+    "hf_repo": "google/fleurs",
+    "subset": "sv_se",
+    "language": "Swedish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_tg": {
+    "hf_repo": "google/fleurs",
+    "subset": "tg_tj",
+    "language": "Tajik",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ta": {
+    "hf_repo": "google/fleurs",
+    "subset": "ta_in",
+    "language": "Tamil",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_te": {
+    "hf_repo": "google/fleurs",
+    "subset": "te_in",
+    "language": "Telugu",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_th": {
+    "hf_repo": "google/fleurs",
+    "subset": "th_th",
+    "language": "Thai",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_tr": {
+    "hf_repo": "google/fleurs",
+    "subset": "tr_tr",
+    "language": "Turkish",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_uk": {
+    "hf_repo": "google/fleurs",
+    "subset": "uk_ua",
+    "language": "Ukrainian",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_umb": {
+    "hf_repo": "google/fleurs",
+    "subset": "umb_ao",
+    "language": "Umbundu",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_ur": {
+    "hf_repo": "google/fleurs",
+    "subset": "ur_pk",
+    "language": "Urdu",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_uz": {
+    "hf_repo": "google/fleurs",
+    "subset": "uz_uz",
+    "language": "Uzbek",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_vi": {
+    "hf_repo": "google/fleurs",
+    "subset": "vi_vn",
+    "language": "Vietnamese",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_cy": {
+    "hf_repo": "google/fleurs",
+    "subset": "cy_gb",
+    "language": "Welsh",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_wo": {
+    "hf_repo": "google/fleurs",
+    "subset": "wo_sn",
+    "language": "Wolof",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_xh": {
+    "hf_repo": "google/fleurs",
+    "subset": "xh_za",
+    "language": "Xhosa",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_yo": {
+    "hf_repo": "google/fleurs",
+    "subset": "yo_ng",
+    "language": "Yoruba",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "fleurs_zu": {
+    "hf_repo": "google/fleurs",
+    "subset": "zu_za",
+    "language": "Zulu",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  }
+}
