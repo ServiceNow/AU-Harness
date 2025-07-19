@@ -145,7 +145,7 @@ class WERMetrics(Metrics):
                     results[f"wer_{attribute}_{attr}"] = incorrect_per_attr[attr] / total_attr
         return results
 
-        def get_score(self, candidates, references, ids=None, lengths=None):
+    def get_score(self, candidates, references, ids=None, lengths=None):
         """Get overall score.
 
         Args:
