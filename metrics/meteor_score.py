@@ -1,14 +1,10 @@
 import nltk
-import json
-from pathlib import Path
-from itertools import zip_longest
-import json, re
-from pathlib import Path
 from nltk.translate.meteor_score import single_meteor_score
 from metrics.metrics import Metrics
 from utils import util
 from tqdm import tqdm
-from utils.custom_logging import write_record_log, append_final_scorefrom metrics.word_error_rate_metrics import normalize_text
+from utils.custom_logging import write_record_log, append_final_score
+from metrics.word_error_rate_metrics import normalize_text
 
 
 class MeteorScore(Metrics):

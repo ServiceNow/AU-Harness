@@ -17,4 +17,5 @@ metric_map = {
     "llm_judge_callhome": ("metrics.llm_judge", "CallHomeLLMJudgeMetric"),
     "meteor": ("metrics.meteor_score", "MeteorScore"),
     "llm_judge_big_bench_audio": ("metrics.llm_judge", "BigBenchAudioLLMJudgeMetric"),
+    'bertscore': ("metrics.bertscore", "BertScore"),
 }
