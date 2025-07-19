@@ -1,4 +1,4 @@
-from utils.logging import configure
+from utils.custom_logging import configure
 configure()
 import logging
 logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -18,6 +18,7 @@ import argparse
 from models.model import Model
 from metrics.metrics import Metrics
 from postprocessors.base import Postprocessor
+from utils.constants import metric_map
 
 class Engine:
     """Evaluate one or many models over the same dataset concurrently."""
@@ -84,7 +85,6 @@ class Engine:
 
 
 
-
 def get_class_from_module(module_prefix, module_name) -> Preprocessor | Postprocessor:
     try:
         # Convert class name (CamelCase) to filename (snake)
@@ -96,8 +96,20 @@ def get_class_from_module(module_prefix, module_name) -> Preprocessor | Postproc
         logger.warning(f"Could not import {module_name} from {module_prefix}: {e}")
         return None
 
+def _load_callhome_dataset(repo, preprocessor_name, num_samples, properties):
+    """Load and process a CallHome dataset using the specified preprocessor."""
+    repo = Path(repo).resolve()
+    logger.info(f"[_load_callhome_dataset] Loading CallHome local dataset from {repo}")
+    # Dynamically load the preprocessor
+    PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
+    if PreprocessorClass is None:
+        error_msg = f"Could not load preprocessor {preprocessor_name}"
+        logger.error(error_msg)
+        raise ValueError(error_msg)
+    dataset = PreprocessorClass().process(repo, num_samples=num_samples, properties=properties)
+    return dataset
 
-def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="AudiobenchPreprocessor", user_prompt_add_ons: list[str] = [], system_prompts: list[str] = [], length_filter=None, metric=None, split=None):
+def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="GeneralPreprocessor", user_prompt_add_ons: list[str] = [], system_prompts: list[str] = [], length_filter=None, metric=None, split=None):
     """Load and preprocess a dataset from a local or remote path."""
     logger.info(f"[_load_dataset] Loading dataset {repo} with preprocessor {preprocessor_name}")
     
@@ -113,16 +125,7 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="A
     
     # Special handling for local CallHome dataset
     if preprocessor_name.startswith("Callhome"):
-        repo = Path(repo).resolve()
-        logger.info(f"[_load_dataset] Loading CallHome local dataset from {repo}")
-        # Dynamically load the preprocessor
-        PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
-        if PreprocessorClass is None:
-            error_msg = f"Could not load preprocessor {preprocessor_name}"
-            logger.error(error_msg)
-            raise ValueError(error_msg)
-        dataset = PreprocessorClass().process(repo, num_samples=num_samples, properties=properties)
-        return dataset
+        return _load_callhome_dataset(repo, preprocessor_name, num_samples, properties)
     
     # For HuggingFace datasets
     if repo and (repo.startswith("/") or repo.startswith(".//")):
@@ -147,42 +150,39 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="A
     logger.info(f"[_load_dataset] Using token: {token}")
     for split_name in preferred_splits:
         try:
+            args = {"path": repo, "split": split_name, "trust_remote_code": True}
             if subset:
+                args["name"] = subset
                 logger.info(f"[_load_dataset] Attempting to load subset: {subset}, split: {split_name}")
-                if token:
-                    dset = load_dataset(repo, subset, split=split_name, trust_remote_code=True, token=token)
-                else:
-                    dset = load_dataset(repo, subset, split=split_name, trust_remote_code=True)
             else:
                 logger.info(f"[_load_dataset] Attempting to load split: {split_name}")
-                if token:
-                    dset = load_dataset(repo, split=split_name, trust_remote_code=True, token=token)
-                else:
-                    dset = load_dataset(repo, split=split_name, trust_remote_code=True)
+            if token:
+                args["token"] = token
+            dset = load_dataset(**args)
             logger.info(f"[_load_dataset] Successfully loaded split: {split_name}")
             break
         except Exception as e:
-            logger.info(f"[_load_dataset] Split {split_name} not available: {str(e)}")
+            logger.info(f"[_load_dataset] Split {split_name} not available: {e}")
     
     # Raise an error if no valid split was found
     if dset is None:
         logger.info(f"[_load_dataset] Attempting to load no split")
         try:
+            args = {"path": repo, "trust_remote_code": True}
             if subset:
-                if token:
-                    dset = load_dataset(repo, subset, trust_remote_code=True, token=token)
-                else:
-                    dset = load_dataset(repo, subset, trust_remote_code=True)
+                args["name"] = subset
+                logger.info(f"[_load_dataset] Attempting to load subset: {subset}")
             else:
-                if token:
-                    dset = load_dataset(repo, trust_remote_code=True, token=token)
-                else:
-                    dset = load_dataset(repo, trust_remote_code=True)
+                logger.info(f"[_load_dataset] Attempting to load dataset without subset")
+            if token:
+                args["token"] = token
+            dset = load_dataset(**args)
+            logger.info(f"[_load_dataset] Successfully loaded dataset without specific split")
         except Exception as e:
             logger.info(f"[_load_dataset] Failed to load dataset: {str(e)}")
             error_msg = f"[_load_dataset] No valid dataset found in {repo}"
             logger.error(error_msg)
-            raise ValueError(error_msg)
+            raise ValueError(e)
     
     logger.info(f"[_load_dataset] Dataset loaded  |  Size before trunc: {len(dset)}")
 
@@ -202,6 +202,9 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="A
     logger.info(f"[_load_dataset] Dataset loaded and processed. Size: {len(processed)}")
     return processed
 
+
+
+
 def _load_models(cfg_list: list[dict]) -> list[Model]:
     logger.info(f"[_load_models] Instantiating models from config: {cfg_list}")
     models = []
@@ -218,33 +221,38 @@ def _load_models(cfg_list: list[dict]) -> list[Model]:
     logger.info(f"[_load_models] Successfully instantiated {len(models)} model(s).")
     return models
 
+
+
+
 def _load_metric(name: str, language: str = "en", judge_concurrency: int | None = None, judge_model: str | None = None):
     logger.info(f"[_load_metric] Loading metric: {name} (judge_concurrency={judge_concurrency}, judge_model={judge_model})")
-    if name == "word_error_rate":
-        from metrics.word_error_rate_metrics import WERMetrics
-        metric = WERMetrics(language=language)
-    elif name == "bleu":
-        from metrics.bleu_metrics import BleuMetrics
-        metric = BleuMetrics()
-    elif name == "llm_judge_binary":
-        from metrics.llm_judge import BinaryLLMJudgeMetric
-        metric = BinaryLLMJudgeMetric(max_concurrency=judge_concurrency, model=judge_model)
-    elif name == "llm_judge_detailed":
-        from metrics.llm_judge import DetailedLLMJudgeMetric
-        metric = DetailedLLMJudgeMetric(max_concurrency=judge_concurrency, model=judge_model)
-    elif name == "llm_judge_callhome":
-        from metrics.llm_judge import CallHomeLLMJudgeMetric
-        metric = CallHomeLLMJudgeMetric(max_concurrency=judge_concurrency, model=judge_model)
-    elif name == "meteor":
-        from metrics.meteor_score import MeteorScore
-        metric = MeteorScore()
-    elif name == "llm_judge_big_bench_audio":
-        from metrics.llm_judge import BigBenchAudioLLMJudgeMetric
-        metric = BigBenchAudioLLMJudgeMetric(max_concurrency=judge_concurrency, model=judge_model)
-    else:
-        raise ValueError(f"Unknown metric: {name}")
-    logger.info(f"[_load_metric] Metric loaded: {metric.name}")
-    return metric
+
+    if name not in metric_map:
+        raise ValueError(f"Unknown metric: {name}. Available metrics: {list(metric_map.keys())}")
+    
+    module_name, class_name = metric_map[name]
+    
+    try:
+        # Dynamically import the module and class
+        module = __import__(module_name, fromlist=[class_name])
+        MetricClass = getattr(module, class_name)
+        
+        # Handle metric-specific initialization parameters
+        if "wer" in name.lower():
+            metric = MetricClass(language=language)
+        elif "judge" in name.lower():
+            metric = MetricClass(max_concurrency=judge_concurrency, model=judge_model)
+        else:
+            # Default initialization for other metrics
+            metric = MetricClass()
+            
+        logger.info(f"[_load_metric] Metric loaded: {metric.name}")
+        return metric
+    except (ImportError, AttributeError) as e:
+        logger.error(f"[_load_metric] Failed to load metric {name}: {e}")
+        raise ValueError(f"Failed to load metric {name}: {e}")
+
+
 
 #TO-DO: need to implement command line override, add common configs, group by task type
 #main that runs
@@ -289,7 +297,7 @@ def main(cfg_path='config.yaml'):
     
     logger.info(f"[main] Dataset-metric pairs from config: {dataset_metric_pairs}")
     
-    # Dictionary to store all evaluation scores
+    # Store all scores in a flat dict with keys in format: 'dataset_name_metric_name'
     all_scores = {}
     
     # Process each dataset-metric pair
@@ -380,14 +388,15 @@ def main(cfg_path='config.yaml'):
             # Dynamically import postprocessor class
             PostprocessorClass = get_class_from_module('postprocessors', postprocessor_name)
             if PostprocessorClass is None:
-                logger.warning(f"Could not load postprocessor {postprocessor_name}, using default AudiobenchPostprocessor")
+                logger.warning(f"Could not load postprocessor {postprocessor_name}, using default GeneralPostprocessor")
                 # Try to load the default postprocessor
-                PostprocessorClass = get_class_from_module('postprocessors', 'AudiobenchPostprocessor')
+                PostprocessorClass = get_class_from_module('postprocessors', 'GeneralPostprocessor')
             postprocessor = PostprocessorClass()
             
             logger.info("[main] Initializing Engine and running evaluation...")
             result = Engine(models, dataset, metric, postprocessor, dataset_name).run()
-            all_scores[dataset_name] = result
+            key = f"{dataset_name}_{metric_name}"
+            all_scores[key] = result
     
     logger.info("[main] Evaluation scores:")
     logger.info(json.dumps(all_scores, indent=2))

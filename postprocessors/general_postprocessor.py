@@ -1,9 +1,10 @@
-from utils.logging import configure
+from utils.custom_logging import configure
 configure()
 import logging
 logger = logging.getLogger(__name__)
 logger.propagate = True
 from postprocessors.base import Postprocessor
+
 class _SimpleMeta:  # stand-in for MetricMetadata
     def __init__(self, name, display_name=None, description=""):
         self.name = name
@@ -15,7 +16,7 @@ class ReportingMetrics(dict):
     """Placeholder so downstream code still works."""
 
 
-class AudiobenchPostprocessor(Postprocessor):
+class GeneralPostprocessor(Postprocessor):
     """Postprocessor class to calculate the model scores for the model predictions."""
     def process(self, dataset: list[dict], predictions, metric) -> dict:
         model_targets = [record["model_target"] for record in dataset if "model_target" in record]

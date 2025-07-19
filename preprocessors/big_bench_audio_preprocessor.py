@@ -3,10 +3,11 @@ from typing import Dict, List, Optional, Any
 import numpy as np
 from scipy.signal import resample
 from tqdm import tqdm
+from preprocessors.base import Preprocessor
 
 logger = logging.getLogger(__name__)
 
-class BigBenchAudioPreprocessor:
+class BigBenchAudioPreprocessor(Preprocessor):
     """
     A preprocessor for the BigBenchAudio dataset, designed for
     Speech Query Question Answering (SQQA) tasks.

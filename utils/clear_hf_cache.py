@@ -2,9 +2,12 @@
 
 import os
 import shutil
-import time
+import glob
 from datasets import config as datasets_config
 import logging
+from transformers.utils.hub import HUGGINGFACE_HUB_CACHE
+import tempfile
+import subprocess
 
 logging.basicConfig(level=logging.INFO, 
                     format='%(asctime)s - %(levelname)s - %(message)s')
@@ -39,7 +42,6 @@ def clear_datasets_cache():
 
 def clear_models_cache():
     try:
-        from transformers.utils.hub import HUGGINGFACE_HUB_CACHE
         models_cache = HUGGINGFACE_HUB_CACHE
         
         logger.info(f"Models cache directory: {models_cache}")
@@ -64,22 +66,14 @@ def clear_models_cache():
                 logger.error(f"Error clearing models cache: {e}")
         else:
             logger.info("No models cache found.")
-    except ImportError:
-        logger.warning("Transformers not found, trying alternative methods")
-        home = os.path.expanduser("~")
-        alt_cache = os.path.join(home, ".cache", "huggingface", "transformers")
-        if os.path.exists(alt_cache):
-            logger.info(f"Clearing alternative models cache at: {alt_cache}")
-            shutil.rmtree(alt_cache, ignore_errors=True)
-            logger.info("Alternative models cache cleared successfully.")
+    except Exception as e:
+        logger.error(f"Error clearing models cache: {e}")
 
 def clear_temp_files():
-    import tempfile
     temp_dir = tempfile.gettempdir()
     logger.info(f"Temp directory: {temp_dir}")
     
     hf_temp_pattern = os.path.join(temp_dir, "tmphf_*")
-    import glob
     hf_temp_files = glob.glob(hf_temp_pattern)
     
     if hf_temp_files:
@@ -98,7 +92,6 @@ def clear_temp_files():
 
 def print_disk_usage():
     try:
-        import subprocess
         logger.info("Disk usage before cleaning:")
         result = subprocess.run(['df', '-h'], stdout=subprocess.PIPE)
         for line in result.stdout.decode('utf-8').splitlines():

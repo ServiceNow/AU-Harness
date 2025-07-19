@@ -1,6 +1,6 @@
 import re
 import logging
-from utils.logging import configure
+from utils.custom_logging import configure
 from postprocessors.base import Postprocessor
 
 configure()

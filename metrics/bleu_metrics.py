@@ -1,7 +1,7 @@
 from tqdm import tqdm
 from sacrebleu.metrics import BLEU
 from metrics.metrics import Metrics
-from utils.logging import write_record_log, append_final_score
+from utils.custom_logging import write_record_log, append_final_score
 
 class BleuMetrics(Metrics):
     def __call__(self, candidates, references, *, dataset_name: str | None = None, model_name: str | None = None):

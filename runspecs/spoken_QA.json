@@ -2,69 +2,69 @@
   "mmau_mini": {
     "hf_repo": "AudioLLMs/MMAU-mini",
     "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   },
   "cn_college_listen_mcq_test": {
     "hf_repo": "AudioLLMs/cn_college_listen_mcq_test",
     "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   },
   "dream_tts_mcq_test": {
     "hf_repo": "AudioLLMs/dream_tts_mcq_test",
     "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   },
   "mnsc_sqa_part3_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SQA-PART3-Test",
     "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
     "accented": true
   },
   "mnsc_sqa_part4_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SQA-PART4-Test",
     "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
     "accented": true
   },
   "mnsc_sqa_part5_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SQA-PART5-Test",
     "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
     "accented": true
   },
   "mnsc_sqa_part6_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SQA-PART6-Test",
     "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
     "accented": true
   },
   "public_sg_speech_qa_test": {
     "hf_repo": "AudioLLMs/public_sg_speech_qa_test",
     "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   },
   "slue_p2_sqa5_test": {
     "hf_repo": "AudioLLMs/slue_p2_sqa5_test",
     "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   },
   "spoken_squad_test": {
     "hf_repo": "AudioLLMs/spoken_squad_test",
     "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   }
 }

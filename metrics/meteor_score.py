@@ -8,7 +8,7 @@ from nltk.translate.meteor_score import single_meteor_score
 from metrics.metrics import Metrics
 from utils import util
 from tqdm import tqdm
-from utils.logging import write_record_log, append_final_score
+from utils.custom_logging import write_record_log, append_final_score
 
 class MeteorScore(Metrics):
     def __call__(self, candidates, references, *, dataset_name: str | None = None, model_name: str | None = None):

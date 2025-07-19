@@ -2,13 +2,13 @@
   "alpaca_audio_test": {
     "hf_repo": "AudioLLMs/alpaca_audio_test",
     "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   },
   "openhermes_instruction_test": {
     "hf_repo": "AudioLLMs/openhermes_instruction_test",
     "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   }
 }

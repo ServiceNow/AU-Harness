@@ -2,7 +2,7 @@
     "mmau_mini": {
     "hf_repo": "AudioLLMs/MMAU-mini",
     "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   }
 }

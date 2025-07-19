@@ -20,13 +20,16 @@ from metrics.metrics import Metrics
 from metrics.wer.normalizers import JapaneseTextNormalizer
 from metrics.wer.whisper_normalizer.english import EnglishTextNormalizer
 from metrics.wer.whisper_normalizer.basic import BasicTextNormalizer
-from utils.logging import write_record_log, append_final_score
+from utils.custom_logging import write_record_log, append_final_score
 
 from utils import constants
 
+# Mapping to normalize language codes
 language_map = {
-    "en": ["english", "en"],
-    "ja": ["japanese", "ja"],
+    "en": "en",
+    "english": "en",
+    "ja": "ja", 
+    "japanese": "ja",
 }
 NORMALIZERS = {"en": EnglishTextNormalizer(), "ja": JapaneseTextNormalizer()}
 DEFAULT_NORMALIZER = BasicTextNormalizer()
@@ -74,12 +77,21 @@ def normalize_text(text: str, language: str) -> str:
 
     Args:
         text: input text
-        language: language code
+        language: language code or full name (e.g. 'en', 'english')
     """
-    language = language_map.get(language, language)
-    normalizer = NORMALIZERS.get(language, DEFAULT_NORMALIZER)
+    # Convert language to lowercase for case-insensitive matching
+    if isinstance(language, str):
+        language = language.lower()
+    
+    # Normalize language code
+    normalized_language = language_map.get(language, '')
+    
+    # Get the appropriate normalizer
+    normalizer = NORMALIZERS.get(normalized_language, DEFAULT_NORMALIZER)
+    
+    # Process the text
     text = convert_unicode_to_characters(text)
-    text = convert_digits_to_words(text, language)
+    text = convert_digits_to_words(text, normalized_language)
     return BASIC_TRANSFORMATIONS([normalizer(text)])[0]
 
 

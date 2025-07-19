@@ -1,6 +1,7 @@
 import numpy as np
 import os
 import base64
+import re
 
 # Import directly from multimodal as in the original file
 from multimodal import (
@@ -107,8 +108,38 @@ def test_truncate_values_for_saving():
         print(f"❌ truncate_values_for_saving test failed: {e}")
 
 
+def split_inline_speaker_labels(text: str) -> str:
+    # This will insert a newline before any 'A:' or 'B:' that is not at the start of a line
+    return re.sub(r'(?<!^)(?<!\n)\s*([AB]:)', r'\n\1', text)
+
+
+def test_split_inline_speaker_labels():
+    """Test the split_inline_speaker_labels function"""
+    print("Testing split_inline_speaker_labels...")
+    
+    try:
+        test_cases = [
+            ("A: hello B: world", "A: hello\nB: world"),
+            ("A: first line\nB: second line", "A: first line\nB: second line"),
+            ("A: hello how are you B: I'm good", "A: hello how are you\nB: I'm good"),
+            ("A: start B: middle A: end", "A: start\nB: middle\nA: end"),
+            ("No speaker labels here", "No speaker labels here"),
+            ("\nA: Already has newline", "\nA: Already has newline"),
+            ("Text A: with A: multiple B: labels", "Text\nA: with\nA: multiple\nB: labels")
+        ]
+        
+        for input_text, expected_output in test_cases:
+            result = split_inline_speaker_labels(input_text)
+            assert result == expected_output, f"Failed: '{input_text}' → Got '{result}', Expected '{expected_output}'"
+        
+        print("✅ split_inline_speaker_labels test passed")
+    except Exception as e:
+        print(f"❌ split_inline_speaker_labels test failed: {e}")
+
+
 if __name__ == "__main__":
     test_encode_audio_array_base64()
     test_audio_array_to_wav_file()
     test_truncate_values_for_saving()
+    test_split_inline_speaker_labels()
     print("All tests completed!")

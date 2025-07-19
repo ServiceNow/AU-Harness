@@ -1,14 +1,14 @@
 from __future__ import annotations
 import asyncio, json, yaml, os, re
 from pathlib import Path
-from openai import AsyncAzureOpenAI
+from openai import AsyncAzureOpenAI, APIConnectionError
 from tqdm import tqdm
 from typing import List, Tuple, Optional
 import httpx
 import logging
 logger = logging.getLogger(__name__)
 from metrics.metrics import Metrics
-from utils.logging import write_record_log, append_final_score
+from utils.custom_logging import write_record_log, append_final_score
 
 # ---------------------------------------------------------------------------
 # Helper to load prompt templates shipped with the package
@@ -63,7 +63,7 @@ class _BaseLLMJudge(Metrics):
                     return json.loads(content)
                 except Exception:
                     return content
-            except (openai.APIConnectionError, httpx.ConnectError, httpx.HTTPError) as e:
+            except (APIConnectionError, httpx.ConnectError, httpx.HTTPError) as e:
                 logger.warning(f"API connection failed (attempt {attempt+1}/{max_retries}): {e}")
                 await asyncio.sleep(2)  # Wait before retrying
             except Exception as e:

@@ -2,13 +2,13 @@
   "audiocaps_test": {
     "hf_repo": "AudioLLMs/audiocaps_test",
     "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   },
   "wavcaps_test": {
     "hf_repo": "AudioLLMs/wavcaps_test",
     "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   }
 }

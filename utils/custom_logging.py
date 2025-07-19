@@ -4,7 +4,7 @@ Shared logging utilities for AudioBench.
 Central logging setup and record-level logging for metrics.
 
 For central logging setup:
-  Call ``utils.logging.configure(log_file_path)`` once (e.g. from ``evaluate.py``)
+  Call ``utils.custom_logging.configure(log_file_path)`` once (e.g. from ``evaluate.py``)
   BEFORE importing other project modules that acquire loggers. If you don't call
   it, we fall back to ``default.log`` in the project root.
 

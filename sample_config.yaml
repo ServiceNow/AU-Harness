@@ -21,7 +21,8 @@ models:
       timeout: 30
       model: "gpt-4o-mini-audio-preview" #only needed for vllm
       auth_token: "${AUTH_TOKEN}" 
-      batch_size: 4 #batch eval size
+      api_version: "${API_VERSION}"
+      batch_size: 100 #batch eval size
       chunk_size: 45 #max audio length in seconds fed to model
   - info:
       name: "gpt-4o-mini-audio-preview-2" 
@@ -32,9 +33,10 @@ models:
       timeout: 30
       model: "gpt-4o-mini-audio-preview" #only needed for vllm
       auth_token: "${AUTH_TOKEN}" 
-      batch_size: 4 #batch eval size
+      api_version: "${API_VERSION}"
+      batch_size: 100 #batch eval size
       chunk_size: 45 #max audio length in seconds fed to model
-    - info:
+  - info:
       name: "qwen-2.5-omni" 
       inference_type: "vllm" #you can use vllm, openai, (chat completion) or audio transcription endpoint
       url: "${ENDPOINT_URL}" - #endpoint url
