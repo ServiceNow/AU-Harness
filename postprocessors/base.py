@@ -27,5 +27,5 @@ class Postprocessor():
         cleaned = cleaned.replace("<|end|>", "")
         return cleaned.strip()
 
-    def process(self, dataset: list[dict], predictions, metric) -> tuple:
+    def process(self, dataset: list[dict], predictions, metric) -> dict:
         raise NotImplementedError
