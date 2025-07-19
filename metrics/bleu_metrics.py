@@ -3,7 +3,7 @@ from sacrebleu.metrics import BLEU
 from metrics.metrics import Metrics
 
 class BleuMetrics(Metrics):
-    def __call__(self, candidates, references):
+    def __call__(self, candidates, references, dataset_name: str | None = None, model_name: str | None = None):
         return self.get_score(candidates, references)
     """TODO: Need SME to add."""
 

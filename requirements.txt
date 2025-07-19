@@ -16,6 +16,7 @@ soundfile   # depends on system libsndfile
 # Evaluation / metrics
 sacrebleu
 nltk
+bert-score
 
 # Misc utilities
 PyYAML

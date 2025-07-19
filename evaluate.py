@@ -196,6 +196,9 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
     elif name == 'diarization_error_rate':
         from metrics.diarization_error_rate_metrics import DERMetrics
         metric = DERMetrics()
+    elif name == 'bertscore':
+        from metrics.bertscore import BertScore
+        metric = BertScore()
     else:
         raise ValueError(f"Unknown metric: {name}")
     logger.info(f"[_load_metric] Metric loaded: {metric.name}")

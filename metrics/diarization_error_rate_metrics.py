@@ -1,7 +1,8 @@
 import re
 import unicodedata
 from collections import defaultdict
-
+from jiwer import process_words
+import numpy as np
 from pyannote.metrics.diarization import DiarizationErrorRate, JaccardErrorRate
 from pyannote.core import Annotation, Segment
 
@@ -204,11 +205,11 @@ class DERMetrics(Metrics):
         avg_sample_turn_based_der = min(avg_sample_turn_based_der, 1.0)
 
         # Compute overall WDER
-        wder_incorrect = sum(scores['wder_incorrect'])
-        wder_total = sum(scores['wder_total'])
+        wder_numerator = sum(scores['wder_sub_inc_spks']) + sum(scores['wder_correct_inc_spks'])
+        wder_denominator = sum(scores['wder_sub']) + sum(scores['wder_correct'])
 
         # Overall WDER
-        overall_wder = wder_incorrect / wder_total if turn_based_der_total > 0 else 0
+        overall_wder = wder_numerator / wder_denominator if wder_denominator > 0 else 0
         overall_wder = min(overall_wder, 1.0)
 
         avg_sample_wder = sum(scores['wder_per_row'])/ len(scores['wder_per_row']) if scores['wder_per_row'] else 0
@@ -233,8 +234,6 @@ class DERMetrics(Metrics):
         self.record_level_scores.setdefault("turn_based_der_total", scores["turn_based_der_total"])
 
         self.record_level_scores.setdefault("wder_per_row", scores["wder_per_row"])
-        self.record_level_scores.setdefault("wder_incorrect", scores["wder_incorrect"])
-        self.record_level_scores.setdefault("wder_total", scores["wder_total"])
 
         return result
 
@@ -252,6 +251,10 @@ class DERMetrics(Metrics):
         der_scores, wder_scores, jer_scores = [], [], []
         references_clean, candidates_clean = [], []
         turn_based_der_incorrect, turn_based_der_total = [], []
+
+        # Aggregated wder essential components
+        wder_sub, wder_correct = [], []
+        wder_sub_inc_spks, wder_correct_inc_spks = [], []
         wder_incorrect, wder_total = [], []
         jer_incorrect, jer_total = [], []
 
@@ -295,7 +298,53 @@ class DERMetrics(Metrics):
             assert len(ref_by_lines) == len(ref_speakers)
             assert len (cand_by_lines) == len(cand_speakers)
 
+            #Flatten the transcripts
+            flattened_ref_transcripts = [x for s in cleaned_ref_transcripts for x in s.split(' ')]
+            flattened_cand_transcripts = [x for s in cleaned_cand_transcripts for x in s.split(' ')]
+
+            assert len(flattened_ref_transcripts) == len(word_level_ref_speakers)
+            assert len(flattened_cand_transcripts) == len(word_level_cand_speakers)
+
+            #--- Calculate WDER metrics -------- #
+            def calculate_wder(ref_transcript, cand_transcript, ref_sample, cand_sample):
+                # Prepare alignment info
+                measures = process_words(ref_transcript, cand_transcript)
+                alignment = measures.alignments[0]
+                
+                num_sub, num_correct = 0, 0
+                num_sub_inc_speaker, num_correct_inc_speaker = 0, 0
+
+                for item in alignment:
+                    alignment_type = item.type 
+                    ref_start, ref_end = item.ref_start_idx, item.ref_end_idx
+                    cand_start, cand_end = item.hyp_start_idx, item.hyp_end_idx
+                    num_steps = ref_end - ref_start
+
+                    if (alignment_type == 'equal'):
+                        num_correct += num_steps
+                        for i in range (num_steps):
+                            if (ref_sample[ref_start + i] != cand_sample[cand_start +i]):
+                                    num_correct_inc_speaker += 1
+                    
+                    elif (alignment_type == 'substitute'):
+                        num_sub += (num_steps)
+                        for i in range (num_steps):
+                            if (ref_sample[ref_start + i] != cand_sample[cand_start+i]):
+                                num_sub_inc_speaker += 1
+                
+                return num_sub_inc_speaker, num_correct_inc_speaker, num_sub, num_correct
+
+            # Make the transcript aligned here
+            flattened_cand_transcripts = ' '.join(flattened_cand_transcripts)
+            flattened_ref_transcripts = ' '.join(flattened_ref_transcripts)
+            num_sub_inc_speaker, num_correct_inc_speaker, num_sub, num_correct = calculate_wder(flattened_ref_transcripts, flattened_cand_transcripts, word_level_ref_speakers, word_level_cand_speakers)
+            wder = (num_sub_inc_speaker + num_correct_inc_speaker) / (num_sub + num_correct + 1e-12)
+            wder_sub.append(num_sub)
+            wder_correct.append(num_correct)
+            wder_sub_inc_spks.append(num_sub_inc_speaker)
+            wder_correct_inc_spks.append(num_correct_inc_speaker)
             
+
             # Convert list of speakers to the correct format to compute metrics
             ref_speaker_tuples, ref_annotations = convert_speaker_list_to_diarization_tuples(ref_speakers)
             cand_speaker_tuples, cand_annotations = convert_speaker_list_to_diarization_tuples(cand_speakers)
@@ -314,18 +363,10 @@ class DERMetrics(Metrics):
             jer = min(jer_components['jaccard error rate'],1.0)
             jer_speaker_error, jer_speaker_count = jer_components['speaker error'], jer_components['speaker count']
 
-            wder_components = self.der_metric(word_level_ref_annotations, word_level_cand_annotations, detailed=True)
-            wder = min(wder_components['diarization error rate'], 1.0)
-
-            wder_sample_total, wder_confusion, wder_missed_detection, wder_correct, wder_false_alarm = wder_components['total'], wder_components['confusion'], wder_components['missed detection'], wder_components['total'], wder_components['false alarm']
-
             
             # Aggregating per-row errors/ totals for overall dataset metric calculation
             turn_based_der_incorrect.append(der_turn_confusion + der_turn_missed_detection + der_turn_false_alarm)
             turn_based_der_total.append(der_turn_total)
-
-            wder_incorrect.append(wder_confusion + wder_missed_detection + wder_false_alarm)
-            wder_total.append(wder_sample_total)
 
             candidates_clean.append(cleaned_cand_transcripts)
             references_clean.append(cleaned_ref_transcripts)
@@ -344,8 +385,11 @@ class DERMetrics(Metrics):
             "references_clean": references_clean,
             "turn_based_der_incorrect": turn_based_der_incorrect,
             "turn_based_der_total": turn_based_der_total,
-            "wder_incorrect": wder_incorrect,
-            "wder_total": wder_total
+
+            'wder_sub': wder_sub,
+            'wder_correct': wder_correct,
+            'wder_sub_inc_spks': wder_sub_inc_spks,
+            'wder_correct_inc_spks': wder_correct_inc_spks,
         }
 
         return results
