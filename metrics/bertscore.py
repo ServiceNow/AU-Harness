@@ -36,7 +36,7 @@ class BertScore(Metrics):
             norm_reference = normalize_text(reference)
             norm_candidate = normalize_text(candidate) 
 
-            precision,recall,f1 = self.scorer([norm_reference], [norm_candidate], lang='en')
+            precision,recall,f1 = self.scorer([norm_reference], [norm_candidate], model_type='bert-base-multilingual-cased')
             f1_score = f1.numpy().tolist()
             score_list.extend(f1_score)
         return {self.name: score_list}
