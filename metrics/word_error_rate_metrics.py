@@ -127,26 +127,6 @@ class WERMetrics(Metrics):
         self.description = "The proportion of words that are incorrectly predicted, when compared to the reference text. The dataset is considered as one big conversation."
         self.language = language
 
-    def _write_to_run_json(self, refs, cands, scores, dataset_name, model_name):
-        """Write each sample's prediction to a shared run.log file."""
-        import json
-        from pathlib import Path
-        from itertools import zip_longest
-        
-        run_path = Path(".") / "run.log"
-        with open(run_path, "a", encoding="utf-8") as f:
-            for ref, cand, sc in zip_longest(refs, cands, scores, fillvalue=None):
-                entry = {
-                    "dataset": dataset_name,
-                    "metric": self.name,
-                    "model": model_name,
-                    "reference": ref,
-                    "candidate": cand,
-                }
-                if sc is not None:
-                    entry["score"] = sc
-                f.write(json.dumps(entry, ensure_ascii=False) + "\n")
-    
     def compute_attributes(self, incorrect: list[int | float], total: list[int | float], attributes: list[str]) -> dict:
         """Compute the attributes (e.g., accent, gender) that should be saved in the record level file for analysis."""
         results = {}
@@ -165,7 +145,7 @@ class WERMetrics(Metrics):
                     results[f"wer_{attribute}_{attr}"] = incorrect_per_attr[attr] / total_attr
         return results
 
-    def get_score(self, candidates, references, ids=None, lengths=None):
+        def get_score(self, candidates, references, ids=None, lengths=None):
         """Get overall score.
 
         Args:
@@ -295,6 +275,7 @@ class WERMetrics(Metrics):
                     else {}
                 )
                 measures = process_words(references_clean[-1], candidates_clean[-1], **kwargs)
+
                 # Newer jiwer returns a dataclass-like object with attributes
                 substitutions = measures.substitutions
                 deletions = measures.deletions
