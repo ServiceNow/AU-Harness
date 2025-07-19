@@ -1,5 +1,3 @@
-
-
 import re
 import unicodedata
 from collections import defaultdict
@@ -17,89 +15,6 @@ from metrics.base_metric_metadata import MetricMetadata
 from metrics.metrics import Metrics
 
 from utils import constants
-from scipy import optimize
-
-import word_levenshtein as levenshtein
-import numpy as np
-import dataclasses
-from typing import Any, Optional
-
-@dataclasses.dataclass
-class UtteranceMetrics:
-  """Metrics for one utterance."""
-
-  wer_insert: int = 0
-  wer_delete: int = 0
-  wer_sub: int = 0
-  wer_correct: int = 0
-  wer_total: int = 0
-
-  wder_sub: int = 0
-  wder_correct: int = 0
-  wder_total: int = 0
-
-  cpwer_insert: int = 0
-  cpwer_delete: int = 0
-  cpwer_sub: int = 0
-  cpwer_correct: int = 0
-  cpwer_total: int = 0
-
-  speaker_count_error: int = 0
-
-def compute_wer(
-    hyp_text: str, ref_text: str
-) -> tuple[UtteranceMetrics, list[tuple[int, int]]]:
-  """Compute the word error rate of an utterance."""
-  result = UtteranceMetrics()
-  hyp_normalized = normalize_text(hyp_text)
-  ref_normalized = normalize_text(ref_text)
-  hyp_words = hyp_normalized.split()
-  ref_words = ref_normalized.split()
-
-  # Get the alignment.
-  _, align = levenshtein.levenshtein_with_edits(ref_normalized, hyp_normalized)
-
-  # Apply the alignment on ref speakers.
-  for i, j in align:
-    if i == -1:
-      result.wer_insert += 1
-    elif j == -1:
-      result.wer_delete += 1
-    else:
-      if ref_words[i] == hyp_words[j]:
-        result.wer_correct += 1
-      else:
-        result.wer_sub += 1
-
-  result.wer_total = result.wer_correct + result.wer_sub + result.wer_delete
-  assert result.wer_total == len(ref_words)
-  return result, align
-
-def compute_wder(ref_spk, hyp_spk, ):
-    hyp_spk_list = [int(x) for x in hyp_spk.split()]
-    ref_spk_list = [int(x) for x in ref_spk.split()]
-    if len(hyp_spk_list) != len(hyp_words):
-        raise ValueError("hyp_spk and hyp_text must have the same length.")
-    if len(ref_spk_list) != len(ref_words):
-        raise ValueError("ref_spk and ref_text must have the same length.")
-    hyp_spk_list_align = []
-    ref_spk_list_align = []
-
-    for i, j in align:
-        if i != -1 and j != -1:
-        ref_spk_list_align.append(ref_spk_list[i])
-        hyp_spk_list_align.append(hyp_spk_list[j])
-
-    # Build cost matrix.
-    max_spk = max(max(ref_spk_list_align), max(hyp_spk_list_align))
-    cost_matrix = np.zeros((max_spk, max_spk), dtype=int)
-    for aligned, original in zip(ref_spk_list_align, hyp_spk_list_align):
-        cost_matrix[aligned - 1, original - 1] += 1
-
-    # Solve alignment.
-    row_index, col_index = optimize.linear_sum_assignment(
-        
-
 
 
 def prepare_speaker_info(input_info, lang_code):
