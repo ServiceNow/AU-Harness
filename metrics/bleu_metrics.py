@@ -51,5 +51,4 @@ class BleuMetrics(Metrics):
             norm_candidate = normalize_text(c) 
             score = self.scorer.sentence_score(norm_candidate, [norm_reference])
             scores.append(score)
-        #scores = [self.scorer.sentence_score(c, [r]).score for c, r in tqdm(zip(candidates, references), desc="BLEU", total=len(candidates))]
         return {self.name: scores}
