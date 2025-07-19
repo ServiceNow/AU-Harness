@@ -66,7 +66,7 @@ def convert_digits_to_words(text: str, language: str):
         return text
 
 
-def normalize_text(text: str, language: str) -> str:
+def normalize_text(text: str, language: str = 'en') -> str:
     """Normalize text based on language.
 
     Args:

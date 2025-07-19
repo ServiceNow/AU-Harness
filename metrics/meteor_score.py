@@ -4,6 +4,7 @@ from nltk.translate.meteor_score import single_meteor_score
 
 from metrics.metrics import Metrics
 from utils import util
+from metrics.word_error_rate_metrics import normalize_text
 
 
 class MeteorScore(Metrics):
@@ -35,8 +36,14 @@ class MeteorScore(Metrics):
             # default preprocess is str.lower()
             # default stemmer is PorterStemmer()
             # default wordnet is nltk.corpus.wordnet
-            # Input hyp/ref of the scorer is an Iterable[str]
-            score = self.scorer(references[i].split(), candidates[i].split())
+            
+            #=== Consistent normalization with WER processing === 
+            reference, candidate = references[i], candidates[i]
+            norm_reference = normalize_text(reference)
+            norm_candidate = normalize_text(candidate) 
+
+            # Compute METEOR Score
+            score = self.scorer(norm_reference.split(), norm_candidate.split())
             score = util.smart_round(score)
             score_list.append(score)
 

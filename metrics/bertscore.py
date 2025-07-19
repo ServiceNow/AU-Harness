@@ -3,6 +3,8 @@ from bert_score import score
 from metrics.metrics import Metrics
 from utils import util
 
+from metrics.word_error_rate_metrics import normalize_text
+
 
 class BertScore(Metrics):
     def __call__(self, candidates, references, dataset_name: str | None = None, model_name: str | None = None):
@@ -29,7 +31,12 @@ class BertScore(Metrics):
         from tqdm import tqdm
         score_list = []
         for i in tqdm(range(len(candidates)), desc="BERTSCORE"):
-            precision,recall,f1 = self.scorer([references[i]], [candidates[i]], lang='en')
+            #=== Consistent normalization with WER processing === 
+            reference, candidate = references[i], candidates[i]
+            norm_reference = normalize_text(reference)
+            norm_candidate = normalize_text(candidate) 
+
+            precision,recall,f1 = self.scorer([norm_reference], [norm_candidate], lang='en')
             f1_score = f1.numpy().tolist()
             score_list.extend(f1_score)
         return {self.name: score_list}
