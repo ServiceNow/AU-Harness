@@ -68,15 +68,16 @@ class Engine:
         # Extract values from the dictionary returned by the postprocessor
         model_targets = process_result["model_targets"]
         predictions = process_result["processed_predictions"]
+        instructions = process_result.get("instructions", None)
         ids = process_result.get("ids", [])
         lengths = process_result.get("lengths", [])
 
         for model_name, outs in predictions.items():
             # Let the metric handle per-record logging internally
             if ids and lengths:
-                model_score = self.metric(outs, model_targets, ids, lengths, dataset_name=self.dataset_name, model_name=model_name)
+                model_score = self.metric(outs, model_targets, ids, lengths, instructions=instructions, dataset_name=self.dataset_name, model_name=model_name)
             else:
-                model_score = self.metric(outs, model_targets, dataset_name=self.dataset_name, model_name=model_name)
+                model_score = self.metric(outs, model_targets, instructions=instructions, dataset_name=self.dataset_name, model_name=model_name)
             scores[model_name] = model_score
         logger.info(f"[Engine.run] Evaluation complete. Returning scores.")
         logger.info(f"[Engine.run] Scores: {scores}")

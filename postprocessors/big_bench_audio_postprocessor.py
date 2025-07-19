@@ -72,12 +72,16 @@ class BigBenchAudioPostprocessor(Postprocessor):
             for record in dataset
             if "model_target" in record
         ]
+        
+        # Extract instructions
+        instructions = [record.get("instruction", "") for record in dataset]
 
         logger.info(f"Extracted {len(targets)} target-reference pairs from dataset.")
 
         output = {
             "model_targets": targets,
             "processed_predictions": processed_predictions,
+            "instructions": instructions
         }
         
         self.validate_output(output)

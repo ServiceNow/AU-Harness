@@ -4,12 +4,14 @@ from metrics.metrics import Metrics
 from utils.custom_logging import write_record_log, append_final_score
 
 class BleuMetrics(Metrics):
-    def __call__(self, candidates, references, *, dataset_name: str | None = None, model_name: str | None = None):
+    def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None):
+        # Store instructions for potential later use
+        self.instructions = instructions
         overall = self.get_score(candidates, references)
         if dataset_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
             # write_record_log will also write to run.log internally
-            write_record_log(self, references, candidates, scores, dataset_name, model_name)
+            write_record_log(self, references, candidates, scores, dataset_name, model_name, instructions=self.instructions)
             # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
         return overall
@@ -40,6 +42,7 @@ class BleuMetrics(Metrics):
     # Internal helper
     # ---------------------------------------------------
     def compute_record_level_scores(self, candidates: list, references: list) -> dict[str, list | None]:
+        # Here we can use self.instructions if needed
         """Compute the scores that should be saved in the record level file.
 
         Args:

@@ -20,9 +20,12 @@ class GeneralPostprocessor(Postprocessor):
     """Postprocessor class to calculate the model scores for the model predictions."""
     def process(self, dataset: list[dict], predictions, metric) -> dict:
         model_targets = [record["model_target"] for record in dataset if "model_target" in record]
+        instructions = [record.get("instruction", "") for record in dataset]
+        
         output = {
             "model_targets": model_targets,
-            "processed_predictions": predictions
+            "processed_predictions": predictions,
+            "instructions": instructions
         }
         
         self.validate_output(output)

@@ -64,7 +64,7 @@ def configure(log_file: Optional[str] = None):
     _configured = True
 
 
-def write_record_log(self, refs, cands, scores, dataset_name, model_name, explanations=None):
+def write_record_log(self, refs, cands, scores, dataset_name, model_name, explanations=None, instructions=None):
     """
     Write record-level logs to a file specific to the dataset, metric, and model.
     
@@ -90,10 +90,14 @@ def write_record_log(self, refs, cands, scores, dataset_name, model_name, explan
     # Use provided explanations or an empty list
     if explanations is None:
         explanations = [""] * len(scores)
+        
+    # Use provided instructions or an empty list
+    if instructions is None:
+        instructions = [""] * len(scores)
     
     with open(log_path, "w", encoding="utf-8") as f:
-        for ref, cand, sc, expl in zip_longest(refs, cands, scores, explanations, fillvalue=None):
-            entry = {"reference": ref, "candidate": cand}
+        for ref, cand, sc, expl, inst in zip_longest(refs, cands, scores, explanations, instructions, fillvalue=None):
+            entry = {"instruction": inst, "reference": ref, "candidate": cand}
             if sc is not None:
                 entry["score"] = sc
             if expl:
@@ -101,7 +105,7 @@ def write_record_log(self, refs, cands, scores, dataset_name, model_name, explan
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
     
     # Write to shared run.log
-    write_to_run_json(self, refs, cands, scores, dataset_name, model_name, explanations)
+    write_to_run_json(self, refs, cands, scores, dataset_name, model_name, explanations, instructions)
     
     return log_path
 
@@ -109,7 +113,7 @@ def write_record_log(self, refs, cands, scores, dataset_name, model_name, explan
 # Flag to track if run.log has been reset for this session
 _run_log_reset = False
 
-def write_to_run_json(self, refs, cands, scores, dataset_name, model_name, explanations=None):
+def write_to_run_json(self, refs, cands, scores, dataset_name, model_name, explanations=None, instructions=None):
     """
     Write each sample's prediction to a shared run.log file that resets with every run.
     The file is truncated on the first call to this function in each program execution.
@@ -130,6 +134,10 @@ def write_to_run_json(self, refs, cands, scores, dataset_name, model_name, expla
     # Use provided explanations or an empty list
     if explanations is None:
         explanations = [""] * len(scores)
+        
+    # Use provided instructions or an empty list
+    if instructions is None:
+        instructions = [""] * len(scores)
     
     # Determine file mode: 'w' to reset file on first call, 'a' to append on subsequent calls
     file_mode = "w" if not _run_log_reset else "a"
@@ -138,11 +146,12 @@ def write_to_run_json(self, refs, cands, scores, dataset_name, model_name, expla
     # Open run.log in appropriate mode
     with open(run_path, file_mode, encoding="utf-8") as f:
         # Add entries for this metric/dataset/model
-        for ref, cand, sc, expl in zip_longest(refs, cands, scores, explanations, fillvalue=None):
+        for ref, cand, sc, expl, inst in zip_longest(refs, cands, scores, explanations, instructions, fillvalue=None):
             entry = {
                 "dataset": dataset_name,
                 "metric": self.name,
                 "model": model_name,
+                "instruction": inst,
                 "reference": ref,
                 "candidate": cand,
             }
