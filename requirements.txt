@@ -37,3 +37,5 @@ scikit-learn==1.7.0      # jiwer, librosa metrics
 scipy==1.15.3            # librosa, scikit-learn
 joblib==1.5.1            # scikit-learn
 soundfile==0.13.1        # librosa dependency, explicitly required
+
+word-levenshtein         # alignment tool for diarization metrics
