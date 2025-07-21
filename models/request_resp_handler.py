@@ -1,14 +1,13 @@
 import time
 import httpx
 from openai import AsyncAzureOpenAI, AsyncOpenAI
-from models.model_response import ModelResponse
+from models.model_response import ModelResponse, ErrorTracker
 from utils import constants
 import logging
 import requests
 logger = logging.getLogger(__name__)  # handlers configured in utils/logging.py
 import json
 import os
-import httpx
 
 class RequestRespHandler:
     """Class responsible for creating request and processing response for each type of inference server."""
@@ -21,6 +20,8 @@ class RequestRespHandler:
         self.api_version = model_info.get("api_version", "")
         self.client = None
         self.timeout = timeout
+        # Get temperature from model_info (default 0.2)
+        self.temperature = model_info.get("temperature", 0.2)
         # current retry attempt (set by caller). Default 1.
         self.current_attempt: int = 1
         # Remove Bearer if present for vllm/openai
@@ -71,7 +72,7 @@ class RequestRespHandler:
         else:
             raise ValueError(f"Invalid inference type: {self.inference_type}")
 
-    async def request_server(self, msg_body) -> ModelResponse:
+    async def request_server(self, msg_body, error_tracker: ErrorTracker = None) -> ModelResponse:
         """Send a request to the inference server and return a `Model Response`.
 
         Logic:
@@ -121,7 +122,7 @@ class RequestRespHandler:
             #openai chat completions, vllm chat completions
             elif self.inference_type in [constants.OPENAI_CHAT_COMPLETION, constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION]:
                 prediction = await self.client.chat.completions.create(
-                    model=model_name, messages=msg_body
+                    model=model_name, messages=msg_body, temperature=self.temperature
                 )
                 response_data = prediction.model_dump()
                 raw_response: str = response_data
@@ -173,6 +174,24 @@ class RequestRespHandler:
             logger.error(f"Attempt {self.current_attempt}: audio_raw_response={e!r}")
             # First attempt to wrap the error in ModelResponse
             try:
+                # Use the provided error_tracker if available, or create a new one
+                if not error_tracker:
+                    error_tracker = ErrorTracker()
+            
+                # Increment the appropriate counter based on error type
+                if "Connection error" in str(e):
+                    error_tracker.connection_error += 1
+                elif "rate limit" in str(e).lower() or "rate_limit" in str(e).lower():
+                    error_tracker.rate_limit += 1
+                elif "timeout" in str(e).lower():
+                    error_tracker.request_timeout += 1
+                elif "internal server" in str(e).lower() or "5" == str(e)[0]:
+                    error_tracker.internal_server += 1
+                elif "4" == str(e)[0]:
+                    error_tracker.api_error += 1
+                else:
+                    error_tracker.other += 1
+            
                 return ModelResponse(
                     input_prompt=str(msg_body) if msg_body is not None else "error",
                     llm_response="",
@@ -180,10 +199,15 @@ class RequestRespHandler:
                     response_code=500,
                     performance=None,
                     wait_time=0,
+                    error_tracker=error_tracker,
                 )
             except Exception as inner:
                 logger.error(f"ModelResponse construction failed: {inner!r}")
                 # Second ultra-safe fallback with hard-coded fields
+                # Use provided error_tracker or create a fallback one
+                if not error_tracker:
+                    error_tracker = ErrorTracker()
+                error_tracker.other += 1
                 return ModelResponse(
                     input_prompt="error",
                     llm_response="",
@@ -191,6 +215,7 @@ class RequestRespHandler:
                     response_code=500,
                     performance=None,
                     wait_time=0,
+                    error_tracker=error_tracker
                 )
     def get_response_text(self, resp_text):
         """Extract transcription text from the response."""

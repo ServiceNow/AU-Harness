@@ -61,10 +61,12 @@ class GeneralPreprocessor(Preprocessor):
             record["model_target"] = next((record[k] for k in possible_keys if k in record), None)
             if record["model_target"] is None:
                 raise ValueError("No valid target key found in record")
-
+            choices = record.get("choices", "")
             instruction = record.get("instruction") or record.get("question") or ""
             # Append any user-specified prompt add-ons
             instruction += " " + " ".join(prompt_add_ons[k] for k in user_prompt_add_ons if k in prompt_add_ons)
+            if choices:
+                instruction += f"\nAvailable choices: {choices}"
             record["instruction"] = instruction
             
             # Process system prompts

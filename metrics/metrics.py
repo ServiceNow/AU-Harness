@@ -17,6 +17,7 @@ class Metrics(ABC, MetricMetadata):
     record_level_scores: dict = Field(default_factory=dict, exclude=True, description="Record level scores")
     contexts: list[dict] = Field(default_factory=list, exclude=True, description="Contexts for the metric")
     params: dict = Field(default_factory=dict, exclude=True, description="Parameters for the metric")
+    model_responses: list = Field(default_factory=list, exclude=True, description="Model responses from inference")
     
     def __init__(self, **data):
         super().__init__(**data)

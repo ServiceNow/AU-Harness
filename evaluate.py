@@ -32,19 +32,19 @@ class Engine:
         self.dataset_name = dataset_name
 
     # Infer single model over dataset asynchronously
-    async def _infer_single_model(self, model: Model) -> list[str]:
+    async def _infer_single_model(self, model: Model) -> list:
         logger.info(f"[Engine._infer_single_model] Running model: {model.name()} on dataset of size {len(self.dataset)}")
         sem = asyncio.Semaphore(model.batch_size)  # Use per-model batch size
         async def _call(idx: int, sample: dict):
             async with sem:
                 resp = await model._generate_text_with_retry(sample, {"chunk_size": model.chunk_size, "metric": self.metric.name})
-                return idx, (resp.llm_response if resp else "")
-        # Create tasks paired with their original indexx
+                return idx, resp
+        # Create tasks paired with their original index
         tasks = [_call(i, ex) for i, ex in enumerate(self.dataset)]
-        results: list[str | None] = [None] * len(tasks)
+        results = [None] * len(tasks)
         for coro in tqdm(asyncio.as_completed(tasks), total=len(tasks), desc=f"Inference ({model.name()})"):
-            idx, text = await coro
-            results[idx] = text
+            idx, resp = await coro
+            results[idx] = resp
         logger.info(f"[Engine._infer_single_model] Model {model.name()} finished inference.")
         return results
 
@@ -58,9 +58,15 @@ class Engine:
 
     def run(self):
         logger.info("[Engine.run] Starting evaluation run.")
-        predictions = asyncio.run(self._infer_all())
+        model_responses_by_model = asyncio.run(self._infer_all())
         logger.info(f"[Engine.run] Predictions complete. Calculating scores...")
         scores = {}
+        
+        # Extract text predictions from ModelResponse objects
+        predictions = {}
+        for model_name, responses in model_responses_by_model.items():
+            # Extract text responses for the postprocessor
+            predictions[model_name] = [(resp.llm_response if resp else "") for resp in responses]
         
         # Pass the metric name to the postprocessor
         process_result = self.postprocessor.process(dataset=self.dataset, predictions=predictions, metric=self.metric.name)
@@ -74,10 +80,16 @@ class Engine:
 
         for model_name, outs in predictions.items():
             # Let the metric handle per-record logging internally
+            # Pass the full ModelResponse objects to the metric
+            model_responses = model_responses_by_model.get(model_name, [])
             if ids and lengths:
-                model_score = self.metric(outs, model_targets, ids, lengths, instructions=instructions, dataset_name=self.dataset_name, model_name=model_name)
+                model_score = self.metric(outs, model_targets, ids, lengths, instructions=instructions, 
+                                         dataset_name=self.dataset_name, model_name=model_name, 
+                                         model_responses=model_responses)
             else:
-                model_score = self.metric(outs, model_targets, instructions=instructions, dataset_name=self.dataset_name, model_name=model_name)
+                model_score = self.metric(outs, model_targets, instructions=instructions, 
+                                         dataset_name=self.dataset_name, model_name=model_name, 
+                                         model_responses=model_responses)
             scores[model_name] = model_score
         logger.info(f"[Engine.run] Evaluation complete. Returning scores.")
         logger.info(f"[Engine.run] Scores: {scores}")

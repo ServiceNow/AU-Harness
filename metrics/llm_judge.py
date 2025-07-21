@@ -142,9 +142,11 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
     name: str = "llm_judge_binary"
     _prompt_key: str = "binary_judge_prompt"
 
-    def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None):
+    def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
         """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
         self.instructions = instructions
+        self.model_responses = model_responses if model_responses else []
+        
         overall = super().get_score(candidates, references)
         if self.name in overall:
             overall[self.name] *= 100
@@ -152,7 +154,8 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
             scores = self.record_level_scores.get(self.name, [])
             # write_record_log will also write to run.log internally
             explanations = getattr(self, "explanations", None)
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, instructions=self.instructions)
+            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, 
+                           instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
         return overall
@@ -175,18 +178,22 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):
     name: str = "llm_judge_detailed"
     _prompt_key: str = "detailed_judge_prompt"
 
-    def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None):
+    def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
         """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
-        # Store instructions for potential later use
+        # Store instructions and model_responses for potential later use
         self.instructions = instructions
+        self.model_responses = model_responses if model_responses else []
+        
         overall = super().get_score(candidates, references)
         if self.name in overall:
+            # From 0-5 scale to 0-100 scale
             overall[self.name] *= 20
         if dataset_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
             # write_record_log will also write to run.log internally
             explanations = getattr(self, "explanations", None)
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, instructions=self.instructions)
+            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, 
+                          instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
         return overall
@@ -203,10 +210,12 @@ class CallHomeLLMJudgeMetric(_BaseLLMJudge):
     name: str = "llm_judge_callhome"
     _prompt_key: str = "callhome_judge_prompt"
 
-    def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None):
+    def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
         """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
-        # Store instructions for potential later use
+        # Store instructions and model_responses for potential later use
         self.instructions = instructions
+        self.model_responses = model_responses if model_responses else []
+        
         overall = super().get_score(candidates, references)
         print(overall)
         if self.name in overall:
@@ -216,7 +225,8 @@ class CallHomeLLMJudgeMetric(_BaseLLMJudge):
             scores = self.record_level_scores.get(self.name, [])
             # write_record_log will also write to run.log internally
             explanations = getattr(self, "explanations", None)
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, instructions=self.instructions)
+            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, 
+                      instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
         return overall
@@ -261,7 +271,8 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
         instructions=None,
         *,
         dataset_name: Optional[str] = None,
-        model_name: Optional[str] = None
+        model_name: Optional[str] = None,
+        model_responses=None
     ) -> dict:
         """
         Evaluate the predictions using LLM-based judgment and return overall accuracy.
@@ -275,8 +286,10 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
         Returns:
             dict: Evaluation result with accuracy and counts for correct, incorrect, and failed responses.
         """
-        # Store instructions for potential later use
+        # Store instructions and model_responses for potential later use
         self.instructions = instructions
+        self.model_responses = model_responses if model_responses else []
+        
         scores = self.compute_record_level_scores(candidates, references)
         all_scores = scores[self.name]
 
@@ -293,7 +306,8 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
 
         if dataset_name and model_name:
             # write_record_log will also write to run.log internally
-            write_record_log(self, references, candidates, all_scores, dataset_name, model_name, instructions=self.instructions)
+            write_record_log(self, references, candidates, all_scores, dataset_name, model_name, 
+                       instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
 

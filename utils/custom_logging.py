@@ -64,7 +64,7 @@ def configure(log_file: Optional[str] = None):
     _configured = True
 
 
-def write_record_log(self, refs, cands, scores, dataset_name, model_name, explanations=None, instructions=None):
+def write_record_log(self, refs, cands, scores, dataset_name, model_name, explanations=None, instructions=None, model_responses=None):
     """
     Write record-level logs to a file specific to the dataset, metric, and model.
     
@@ -76,6 +76,8 @@ def write_record_log(self, refs, cands, scores, dataset_name, model_name, explan
         dataset_name: Name of the dataset
         model_name: Name of the model
         explanations: Optional list of explanations for each score
+        instructions: Optional list of instructions
+        model_responses: Optional list of ModelResponse objects with detailed info
     """
     if not refs or not scores:
         return
@@ -96,12 +98,52 @@ def write_record_log(self, refs, cands, scores, dataset_name, model_name, explan
         instructions = [""] * len(scores)
     
     with open(log_path, "w", encoding="utf-8") as f:
-        for ref, cand, sc, expl, inst in zip_longest(refs, cands, scores, explanations, instructions, fillvalue=None):
+        for i, (ref, cand, sc, expl, inst) in enumerate(zip_longest(refs, cands, scores, explanations, instructions, fillvalue=None)):
             entry = {"instruction": inst, "reference": ref, "candidate": cand}
             if sc is not None:
                 entry["score"] = sc
             if expl:
                 entry["explanation"] = expl
+                
+            # Add ModelResponse data if available
+            if model_responses and i < len(model_responses) and model_responses[i]:
+                resp = model_responses[i]
+                # Add core ModelResponse fields
+                entry["model_response"] = {
+                    "response_code": resp.response_code,
+                    "raw_response_type": type(resp.raw_response).__name__
+                }
+                
+                if hasattr(resp, "wait_time") and resp.wait_time is not None:
+                    entry["model_response"]["wait_time"] = resp.wait_time
+                
+                # Add performance metrics if available
+                if resp.performance:
+                    entry["model_response"]["performance"] = {
+                        "latency": resp.performance.latency,
+                        "prompt_tokens": resp.performance.prompt_tokens,
+                        "response_tokens": resp.performance.response_tokens
+                    }
+                    
+                    # Add optional performance fields if they exist
+                    if hasattr(resp.performance, "time_per_token") and resp.performance.time_per_token is not None:
+                        entry["model_response"]["performance"]["time_per_token"] = resp.performance.time_per_token
+                    if hasattr(resp.performance, "reasoning_tokens") and resp.performance.reasoning_tokens is not None:
+                        entry["model_response"]["performance"]["reasoning_tokens"] = resp.performance.reasoning_tokens
+                    if hasattr(resp.performance, "relative_output_tokens") and resp.performance.relative_output_tokens is not None:
+                        entry["model_response"]["performance"]["relative_output_tokens"] = resp.performance.relative_output_tokens
+                    
+                # Add error tracker data if available
+                if resp.error_tracker:
+                    entry["model_response"]["errors"] = {
+                        "rate_limit": resp.error_tracker.rate_limit,
+                        "connection_error": resp.error_tracker.connection_error,
+                        "api_error": resp.error_tracker.api_error,
+                        "request_timeout": resp.error_tracker.request_timeout,
+                        "internal_server": resp.error_tracker.internal_server,
+                        "other": resp.error_tracker.other
+                    }
+                
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
     
     # Write to shared run.log
