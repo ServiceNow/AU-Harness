@@ -304,7 +304,7 @@ class Model(ABC):
             constants.OPENAI_CHAT_COMPLETION,
         ):
             # Cut to first 30s, then process as chat completion
-            if audio_array:
+            if audio_array is not None and len(audio_array) > 0:
                 chunk_array = audio_array[:max_samples]
                 encoded = encode_audio_array_base64(chunk_array, sampling_rate)
             else:
