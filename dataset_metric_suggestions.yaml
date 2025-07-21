@@ -365,3 +365,4 @@ dataset_metric:
   - "(fleurs_zu, word_error_rate)"
   - "(ifeval_audio, ifeval_score)"
   - "(ifeval_text, ifeval_score)"
+  - "(openbookqa, llm_judge_binary)"

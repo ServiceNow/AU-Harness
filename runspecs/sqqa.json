@@ -1,0 +1,9 @@
+{
+  "openbookqa": {
+    "hf_repo": "hlt-lab/voicebench",
+    "subset": "openbookqa",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  }
+}
