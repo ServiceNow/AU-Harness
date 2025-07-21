@@ -5,5 +5,13 @@
     "language": "english",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor"
+  },
+  "sd-qa": {
+    "hf_repo": "hlt-lab/voicebench",
+    "subset": "sd-qa",
+    "split": "usa",
+    "language": "english",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   }
 }

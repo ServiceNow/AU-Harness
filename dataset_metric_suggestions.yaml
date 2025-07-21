@@ -366,3 +366,4 @@ dataset_metric:
   - "(ifeval_audio, ifeval_score)"
   - "(ifeval_text, ifeval_score)"
   - "(openbookqa, llm_judge_binary)"
+  - "(sd-qa, llm_judge_binary)"
