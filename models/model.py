@@ -189,8 +189,8 @@ class Model(ABC):
 
 
         #getting attributes
-        audio_array = message.get("array")
-        sampling_rate = message.get("sampling_rate")
+        audio_array = message.get("array", None)
+        sampling_rate = message.get("sampling_rate", 0)
         chunk_seconds: int = int(run_params.get("chunk_size", 30))  # default to 30s
         metric_name: str | None = run_params.get("metric")
         max_samples: int = int(chunk_seconds * sampling_rate) if sampling_rate else 0
@@ -304,8 +304,11 @@ class Model(ABC):
             constants.OPENAI_CHAT_COMPLETION,
         ):
             # Cut to first 30s, then process as chat completion
-            chunk_array = audio_array[:max_samples]
-            encoded = encode_audio_array_base64(chunk_array, sampling_rate)
+            if audio_array:
+                chunk_array = audio_array[:max_samples]
+                encoded = encode_audio_array_base64(chunk_array, sampling_rate)
+            else:
+                encoded = ""
 
             # Prepare messages list starting with system prompt if available
             messages = []
