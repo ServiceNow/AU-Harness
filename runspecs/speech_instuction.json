@@ -10,5 +10,12 @@
     "language": "english",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor"
+  },
+  "ifeval": {
+    "hf_repo": "hlt-lab/voicebench",
+    "subset": "ifeval",
+    "language": "english",
+    "preprocessor": "IfevalPreprocessor",
+    "postprocessor": "IfevalPostprocessor"
   }
 }

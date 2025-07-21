@@ -363,3 +363,4 @@ dataset_metric:
   - "(fleurs_xh, word_error_rate)"
   - "(fleurs_yo, word_error_rate)"
   - "(fleurs_zu, word_error_rate)"
+  - "(ifeval, ifeval_score)"
