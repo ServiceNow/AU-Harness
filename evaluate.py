@@ -375,15 +375,23 @@ def main(cfg_path='config.yaml'):
             logger.info(f"[main] Loading dataset '{dataset_name}' with metric '{metric_name}' ...")
             
             repo = dataset_info.get("hf_repo", None)
+            split = None
             if not repo:
                 repo = dataset_info.get("path", None)
             subset = dataset_info.get("subset", "")
             language = dataset_info.get("language", "en")
             preprocessor_name = dataset_info["preprocessor"]
             postprocessor_name = dataset_info["postprocessor"]
+
+            if cfg.get("split", None) is not None:
+                split = cfg.get("split")
+
+            if dataset_info.get("split", None) is not None:
+                split = dataset_info["split"]
+
             
             dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, 
-                                  user_prompt_add_ons=user_prompt_add_ons, system_prompts=system_prompts, length_filter=length_filter, metric=metric_name, split=cfg.get("split"))
+                                  user_prompt_add_ons=user_prompt_add_ons, system_prompts=system_prompts, length_filter=length_filter, metric=metric_name, split=split)
             metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
             
             # Dynamically import postprocessor class
