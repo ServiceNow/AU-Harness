@@ -58,7 +58,8 @@ class IfevalPreprocessor(Preprocessor):
 
             instruction = {"instruction_id_list": record["instruction_id_list"],
                            "kwargs": record["kwargs"]}
-            record["instruction"] = instruction
+            record["instruction"] = ''
+            record["supporting_instructions"] = instruction
             new_dataset.append(record)
         logger.info(f"Dataset is {total_duration / 3600:.2f} hours long")
         return new_dataset

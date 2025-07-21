@@ -27,7 +27,7 @@ class IfevalPostprocessor(Postprocessor):
 
     def process(self, dataset: list[dict], predictions, metric) -> dict:
         input_prompts = [record["prompt"] for record in dataset if "prompt" in record]
-        instructions = [record.get("instruction", "") for record in dataset]
+        instructions = [record.get("supporting_instructions", "") for record in dataset]
 
         output = {
             "model_targets": input_prompts,
