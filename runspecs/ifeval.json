@@ -1,0 +1,16 @@
+{
+    "ifeval_audio": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "ifeval",
+        "language": "english",
+        "preprocessor": "IfevalAudioPreprocessor",
+        "postprocessor": "IfevalPostprocessor"
+    },
+    "ifeval_text": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "ifeval",
+        "language": "english",
+        "preprocessor": "IfevalTextPreprocessor",
+        "postprocessor": "IfevalPostprocessor"
+    }
+}
