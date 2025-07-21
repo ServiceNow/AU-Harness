@@ -5,7 +5,7 @@ from tqdm import tqdm
 from preprocessors.base import Preprocessor
 
 
-class IfevalPreprocessor(Preprocessor):
+class IfevalAudioPreprocessor(Preprocessor):
     """Preprocessor for Audio benchmarks from AudioBench on HF."""
 
     def extract_audio_info(self, record):
