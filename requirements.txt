@@ -39,5 +39,10 @@ scipy==1.15.3            # librosa, scikit-learn
 joblib==1.5.1            # scikit-learn
 soundfile==0.13.1        # librosa dependency, explicitly required
 
+
+langdetect==1.0.9
+immutabledict==4.2.1
+
 # Debugging
 debugpy==1.8.0           # VSCode debugging support
+

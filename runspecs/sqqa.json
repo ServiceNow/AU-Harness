@@ -1,0 +1,113 @@
+{
+    "openbookqa": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "openbookqa",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_usa": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "usa",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "mmsu_law": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "mmsu",
+        "split": "law",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "mmsu_engineering": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "mmsu",
+        "split": "engineering",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "mmsu_other": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "mmsu",
+        "split": "other",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "mmsu_biology": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "mmsu",
+        "split": "biology",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "mmsu_business": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "mmsu",
+        "split": "business",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "mmsu_economics": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "mmsu",
+        "split": "economics",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "mmsu_health": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "mmsu",
+        "split": "health",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "mmsu_philosophy": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "mmsu",
+        "split": "philosophy",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "mmsu_psychology": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "mmsu",
+        "split": "psychology",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "mmsu_history": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "mmsu",
+        "split": "history",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "mmsu_chemistry": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "mmsu",
+        "split": "chemistry",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "mmsu_physics": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "mmsu",
+        "split": "physics",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    }
+}
