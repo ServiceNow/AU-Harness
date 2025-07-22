@@ -1,7 +1,6 @@
 import logging
 from typing import Dict, List, Optional, Any
 import numpy as np
-from tqdm import tqdm
 from preprocessors.base import Preprocessor
 
 logger = logging.getLogger(__name__)
@@ -37,23 +36,23 @@ class BigBenchAudioTextOnlyPreprocessor(Preprocessor):
           including the audio array resampled to 16kHz, metadata, and target label.
         """
         
-        logger.info("In [BigBenchAudioPreprocessor] Processing dataset...")
+        logger.info("In [BigBenchAudioTextOnlyPreprocessor] Processing dataset...")
 
         dataset_keys = list(dataset.keys())
         dataset_size = len(dataset.get("id", []))
-        logger.info(f"Dataset keys: {dataset_keys}, total samples: {dataset_size}")
+        self.log_dataset_info(dataset_keys, dataset_size)
 
-        processed_data: List[Dict[str, Any]] = []
+        # Convert from columnar to row-wise format
+        row_data = self.columnar_to_row_wise(dataset)
+        processed_data = []
 
-        for i in tqdm(range(dataset_size), desc="Processing samples"):
-            sample_id = dataset["id"][i]
+        for record in row_data:
+            sample_id = record["id"]
             audio_data = {
                 "array": np.array([]), # Placeholder, not used in text-only evals
                 "sampling_rate": 16000
             }
-            category = dataset["category"][i]
-            official_answer = dataset["official_answer"][i]
-            transcript = dataset["transcript"][i]
+            transcript = record["transcript"]
 
             # Ensure transcript exists
             if not transcript:
@@ -61,22 +60,22 @@ class BigBenchAudioTextOnlyPreprocessor(Preprocessor):
                 continue
 
             # Ensure official answer exists
-            if not official_answer:
+            if not record["official_answer"]:
                 logger.warning(f"[{sample_id}] Missing official answer. Skipping sample.")
                 continue
 
             # Create structured sample
             sample = {
                 "id": sample_id,
-                "category": category,
+                "category": record["category"],
                 "transcript": transcript,
                 "array": audio_data["array"],  # Placeholder, not used in text-only evals
                 "sampling_rate": audio_data["sampling_rate"],   # Placeholder, not used in text-only evals
-                "model_target": official_answer.strip(),
+                "model_target": record["official_answer"].strip(),
                 "instruction": transcript,
             }
 
             processed_data.append(sample)
 
-        logger.info(f"Processed dataset size: {len(processed_data)}")
+        self.log_dataset_info(dataset_keys, dataset_size, len(processed_data))
         return processed_data

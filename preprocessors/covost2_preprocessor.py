@@ -1,10 +1,7 @@
 import logging
-logger = logging.getLogger(__name__)
-from tqdm import tqdm
-from pathlib import Path
-from scipy.signal import resample
-import yaml
 from preprocessors.base import Preprocessor
+
+logger = logging.getLogger(__name__)
 
 class Covost2Preprocessor(Preprocessor):
     """Preprocessor for Covost2 dataset from fixie-ai/covost2."""
@@ -19,17 +16,25 @@ class Covost2Preprocessor(Preprocessor):
         """
         logger.info("In [Covost2Preprocessor] Processing dataset...")
 
+        # Extract common properties using base class method
+        props = self.extract_properties(properties)
+        
+        # Get dataset info
         dataset_keys = list(dataset.keys())
         dataset_size = len(dataset.get("id", []))
-        logger.info(f"Dataset keys: {dataset_keys}, total samples: {dataset_size}")
-
-        target_language = properties.get("target_language", "en")
-        processed_data: List[Dict[str, Any]] = []
-
-        for idx in tqdm(range(dataset_size), desc="Processing samples"):
-            sample_id = dataset["id"][idx]
-            translation = dataset["translation"][idx]
-            audio = dataset["audio"][idx]
+        self.log_dataset_info(dataset_keys, dataset_size)
+        
+        # Set default target language
+        target_language = "en"
+        
+        # Convert from columnar to row-wise format
+        row_data = self.columnar_to_row_wise(dataset)
+        processed_data = []
+        
+        for record in row_data:
+            sample_id = record["id"]
+            translation = record["translation"]
+            audio = record["audio"]
             audio_array = audio["array"]
             sampling_rate = audio["sampling_rate"]
 
@@ -37,17 +42,16 @@ class Covost2Preprocessor(Preprocessor):
                 logger.warning(f"[{sample_id}] Sampling rate missing. Assuming 16kHz.")
                 sampling_rate = 16000
 
-            # Resample if needed
-            if sampling_rate != 16000:
-                target_length = int(16000 * len(audio_array) / sampling_rate)
-                audio_array = resample(audio_array, target_length)
-                sampling_rate = 16000
+            # Resample if needed using base class method
+            audio_array, sampling_rate = self.resample_audio(audio_array, sampling_rate)
             
             # Get the target language from dataset_info
             try:
-                target_language = properties["dataset_info"].get("target_language")
+                dataset_info = props["dataset_info"]
+                if dataset_info and "target_language" in dataset_info:
+                    target_language = dataset_info["target_language"]
             except KeyError:
-                raise ValueError("Target language not found. Please specify target_language in dataset config")
+                pass  # Keep default language if not found
 
             instruction = f"Please translate the given speech to {target_language}. Return ONLY the translated speech in text format without any other prefix text."
             
@@ -61,5 +65,5 @@ class Covost2Preprocessor(Preprocessor):
             }
             processed_data.append(sample)
 
-        logger.info(f"Processed dataset size: {len(processed_data)}")
+        self.log_dataset_info(dataset_keys, dataset_size, len(processed_data))
         return processed_data

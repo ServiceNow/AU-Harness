@@ -1,8 +1,6 @@
 import logging
 from typing import Dict, List, Optional, Any
 import numpy as np
-from scipy.signal import resample
-from tqdm import tqdm
 from preprocessors.base import Preprocessor
 
 logger = logging.getLogger(__name__)
@@ -40,17 +38,16 @@ class BigBenchAudioPreprocessor(Preprocessor):
 
         dataset_keys = list(dataset.keys())
         dataset_size = len(dataset.get("id", []))
-        logger.info(f"Dataset keys: {dataset_keys}, total samples: {dataset_size}")
+        self.log_dataset_info(dataset_keys, dataset_size)
+        
+        # Convert from columnar to row-wise format
+        row_data = self.columnar_to_row_wise(dataset)
+        processed_data = []
 
-        processed_data: List[Dict[str, Any]] = []
-
-        for i in tqdm(range(dataset_size), desc="Processing samples"):
-            sample_id = dataset["id"][i]
-            audio_data = dataset["audio"][i]
-            category = dataset["category"][i]
-            official_answer = dataset["official_answer"][i]
-            transcript = dataset["transcript"][i]
-
+        for record in row_data:
+            sample_id = record["id"]
+            audio_data = record["audio"]
+            
             # Validate audio data structure
             if not isinstance(audio_data, dict):
                 logger.warning(f"[{sample_id}] Invalid audio format. Skipping sample.")
@@ -65,28 +62,25 @@ class BigBenchAudioPreprocessor(Preprocessor):
                 sr = 16000
 
             # Resample if needed
-            if sr != 16000:
-                target_length = int(16000 * len(audio_array) / sr)
-                audio_array = resample(audio_array, target_length)
-                sr = 16000
+            audio_array, sr = self.resample_audio(audio_array, sr)
 
             # Ensure official answer exists
-            if not official_answer:
+            if not record["official_answer"]:
                 logger.warning(f"[{sample_id}] Missing official answer. Skipping sample.")
                 continue
 
             # Create structured sample
             sample = {
                 "id": sample_id,
-                "category": category,
-                "transcript": transcript,
+                "category": record["category"],
+                "transcript": record["transcript"],
                 "array": audio_array,
                 "sampling_rate": sr,
-                "model_target": official_answer.strip(),
+                "model_target": record["official_answer"].strip(),
                 "instruction": "Answer the question provided in the audio.",
             }
 
             processed_data.append(sample)
 
-        logger.info(f"Processed dataset size: {len(processed_data)}")
+        self.log_dataset_info(dataset_keys, dataset_size, len(processed_data))
         return processed_data

@@ -26,14 +26,28 @@ class IfevalPostprocessor(Postprocessor):
     """Postprocessor class to calculate the model scores for the model predictions."""
 
     def process(self, dataset: list[dict], predictions, metric) -> dict:
+        """
+        Process and clean model predictions and prepare targets for evaluation.
+        
+        Args:
+            dataset (list[dict]): List of preprocessed input samples
+            predictions (dict): Dictionary mapping model names to lists of predictions
+            metric: Evaluation metric
+            
+        Returns:
+            dict: Dictionary containing processed data for evaluation
+        """
+        logger.info("Processing predictions with IfevalPostprocessor...")
+        
+        # Extract prompts as targets (specific to ifeval format)
         input_prompts = [record["prompt"] for record in dataset if "prompt" in record]
+        
+        # Extract supporting instructions (specific to ifeval format)
         instructions = [record.get("supporting_instructions", "") for record in dataset]
 
-        output = {
-            "model_targets": input_prompts,
-            "processed_predictions": predictions,
-            "instructions": instructions
-        }
-
-        self.validate_output(output)
-        return output
+        # Create standardized output using base class method
+        return self.create_output(
+            model_targets=input_prompts,
+            processed_predictions=predictions,
+            instructions=instructions
+        )

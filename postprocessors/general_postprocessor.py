@@ -19,14 +19,31 @@ class ReportingMetrics(dict):
 class GeneralPostprocessor(Postprocessor):
     """Postprocessor class to calculate the model scores for the model predictions."""
     def process(self, dataset: list[dict], predictions, metric) -> dict:
-        model_targets = [record["model_target"] for record in dataset if "model_target" in record]
-        instructions = [record.get("instruction", "") for record in dataset]
+        """
+        Process and clean model predictions and prepare targets for evaluation.
         
-        output = {
-            "model_targets": model_targets,
-            "processed_predictions": predictions,
-            "instructions": instructions
-        }
+        Args:
+            dataset (list[dict]): List of preprocessed input samples
+            predictions (dict): Dictionary mapping model names to lists of predictions
+            metric: Evaluation metric
+            
+        Returns:
+            dict: Dictionary containing processed data for evaluation
+        """
+        logger.info("Processing predictions with GeneralPostprocessor...")
         
-        self.validate_output(output)
-        return output
+        # Process predictions (in this case, just pass them through)
+        processed_predictions = predictions
+        
+        # Extract targets using base class method
+        targets = self.extract_targets(dataset)
+        
+        # Extract instructions using base class method
+        instructions = self.extract_instructions(dataset)
+        
+        # Create standardized output using base class method
+        return self.create_output(
+            model_targets=targets,
+            processed_predictions=processed_predictions,
+            instructions=instructions
+        )

@@ -1,24 +1,13 @@
 import logging
+from preprocessors.base import Preprocessor
 
 logger = logging.getLogger(__name__)
-from tqdm import tqdm
-from preprocessors.base import Preprocessor
 
 
 class IfevalAudioPreprocessor(Preprocessor):
     """Preprocessor for Audio benchmarks from AudioBench on HF."""
 
-    def extract_audio_info(self, record):
-        if "audio" in record:
-            record["array"] = record["audio"]["array"]
-            record["sampling_rate"] = record["audio"]["sampling_rate"]
-            record.pop("audio")
-        elif "context" in record:
-            record["array"] = record["context"]["array"]
-            record["sampling_rate"] = record["context"]["sampling_rate"]
-            record.pop("context")
-        else:
-            raise KeyError("Neither 'audio' nor 'context' keys found in data")
+    # Using the extract_audio_info method from the base class
 
     def process(self, dataset: dict,
                 num_samples: int = None,
@@ -36,14 +25,19 @@ class IfevalAudioPreprocessor(Preprocessor):
         props = self.extract_properties(properties)
         length_filter = props["length_filter"]
 
+        # Get dataset keys and size
+        keys = list(dataset.keys())
+        dataset_size = len(dataset[keys[0]]) if keys else 0
+        self.log_dataset_info(keys, dataset_size)
 
+        # Convert from columnar to row-wise format
+        row_data = self.columnar_to_row_wise(dataset)
+        
         total_duration = 0
         new_dataset = []
-        keys = list(dataset.keys())
-        num_samples = len(dataset[keys[0]]) if keys else 0
-        # logger.info(f"Dataset keys: {keys}, num_samples: {num_samples}")
-        for i in tqdm(range(num_samples), desc="Preprocessing"):
-            record = {k: dataset[k][i] for k in keys}
+        
+        for record in row_data:
+            # Extract audio information
             self.extract_audio_info(record)
 
             # Calculate audio duration in seconds
@@ -51,15 +45,14 @@ class IfevalAudioPreprocessor(Preprocessor):
             total_duration += audio_duration
 
             # Apply length filtering if specified
-            if length_filter and isinstance(length_filter, tuple) and len(length_filter) == 2:
-                min_length, max_length = length_filter
-                if audio_duration < min_length or audio_duration > max_length:
-                    continue
+            if not self.check_audio_length(record["array"], record["sampling_rate"], length_filter):
+                continue
 
             instruction = {"instruction_id_list": record["instruction_id_list"],
                            "kwargs": record["kwargs"]}
             record["instruction"] = ''
             record["supporting_instructions"] = instruction
             new_dataset.append(record)
-        logger.info(f"Dataset is {total_duration / 3600:.2f} hours long")
+            
+        self.log_dataset_info(keys, dataset_size, len(new_dataset), total_duration)
         return new_dataset

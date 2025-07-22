@@ -1,10 +1,8 @@
 import logging
-
-logger = logging.getLogger(__name__)
-from tqdm import tqdm
 from preprocessors.ifeval_audio_preprocessor import IfevalAudioPreprocessor
 from preprocessors.base import Preprocessor
 
+logger = logging.getLogger(__name__)
 
 
 class IfevalTextPreprocessor(Preprocessor):
@@ -22,11 +20,23 @@ class IfevalTextPreprocessor(Preprocessor):
             properties: Optional dict of properties, may include 'length_filter' tuple (min_seconds, max_seconds)
                        to filter samples by audio length.
         """
+        # Process data using ifeval_audio_processor first
         ifeval_audio_processor = IfevalAudioPreprocessor()
-        dataset = ifeval_audio_processor.process(dataset, num_samples, properties)
+        processed_dataset = ifeval_audio_processor.process(dataset, num_samples, properties)
+        
+        # Get dataset keys to log information
+        keys = list(dataset.keys())
+        dataset_size = len(dataset[keys[0]]) if keys else 0
+        
+        logger.info("In [IfEvalTextPreprocessor] Processing dataset...")
+        
+        # Process for text-only
         new_dataset = []
-        for i in range(len(dataset)):
-            dataset[i]['array'] = None
-            dataset[i]['instruction'] = dataset[i]['prompt']
-            new_dataset.append(dataset[i])
+        for record in processed_dataset:
+            record['array'] = None
+            if 'prompt' in record:
+                record['instruction'] = record['prompt']
+            new_dataset.append(record)
+            
+        self.log_dataset_info(keys, dataset_size, len(new_dataset))
         return new_dataset
