@@ -279,7 +279,6 @@ class Model(ABC):
                                 },
                             ],
                         })
-                    
                     message["model_inputs"] = messages
                     resp = await self.req_resp_hndlr.request_server(message["model_inputs"], error_tracker)
                     concatenated_text += resp.llm_response or ""
@@ -356,7 +355,6 @@ class Model(ABC):
                         }
                     ],
                 })
-            
             message["model_inputs"] = messages
             return await self.req_resp_hndlr.request_server(message["model_inputs"], error_tracker)
 

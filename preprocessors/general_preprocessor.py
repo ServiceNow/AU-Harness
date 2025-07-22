@@ -72,11 +72,9 @@ class GeneralPreprocessor(Preprocessor):
             # Process system prompts
             system_prompt_text = "\n\n".join(system_prompts_mapping[k] for k in system_prompts if k in system_prompts_mapping)
             if system_prompt_text:
-                record["system_prompt"] = system_prompt_text
-                
+                record["system_prompt"] = system_prompt_text    
             record["judge_type"] = properties.get("judge_type", "detailed")
             new_dataset.append(record)
 
         logger.info(f"Dataset is {total_duration / 3600:.2f} hours long")
-        #print("DEBUG: Flattened record keys:", new_dataset[0].keys())
         return new_dataset

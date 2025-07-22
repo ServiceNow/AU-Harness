@@ -1,5 +1,26 @@
+import os
+import yaml
+import sys
+from pathlib import Path
+
+# Load config.yaml first to configure logging
+config_path = Path("config.yaml")
+if not config_path.exists():
+    print(f"Error: {config_path} not found")
+    sys.exit(1)
+
+with open(config_path, 'r') as f:
+    config = yaml.safe_load(f)
+
+# Get logging configuration from config.yaml or use defaults
+log_config = config.get('logging', {})
+log_file = log_config.get('log_file', 'default.log')
+log_level = log_config.get('level', 'INFO')
+
+# Import and set up logging with the configuration from config.yaml
 from utils.custom_logging import configure
-configure()
+configure(log_file)
+
 import logging
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
