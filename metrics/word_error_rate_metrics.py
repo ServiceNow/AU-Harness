@@ -23,16 +23,9 @@ from metrics.wer.normalizers import JapaneseTextNormalizer
 from metrics.wer.whisper_normalizer.english import EnglishTextNormalizer
 from metrics.wer.whisper_normalizer.basic import BasicTextNormalizer
 from utils.custom_logging import write_record_log, append_final_score
-
 from utils import constants
 
-# Mapping to normalize language codes
-language_map = {
-    "en": "en",
-    "english": "en",
-    "ja": "ja", 
-    "japanese": "ja",
-}
+# Normalizers for different languages
 NORMALIZERS = {"en": EnglishTextNormalizer(), "ja": JapaneseTextNormalizer()}
 DEFAULT_NORMALIZER = BasicTextNormalizer()
 BASIC_TRANSFORMATIONS = Compose(
@@ -60,19 +53,12 @@ def convert_unicode_to_characters(text: str) -> str:
         # Optionally log the error
         logger.warning(f"Unicode normalization failed: {e}. Returning original text.")
         return text
-    """Convert unicode to composed form."""
-    try:
-        return unicodedata.normalize("NFC", text)
-    except Exception as e:
-        # Optionally log the error
-        logger.warning(f"Unicode normalization failed: {e}. Returning original text.")
-        return text
 
 
 def convert_digits_to_words(text: str, language: str):
+    """Convert numbers to words (e.g., "3" to "three")."""
     if not language:
         return text
-    """Convert numbers to words (e.g., "3" to "three")."""
     try:
         return re.sub(r"\d+", lambda m: num2words(int(m.group()), lang=language), text)
     except Exception as e:
@@ -86,14 +72,10 @@ def normalize_text(text: str, language: str = 'en') -> str:
 
     Args:
         text: input text
-        language: language code or full name (e.g. 'en', 'english')
+        language: full name (e.g. 'english', 'English')
     """
-    # Convert language to lowercase for case-insensitive matching
-    if isinstance(language, str):
-        language = language.lower()
-    
-    # Normalize language code
-    normalized_language = language_map.get(language, '')
+    # Normalize language code using the enhanced get_language_code function
+    normalized_language = constants.get_language_code(language)
     
     # Get the appropriate normalizer
     normalizer = NORMALIZERS.get(normalized_language, DEFAULT_NORMALIZER)
@@ -124,8 +106,9 @@ class WERMetrics(Metrics):
         super().__init__()
         self.name = "word_error_rate"
         self.lower_better = True
+        # Normalize language code during initialization
+        self.language = constants.get_language_code(language)
         self.description = "The proportion of words that are incorrectly predicted, when compared to the reference text. The dataset is considered as one big conversation."
-        self.language = language
 
     def compute_attributes(self, incorrect: list[int | float], total: list[int | float], attributes: list[str]) -> dict:
         """Compute the attributes (e.g., accent, gender) that should be saved in the record level file for analysis."""
@@ -259,6 +242,7 @@ class WERMetrics(Metrics):
         candidates_clean = []
 
         for i, (reference, candidate) in enumerate(tqdm(zip(references, candidates), desc="word_error_rate", total=len(references))):
+            # Use the normalized language code from instance variable
             lang_code = getattr(self, 'language', 'en')
             references_clean.append(normalize_text(reference, lang_code))
             candidates_clean.append(normalize_text(candidate, lang_code))
