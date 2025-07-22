@@ -146,7 +146,6 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
         """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
         self.instructions = instructions
         self.model_responses = model_responses if model_responses else []
-        
         overall = super().get_score(candidates, references)
         if self.name in overall:
             overall[self.name] *= 100
