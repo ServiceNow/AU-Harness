@@ -3,15 +3,7 @@ import re
 import unicodedata
 from collections import defaultdict
 import re
-from jiwer import (
-    Compose,
-    ReduceToListOfListOfChars,
-    RemovePunctuation,
-    RemoveWhiteSpace,
-    Strip,
-    ToLowerCase,
-    process_words,
-)
+from jiwer import process_words
 from tqdm import tqdm
 from num2words import num2words
 import logging
@@ -19,30 +11,8 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 from metrics.base_metric_metadata import MetricMetadata
 from metrics.metrics import Metrics
-from metrics.wer.normalizers import JapaneseTextNormalizer
-from metrics.wer.whisper_normalizer.english import EnglishTextNormalizer
-from metrics.wer.whisper_normalizer.basic import BasicTextNormalizer
 from utils.custom_logging import write_record_log, append_final_score
 from utils import constants
-
-# Normalizers for different languages
-NORMALIZERS = {"en": EnglishTextNormalizer(), "ja": JapaneseTextNormalizer()}
-DEFAULT_NORMALIZER = BasicTextNormalizer()
-BASIC_TRANSFORMATIONS = Compose(
-    [
-        ToLowerCase(),
-        RemovePunctuation(),
-        Strip(),
-    ]
-)
-# CER stands for Character Error Rate
-CER_LANGUAGES = {"ja"}
-CER_DEFAULTS = Compose(
-    [
-        RemoveWhiteSpace(),
-        ReduceToListOfListOfChars(),
-    ]
-)
 
 
 def convert_unicode_to_characters(text: str) -> str:
@@ -78,12 +48,12 @@ def normalize_text(text: str, language: str = 'en') -> str:
     normalized_language = constants.get_language_code(language)
     
     # Get the appropriate normalizer
-    normalizer = NORMALIZERS.get(normalized_language, DEFAULT_NORMALIZER)
+    normalizer = constants.NORMALIZERS.get(normalized_language, constants.DEFAULT_NORMALIZER)
     
     # Process the text
     text = convert_unicode_to_characters(text)
     text = convert_digits_to_words(text, normalized_language)
-    return BASIC_TRANSFORMATIONS([normalizer(text)])[0]
+    return constants.BASIC_TRANSFORMATIONS([normalizer(text)])[0]
 
 
 class WERMetrics(Metrics):
@@ -254,8 +224,8 @@ class WERMetrics(Metrics):
                 total_scores.append(1)
             else:
                 kwargs = (
-                    {kwarg: CER_DEFAULTS for kwarg in ("truth_transform", "hypothesis_transform")}
-                    if lang_code in CER_LANGUAGES
+                    {kwarg: constants.CER_DEFAULTS for kwarg in ("truth_transform", "hypothesis_transform")}
+                    if lang_code in constants.CER_LANGUAGES
                     else {}
                 )
                 measures = process_words(references_clean[-1], candidates_clean[-1], **kwargs)

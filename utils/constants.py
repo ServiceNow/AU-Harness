@@ -1,9 +1,43 @@
-#inference server types
+# Inference server types
 INFERENCE_SERVER_VLLM_CHAT_COMPLETION = 'vllm'
 OPENAI_CHAT_COMPLETION = 'openai'
 INFERENCE_SERVER_VLLM_TRANSCRIPTION = 'vllm_transcription'
 OPENAI_TRANSCRIPTION = 'openai_transcription'
-#extras
+
+# WER/CER metrics constants
+# These imports need to be added since we're moving the constants here
+from jiwer import (
+    Compose,
+    ReduceToListOfListOfChars,
+    RemovePunctuation,
+    RemoveWhiteSpace,
+    Strip,
+    ToLowerCase,
+)
+from metrics.wer.normalizers import JapaneseTextNormalizer
+from metrics.wer.whisper_normalizer.english import EnglishTextNormalizer
+from metrics.wer.whisper_normalizer.basic import BasicTextNormalizer
+
+# Define WER/CER related constants
+NORMALIZERS = {"en": EnglishTextNormalizer(), "ja": JapaneseTextNormalizer()}
+DEFAULT_NORMALIZER = BasicTextNormalizer()
+BASIC_TRANSFORMATIONS = Compose(
+    [
+        ToLowerCase(),
+        RemovePunctuation(),
+        Strip(),
+    ]
+)
+# CER stands for Character Error Rate
+CER_LANGUAGES = {"ja"}
+CER_DEFAULTS = Compose(
+    [
+        RemoveWhiteSpace(),
+        ReduceToListOfListOfChars(),
+    ]
+)
+
+# Other constants
 ROUND_DIGITS = 3
 VLLM_MAX_TOKEN_RETRY_BUFFER = 50
 INVERTED_METRIC_INDICATOR = '↓'
