@@ -18,5 +18,5 @@ metric_map = {
     'meteor': ('metrics.meteor_score', 'MeteorScore'),
     'llm_judge_big_bench_audio': ('metrics.llm_judge', 'BigBenchAudioLLMJudgeMetric'),
     'bertscore': ('metrics.bertscore', 'BertScore'),
-    'ifeval_score': ('metrics.ifeval_score', 'IfevalScore'),
+    "instruction_following": ("metrics.voice_bench_ifeval_score", "InstructionFollowingScore"),
 }
