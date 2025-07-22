@@ -211,9 +211,8 @@ class WERMetrics(Metrics):
 
         for i, (reference, candidate) in enumerate(tqdm(zip(references, candidates), desc="word_error_rate", total=len(references))):
             # Use the normalized language code from instance variable
-            lang_code = getattr(self, 'language', 'en')
-            references_clean.append(normalize_text(reference, lang_code))
-            candidates_clean.append(normalize_text(candidate, lang_code))
+            references_clean.append(normalize_text(reference, self.language))
+            candidates_clean.append(normalize_text(candidate, self.language))
             if references_clean[-1].strip() == "":
                 logger.warning(
                     f"After normalization, '{reference}' is empty. Considering all words in '{candidate}' as incorrect."
@@ -223,7 +222,7 @@ class WERMetrics(Metrics):
             else:
                 kwargs = (
                     {kwarg: constants.CER_DEFAULTS for kwarg in ("truth_transform", "hypothesis_transform")}
-                    if lang_code in constants.CER_LANGUAGES
+                    if self.language in constants.CER_LANGUAGES
                     else {}
                 )
                 measures = process_words(references_clean[-1], candidates_clean[-1], **kwargs)
