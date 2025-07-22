@@ -42,17 +42,15 @@ def normalize_text(text: str, language: str = 'en') -> str:
 
     Args:
         text: input text
-        language: full name (e.g. 'english', 'English')
+        language: language code (e.g. 'en', 'es')
     """
-    # Normalize language code using the enhanced get_language_code function
-    normalized_language = constants.get_language_code(language)
-    
+    # Use language code directly without conversion
     # Get the appropriate normalizer
-    normalizer = constants.NORMALIZERS.get(normalized_language, constants.DEFAULT_NORMALIZER)
+    normalizer = constants.NORMALIZERS.get(language, constants.DEFAULT_NORMALIZER)
     
     # Process the text
     text = convert_unicode_to_characters(text)
-    text = convert_digits_to_words(text, normalized_language)
+    text = convert_digits_to_words(text, language)
     return constants.BASIC_TRANSFORMATIONS([normalizer(text)])[0]
 
 
@@ -76,8 +74,8 @@ class WERMetrics(Metrics):
         super().__init__()
         self.name = "word_error_rate"
         self.lower_better = True
-        # Normalize language code during initialization
-        self.language = constants.get_language_code(language)
+        # Use language code directly without conversion
+        self.language = language
         self.description = "The proportion of words that are incorrectly predicted, when compared to the reference text. The dataset is considered as one big conversation."
 
     def compute_attributes(self, incorrect: list[int | float], total: list[int | float], attributes: list[str]) -> dict:

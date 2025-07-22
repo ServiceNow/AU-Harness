@@ -50,7 +50,7 @@
         "hf_repo": "hlt-lab/voicebench",
         "subset": "mmsu",
         "split": "business",
-        "language": "english",
+        "language": "en",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
     },
@@ -58,7 +58,7 @@
         "hf_repo": "hlt-lab/voicebench",
         "subset": "mmsu",
         "split": "economics",
-        "language": "english",
+        "language": "en",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
     },
@@ -66,7 +66,7 @@
         "hf_repo": "hlt-lab/voicebench",
         "subset": "mmsu",
         "split": "health",
-        "language": "english",
+        "language": "en",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
     },
@@ -74,7 +74,7 @@
         "hf_repo": "hlt-lab/voicebench",
         "subset": "mmsu",
         "split": "philosophy",
-        "language": "english",
+        "language": "en",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
     },
@@ -82,7 +82,7 @@
         "hf_repo": "hlt-lab/voicebench",
         "subset": "mmsu",
         "split": "psychology",
-        "language": "english",
+        "language": "en",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
     },
@@ -90,7 +90,7 @@
         "hf_repo": "hlt-lab/voicebench",
         "subset": "mmsu",
         "split": "history",
-        "language": "english",
+        "language": "en",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
     },
@@ -98,7 +98,7 @@
         "hf_repo": "hlt-lab/voicebench",
         "subset": "mmsu",
         "split": "chemistry",
-        "language": "english",
+        "language": "en",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
     },
@@ -106,7 +106,7 @@
         "hf_repo": "hlt-lab/voicebench",
         "subset": "mmsu",
         "split": "physics",
-        "language": "english",
+        "language": "en",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
     }
