@@ -287,7 +287,31 @@ def _calculate_aggregates(aggregates, all_scores, models):
             continue
         
         # Filter valid pairs (each pair must be a tuple/list with 2 items)
-        pair_tuples = [(p[0], p[1]) for p in pairs if isinstance(p, (list, tuple)) and len(p) == 2]
+        # First, get the original pairs from the config
+        original_pairs = [(p[0], p[1]) for p in pairs if isinstance(p, (list, tuple)) and len(p) == 2]
+        
+        # Expand any pairs that use 'all' as the dataset name
+        pair_tuples = []
+        for dataset_name, metric_name in original_pairs:
+            if dataset_name.lower() == "all":
+                # Find all keys in all_scores that match this metric
+                all_datasets_for_metric = []
+                for key in all_scores.keys():
+                    if key.endswith(f"_{metric_name}") and isinstance(all_scores[key], dict):
+                        # Extract the dataset name from the key
+                        key_parts = key.split(f"_{metric_name}")
+                        if key_parts:
+                            dataset = key_parts[0]
+                            all_datasets_for_metric.append((dataset, metric_name))
+                
+                if all_datasets_for_metric:
+                    logger.info(f"[_calculate_aggregates] Expanding 'all' for metric '{metric_name}' to {len(all_datasets_for_metric)} datasets: {all_datasets_for_metric}")
+                    pair_tuples.extend(all_datasets_for_metric)
+                else:
+                    logger.warning(f"[_calculate_aggregates] No datasets found for metric '{metric_name}' when expanding 'all'")
+            else:
+                # Use the pair as-is
+                pair_tuples.append((dataset_name, metric_name))
         if not pair_tuples:
             logger.warning(f"[calculate_aggregates] No valid pairs found in aggregate '{agg_name}'")
             continue
