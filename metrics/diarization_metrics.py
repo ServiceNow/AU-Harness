@@ -370,13 +370,3 @@ class DiarizationMetrics(Metrics):
         }
 
         return results
-
-    def get_reporting_summary_score(self, overall_score: dict[str, float]) -> dict:
-        """Gets the score to display in wandb. If a metric says lower-is-better, highlight with an ↓.
-
-        Args:
-            overall_score: The overall score that was computed for the metric
-        Returns:
-            The dictionary of columns and values to actually present in wandb
-        """
-        return overall_score
