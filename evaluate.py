@@ -83,7 +83,8 @@ class Engine:
             scores[model_name] = model_score
         logger.info(f"[Engine.run] Evaluation complete. Returning scores.")
         logger.info(f"[Engine.run] Scores: {scores}")
-        return {self.metric.name: scores}
+        # Return scores directly without nesting under metric name
+        return scores
 
 
 
@@ -259,7 +260,7 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
 
 
 
-def calculate_aggregates(aggregates, all_scores, models):
+def _calculate_aggregates(aggregates, all_scores, models):
     """
     Process aggregate metrics by calculating means across multiple dataset-metric pairs.
     
@@ -297,14 +298,21 @@ def calculate_aggregates(aggregates, all_scores, models):
             for dataset_name, metric_name in pair_tuples:
                 key = f"{dataset_name}_{metric_name}"
                 try:
-                    score = all_scores[key][metric_name][model_name]
+                    # Access scores directly with model name
+                    score = all_scores[key][model_name]
                     valid_scores.append(score)
                 except KeyError:
+                    logger.debug(f"[_calculate_aggregates] Score not found for {model_name} in {key}")
                     pass  # Skip if any part of the path doesn't exist
             
-            # Calculate mean if we have valid scores
+            # Calculate mean of valid scores directly since we're no longer dealing with nested structures
             if valid_scores:
+                # All scores should be numeric now that we've simplified the structure
                 model_agg_scores[model_name] = statistics.mean(valid_scores)
+                logger.info(f"[_calculate_aggregates] Model {model_name} aggregate score for '{agg_name}': {model_agg_scores[model_name]}")
+            else:
+                logger.warning(f"[_calculate_aggregates] No valid scores found for model {model_name} in aggregate '{agg_name}'")
+                logger.debug(f"[_calculate_aggregates] No scores available to aggregate")
 
         if model_agg_scores:
             aggregate_scores[str(agg_name)] = model_agg_scores
@@ -316,7 +324,7 @@ def calculate_aggregates(aggregates, all_scores, models):
         
 
 #TO-DO: need to implement command line override, add common configs, group by task type
-def find_runspec_by_name(dataset_name, runspec_files):
+def _find_runspec_by_name(dataset_name, runspec_files):
     """
     Find a runspec file by exact name match.
     
@@ -345,7 +353,7 @@ def find_runspec_by_name(dataset_name, runspec_files):
     return False, {}
 
 
-def process_dataset_and_evaluate(dataset_name, dataset_info, metric_name, cfg, settings, models, all_scores):
+def _process_dataset_and_evaluate(dataset_name, dataset_info, metric_name, cfg, settings, models, all_scores):
     """
     Process a dataset and run evaluation on it.
     
@@ -423,7 +431,7 @@ def process_dataset_and_evaluate(dataset_name, dataset_info, metric_name, cfg, s
     return True
 
 
-def find_dataset_in_runspecs(dataset_name, runspec_files):
+def _find_dataset_in_runspecs(dataset_name, runspec_files):
     """
     Search for a dataset within all runspec files.
     
@@ -450,7 +458,7 @@ def find_dataset_in_runspecs(dataset_name, runspec_files):
     return False, {}
 
 
-def load_config(cfg_path):
+def _load_config(cfg_path):
     """
     Load configuration from YAML file and extract settings.
     
@@ -486,9 +494,13 @@ def load_config(cfg_path):
     return cfg, runspec_files, settings
 
 
+
+
+
+
 def main(cfg_path='config.yaml'):
     # Load configuration
-    cfg, runspec_files, settings = load_config(cfg_path)
+    cfg, runspec_files, settings = _load_config(cfg_path)
     
     # Extract settings
 
@@ -523,11 +535,11 @@ def main(cfg_path='config.yaml'):
         logger.info(f"[main] Processing dataset '{dname}' with metric '{metric_name}' ...")
         
         # Step 1: Look for a matching runspec file
-        found_runspec, selected_datasets = find_runspec_by_name(dname, runspec_files)
+        found_runspec, selected_datasets = _find_runspec_by_name(dname, runspec_files)
         
         # Step 2: If no matching runspec file by name, search within all runspec files for the specific dataset
         if not found_runspec:
-            found_runspec, selected_datasets = find_dataset_in_runspecs(dname, runspec_files)
+            found_runspec, selected_datasets = _find_dataset_in_runspecs(dname, runspec_files)
             
             if not found_runspec:
                 logger.info(f"[main] Dataset not found: {dname}")
@@ -543,7 +555,7 @@ def main(cfg_path='config.yaml'):
         # Process each selected dataset(if whole runspec could be multiple per dname/metric pair)
         for dataset_name, dataset_info in selected_datasets.items():
             # Process this dataset and evaluate
-            process_dataset_and_evaluate(dataset_name, dataset_info, metric_name, cfg, settings, models, all_scores)
+            _process_dataset_and_evaluate(dataset_name, dataset_info, metric_name, cfg, settings, models, all_scores)
     
     logger.info("[main] Evaluation scores:")
     logger.info(json.dumps(all_scores, indent=2))
@@ -552,7 +564,7 @@ def main(cfg_path='config.yaml'):
     aggregates = cfg.get("aggregate", [])
     if aggregates:
         logger.info("[main] Processing aggregate metrics...")
-        calculate_aggregates(aggregates, all_scores, models)
+        _calculate_aggregates(aggregates, all_scores, models)
     
     return all_scores
 
