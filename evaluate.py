@@ -14,6 +14,8 @@ import yaml
 from tqdm import tqdm
 import importlib
 import argparse
+import statistics
+from typing import Dict, List, Tuple, Any
 # Central logging setup
 from models.model import Model
 from metrics.metrics import Metrics
@@ -257,10 +259,208 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
 
 
 
+def calculate_aggregates(aggregates, all_scores, models):
+    """
+    Process aggregate metrics by calculating means across multiple dataset-metric pairs.
+    
+    Args:
+        aggregates: List of aggregate configurations from the config file
+        all_scores: Dictionary of scores keyed by dataset_metric pairs
+        models: List of model instances used for evaluation
+    """
+    logger.info("[calculate_aggregates] Processing aggregate metrics...")
+    aggregate_scores = {}
+    models_list = [model.name() for model in models]
+    
+    for agg_item in aggregates:
+        # Skip invalid aggregates
+        if not isinstance(agg_item, (list, tuple)) or len(agg_item) != 2:
+            logger.warning(f"[calculate_aggregates] Invalid aggregate format: {agg_item}")
+            continue
+            
+        agg_name, pairs = agg_item
+        if not isinstance(pairs, list) or not pairs:
+            logger.warning(f"[calculate_aggregates] Invalid pairs in aggregate '{agg_name}'")
+            continue
+        
+        # Filter valid pairs (each pair must be a tuple/list with 2 items)
+        pair_tuples = [(p[0], p[1]) for p in pairs if isinstance(p, (list, tuple)) and len(p) == 2]
+        if not pair_tuples:
+            logger.warning(f"[calculate_aggregates] No valid pairs found in aggregate '{agg_name}'")
+            continue
+            
+        # Calculate model scores
+        model_agg_scores = {}
+        for model_name in models_list:
+            # Collect valid scores for this model across all dataset-metric pairs
+            valid_scores = []
+            for dataset_name, metric_name in pair_tuples:
+                key = f"{dataset_name}_{metric_name}"
+                try:
+                    score = all_scores[key][metric_name][model_name]
+                    valid_scores.append(score)
+                except KeyError:
+                    pass  # Skip if any part of the path doesn't exist
+            
+            # Calculate mean if we have valid scores
+            if valid_scores:
+                model_agg_scores[model_name] = statistics.mean(valid_scores)
+
+        if model_agg_scores:
+            aggregate_scores[str(agg_name)] = model_agg_scores
+    
+    # Add aggregate scores to all_scores
+    if aggregate_scores:
+        logger.info(f"[calculate_aggregates] Final aggregate scores: {json.dumps(aggregate_scores, indent=2)}")
+        all_scores["aggregates"] = aggregate_scores
+        
+
 #TO-DO: need to implement command line override, add common configs, group by task type
-#main that runs
-def main(cfg_path='config.yaml'):
-    logger.info(f"[main] Loading config from {cfg_path}")
+def find_runspec_by_name(dataset_name, runspec_files):
+    """
+    Find a runspec file by exact name match.
+    
+    Args:
+        dataset_name: Name of the dataset to find
+        runspec_files: List of runspec files to search in
+        
+    Returns:
+        tuple: (found_runspec, selected_datasets)
+    """
+    for runspec_file in runspec_files:
+        runspec_name = runspec_file.stem
+        
+        # Check if dataset name exactly matches the runspec file name
+        if dataset_name == runspec_name:
+            logger.info(f"[find_runspec_by_name] Found matching runspec file: {runspec_file}")
+            
+            # Load the runspec file
+            with open(runspec_file, 'r') as f:
+                runspec_db = json.load(f)
+            
+            # Use all datasets in this runspec
+            logger.info(f"[find_runspec_by_name] Using all {len(runspec_db)} datasets from {runspec_file}")
+            return True, runspec_db
+    
+    return False, {}
+
+
+def process_dataset_and_evaluate(dataset_name, dataset_info, metric_name, cfg, settings, models, all_scores):
+    """
+    Process a dataset and run evaluation on it.
+    
+    Args:
+        dataset_name: Name of the dataset to process
+        dataset_info: Dictionary containing dataset information
+        metric_name: Name of the metric to use
+        cfg: Configuration dictionary
+        settings: Dictionary of settings extracted from config
+        models: List of model instances
+        all_scores: Dictionary to store evaluation results
+        
+    Returns:
+        bool: True if evaluation was performed, False if dataset was skipped
+    """
+    # Extract needed settings
+    accented_filter = settings["accented"]
+    language_filter = settings["language"]
+    num_samples = settings["num_samples"]
+    user_prompt_add_ons = settings["user_prompt_add_ons"]
+    system_prompts = settings["system_prompts"]
+    length_filter = settings["length_filter"]
+    judge_concurrency = settings["judge_concurrency"]
+    judge_model = settings["judge_model"]
+    
+    # Check if we need to filter out accented datasets
+    if accented_filter is False and dataset_info.get("accented", False) is True:
+        logger.info(f"[process_dataset] Skipping dataset '{dataset_name}' because it is accented and accented filter is False")
+        return False
+        
+    # Check if we need to filter by language
+    if language_filter is not None:
+        dataset_language = dataset_info.get("language", "").lower()
+        if dataset_language and language_filter.lower() != dataset_language:
+            logger.info(f"[process_dataset] Skipping dataset '{dataset_name}' because its language '{dataset_language}' doesn't match filter '{language_filter}'")
+            return False
+    
+    logger.info(f"[process_dataset] Loading dataset '{dataset_name}' with metric '{metric_name}' ...")
+    
+    # Extract dataset parameters
+    repo = dataset_info.get("hf_repo", None)
+    split = None
+    if not repo:
+        repo = dataset_info.get("path", None)
+    subset = dataset_info.get("subset", "")
+    language = dataset_info.get("language", "en")
+    preprocessor_name = dataset_info["preprocessor"]
+    postprocessor_name = dataset_info["postprocessor"]
+
+    if cfg.get("split", None) is not None:
+        split = cfg.get("split")
+
+    if dataset_info.get("split", None) is not None:
+        split = dataset_info["split"]
+
+    
+    # Load dataset, metric, and postprocessor
+    dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, user_prompt_add_ons=user_prompt_add_ons, 
+                            system_prompts=system_prompts, length_filter=length_filter, metric=metric_name, split=split, dataset_info=dataset_info)
+    metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
+    
+    # Dynamically import postprocessor class
+    PostprocessorClass = get_class_from_module('postprocessors', postprocessor_name)
+    if PostprocessorClass is None:
+        logger.warning(f"Could not load postprocessor {postprocessor_name}, using default GeneralPostprocessor")
+        # Try to load the default postprocessor
+        PostprocessorClass = get_class_from_module('postprocessors', 'GeneralPostprocessor')
+    postprocessor = PostprocessorClass()
+    
+    logger.info("[process_dataset] Initializing Engine and running evaluation...")
+    result = Engine(models, dataset, metric, postprocessor, dataset_name).run()
+    key = f"{dataset_name}_{metric_name}"
+    all_scores[key] = result
+    
+    return True
+
+
+def find_dataset_in_runspecs(dataset_name, runspec_files):
+    """
+    Search for a dataset within all runspec files.
+    
+    Args:
+        dataset_name: Name of the dataset to find
+        runspec_files: List of runspec files to search in
+        
+    Returns:
+        tuple: (found_runspec, selected_datasets)
+    """
+    logger.info(f"[find_dataset_in_runspecs] No matching runspec file for '{dataset_name}'. Searching within individual runspec files...")
+    
+    # Search through all runspec files to find the dataset
+    for runspec_file in runspec_files:
+        with open(runspec_file, 'r') as f:
+            runspec_db = json.load(f)
+        
+        if dataset_name in runspec_db:
+            logger.info(f"[find_dataset_in_runspecs] Found dataset '{dataset_name}' in {runspec_file}")
+            # Use only this specific dataset
+            return True, {dataset_name: runspec_db[dataset_name]}
+    
+    logger.warning(f"[find_dataset_in_runspecs] Dataset '{dataset_name}' not found in any runspec file")
+    return False, {}
+
+
+def load_config(cfg_path):
+    """
+    Load configuration from YAML file and extract settings.
+    
+    Args:
+        cfg_path: Path to the configuration YAML file
+        
+    Returns:
+        tuple: (cfg, runspec_files, settings_dict)
+    """
+    logger.info(f"[load_config] Loading config from {cfg_path}")
     with open(cfg_path, 'r') as f:
         cfg = yaml.safe_load(f)
     
@@ -269,15 +469,31 @@ def main(cfg_path='config.yaml'):
     
     # Get list of all runspec files in the runspecs directory
     runspec_files = list(runspecs_dir.glob("*.json"))
-    logger.info(f"[main] Found {len(runspec_files)} runspec files")
+    logger.info(f"[load_config] Found {len(runspec_files)} runspec files")
     
-    # Load metric and model settings
-    judge_concurrency = cfg.get("judge_concurrency", 1)
-    judge_model = cfg.get("judge_model", None)
-    user_prompt_add_ons = cfg.get("user_prompt_add_ons", [])
-    system_prompts = cfg.get("system_prompts", [])
-    length_filter = cfg.get("length_filter", None)
-    num_samples = cfg.get("num_samples", None)
+    # Extract settings
+    settings = {
+        "judge_concurrency": cfg.get("judge_concurrency", 1),
+        "judge_model": cfg.get("judge_model", None),
+        "user_prompt_add_ons": cfg.get("user_prompt_add_ons", []),
+        "system_prompts": cfg.get("system_prompts", []),
+        "length_filter": cfg.get("length_filter", None),
+        "num_samples": cfg.get("num_samples", None),
+        "accented": cfg.get("accented", None),
+        "language": cfg.get("language", None)
+    }
+    
+    return cfg, runspec_files, settings
+
+
+def main(cfg_path='config.yaml'):
+    # Load configuration
+    cfg, runspec_files, settings = load_config(cfg_path)
+    
+    # Extract settings
+
+    accented_filter = settings["accented"]
+    language_filter = settings["language"]
     
     # Load models
     logger.info(f"[main] Loading models...")
@@ -289,13 +505,12 @@ def main(cfg_path='config.yaml'):
     
     # Get dataset-metric pairs from config.yaml
     dataset_metric_pairs = []
-    for pair_str in cfg.get("dataset_metric", []):
-        # Remove parentheses and split by comma
-        pair_str = pair_str.strip().strip("()").strip()
-        items = [x.strip() for x in pair_str.split(",")]
-        if len(items) != 2:
-            raise ValueError(f"Invalid dataset_metric pair: {pair_str}. Must be in format '(dataset, metric)'")
-        dataset_name, metric_name = items
+    for pair in cfg.get("dataset_metric", []):
+        # Validate the pair format - should be a list with two elements
+        if not isinstance(pair, list) or len(pair) != 2:
+            raise ValueError(f"Invalid dataset_metric pair: {pair}. Must be a list with two elements [dataset, metric]")
+        
+        dataset_name, metric_name = pair
         dataset_metric_pairs.append((dataset_name, metric_name))
     
     logger.info(f"[main] Dataset-metric pairs from config: {dataset_metric_pairs}")
@@ -308,109 +523,38 @@ def main(cfg_path='config.yaml'):
         logger.info(f"[main] Processing dataset '{dname}' with metric '{metric_name}' ...")
         
         # Step 1: Look for a matching runspec file
-        found_runspec = False
-        selected_datasets = {}
-        
-        # Try to match the dataset name with one of the runspec files
-        for runspec_file in runspec_files:
-            runspec_name = runspec_file.stem
-            
-            # First, check if dataset name exactly matches the runspec file name
-            if dname == runspec_name:
-                logger.info(f"[main] Found matching runspec file: {runspec_file}")
-                found_runspec = True
-                
-                # Load the runspec file
-                with open(runspec_file, 'r') as f:
-                    runspec_db = json.load(f)
-                
-                # Use all datasets in this runspec
-                selected_datasets = runspec_db
-                logger.info(f"[main] Using all {len(runspec_db)} datasets from {runspec_file}")
-                break
+        found_runspec, selected_datasets = find_runspec_by_name(dname, runspec_files)
         
         # Step 2: If no matching runspec file by name, search within all runspec files for the specific dataset
         if not found_runspec:
-            logger.info(f"[main] No matching runspec file for '{dname}'. Searching within individual runspec files...")
-            
-            # Search through all runspec files to find the dataset
-            for runspec_file in runspec_files:
-                with open(runspec_file, 'r') as f:
-                    runspec_db = json.load(f)
-                
-                if dname in runspec_db:
-                    logger.info(f"[main] Found dataset '{dname}' in {runspec_file}")
-                    # Use only this specific dataset
-                    selected_datasets = {dname: runspec_db[dname]}
-                    found_runspec = True
-                    break
+            found_runspec, selected_datasets = find_dataset_in_runspecs(dname, runspec_files)
             
             if not found_runspec:
-                logger.warning(f"[main] Dataset '{dname}' not found in any runspec file")
                 logger.info(f"[main] Dataset not found: {dname}")
                 continue
         
-        # Check for accented filter setting
-        accented_filter = cfg.get("accented", None)
+        # Log filter settings if they exist
         if accented_filter is not None:
             logger.info(f"[main] Applying accented filter setting: {accented_filter}")
             
-        # Check for language filter setting
-        language_filter = cfg.get("language", None)
         if language_filter is not None:
             logger.info(f"[main] Applying language filter setting: {language_filter}")
         
-        # Process each selected dataset
+        # Process each selected dataset(if whole runspec could be multiple per dname/metric pair)
         for dataset_name, dataset_info in selected_datasets.items():
-            # Check if we need to filter out accented datasets
-            if accented_filter is False and dataset_info.get("accented", False) is True:
-                logger.info(f"[main] Skipping dataset '{dataset_name}' because it is accented and accented filter is False")
-                continue
-                
-            # Check if we need to filter by language
-            if language_filter is not None:
-                dataset_language = dataset_info.get("language", "").lower()
-                if dataset_language and language_filter.lower() != dataset_language:
-                    logger.info(f"[main] Skipping dataset '{dataset_name}' because its language '{dataset_language}' doesn't match filter '{language_filter}'")
-                    continue
-            
-            logger.info(f"[main] Loading dataset '{dataset_name}' with metric '{metric_name}' ...")
-            
-            repo = dataset_info.get("hf_repo", None)
-            split = None
-            if not repo:
-                repo = dataset_info.get("path", None)
-            subset = dataset_info.get("subset", "")
-            language = dataset_info.get("language", "en")
-            preprocessor_name = dataset_info["preprocessor"]
-            postprocessor_name = dataset_info["postprocessor"]
-
-            if cfg.get("split", None) is not None:
-                split = cfg.get("split")
-
-            if dataset_info.get("split", None) is not None:
-                split = dataset_info["split"]
-
-            
-            dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, user_prompt_add_ons=user_prompt_add_ons, 
-                                    system_prompts=system_prompts, length_filter=length_filter, metric=metric_name, split=split, dataset_info=dataset_info)
-            metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
-            
-            # Dynamically import postprocessor class
-            PostprocessorClass = get_class_from_module('postprocessors', postprocessor_name)
-            if PostprocessorClass is None:
-                logger.warning(f"Could not load postprocessor {postprocessor_name}, using default GeneralPostprocessor")
-                # Try to load the default postprocessor
-                PostprocessorClass = get_class_from_module('postprocessors', 'GeneralPostprocessor')
-            postprocessor = PostprocessorClass()
-            
-            logger.info("[main] Initializing Engine and running evaluation...")
-            result = Engine(models, dataset, metric, postprocessor, dataset_name).run()
-            key = f"{dataset_name}_{metric_name}"
-            all_scores[key] = result
+            # Process this dataset and evaluate
+            process_dataset_and_evaluate(dataset_name, dataset_info, metric_name, cfg, settings, models, all_scores)
     
     logger.info("[main] Evaluation scores:")
     logger.info(json.dumps(all_scores, indent=2))
+    
+    # Process aggregate metrics if present in config
+    aggregates = cfg.get("aggregate", [])
+    if aggregates:
+        logger.info("[main] Processing aggregate metrics...")
+        calculate_aggregates(aggregates, all_scores, models)
+    
+    return all_scores
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run audio evaluation benchmark')
@@ -419,4 +563,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     # Pass the config path to main
-    main(cfg_path=args.config)
+    all_scores = main(cfg_path=args.config)
+    logger.info("[main] Evaluation complete.")

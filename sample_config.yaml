@@ -1,8 +1,14 @@
 
-dataset_metric: #tuple of dataset, metric(can run by task or dataset)
-  - "(wavcaps_qa_test, word_error_rate)"
-  - "(alpaca_audio_test, word_error_rate)"
-  - "(emotion_recognition, llm_judge_binary)"
+dataset_metric: #list of dataset-metric pairs, each as a two-item list of strings ["dataset_name", "metric_name"]
+  - ["wavcaps_qa_test", "word_error_rate"]
+  - ["alpaca_audio_test", "word_error_rate"]
+  - ["emotion_recognition", "llm_judge_binary"]
+
+# Optional: Aggregate multiple dataset-metric pairs into a single score
+# Format: list of [string, list of dataset-metric pairs]
+aggregate:
+  - ["overall_wer", [["wavcaps_qa_test", "word_error_rate"], ["alpaca_audio_test", "word_error_rate"]]]
+  - ["emotion_performance", [["emotion_recognition", "llm_judge_binary"]]]
 num_samples: 100 #number of samples to run(remove for all)
 judge_concurrency: 8 #judge call(optional)
 judge_model: "gpt-4o-mini" #optional(only supported model right no2)
