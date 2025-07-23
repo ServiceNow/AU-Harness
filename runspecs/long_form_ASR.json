@@ -2,20 +2,20 @@
   "earnings21_test": {
     "hf_repo": "AudioLLMs/earnings21_test",
     "language": "en",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   },
   "earnings22_test": {
     "hf_repo": "AudioLLMs/earnings22_test",
     "language": "en",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   },
   "tedlium3_long_form_test": {
     "hf_repo": "AudioLLMs/tedlium3_long_form_test",
     "language": "en",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   },
   "callhome_eng": {
     "language": "en",

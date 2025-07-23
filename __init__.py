@@ -1,4 +1,3 @@
-"""AudioBench-Minimal package init."""
 __all__ = [
     "evaluate",
 ]
