@@ -20,6 +20,10 @@ class CallhomePostprocessor(Postprocessor):
             for model_name, preds in predictions.items()
         }
         # Special handling for word_error_rate metric
+        output = {
+            "model_targets": model_targets,
+            "processed_predictions": processed_predictions
+        }
         if metric == "word_error_rate":
             # More robust handling of IDs and audio lengths
             ids = []
@@ -31,20 +35,8 @@ class CallhomePostprocessor(Postprocessor):
                 length = len(array) / sampling_rate if array is not None else 0
                 lengths.append(length)
                 
-            output = {
-                "model_targets": model_targets,
-                "processed_predictions": processed_predictions,
-                "ids": ids,
-                "lengths": lengths
-            }
+            output["ids"] = ids
+            output["lengths"] = lengths
             
-            self.validate_output(output)
-            return output
-
-        output = {
-            "model_targets": model_targets,
-            "processed_predictions": processed_predictions
-        }
-        
         self.validate_output(output)
         return output

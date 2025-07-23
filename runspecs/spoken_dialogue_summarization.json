@@ -2,7 +2,7 @@
     "mnsc_sds_part3_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SDS-PART3-Test",
-    "language": "english",
+    "language": "en",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor",
     "accented": true
@@ -10,7 +10,7 @@
   "mnsc_sds_part4_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SDS-PART4-Test",
-    "language": "english",
+    "language": "en",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor",
     "accented": true
@@ -18,7 +18,7 @@
   "mnsc_sds_part5_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "SDS-PART5-Test",
-    "language": "english",
+    "language": "en",
     "preprocessor": "AudiobenchPreprocessor",
     "postprocessor": "AudiobenchPostprocessor",
     "accented": true

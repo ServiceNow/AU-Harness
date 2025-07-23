@@ -5,6 +5,7 @@ from pathlib import Path
 from scipy.signal import resample
 import yaml
 from preprocessors.base import Preprocessor
+from utils.constants import language_map  # Import language_map from constants
 
 class Covost2Preprocessor(Preprocessor):
     """Preprocessor for Covost2 dataset from fixie-ai/covost2."""
@@ -45,11 +46,14 @@ class Covost2Preprocessor(Preprocessor):
             
             # Get the target language from dataset_info
             try:
-                target_language = properties["dataset_info"].get("target_language")
+                target_language_code = properties["dataset_info"].get("target_language")
+                # Convert language code to full language name using the language_map
+                target_language_name = language_map.get(target_language_code, target_language_code)
+                target_language_name = target_language_name.capitalize()
             except KeyError:
                 raise ValueError("Target language not found. Please specify target_language in dataset config")
 
-            instruction = f"Please translate the given speech to {target_language}. Return ONLY the translated speech in text format without any other prefix text."
+            instruction = f"Please translate the given speech to {target_language_name}. Return ONLY the translated speech in text format without any other prefix text."
             
             # Create structured sample
             sample = {
