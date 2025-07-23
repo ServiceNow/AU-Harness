@@ -15,7 +15,6 @@ from tqdm import tqdm
 import importlib
 import argparse
 import statistics
-from typing import Dict, List, Tuple, Any
 # Central logging setup
 from models.model import Model
 from metrics.metrics import Metrics
@@ -205,8 +204,11 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="G
         logger.error(error_msg)
         raise ValueError(error_msg)
     processed = PreprocessorClass().process(dset, num_samples, properties)
-    logger.info(f"[_load_dataset] Dataset loaded and processed. Size: {len(processed)}")
-    return processed
+    dataset_size = len(processed)
+    logger.info(f"[_load_dataset] Dataset loaded and processed. Size: {dataset_size}")
+    
+    # Return both the processed dataset and its size
+    return processed, dataset_size
 
 
 
@@ -298,18 +300,34 @@ def _calculate_aggregates(aggregates, all_scores, models):
             for dataset_name, metric_name in pair_tuples:
                 key = f"{dataset_name}_{metric_name}"
                 try:
-                    # Access scores directly with model name
-                    score = all_scores[key][model_name]
-                    valid_scores.append(score)
+                    # Access scores within the model's dictionary - get result part
+                    score_data = all_scores[key]
+                    dataset_size = score_data.get("dataset_size", 1)  # Get dataset size, default to 1
+                    model_dict = score_data["result"][model_name]
+                    
+                    # Extract the appropriate metric score
+                    if metric_name in model_dict:
+                        metric_score = model_dict[metric_name]
+                        valid_scores.append((metric_score, dataset_size))
+
                 except KeyError:
-                    logger.debug(f"[_calculate_aggregates] Score not found for {model_name} in {key}")
+                    logger.warning(f"[_calculate_aggregates] Score not found for {model_name} in {key}")
                     pass  # Skip if any part of the path doesn't exist
             
-            # Calculate mean of valid scores directly since we're no longer dealing with nested structures
+            # Calculate weighted mean if we have valid scores
             if valid_scores:
-                # All scores should be numeric now that we've simplified the structure
-                model_agg_scores[model_name] = statistics.mean(valid_scores)
-                logger.info(f"[_calculate_aggregates] Model {model_name} aggregate score for '{agg_name}': {model_agg_scores[model_name]}")
+                # Unpack scores and weights
+                scores, weights = zip(*valid_scores)
+                
+                # Calculate weighted average if we have weights
+                if sum(weights) > 0:
+                    weighted_avg = sum(score * weight for score, weight in zip(scores, weights)) / sum(weights)
+                    model_agg_scores[model_name] = weighted_avg
+                    logger.info(f"[_calculate_aggregates] Model {model_name} weighted aggregate score for '{agg_name}': {weighted_avg}")
+                else:
+                    # Fallback to simple mean if weights are all zero
+                    model_agg_scores[model_name] = statistics.mean(scores)
+                    logger.info(f"[_calculate_aggregates] Model {model_name} simple aggregate score for '{agg_name}': {model_agg_scores[model_name]}")
             else:
                 logger.warning(f"[_calculate_aggregates] No valid scores found for model {model_name} in aggregate '{agg_name}'")
                 logger.debug(f"[_calculate_aggregates] No scores available to aggregate")
@@ -381,17 +399,17 @@ def _process_dataset_and_evaluate(dataset_name, dataset_info, metric_name, cfg, 
     
     # Check if we need to filter out accented datasets
     if accented_filter is False and dataset_info.get("accented", False) is True:
-        logger.info(f"[process_dataset] Skipping dataset '{dataset_name}' because it is accented and accented filter is False")
+        logger.info(f"[_process_dataset] Skipping dataset '{dataset_name}' because it is accented and accented filter is False")
         return False
         
     # Check if we need to filter by language
     if language_filter is not None:
         dataset_language = dataset_info.get("language", "").lower()
         if dataset_language and language_filter.lower() != dataset_language:
-            logger.info(f"[process_dataset] Skipping dataset '{dataset_name}' because its language '{dataset_language}' doesn't match filter '{language_filter}'")
+            logger.info(f"[_process_dataset] Skipping dataset '{dataset_name}' because its language '{dataset_language}' doesn't match filter '{language_filter}'")
             return False
     
-    logger.info(f"[process_dataset] Loading dataset '{dataset_name}' with metric '{metric_name}' ...")
+    logger.info(f"[_process_dataset] Loading dataset '{dataset_name}' with metric '{metric_name}' ...")
     
     # Extract dataset parameters
     repo = dataset_info.get("hf_repo", None)
@@ -411,8 +429,8 @@ def _process_dataset_and_evaluate(dataset_name, dataset_info, metric_name, cfg, 
 
     
     # Load dataset, metric, and postprocessor
-    dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, user_prompt_add_ons=user_prompt_add_ons, 
-                            system_prompts=system_prompts, length_filter=length_filter, metric=metric_name, split=split, dataset_info=dataset_info)
+    dataset, dataset_size = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, user_prompt_add_ons=user_prompt_add_ons, 
+                                    system_prompts=system_prompts, length_filter=length_filter, metric=metric_name, split=split, dataset_info=dataset_info)
     metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
     
     # Dynamically import postprocessor class
@@ -423,10 +441,11 @@ def _process_dataset_and_evaluate(dataset_name, dataset_info, metric_name, cfg, 
         PostprocessorClass = get_class_from_module('postprocessors', 'GeneralPostprocessor')
     postprocessor = PostprocessorClass()
     
-    logger.info("[process_dataset] Initializing Engine and running evaluation...")
+    logger.info("[_process_dataset] Initializing Engine and running evaluation...")
     result = Engine(models, dataset, metric, postprocessor, dataset_name).run()
     key = f"{dataset_name}_{metric_name}"
-    all_scores[key] = result
+    # Store both the result and dataset size together
+    all_scores[key] = {"result": result, "dataset_size": dataset_size}
     
     return True
 
@@ -492,9 +511,6 @@ def _load_config(cfg_path):
     }
     
     return cfg, runspec_files, settings
-
-
-
 
 
 
