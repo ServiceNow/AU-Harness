@@ -1,7 +1,7 @@
 import logging
 from preprocessors.ifeval_audio_preprocessor import IfevalAudioPreprocessor
 from preprocessors.base import Preprocessor
-import tqdm
+from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
 

@@ -2,7 +2,7 @@ import logging
 from typing import Dict, List, Optional, Any
 import numpy as np
 from preprocessors.base import Preprocessor
-import tqdm
+from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
 
