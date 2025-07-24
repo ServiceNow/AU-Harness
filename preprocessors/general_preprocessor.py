@@ -4,7 +4,7 @@ from tqdm import tqdm
 from preprocessors.base import Preprocessor
 
 class GeneralPreprocessor(Preprocessor):
-    """Preprocessor for Audio benchmarks from AudioBench and more on HF."""
+    """Preprocessor for Audio benchmarks from "AudioLLMs" and more on HF."""
     
     def extract_audio_info(self, record):
         if "audio" in record:
