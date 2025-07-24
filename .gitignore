@@ -1,21 +1,31 @@
-#env
+# env
 lite
+env
 
-#config files
+# config files
 config.yaml
 
-#log files
+# log files
 *.log
 *.out
 *.csv
+
+#private datasets
+private_datasets
 
 # python cache files
 __pycache__/
 **/__pycache__/
 *.py[cod]
+.DS_Store
 
-#datasets
+# datasets
 private_datasets/
 
-#tests
+# tests
 test.py
+client_test.py
+
+# local configs
+.venv/
+.vscode/

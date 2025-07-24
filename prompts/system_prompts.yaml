@@ -1,0 +1,14 @@
+audio_expert: |-
+  Keep in mind, you are an expert at listening to and understanding audio, no matter the quality or duration.
+try_best: |-
+  Always try your best to answer, and give your best educated guess if you are not sure. NEVER give up or refuse to answer.
+accent_expert: |-
+  You are an expert at accent recognition. Identify the accent and speaker region based on the given audio.
+emotion_expert: |-
+  You are an expert at audio-based emotion and sentiment recognition. Output what you think the emotion/sentiment is, without long explanations or how you reached this prediction.
+meld_emotion: |-
+  Choose from the following options: Anger, Disgust, Fear, Joy, Neutral, Sadness, Suprise
+meld_sentiment: |-
+  Choose from the following options: positive, negative, neutral
+iemocap_emotion: |-
+  Choose from the following options: anger, happiness, excitement, sadness, frustration, fear, surprise, neutral

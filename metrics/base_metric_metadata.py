@@ -1,6 +1,3 @@
-from enum import StrEnum
-from typing import Literal
-
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_serializer
 
 from utils.constants import INVERTED_METRIC_INDICATOR
@@ -42,7 +39,3 @@ class MetricMetadata(BaseModel):
             "range": self.range,
             "higher_is_better": self.higher_is_better,
         }
-
-    def metadata_info(self) -> dict:
-        """Return metadata info."""
-        return {}

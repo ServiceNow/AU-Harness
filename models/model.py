@@ -1,7 +1,5 @@
 import asyncio
-import re
 from abc import ABC
-import os
 from tenacity import (
     AsyncRetrying,
     RetryError,
@@ -11,8 +9,8 @@ from tenacity import (
     wait_random_exponential,
 )
 
-import logger_setup
-logger_setup.configure()
+from utils.custom_logging import configure
+configure()
 import logging
 logger = logging.getLogger(__name__)
 logger.propagate = True
@@ -191,8 +189,8 @@ class Model(ABC):
 
 
         #getting attributes
-        audio_array = message.get("array")
-        sampling_rate = message.get("sampling_rate")
+        audio_array = message.get("array", None)
+        sampling_rate = message.get("sampling_rate", 0)
         chunk_seconds: int = int(run_params.get("chunk_size", 30))  # default to 30s
         metric_name: str | None = run_params.get("metric")
         max_samples: int = int(chunk_seconds * sampling_rate) if sampling_rate else 0
@@ -232,8 +230,27 @@ class Model(ABC):
                     else:
                         full_instruction = instruction
 
-                    message["model_inputs"] = [
-                        {
+                    # Prepare messages list starting with system prompt if available
+                    messages = []
+                    
+                    # Add system prompt if available
+                    system_prompt = message.get("system_prompt")
+                    if system_prompt:
+                        messages.append({
+                            "role": "system",
+                            "content": system_prompt
+                        })
+                
+                    # Handle text-only vs audio+text scenarios
+                    if encoded == "":
+                        # Text-only case
+                        messages.append({
+                            "role": "user",
+                            "content": [{"type": "text", "text": full_instruction}]
+                        })
+                    else:
+                        # Audio + text case
+                        messages.append({
                             "role": "user",
                             "content": [
                                 {"type": "text", "text": full_instruction},
@@ -245,8 +262,9 @@ class Model(ABC):
                                     },
                                 },
                             ],
-                        }
-                    ]
+                        })
+                    
+                    message["model_inputs"] = messages
                     resp = await self.req_resp_hndlr.request_server(message["model_inputs"])
                     concatenated_text += resp.llm_response or ""
                     responses.append(resp)
@@ -286,11 +304,33 @@ class Model(ABC):
             constants.OPENAI_CHAT_COMPLETION,
         ):
             # Cut to first 30s, then process as chat completion
-            chunk_array = audio_array[:max_samples]
-            encoded = encode_audio_array_base64(chunk_array, sampling_rate)
+            if audio_array is not None and len(audio_array) > 0:
+                chunk_array = audio_array[:max_samples]
+                encoded = encode_audio_array_base64(chunk_array, sampling_rate)
+            else:
+                encoded = ""
 
-            message["model_inputs"] = [
-                {
+            # Prepare messages list starting with system prompt if available
+            messages = []
+            
+            # Add system prompt if available
+            system_prompt = message.get("system_prompt")
+            if system_prompt:
+                messages.append({
+                    "role": "system",
+                    "content": system_prompt
+                })
+            
+            # Handle text-only vs audio+text scenarios
+            if encoded == "":
+                # Text-only case
+                messages.append({
+                    "role": "user",
+                    "content": [{"type": "text", "text": instruction}]
+                })
+            else:
+                # Audio + text case
+                messages.append({
                     "role": "user",
                     "content": [
                         {"type": "text", "text": instruction},
@@ -302,8 +342,9 @@ class Model(ABC):
                             },
                         }
                     ],
-                }
-            ]
+                })
+            
+            message["model_inputs"] = messages
             return await self.req_resp_hndlr.request_server(message["model_inputs"])
 
         #transcription

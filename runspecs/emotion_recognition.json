@@ -1,0 +1,20 @@
+{
+  "iemocap_emotion_recognition": {
+    "hf_repo": "AudioLLMs/iemocap_emotion_recognition",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "meld_emotion_test": {
+    "hf_repo": "AudioLLMs/meld_emotion_test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "meld_sentiment_test": {
+    "hf_repo": "AudioLLMs/meld_sentiment_test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  }
+}
