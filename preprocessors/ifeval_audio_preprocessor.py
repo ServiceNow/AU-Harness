@@ -1,5 +1,6 @@
 import logging
 from preprocessors.base import Preprocessor
+import tqdm
 
 logger = logging.getLogger(__name__)
 
