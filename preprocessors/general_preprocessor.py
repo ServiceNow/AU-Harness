@@ -33,13 +33,15 @@ class GeneralPreprocessor(Preprocessor):
         dataset_size = len(dataset[keys[0]]) if keys else 0
         self.log_dataset_info(keys, dataset_size)
         
-        # Convert from columnar to row-wise format
-        row_data = self.columnar_to_row_wise(dataset)
-        
+        # Direct iteration through the columnar dataset
         total_duration = 0
         new_dataset = []
+        dataset_size = len(dataset[keys[0]]) if keys else 0
+        indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
         
-        for record in row_data:
+        for i in tqdm(indices, desc="Processing samples"):
+            # Create record by accessing each feature by index
+            record = {k: dataset[k][i] for k in keys}
             # Extract audio information
             self.extract_audio_info(record)
 

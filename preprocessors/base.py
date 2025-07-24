@@ -147,30 +147,4 @@ class Preprocessor():
         if total_duration is not None:
             logger.info(f"Dataset is {total_duration / 3600:.2f} hours long")
             
-    def columnar_to_row_wise(self, dataset, indices=None):
-        """
-        Convert a columnar dataset (dict of lists) to row-wise format (list of dicts).
-        
-        Args:
-            dataset (dict): Dictionary where keys are column names and values are lists
-            indices (list, optional): Specific indices to extract, if None uses all
-            
-        Returns:
-            list: List of dictionaries where each dictionary represents a row
-        """
-        keys = list(dataset.keys())
-        if not keys:
-            return []
-            
-        total_samples = len(dataset[keys[0]])
-        if indices is None:
-            indices = range(total_samples)
-            
-        result = []
-        for i in tqdm(indices, desc="Processing samples"):
-            if i >= total_samples:
-                break
-            record = {k: dataset[k][i] for k in keys}
-            result.append(record)
-            
-        return result
+    # columnar_to_row_wise method removed - direct iteration is now used in each preprocessor

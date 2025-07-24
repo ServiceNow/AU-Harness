@@ -42,17 +42,18 @@ class BigBenchAudioTextOnlyPreprocessor(Preprocessor):
         dataset_size = len(dataset.get("id", []))
         self.log_dataset_info(dataset_keys, dataset_size)
 
-        # Convert from columnar to row-wise format
-        row_data = self.columnar_to_row_wise(dataset)
+        # Direct iteration through the columnar dataset
         processed_data = []
-
-        for record in row_data:
-            sample_id = record["id"]
+        dataset_size = len(dataset.get("id", []))
+        indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
+        
+        for i in tqdm(indices, desc="Processing samples"):
+            sample_id = dataset["id"][i]
             audio_data = {
                 "array": np.array([]), # Placeholder, not used in text-only evals
                 "sampling_rate": 16000
             }
-            transcript = record["transcript"]
+            transcript = dataset["transcript"][i]
 
             # Ensure transcript exists
             if not transcript:
@@ -60,18 +61,18 @@ class BigBenchAudioTextOnlyPreprocessor(Preprocessor):
                 continue
 
             # Ensure official answer exists
-            if not record["official_answer"]:
+            if not dataset["official_answer"][i]:
                 logger.warning(f"[{sample_id}] Missing official answer. Skipping sample.")
                 continue
 
             # Create structured sample
             sample = {
                 "id": sample_id,
-                "category": record["category"],
+                "category": dataset["category"][i],
                 "transcript": transcript,
                 "array": audio_data["array"],  # Placeholder, not used in text-only evals
                 "sampling_rate": audio_data["sampling_rate"],   # Placeholder, not used in text-only evals
-                "model_target": record["official_answer"].strip(),
+                "model_target": dataset["official_answer"][i].strip(),
                 "instruction": transcript,
             }
 

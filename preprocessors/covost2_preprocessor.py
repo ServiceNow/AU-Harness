@@ -16,7 +16,6 @@ class Covost2Preprocessor(Preprocessor):
         """
         logger.info("In [Covost2Preprocessor] Processing dataset...")
 
-        # Extract common properties using base class method
         props = self.extract_properties(properties)
         
         # Get dataset info
@@ -24,17 +23,15 @@ class Covost2Preprocessor(Preprocessor):
         dataset_size = len(dataset.get("id", []))
         self.log_dataset_info(dataset_keys, dataset_size)
         
-        # Set default target language
-        target_language = "en"
-        
-        # Convert from columnar to row-wise format
-        row_data = self.columnar_to_row_wise(dataset)
+        # Direct iteration through the columnar dataset
         processed_data = []
+        dataset_size = len(dataset.get("id", []))
+        indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
         
-        for record in row_data:
-            sample_id = record["id"]
-            translation = record["translation"]
-            audio = record["audio"]
+        for i in tqdm(indices, desc="Processing samples"):
+            sample_id = dataset["id"][i]
+            translation = dataset["translation"][i]
+            audio = dataset["audio"][i]
             audio_array = audio["array"]
             sampling_rate = audio["sampling_rate"]
 
@@ -51,7 +48,7 @@ class Covost2Preprocessor(Preprocessor):
                 if dataset_info and "target_language" in dataset_info:
                     target_language = dataset_info["target_language"]
             except KeyError:
-                pass  # Keep default language if not found
+                raise ValueError("Target language not found. Please specify target_language in dataset config")
 
             instruction = f"Please translate the given speech to {target_language}. Return ONLY the translated speech in text format without any other prefix text."
             

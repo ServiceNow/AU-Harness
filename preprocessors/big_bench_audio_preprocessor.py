@@ -40,13 +40,15 @@ class BigBenchAudioPreprocessor(Preprocessor):
         dataset_size = len(dataset.get("id", []))
         self.log_dataset_info(dataset_keys, dataset_size)
         
-        # Convert from columnar to row-wise format
-        row_data = self.columnar_to_row_wise(dataset)
+        # Direct iteration through the columnar dataset
         processed_data = []
-
-        for record in row_data:
-            sample_id = record["id"]
-            audio_data = record["audio"]
+        dataset_size = len(dataset.get("id", []))
+        indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
+        
+        for i in tqdm(indices, desc="Processing samples"):
+            # Create record by accessing each feature by index
+            sample_id = dataset["id"][i]
+            audio_data = dataset["audio"][i]
             
             # Validate audio data structure
             if not isinstance(audio_data, dict):
@@ -65,18 +67,18 @@ class BigBenchAudioPreprocessor(Preprocessor):
             audio_array, sr = self.resample_audio(audio_array, sr)
 
             # Ensure official answer exists
-            if not record["official_answer"]:
+            if not dataset["official_answer"][i]:
                 logger.warning(f"[{sample_id}] Missing official answer. Skipping sample.")
                 continue
 
             # Create structured sample
             sample = {
                 "id": sample_id,
-                "category": record["category"],
-                "transcript": record["transcript"],
+                "category": dataset["category"][i],
+                "transcript": dataset["transcript"][i],
                 "array": audio_array,
                 "sampling_rate": sr,
-                "model_target": record["official_answer"].strip(),
+                "model_target": dataset["official_answer"][i].strip(),
                 "instruction": "Answer the question provided in the audio.",
             }
 
