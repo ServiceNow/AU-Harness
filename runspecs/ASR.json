@@ -5,8 +5,8 @@
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor"
   },
-  "gigaspeech2_test": {
-    "hf_repo": "AudioLLMs/gigaspeech2-test",
+  "gigaspeech_test": {
+    "hf_repo": "AudioLLMs/gigaspeech-test",
     "language": "en",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor"

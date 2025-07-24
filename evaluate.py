@@ -316,11 +316,13 @@ def _calculate_aggregates(aggregates, all_scores, models):
             logger.warning(f"[calculate_aggregates] No valid pairs found in aggregate '{agg_name}'")
             continue
             
-        # Calculate model scores
+        # Calculate model scores - one per metric key
         model_agg_scores = {}
         for model_name in models_list:
-            # Collect valid scores for this model across all dataset-metric pairs
-            valid_scores = []
+            # First, collect all metric keys across all datasets to find common ones
+            all_metric_keys = {}
+            
+            # First pass: collect all available metric keys and their corresponding values
             for dataset_name, metric_name in pair_tuples:
                 key = f"{dataset_name}_{metric_name}"
                 try:
@@ -329,32 +331,47 @@ def _calculate_aggregates(aggregates, all_scores, models):
                     dataset_size = score_data.get("dataset_size", 1)  # Get dataset size, default to 1
                     model_dict = score_data["result"][model_name]
                     
-                    # Extract the appropriate metric score
-                    if metric_name in model_dict:
-                        metric_score = model_dict[metric_name]
-                        valid_scores.append((metric_score, dataset_size))
-
-                except KeyError:
-                    logger.warning(f"[_calculate_aggregates] Score not found for {model_name} in {key}")
-                    pass  # Skip if any part of the path doesn't exist
+                    # Find all available numerical scores in this model's results
+                    numerical_scores = {k: v for k, v in model_dict.items() if isinstance(v, (int, float))}
+                    
+                    # For each numerical score, add it to our collection with dataset size for weighting
+                    for score_key, score_value in numerical_scores.items():
+                        if score_key not in all_metric_keys:
+                            all_metric_keys[score_key] = []
+                        all_metric_keys[score_key].append((score_value, dataset_size, key))
+                        
+                except KeyError as e:
+                    logger.warning(f"[_calculate_aggregates] Error accessing data for {model_name} in {key}: {str(e)}")
             
-            # Calculate weighted mean if we have valid scores
-            if valid_scores:
-                # Unpack scores and weights
-                scores, weights = zip(*valid_scores)
-                
-                # Calculate weighted average if we have weights
-                if sum(weights) > 0:
-                    weighted_avg = sum(score * weight for score, weight in zip(scores, weights)) / sum(weights)
-                    model_agg_scores[model_name] = weighted_avg
-                    logger.info(f"[_calculate_aggregates] Model {model_name} weighted aggregate score for '{agg_name}': {weighted_avg}")
-                else:
-                    # Fallback to simple mean if weights are all zero
-                    model_agg_scores[model_name] = statistics.mean(scores)
-                    logger.info(f"[_calculate_aggregates] Model {model_name} simple aggregate score for '{agg_name}': {model_agg_scores[model_name]}")
+            # Create an aggregate for each metric key that has values
+            model_scores = {}
+            for score_key, score_entries in all_metric_keys.items():
+                if score_entries:
+                    # Extract scores and weights for this metric key
+                    scores_for_key = []
+                    weights_for_key = []
+                    for score, weight, source_key in score_entries:
+                        scores_for_key.append(score)
+                        weights_for_key.append(weight)
+                        logger.info(f"[_calculate_aggregates] Using '{score_key}': {score} (weight: {weight}) from {source_key} for {model_name}")
+                        
+                    # Calculate weighted average for this metric key
+                    if sum(weights_for_key) > 0:
+                        weighted_avg = sum(s * w for s, w in zip(scores_for_key, weights_for_key)) / sum(weights_for_key)
+                        model_scores[score_key] = weighted_avg
+                        logger.info(f"[_calculate_aggregates] {model_name} weighted avg for '{score_key}': {weighted_avg}")
+                    else:
+                        # Fallback to simple mean if weights are all zero
+                        model_scores[score_key] = statistics.mean(scores_for_key)
+                        logger.info(f"[_calculate_aggregates] {model_name} simple avg for '{score_key}': {model_scores[score_key]}")
+            
+            # Store all the aggregated scores for this model
+            if model_scores:
+                model_agg_scores[model_name] = model_scores
             else:
-                logger.warning(f"[_calculate_aggregates] No valid scores found for model {model_name} in aggregate '{agg_name}'")
-                logger.debug(f"[_calculate_aggregates] No scores available to aggregate")
+                logger.warning(f"[_calculate_aggregates] No scores to aggregate for {model_name} in '{agg_name}'")
+            
+            # Note: We're handling all aggregation above, no need for additional calculations
 
         if model_agg_scores:
             aggregate_scores[str(agg_name)] = model_agg_scores
