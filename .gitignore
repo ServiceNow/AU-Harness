@@ -7,6 +7,7 @@ config.yaml
 #log files
 *.log
 *.out
+*.csv
 
 # python cache files
 __pycache__/
@@ -15,3 +16,6 @@ __pycache__/
 
 #datasets
 private_datasets/
+
+#tests
+test.py
