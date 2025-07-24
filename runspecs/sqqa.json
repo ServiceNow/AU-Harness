@@ -28,6 +28,86 @@
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
     },
+    "sd-qa_zaf": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "zaf",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_phl": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "phl",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_nzl": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "nzl",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_nga": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "nga",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_kenya": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "kenya",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_irl": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "irl",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_ind_s": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "ind_s",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_ind_n": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "ind_n",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_gbr": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "gbr",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_aus": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "aus",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
     "mmsu_law": {
         "hf_repo": "hlt-lab/voicebench",
         "subset": "mmsu",
