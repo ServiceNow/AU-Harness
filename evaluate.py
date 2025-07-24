@@ -2,44 +2,23 @@ import os
 import yaml
 import sys
 from pathlib import Path
-
-# Load config.yaml first to configure logging
-config_path = Path("config.yaml")
-if not config_path.exists():
-    print(f"Error: {config_path} not found")
-    sys.exit(1)
-
-with open(config_path, 'r') as f:
-    config = yaml.safe_load(f)
-
-# Get logging configuration from config.yaml or use defaults
-log_config = config.get('logging', {})
-log_file = log_config.get('log_file', 'default.log')
-log_level = log_config.get('level', 'INFO')
-
-# Import and set up logging with the configuration from config.yaml
-from utils.custom_logging import configure
-configure(log_file)
-
 import logging
-logging.getLogger("httpx").setLevel(logging.WARNING)
-logger = logging.getLogger(__name__)
+from utils.custom_logging import configure
 from postprocessors.base import Postprocessor
 from preprocessors.base import Preprocessor
-import os
 import json
-from pathlib import Path
 import asyncio
 from datasets import load_dataset
-import yaml
 from tqdm import tqdm
 import importlib
 import argparse
-# Central logging setup
 from models.model import Model
 from metrics.metrics import Metrics
-from postprocessors.base import Postprocessor
 from utils.constants import metric_map
+
+# Create logger at module level
+logger = logging.getLogger(__name__)
+# Removed duplicate imports that were moved to the top
 
 class Engine:
     """Evaluate one or many models over the same dataset concurrently."""
@@ -290,10 +269,35 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
 
 #TO-DO: need to implement command line override, add common configs, group by task type
 #main that runs
+def setup_logging(log_file):
+    """Set up logging with the specified log file"""
+    # Configure logging using the custom_logging module
+    configure(log_file)
+    
+    # Set httpx logger to WARNING level to reduce noise
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    
+    logger.info("Logging setup complete")
+
+
 def main(cfg_path='config.yaml'):
-    logger.info(f"[main] Loading config from {cfg_path}")
-    with open(cfg_path, 'r') as f:
+    # Load config file first
+    config_path = Path(cfg_path)
+    if not config_path.exists():
+        print(f"Error: {config_path} not found")
+        sys.exit(1)
+
+    with open(config_path, 'r') as f:
         cfg = yaml.safe_load(f)
+        
+    # Get logging configuration from config.yaml or use defaults
+    log_config = cfg.get('logging', {})
+    log_file = log_config.get('log_file', 'default.log')
+    
+    # Set up logging with the configuration from config.yaml
+    setup_logging(log_file)
+    
+    logger.info(f"[main] Loading config from {cfg_path}")
     
     # Load runspec files from the runspecs directory
     runspecs_dir = Path("runspecs")
