@@ -331,9 +331,18 @@ def main(cfg_path='config.yaml'):
     # Load runspec files from the runspecs directory
     runspecs_dir = Path("runspecs")
     
-    # Get list of all runspec files in the runspecs directory
-    runspec_files = list(runspecs_dir.glob("*.json"))
-    logger.info(f"[main] Found {len(runspec_files)} runspec files")
+    # Get list of all category directories in the runspecs directory
+    category_dirs = [d for d in runspecs_dir.iterdir() if d.is_dir()]
+    logger.info(f"[main] Found {len(category_dirs)} category directories in runspecs")
+    
+    # Get list of all runspec files in all category directories
+    runspec_files = []
+    for category_dir in category_dirs:
+        category_json_files = list(category_dir.glob("*.json"))
+        runspec_files.extend(category_json_files)
+        logger.info(f"[main] Found {len(category_json_files)} runspec files in {category_dir.name}")
+    
+    logger.info(f"[main] Found {len(runspec_files)} total runspec files")
     
     # Load metric and model settings
     judge_concurrency = cfg.get("judge_concurrency", 1)
@@ -375,12 +384,31 @@ def main(cfg_path='config.yaml'):
         found_runspec = False
         selected_datasets = {}
         
-        # Try to match the dataset name with one of the runspec files
+        # Try to match the dataset name with one of the runspec files or categories
         for runspec_file in runspec_files:
+            category_name = runspec_file.parent.name  # Get the category directory name
             runspec_name = runspec_file.stem
             
-            # First, check if dataset name exactly matches the runspec file name
-            if dname == runspec_name:
+            # Check if dataset name exactly matches the category name
+            if dname == category_name:
+                logger.info(f"[main] Found matching category: {category_name}")
+                found_runspec = True
+                
+                # Load all runspec files in this category
+                category_datasets = {}
+                category_files = list(runspec_file.parent.glob("*.json"))
+                for cat_file in category_files:
+                    with open(cat_file, 'r') as f:
+                        file_db = json.load(f)
+                    category_datasets.update(file_db)
+                
+                # Use all datasets in this category
+                selected_datasets = category_datasets
+                logger.info(f"[main] Using all {len(category_datasets)} datasets from category {category_name}")
+                break
+                
+            # Check if dataset name exactly matches the runspec file name
+            elif dname == runspec_name:
                 logger.info(f"[main] Found matching runspec file: {runspec_file}")
                 found_runspec = True
                 
@@ -399,11 +427,13 @@ def main(cfg_path='config.yaml'):
             
             # Search through all runspec files to find the dataset
             for runspec_file in runspec_files:
+                category_name = runspec_file.parent.name  # Get the category directory name
+                
                 with open(runspec_file, 'r') as f:
                     runspec_db = json.load(f)
                 
                 if dname in runspec_db:
-                    logger.info(f"[main] Found dataset '{dname}' in {runspec_file}")
+                    logger.info(f"[main] Found dataset '{dname}' in {category_name}/{runspec_file.name}")
                     # Use only this specific dataset
                     selected_datasets = {dname: runspec_db[dname]}
                     found_runspec = True
