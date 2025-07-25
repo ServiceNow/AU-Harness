@@ -19,6 +19,7 @@ from models.model import Model
 from metrics.metrics import Metrics
 from postprocessors.base import Postprocessor
 from utils.constants import metric_map, allowed_task_metrics
+from utils.util import validate_config
 
 class Engine:
     """Evaluate one or many models over the same dataset concurrently."""
@@ -325,25 +326,29 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
 #main that runs
 def main(cfg_path='config.yaml'):
     logger.info(f"[main] Loading config from {cfg_path}")
-    with open(cfg_path, 'r') as f:
-        cfg = yaml.safe_load(f)
+    
+    # Validate the configuration file
+    try:
+        logger.info(f"[main] Validating config file: {cfg_path}")
+        cfg = validate_config(cfg_path)
+        logger.info(f"[main] Config file validation successful")
+    except ValueError as e:
+        logger.error(f"[main] Config validation error: {e}")
+        raise
     
     # Load runspec files from the runspecs directory
     runspecs_dir = Path("runspecs")
     
     # Get list of all category directories in the runspecs directory
     category_dirs = [d for d in runspecs_dir.iterdir() if d.is_dir()]
-    logger.info(f"[main] Found {len(category_dirs)} category directories in runspecs")
     
     # Get list of all runspec files in all category directories
     runspec_files = []
     for category_dir in category_dirs:
         category_json_files = list(category_dir.glob("*.json"))
         runspec_files.extend(category_json_files)
-        logger.info(f"[main] Found {len(category_json_files)} runspec files in {category_dir.name}")
     
-    logger.info(f"[main] Found {len(runspec_files)} total runspec files")
-    
+
     # Load metric and model settings
     judge_concurrency = cfg.get("judge_concurrency", 1)
     judge_model = cfg.get("judge_model", None)
