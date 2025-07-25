@@ -19,3 +19,20 @@ metric_map = {
     "llm_judge_big_bench_audio": ("metrics.llm_judge", "BigBenchAudioLLMJudgeMetric"),
     'bertscore': ("metrics.bertscore", "BertScore"),
 }
+
+task_temp_map = {
+    "ASR": 0.1,
+    "accent_recognition": 0.2,
+    "code_switching_ASR": 0.1,
+    "emotion_recognition": 0.2,
+    "gender_recognition": 0.2,
+    "long_form_ASR": 0.1,
+    "music_understanding": 0.7,
+    "scene_QA": 0.4,
+    "scene_captioning": 0.7,
+    "speaker_recognition": 0.2,
+    "speech_instuction": 0.7,
+    "spoken_QA": 0.5,
+    "spoken_dialogue_summarization": 0.8,
+    "translation": 0.2,
+}

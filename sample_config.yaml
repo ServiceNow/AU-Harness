@@ -15,6 +15,15 @@ logging:
   log_file: "audiobench.log"  # Path to the main log file
   level: "INFO"    # Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
+# Optional temperature overrides by model and task
+temperature_overrides:
+  - model: "qwen-2-audio"
+    task: "ASR"
+    temperature: 0.9
+  - model: "gpt-4o-mini-audio-preview"
+    task: "emotion_recognition"
+    temperature: 0.3
+
 models:
   - info:
       name: "gpt-4o-mini-audio-preview-1" 

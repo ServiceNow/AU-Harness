@@ -12,7 +12,7 @@ import os
 class RequestRespHandler:
     """Class responsible for creating request and processing response for each type of inference server."""
 
-    def __init__(self, inference_type: str, model_info: dict, timeout: int = 30):
+    def __init__(self, inference_type: str, model_info: dict, timeout: int = 30, temperature: float = 0.7):
         self.inference_type = inference_type
         self.model_info = model_info
         self.api = model_info.get("url")
@@ -20,8 +20,8 @@ class RequestRespHandler:
         self.api_version = model_info.get("api_version", "")
         self.client = None
         self.timeout = timeout
-        # Get temperature from model_info (default 0.2)
-        self.temperature = model_info.get("temperature", 0.2)
+        # Use provided temperature parameter (overrides model_info)  
+        self.temperature = temperature
         # current retry attempt (set by caller). Default 1.
         self.current_attempt: int = 1
         # Remove Bearer if present for vllm/openai

@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 class Engine:
     """Evaluate one or many models over the same dataset concurrently."""
-    def __init__(self, models: list[Model], dataset: list[dict], metric: Metrics, postprocessor, dataset_name: str):
+    def __init__(self, models: list[Model], dataset: list[dict], metric: Metrics, postprocessor, dataset_name: str, task_type: str = None, temperature_overrides: list[dict] = None):
         logger.info(f"[Engine.__init__] Initializing Engine with {len(models)} model(s), dataset size: {len(dataset)}, metric: {metric.name}")
         self.models = models
         self.dataset = dataset
@@ -30,10 +30,29 @@ class Engine:
         self.postprocessor = postprocessor
         # Keep track of dataset name so we can create per-dataset log files
         self.dataset_name = dataset_name
+        # Store task_type for temperature setting
+        self.task_type = task_type
+        # Store temperature overrides
+        self.temperature_overrides = temperature_overrides or []
 
     # Infer single model over dataset asynchronously
     async def _infer_single_model(self, model: Model) -> list:
         logger.info(f"[Engine._infer_single_model] Running model: {model.name()} on dataset of size {len(self.dataset)}")
+        # Set temperature based on the task_type if provided
+        task_type = self.task_type
+        
+        # Check for temperature override for this specific model and task combination
+        override_temp = _get_temperature_override(model.name(), task_type, self.temperature_overrides)
+        
+        if override_temp is not None:
+            # Use the override temperature directly
+            logger.info(f"[Engine._infer_single_model] Using override temperature {override_temp} for model {model.name()} and task {task_type}")
+            model.temperature = override_temp
+            model.req_resp_hndlr.temperature = override_temp
+        else:
+            # Use the standard task-based temperature setting
+            model.set_temp(task_type)
+        
         sem = asyncio.Semaphore(model.batch_size)  # Use per-model batch size
         async def _call(idx: int, sample: dict):
             async with sem:
@@ -218,13 +237,35 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="G
 
 
 
+def _get_temperature_override(model_name: str, task_type: str, temperature_overrides: list[dict]) -> float | None:
+    """Check if there's a temperature override for this model and task combination.
+    
+    Args:
+        model_name: The name of the model
+        task_type: The type of task being performed
+        temperature_overrides: List of override dictionaries from config.yaml
+        
+    Returns:
+        The override temperature if found, None otherwise
+    """
+    if not temperature_overrides:
+        return None
+        
+    for override in temperature_overrides:
+        if override.get("model") == model_name and override.get("task") == task_type:
+            temp = override.get("temperature")
+            if temp is not None:
+                return float(temp)
+    
+    return None
+
 def _load_models(cfg_list: list[dict]) -> list[Model]:
     logger.info(f"[_load_models] Instantiating models from config: {cfg_list}")
     models = []
     for cfg in cfg_list:
         model_name = cfg["info"].get("name")
         logger.info(f"[_load_models] Instantiating model for {model_name}")
-        model_obj = Model(cfg["info"])
+        model_obj = Model(cfg["info"], 0.7)
         models.append(model_obj)
     if not models:
         logger.info("[_load_models] ERROR: No valid models found in configuration.")
@@ -345,6 +386,7 @@ def main(cfg_path='config.yaml'):
         # Step 1: Look for a matching runspec file
         found_runspec = False
         selected_datasets = {}
+        current_runspec_name = None  # Track the current runspec name
         
         # Try to match the dataset name with one of the runspec files
         for runspec_file in runspec_files:
@@ -361,6 +403,7 @@ def main(cfg_path='config.yaml'):
                 
                 # Use all datasets in this runspec
                 selected_datasets = runspec_db
+                current_runspec_name = runspec_name  # Store the runspec name
                 logger.info(f"[main] Using all {len(runspec_db)} datasets from {runspec_file}")
                 break
         
@@ -377,6 +420,7 @@ def main(cfg_path='config.yaml'):
                     logger.info(f"[main] Found dataset '{dname}' in {runspec_file}")
                     # Use only this specific dataset
                     selected_datasets = {dname: runspec_db[dname]}
+                    current_runspec_name = runspec_file.stem  # Store the runspec name
                     found_runspec = True
                     break
             
@@ -432,7 +476,22 @@ def main(cfg_path='config.yaml'):
             postprocessor = PostprocessorClass()
             
             logger.info("[main] Initializing Engine and running evaluation...")
-            result = Engine(models, dataset, metric, postprocessor, dataset_name).run()
+            # Pass the correct runspec name as the task_type for temperature control
+            logger.info(f"[main] Using runspec '{current_runspec_name}' as task_type for temperature setting")
+            
+            # Get temperature overrides from config if available
+            temperature_overrides = cfg.get("temperature_overrides", [])
+                
+            # Initialize and run the engine with task type and temperature overrides
+            result = Engine(
+                models, 
+                dataset, 
+                metric, 
+                postprocessor, 
+                dataset_name, 
+                task_type=current_runspec_name,
+                temperature_overrides=temperature_overrides
+            ).run()
             key = f"{dataset_name}_{metric_name}"
             all_scores[key] = result
     

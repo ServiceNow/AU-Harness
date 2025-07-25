@@ -18,12 +18,13 @@ from models.model_response import ErrorTracker, ModelResponse
 from models.request_resp_handler import RequestRespHandler
 from copy import deepcopy
 from utils import constants
+from utils.constants import task_temp_map
 from utils.multimodal import encode_audio_array_base64, audio_array_to_wav_file
 
 class Model(ABC):
     """TODO: Need SME to add."""
 
-    def __init__(self, model_info: dict):
+    def __init__(self, model_info: dict, temperature: float = 0.7):
         """Initialize model configuration here.
 
         Args:
@@ -44,8 +45,8 @@ class Model(ABC):
         self.retry_attempts = model_info.get("retry_attempts", 8)
         # chunk_size in seconds (default 30)
         self.chunk_size = model_info.get("chunk_size", 30)
-        # temperature for LLM requests (default 0.2)
-        self.temperature = model_info.get("temperature", 0.2)
+        # temperature for LLM requests (default 0.7)
+        self.temperature = temperature
         # some flow does not work with async client like internal private network
         self.postprocessor_path = model_info.get("postprocessor", [])
         #model_name = model_info.get("model", model_info.get("alias", self.name()))
@@ -53,6 +54,7 @@ class Model(ABC):
             self.inference_type,
             self.model_info,
             timeout=self.timeout,
+            temperature=self.temperature
         )
         # prevent data races when updating self.errors asynchronously
         self.errors_lock = asyncio.Lock()
@@ -60,6 +62,18 @@ class Model(ABC):
 
     def name(self):
         return self._name
+
+    def set_temp(self, task_type: str) -> None:
+        """Set temperature based on task type using task_temp_map.
+        
+        Args:
+            task_type: The type of task being performed.
+        """
+        if task_type in task_temp_map:
+            self.temperature = task_temp_map[task_type]
+            # Also update the request handler's temperature
+            self.req_resp_hndlr.temperature = self.temperature
+            logging.info(f"[Model.set_temp] Set temperature to {self.temperature} for task type {task_type} and model {self.name()}")
 
     def _is_retryable_error(self, result: ModelResponse):
         """Check if the error is a rate limit error by checking response code."""
