@@ -252,10 +252,26 @@ def _get_temperature_override(model_name: str, task_type: str, temperature_overr
         return None
         
     for override in temperature_overrides:
-        if override.get("model") == model_name and override.get("task") == task_type:
-            temp = override.get("temperature")
-            if temp is not None:
-                return float(temp)
+        # Get the temperature value if present
+        temp = override.get("temperature")
+        if temp is None:
+            continue
+            
+        # Check if this override applies to our model/task
+        override_model = override.get("model")
+        override_task = override.get("task")
+        
+        # Case 1: Model+Task specific override
+        if override_model == model_name and override_task == task_type:
+            return float(temp)
+            
+        # Case 2: Model-only override
+        if override_model == model_name and not override_task:
+            return float(temp)
+            
+        # Case 3: Task-only override
+        if not override_model and override_task == task_type:
+            return float(temp)
     
     return None
 
@@ -476,9 +492,6 @@ def main(cfg_path='config.yaml'):
             postprocessor = PostprocessorClass()
             
             logger.info("[main] Initializing Engine and running evaluation...")
-            # Pass the correct runspec name as the task_type for temperature control
-            logger.info(f"[main] Using runspec '{current_runspec_name}' as task_type for temperature setting")
-            
             # Get temperature overrides from config if available
             temperature_overrides = cfg.get("temperature_overrides", [])
                 

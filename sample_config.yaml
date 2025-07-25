@@ -17,12 +17,20 @@ logging:
 
 # Optional temperature overrides by model and task
 temperature_overrides:
+  # Override temperature for specific model+task combinations (first priority)
   - model: "qwen-2-audio"
     task: "ASR"
     temperature: 0.9
   - model: "gpt-4o-mini-audio-preview"
     task: "emotion_recognition"
     temperature: 0.3
+  # Override temperature for all tasks of a specific model or task(second priority)
+    #override all model temperatures
+  - model: "phi-4-multimodal"
+    temperature: 0.9
+    #override all task temperatures
+  - task: "accent_recognition"
+    temperature: 0.9
 
 models:
   - info:
