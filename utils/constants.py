@@ -171,6 +171,7 @@ language_map = {
     'sq': 'albanian',
     'sr': 'serbian',
     'sv': 'swedish',
+    'sv-SE': 'swedish',
     'sw': 'swahili',
     'ta': 'tamil',
     'te': 'telugu',
@@ -195,5 +196,6 @@ language_map = {
     'yo': 'yoruba',
     'yue': 'cantonese chinese',
     'zh': 'chinese',
+    'zh-CN': 'chinese',
     'zu': 'zulu',
 }
