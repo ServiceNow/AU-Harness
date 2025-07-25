@@ -32,6 +32,9 @@ class VoiceBenchIfevalPreprocessor:
         
         logger.info("In [VoiceBenchIfevalPreprocessor] Processing dataset...")
 
+        modality = properties.get("modality", "audio")
+        logger.info(f"Processing modality: {modality}")
+
         dataset_keys = list(dataset.keys())
         dataset_size = len(dataset.get("key", []))
         logger.info(f"Dataset keys: {dataset_keys}, total samples: {dataset_size}")
@@ -40,42 +43,55 @@ class VoiceBenchIfevalPreprocessor:
 
         for i in tqdm(range(dataset_size), desc="Processing samples"):
             key = dataset["key"][i]
-            audio_data = dataset["audio"][i]
+
+            if modality == "text":
+                audio_data = {
+                    "array": np.array([]),  # Placeholder, not used in text-only evals
+                    "sampling_rate": 16000
+                }
+            else:
+                audio_data = dataset["audio"][i]
+
             prompt = dataset["prompt"][i]
             instruction_id_list = dataset["instruction_id_list"][i]
             kwargs = dataset["kwargs"][i]
 
-            # Validate audio data structure
-            if not isinstance(audio_data, dict):
-                logger.warning(f"[{sample_id}] Invalid audio format. Skipping sample.")
-                continue
+            if modality == "audio":
+                # Validate audio data structure
+                if not isinstance(audio_data, dict):
+                    logger.warning(f"[{sample_id}] Invalid audio format. Skipping sample.")
+                    continue
 
-            # Convert to NumPy array
-            audio_array = np.array(audio_data.get("array"))
-            sr = audio_data.get("sampling_rate")
+                # Convert to NumPy array
+                audio_array = np.array(audio_data.get("array"))
+                sr = audio_data.get("sampling_rate")
 
-            if sr is None:
-                logger.warning(f"[{sample_id}] Sampling rate missing. Assuming 16kHz.")
-                sr = 16000
+                if sr is None:
+                    logger.warning(f"[{sample_id}] Sampling rate missing. Assuming 16kHz.")
+                    sr = 16000
 
-            # Resample if needed
-            if sr != 16000:
-                target_length = int(16000 * len(audio_array) / sr)
-                audio_array = resample(audio_array, target_length)
-                sr = 16000
+                # Resample if needed
+                if sr != 16000:
+                    target_length = int(16000 * len(audio_array) / sr)
+                    audio_array = resample(audio_array, target_length)
+                    sr = 16000
 
             # Ensure prompt exists
             if not prompt:
                 logger.warning(f"[{sample_id}] Missing prompt. Skipping sample.")
                 continue
 
-            instruction = f"Answer the question provided in the audio."
+            if modality == "text":
+                instruction = prompt
+            else:
+                # For audio modality, we can define a generic instruction
+                instruction = f"Answer the question provided in the audio."
 
             # Create structured sample
             sample = {
                 "id": key,
-                "array": audio_array,
-                "sampling_rate": sr,
+                "array": audio_array if modality == "audio" else audio_data["array"],
+                "sampling_rate": sr if modality == "audio" else audio_data["sampling_rate"],
                 "audio_content_in_text": prompt,
                 "instruction": instruction,
                 "instruction_id_list": instruction_id_list,

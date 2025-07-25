@@ -172,7 +172,7 @@ def _load_callhome_dataset(repo, preprocessor_name, num_samples, properties):
     dataset = PreprocessorClass().process(repo, num_samples=num_samples, properties=properties)
     return dataset
 
-def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="GeneralPreprocessor", user_prompt_add_ons: list[str] = [], system_prompts: list[str] = [], length_filter=None, metric=None, split=None, dataset_info=None):
+def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="GeneralPreprocessor", user_prompt_add_ons: list[str] = [], system_prompts: list[str] = [], length_filter=None, metric=None, split=None, dataset_info=None, modality=None):
     """Load and preprocess a dataset from a local or remote path."""
     logger.info(f"[_load_dataset] Loading dataset {repo} with preprocessor {preprocessor_name}")
     
@@ -187,6 +187,8 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="G
         properties["length_filter"] = tuple(length_filter)  # Convert list to tuple
     if dataset_info:
         properties["dataset_info"] = dataset_info
+    if modality:
+        properties["modality"] = modality
     
     # Special handling for local CallHome dataset
     if preprocessor_name.startswith("Callhome"):
@@ -446,6 +448,7 @@ def main(cfg_path='config.yaml'):
             language = dataset_info.get("language", "en")
             preprocessor_name = dataset_info["preprocessor"]
             postprocessor_name = dataset_info["postprocessor"]
+            modality=dataset_info.get("modality", "audio")
 
             if cfg.get("split", None) is not None:
                 split = cfg.get("split")
@@ -454,8 +457,18 @@ def main(cfg_path='config.yaml'):
                 split = dataset_info["split"]
 
             
-            dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, user_prompt_add_ons=user_prompt_add_ons, 
-                                    system_prompts=system_prompts, length_filter=length_filter, metric=metric_name, split=split, dataset_info=dataset_info)
+            dataset = _load_dataset(
+                repo, subset=subset, 
+                num_samples=num_samples, 
+                preprocessor_name=preprocessor_name, 
+                user_prompt_add_ons=user_prompt_add_ons, 
+                system_prompts=system_prompts, 
+                length_filter=length_filter, 
+                metric=metric_name, 
+                split=split, 
+                dataset_info=dataset_info,
+                modality=modality
+                )
             metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
             
             # Dynamically import postprocessor class
