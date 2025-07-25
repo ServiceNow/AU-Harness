@@ -52,7 +52,8 @@ metric_map = {
     "meteor": ("metrics.meteor_score", "MeteorScore"),
     "llm_judge_big_bench_audio": ("metrics.llm_judge", "BigBenchAudioLLMJudgeMetric"),
     'bertscore': ("metrics.bertscore", "BertScore"),
-    'diarization_metrics': ('metrics.diarization_metrics','DiarizationMetrics')
+    'diarization_metrics': ('metrics.diarization_metrics','DiarizationMetrics'),
+    "instruction_following": ("metrics.voice_bench_ifeval_score", "InstructionFollowingScore"),
 }
 
 # Dictionary mapping language names to their standard codes

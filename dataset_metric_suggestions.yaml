@@ -387,5 +387,5 @@ dataset_metric:
   - "(mmsu_history, llm_judge_binary)"
   - "(mmsu_chemistry, llm_judge_binary)"
   - "(mmsu_physics, llm_judge_binary)"
-  - "(voicebench_ifeval, instruction_following)"
-  - "(voicebench_ifeval_text_only, instruction_following)"
+  - "(voicebench_ifeval_audio, instruction_following)"
+  - "(voicebench_ifeval_text, instruction_following)"
