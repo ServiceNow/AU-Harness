@@ -308,7 +308,6 @@ def _calculate_aggregates(aggregates, all_scores, models):
                             all_datasets_for_metric.append((dataset, metric_name))
                 
                 if all_datasets_for_metric:
-                    logger.info(f"[_calculate_aggregates] Expanding 'all' for metric '{metric_name}' to {len(all_datasets_for_metric)} datasets: {all_datasets_for_metric}")
                     pair_tuples.extend(all_datasets_for_metric)
                 else:
                     logger.warning(f"[_calculate_aggregates] No datasets found for metric '{metric_name}' when expanding 'all'")
@@ -356,17 +355,14 @@ def _calculate_aggregates(aggregates, all_scores, models):
                     for score, weight, source_key in score_entries:
                         scores_for_key.append(score)
                         weights_for_key.append(weight)
-                        logger.info(f"[_calculate_aggregates] Using '{score_key}': {score} (weight: {weight}) from {source_key} for {model_name}")
                         
                     # Calculate weighted average for this metric key
                     if sum(weights_for_key) > 0:
                         weighted_avg = sum(s * w for s, w in zip(scores_for_key, weights_for_key)) / sum(weights_for_key)
                         model_scores[score_key] = weighted_avg
-                        logger.info(f"[_calculate_aggregates] {model_name} weighted avg for '{score_key}': {weighted_avg}")
                     else:
                         # Fallback to simple mean if weights are all zero
                         model_scores[score_key] = statistics.mean(scores_for_key)
-                        logger.info(f"[_calculate_aggregates] {model_name} simple avg for '{score_key}': {model_scores[score_key]}")
             
             # Store all the aggregated scores for this model
             if model_scores:
