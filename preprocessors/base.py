@@ -13,7 +13,7 @@ class Preprocessor():
         """Base implementation of the process method to be overridden by subclasses.
         
         Args:
-            dataset: Dictionary containing data in columnar format (dict-of-lists)
+            dataset: Dictionary containing data
             num_samples: Number of samples to extract from the dataset
             properties: Optional dict of properties for preprocessing configuration
             
@@ -146,5 +146,3 @@ class Preprocessor():
             
         if total_duration is not None:
             logger.info(f"Dataset is {total_duration / 3600:.2f} hours long")
-            
-    # columnar_to_row_wise method removed - direct iteration is now used in each preprocessor

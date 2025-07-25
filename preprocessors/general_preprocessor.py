@@ -34,7 +34,6 @@ class GeneralPreprocessor(Preprocessor):
         dataset_size = len(dataset[keys[0]]) if keys else 0
         self.log_dataset_info(keys, dataset_size)
         
-        # Direct iteration through the columnar dataset
         total_duration = 0
         new_dataset = []
         dataset_size = len(dataset[keys[0]]) if keys else 0

@@ -24,7 +24,6 @@ class Covost2Preprocessor(Preprocessor):
         dataset_size = len(dataset.get("id", []))
         self.log_dataset_info(dataset_keys, dataset_size)
         
-        # Direct iteration through the columnar dataset
         processed_data = []
         dataset_size = len(dataset.get("id", []))
         indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))

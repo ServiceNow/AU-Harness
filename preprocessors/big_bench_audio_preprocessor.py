@@ -10,9 +10,6 @@ class BigBenchAudioPreprocessor(Preprocessor):
     """
     A preprocessor for the BigBenchAudio dataset, designed for
     Speech Query Question Answering (SQQA) tasks.
-
-    This class converts a columnar dataset format (dictionary of lists)
-    into a row-wise list of dictionaries suitable for model training or inference.
     """
 
     def process(
@@ -25,7 +22,7 @@ class BigBenchAudioPreprocessor(Preprocessor):
         Process the BigBenchAudio dataset to ensure consistent audio format and structured data.
 
         Parameters:
-        - dataset (Dict[str, List[Any]]): A columnar-format dataset where each key maps to a list of values.
+        - dataset (Dict[str, List[Any]])
             Expected keys: 'id', 'audio', 'category', 'official_answer', 'transcript'.
         - num_samples (Optional[int]): Not used. Reserved for future functionality (e.g., truncating dataset).
         - properties (Optional[Dict[str, Any]]): Not used. Reserved for additional metadata or preprocessing options.
@@ -41,7 +38,6 @@ class BigBenchAudioPreprocessor(Preprocessor):
         dataset_size = len(dataset.get("id", []))
         self.log_dataset_info(dataset_keys, dataset_size)
         
-        # Direct iteration through the columnar dataset
         processed_data = []
         dataset_size = len(dataset.get("id", []))
         indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
