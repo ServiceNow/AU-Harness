@@ -74,6 +74,9 @@ class Engine:
         lengths = process_result.get("lengths", [])
 
         for model_name, outs in predictions.items():
+            # Reset the metric's record_level_scores before each model evaluation
+            self.metric.reset()
+            
             # Let the metric handle per-record logging internally
             if ids and lengths:
                 model_score = self.metric(outs, model_targets, ids, lengths, instructions=instructions, dataset_name=self.dataset_name, model_name=model_name)
