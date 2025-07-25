@@ -30,17 +30,33 @@ class Engine:
         self.postprocessor = postprocessor
         # Keep track of dataset name so we can create per-dataset log files
         self.dataset_name = dataset_name
+        
+        # Group models by their model attribute for sharding
+        self.model_groups = {}
+        for model in models:
+            model_type = model.model  # The model attribute we're sharding on
+            if model_type not in self.model_groups:
+                self.model_groups[model_type] = []
+            self.model_groups[model_type].append(model)
+        
+        # Log model grouping information
+        for model_type, group_models in self.model_groups.items():
+            if len(group_models) > 1:
+                logger.info(f"[Engine.__init__] Model type '{model_type}' has {len(group_models)} instances - will shard dataset")
 
-    # Infer single model over dataset asynchronously
-    async def _infer_single_model(self, model: Model) -> list[str]:
-        logger.info(f"[Engine._infer_single_model] Running model: {model.name()} on dataset of size {len(self.dataset)}")
+
+    # ---------------- internal helpers ----------------x
+    #infer by batch size, calling generate text with retry for each sample
+    async def _infer_single_model(self, model: Model, samples=None) -> list[str]:
+        samples = samples if samples is not None else self.dataset  # Use provided samples or full dataset
+        logger.info(f"[Engine._infer_single_model] Running model: {model.name()} on dataset of size {len(samples)}")
         sem = asyncio.Semaphore(model.batch_size)  # Use per-model batch size
         async def _call(idx: int, sample: dict):
             async with sem:
                 resp = await model._generate_text_with_retry(sample, {"chunk_size": model.chunk_size, "metric": self.metric.name})
                 return idx, (resp.llm_response if resp else "")
-        # Create tasks paired with their original indexx
-        tasks = [_call(i, ex) for i, ex in enumerate(self.dataset)]
+        # Create tasks paired with their original index
+        tasks = [_call(i, ex) for i, ex in enumerate(samples)]
         results: list[str | None] = [None] * len(tasks)
         for coro in tqdm(asyncio.as_completed(tasks), total=len(tasks), desc=f"Inference ({model.name()})"):
             idx, text = await coro
@@ -51,8 +67,54 @@ class Engine:
     # Infer all models concurrently
     async def _infer_all(self):
         logger.info(f"[Engine._infer_all] Starting inference for all models: {[m.name() for m in self.models]}")
-        tasks = {m.name(): asyncio.create_task(self._infer_single_model(m)) for m in self.models}
-        results = {name: await t for name, t in tasks.items()}
+        results = {}
+        
+        # Process each unique model type (for sharding)
+        for model_type, models in self.model_groups.items():
+            if len(models) > 1:  # Multiple instances of the same model type - need sharding
+                logger.info(f"[Engine._infer_all] Sharding dataset for {len(models)} instances of model type '{model_type}'")
+                # Divide dataset among model instances
+                shard_size = len(self.dataset) // len(models)
+                tasks = {}
+                
+                # Track the mapping of original indices to shard indices for recombination
+                index_mappings = {}
+                
+                # Distribute samples and create tasks
+                for i, model in enumerate(models):
+                    start_idx = i * shard_size
+                    # Last model gets any remaining samples
+                    end_idx = (i+1) * shard_size if i < len(models)-1 else len(self.dataset)
+                    shard = self.dataset[start_idx:end_idx]
+                    
+                    # Keep track of original indices
+                    index_mappings[model.name()] = list(range(start_idx, end_idx))
+                    
+                    tasks[model.name()] = asyncio.create_task(self._infer_single_model(model, shard))
+                    logger.info(f"[Engine._infer_all] Model {model.name()} assigned {len(shard)} samples (indices {start_idx}-{end_idx-1})")
+                
+                # Wait for all sharded tasks to complete
+                shard_results = {name: await t for name, t in tasks.items()}
+                
+                # Combine results under model_type as the key
+                combined_results = [None] * len(self.dataset)
+                
+                # Use index mappings to put results back in correct order
+                for model_name, model_results in shard_results.items():
+                    original_indices = index_mappings[model_name]
+                    for shard_idx, orig_idx in enumerate(original_indices):
+                        if shard_idx < len(model_results):
+                            combined_results[orig_idx] = model_results[shard_idx]
+                
+                # Use the model_type as the key for combined results
+                results[model_type] = combined_results
+                logger.info(f"[Engine._infer_all] Combined results for {len(models)} instances of '{model_type}'")
+            else:
+                # Single instance, normal processing
+                model = models[0]
+                model_name = model.name()
+                results[model_name] = await self._infer_single_model(model)
+        
         logger.info(f"[Engine._infer_all] All models finished inference.")
         return results
 
@@ -110,7 +172,7 @@ def _load_callhome_dataset(repo, preprocessor_name, num_samples, properties):
     dataset = PreprocessorClass().process(repo, num_samples=num_samples, properties=properties)
     return dataset
 
-def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="GeneralPreprocessor", user_prompt_add_ons: list[str] = [], system_prompts: list[str] = [], length_filter=None, metric=None, split=None):
+def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="GeneralPreprocessor", user_prompt_add_ons: list[str] = [], system_prompts: list[str] = [], length_filter=None, metric=None, split=None, dataset_info=None):
     """Load and preprocess a dataset from a local or remote path."""
     logger.info(f"[_load_dataset] Loading dataset {repo} with preprocessor {preprocessor_name}")
     
@@ -123,6 +185,8 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="G
     if length_filter:
         logger.info(f"[_load_dataset] Applying length filter: {length_filter}")
         properties["length_filter"] = tuple(length_filter)  # Convert list to tuple
+    if dataset_info:
+        properties["dataset_info"] = dataset_info
     
     # Special handling for local CallHome dataset
     if preprocessor_name.startswith("Callhome"):
@@ -375,15 +439,23 @@ def main(cfg_path='config.yaml'):
             logger.info(f"[main] Loading dataset '{dataset_name}' with metric '{metric_name}' ...")
             
             repo = dataset_info.get("hf_repo", None)
+            split = None
             if not repo:
                 repo = dataset_info.get("path", None)
             subset = dataset_info.get("subset", "")
             language = dataset_info.get("language", "en")
             preprocessor_name = dataset_info["preprocessor"]
             postprocessor_name = dataset_info["postprocessor"]
+
+            if cfg.get("split", None) is not None:
+                split = cfg.get("split")
+
+            if dataset_info.get("split", None) is not None:
+                split = dataset_info["split"]
+
             
-            dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, 
-                                  user_prompt_add_ons=user_prompt_add_ons, system_prompts=system_prompts, length_filter=length_filter, metric=metric_name, split=cfg.get("split"))
+            dataset = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, user_prompt_add_ons=user_prompt_add_ons, 
+                                    system_prompts=system_prompts, length_filter=length_filter, metric=metric_name, split=split, dataset_info=dataset_info)
             metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
             
             # Dynamically import postprocessor class

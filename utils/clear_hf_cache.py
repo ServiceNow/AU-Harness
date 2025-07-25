@@ -5,7 +5,7 @@ import shutil
 import glob
 from datasets import config as datasets_config
 import logging
-from transformers.utils.hub import HUGGINGFACE_HUB_CACHE
+from huggingface_hub import constants as hf_hub_constants
 import tempfile
 import subprocess
 
@@ -42,7 +42,7 @@ def clear_datasets_cache():
 
 def clear_models_cache():
     try:
-        models_cache = HUGGINGFACE_HUB_CACHE
+        models_cache = hf_hub_constants.HF_HUB_CACHE
         
         logger.info(f"Models cache directory: {models_cache}")
         if os.path.exists(models_cache):

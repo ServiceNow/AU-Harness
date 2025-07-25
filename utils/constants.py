@@ -1,12 +1,46 @@
-#inference server types
-INFERENCE_SERVER_VLLM_CHAT_COMPLETION = "vllm"
-OPENAI_CHAT_COMPLETION = "openai"
-INFERENCE_SERVER_VLLM_TRANSCRIPTION = "vllm_transcription"
-OPENAI_TRANSCRIPTION = "openai_transcription"
-#extras
+# Inference server types
+INFERENCE_SERVER_VLLM_CHAT_COMPLETION = 'vllm'
+OPENAI_CHAT_COMPLETION = 'openai'
+INFERENCE_SERVER_VLLM_TRANSCRIPTION = 'vllm_transcription'
+OPENAI_TRANSCRIPTION = 'openai_transcription'
+
+# WER/CER metrics constants
+# These imports need to be added since we're moving the constants here
+from jiwer import (
+    Compose,
+    ReduceToListOfListOfChars,
+    RemovePunctuation,
+    RemoveWhiteSpace,
+    Strip,
+    ToLowerCase,
+)
+from metrics.wer.normalizers import JapaneseTextNormalizer
+from metrics.wer.whisper_normalizer.english import EnglishTextNormalizer
+from metrics.wer.whisper_normalizer.basic import BasicTextNormalizer
+
+# Define WER/CER related constants
+NORMALIZERS = {"en": EnglishTextNormalizer(), "ja": JapaneseTextNormalizer()}
+DEFAULT_NORMALIZER = BasicTextNormalizer()
+BASIC_TRANSFORMATIONS = Compose(
+    [
+        ToLowerCase(),
+        RemovePunctuation(),
+        Strip(),
+    ]
+)
+# CER stands for Character Error Rate
+CER_LANGUAGES = {"ja"}
+CER_DEFAULTS = Compose(
+    [
+        RemoveWhiteSpace(),
+        ReduceToListOfListOfChars(),
+    ]
+)
+
+# Other constants
 ROUND_DIGITS = 3
 VLLM_MAX_TOKEN_RETRY_BUFFER = 50
-INVERTED_METRIC_INDICATOR = "↓"
+INVERTED_METRIC_INDICATOR = '↓'
 
 # Dictionary mapping metric names to their implementation details (module, class)
 metric_map = {
@@ -19,4 +53,147 @@ metric_map = {
     "llm_judge_big_bench_audio": ("metrics.llm_judge", "BigBenchAudioLLMJudgeMetric"),
     'bertscore': ("metrics.bertscore", "BertScore"),
     'diarization_metrics': ('metrics.diarization_metrics','DiarizationMetrics')
+}
+
+# Dictionary mapping language names to their standard codes
+language_map = {
+    'ab': 'abkhaz',
+    'af': 'afrikaans',
+    'am': 'amharic',
+    'ar': 'arabic',
+    'as': 'assamese',
+    'ast': 'asturian',
+    'az': 'azerbaijani',
+    'ba': 'bashkir',
+    'bas': 'basaa',
+    'be': 'belarusian',
+    'bg': 'bulgarian',
+    'bn': 'bengali',
+    'br': 'breton',
+    'bs': 'bosnian',
+    'ca': 'catalan',
+    'ceb': 'cebuano',
+    'ckb': 'sorani-kurdish',
+    'cmn': 'mandarin chinese',
+    'cnh': 'hakha chin',
+    'cs': 'czech',
+    'cv': 'chuvash',
+    'cy': 'welsh',
+    'da': 'danish',
+    'de': 'german',
+    'dv': 'dhivehi',
+    'dyu': 'dioula',
+    'el': 'greek',
+    'en': 'english',
+    'eo': 'esperanto',
+    'es': 'spanish',
+    'et': 'estonian',
+    'eu': 'basque',
+    'fa': 'persian',
+    'ff': 'fula',
+    'fi': 'finnish',
+    'fil': 'filipino',
+    'fr': 'french',
+    'fy': 'frisian',
+    'ga': 'irish',
+    'gl': 'galician',
+    'gn': 'guarani',
+    'gu': 'gujarati',
+    'ha': 'hausa',
+    'he': 'hebrew',
+    'hi': 'hindi',
+    'hr': 'croatian',
+    'hsb': 'sorbian, upper',
+    'hu': 'hungarian',
+    'hy': 'armenian',
+    'ia': 'interlingua',
+    'id': 'indonesian',
+    'ig': 'igbo',
+    'is': 'icelandic',
+    'it': 'italian',
+    'ja': 'japanese',
+    'jv': 'javanese',
+    'ka': 'georgian',
+    'kab': 'kabyle',
+    'kam': 'kamba',
+    'kea': 'kabuverdianu',
+    'kk': 'kazakh',
+    'km': 'khmer',
+    'kmr': 'kurmanji kurdish',
+    'kn': 'kannada',
+    'ko': 'korean',
+    'ky': 'kyrgyz',
+    'lb': 'luxembourgish',
+    'lg': 'ganda',
+    'ln': 'lingala',
+    'lo': 'lao',
+    'lt': 'lithuanian',
+    'luo': 'luo',
+    'lv': 'latvian',
+    'mdf': 'moksha',
+    'mhr': 'meadow mari',
+    'mi': 'maori',
+    'mk': 'macedonian',
+    'ml': 'malayalam',
+    'mn': 'mongolian',
+    'mr': 'marathi',
+    'mrj': 'hill mari',
+    'ms': 'malay',
+    'mt': 'maltese',
+    'my': 'burmese',
+    'myv': 'erzya',
+    'nan-tw': 'taiwanese (minnan)',
+    'nb': 'norwegian',
+    'ne': 'nepali',
+    'nl': 'dutch',
+    'nn': 'norwegian nynorsk',
+    'nso': 'northern-sotho',
+    'ny': 'nyanja',
+    'oc': 'occitan',
+    'om': 'oromo',
+    'or': 'oriya',
+    'pa': 'punjabi',
+    'pl': 'polish',
+    'ps': 'pashto',
+    'pt': 'portuguese',
+    'ro': 'romanian',
+    'ru': 'russian',
+    'rw': 'kinyarwanda',
+    'sah': 'sakha',
+    'sat': 'santali (ol chiki)',
+    'sc': 'sardinian',
+    'sd': 'sindhi',
+    'sk': 'slovak',
+    'skr': 'saraiki',
+    'sl': 'slovenian',
+    'sn': 'shona',
+    'so': 'somali',
+    'sq': 'albanian',
+    'sr': 'serbian',
+    'sv': 'swedish',
+    'sw': 'swahili',
+    'ta': 'tamil',
+    'te': 'telugu',
+    'tg': 'tajik',
+    'th': 'thai',
+    'ti': 'tigrinya',
+    'tig': 'tigre',
+    'tk': 'turkmen',
+    'tok': 'toki pona',
+    'tr': 'turkish',
+    'tt': 'tatar',
+    'tw': 'twi',
+    'ug': 'uyghur',
+    'uk': 'ukrainian',
+    'umb': 'umbundu',
+    'ur': 'urdu',
+    'uz': 'uzbek',
+    'vi': 'vietnamese',
+    'vot': 'votic',
+    'wo': 'wolof',
+    'xh': 'xhosa',
+    'yo': 'yoruba',
+    'yue': 'cantonese chinese',
+    'zh': 'chinese',
+    'zu': 'zulu',
 }

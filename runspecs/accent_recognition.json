@@ -2,7 +2,7 @@
   "mnsc_pqa_ar_dialogue_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "PQA-AR-Dialogue-Test",
-    "language": "english",
+    "language": "en",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor",
     "accented": true
@@ -10,14 +10,14 @@
   "mnsc_pqa_ar_sentence_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
     "subset": "PQA-AR-Sentence-Test",
-    "language": "english",
+    "language": "en",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor",
     "accented": true
   },
   "voxceleb_accent_test": {
     "hf_repo": "AudioLLMs/voxceleb_accent_test",
-    "language": "english",
+    "language": "en",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor",
     "accented": true
