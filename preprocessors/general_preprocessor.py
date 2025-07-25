@@ -1,22 +1,13 @@
 import logging
-logger = logging.getLogger(__name__)
-from tqdm import tqdm
 from preprocessors.base import Preprocessor
+from tqdm import tqdm
+
+logger = logging.getLogger(__name__)
 
 class GeneralPreprocessor(Preprocessor):
     """Preprocessor for Audio benchmarks from "AudioLLMs" and more on HF."""
     
-    def extract_audio_info(self, record):
-        if "audio" in record:
-            record["array"] = record["audio"]["array"]
-            record["sampling_rate"] = record["audio"]["sampling_rate"]
-            record.pop("audio")
-        elif "context" in record:
-            record["array"] = record["context"]["array"]
-            record["sampling_rate"] = record["context"]["sampling_rate"]
-            record.pop("context")
-        else:
-            raise KeyError("Neither 'audio' nor 'context' keys found in data")
+    # Using the extract_audio_info method from the base class
 
     def process(self, dataset: dict, num_samples: int = None, properties: dict = None) -> list[dict]:
         """Process the dataset and flatten audio/context structure (expects dict-of-lists).
@@ -27,7 +18,7 @@ class GeneralPreprocessor(Preprocessor):
                        to filter samples by audio length.
         """
         logger.info("In [GeneralPreprocessor] Processing dataset...")
-        #logger.info(dataset)
+        
         # Extract common properties using base class method
         props = self.extract_properties(properties)
         user_prompt_add_ons = props["user_prompt_add_ons"]
@@ -38,13 +29,20 @@ class GeneralPreprocessor(Preprocessor):
         prompt_add_ons = self.load_yaml_file("prompt_add_ons.yaml")
         system_prompts_mapping = self.load_yaml_file("system_prompts.yaml")
 
+        # Get dataset keys and size
+        keys = list(dataset.keys())
+        dataset_size = len(dataset[keys[0]]) if keys else 0
+        self.log_dataset_info(keys, dataset_size)
+        
         total_duration = 0
         new_dataset = []
-        keys = list(dataset.keys())
-        num_samples = len(dataset[keys[0]]) if keys else 0
-        #logger.info(f"Dataset keys: {keys}, num_samples: {num_samples}")
-        for i in tqdm(range(num_samples), desc="Preprocessing"):
+        dataset_size = len(dataset[keys[0]]) if keys else 0
+        indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
+        
+        for i in tqdm(indices, desc="Processing samples"):
+            # Create record by accessing each feature by index
             record = {k: dataset[k][i] for k in keys}
+            # Extract audio information
             self.extract_audio_info(record)
 
             # Calculate audio duration in seconds
@@ -52,10 +50,8 @@ class GeneralPreprocessor(Preprocessor):
             total_duration += audio_duration
             
             # Apply length filtering if specified
-            if length_filter and isinstance(length_filter, tuple) and len(length_filter) == 2:
-                min_length, max_length = length_filter
-                if audio_duration < min_length or audio_duration > max_length:
-                    continue
+            if not self.check_audio_length(record["array"], record["sampling_rate"], length_filter):
+                continue
             
             possible_keys = ["reference", "answer", "text", "transcription", "sentence", "transcript", "normalized_text"]
             record["model_target"] = next((record[k] for k in possible_keys if k in record), None)
@@ -75,6 +71,5 @@ class GeneralPreprocessor(Preprocessor):
             record["judge_type"] = properties.get("judge_type", "detailed")
             new_dataset.append(record)
 
-        logger.info(f"Dataset is {total_duration / 3600:.2f} hours long")
-        #print("DEBUG: Flattened record keys:", new_dataset[0].keys())
+        self.log_dataset_info(keys, dataset_size, len(new_dataset), total_duration)
         return new_dataset

@@ -1,15 +1,15 @@
 import logging
 from typing import Dict, List, Optional, Any
 import numpy as np
-from scipy.signal import resample
+from preprocessors.base import Preprocessor
 from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
 
-class VoiceBenchIfevalPreprocessor:
+class VoiceBenchIfevalPreprocessor(Preprocessor):
     """
     A preprocessor for the VoiceBench IFEval dataset, designed for
-    Speech Query Question Answering (SQQA) tasks.
+    instruction following evaluation of audio LLMs.
     """
 
     def process(
@@ -31,17 +31,22 @@ class VoiceBenchIfevalPreprocessor:
         """
         
         logger.info("In [VoiceBenchIfevalPreprocessor] Processing dataset...")
-
-        modality = properties.get("modality", "audio")
+        
+        # Extract properties using the base class method
+        props = self.extract_properties(properties)
+        modality = props.get("modality", "audio")
         logger.info(f"Processing modality: {modality}")
 
+        # Get dataset info using base class method
         dataset_keys = list(dataset.keys())
         dataset_size = len(dataset.get("key", []))
-        logger.info(f"Dataset keys: {dataset_keys}, total samples: {dataset_size}")
+        self.log_dataset_info(dataset_keys, dataset_size)
 
-        processed_data: List[Dict[str, Any]] = []
-
-        for i in tqdm(range(dataset_size), desc="Processing samples"):
+        processed_data = []
+        dataset_size = len(dataset.get("key", []))
+        indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
+        
+        for i in tqdm(indices, desc="Processing samples"):
             key = dataset["key"][i]
 
             if modality == "text":
@@ -59,7 +64,7 @@ class VoiceBenchIfevalPreprocessor:
             if modality == "audio":
                 # Validate audio data structure
                 if not isinstance(audio_data, dict):
-                    logger.warning(f"[{sample_id}] Invalid audio format. Skipping sample.")
+                    logger.warning(f"[{key}] Invalid audio format. Skipping sample.")
                     continue
 
                 # Convert to NumPy array
@@ -67,18 +72,15 @@ class VoiceBenchIfevalPreprocessor:
                 sr = audio_data.get("sampling_rate")
 
                 if sr is None:
-                    logger.warning(f"[{sample_id}] Sampling rate missing. Assuming 16kHz.")
+                    logger.warning(f"[{key}] Sampling rate missing. Assuming 16kHz.")
                     sr = 16000
 
-                # Resample if needed
-                if sr != 16000:
-                    target_length = int(16000 * len(audio_array) / sr)
-                    audio_array = resample(audio_array, target_length)
-                    sr = 16000
+                # Use base class method to resample audio
+                audio_array, sr = self.resample_audio(audio_array, sr)
 
             # Ensure prompt exists
             if not prompt:
-                logger.warning(f"[{sample_id}] Missing prompt. Skipping sample.")
+                logger.warning(f"[{key}] Missing prompt. Skipping sample.")
                 continue
 
             if modality == "text":
@@ -101,5 +103,5 @@ class VoiceBenchIfevalPreprocessor:
 
             processed_data.append(sample)
 
-        logger.info(f"Processed dataset size: {len(processed_data)}")
+        self.log_dataset_info(dataset_keys, dataset_size, len(processed_data))
         return processed_data

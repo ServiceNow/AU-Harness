@@ -1,4 +1,3 @@
-import re
 import logging
 from utils.custom_logging import configure
 from postprocessors.base import Postprocessor
@@ -16,24 +15,7 @@ class BigBenchAudioPostprocessor(Postprocessor):
     <think>...</think> tags) and structuring data for scoring and evaluation.
     """
 
-    @staticmethod
-    def remove_thinking_content(sample: str) -> str:
-        """
-        Removes special formatting tags and extraneous content from a model prediction.
-
-        Specifically removes:
-        - Text enclosed in <think>...</think>
-        - The special token <|end|>
-        
-        Args:
-            sample (str): Raw model prediction string.
-
-        Returns:
-            str: Cleaned version of the prediction.
-        """
-        cleaned = re.sub(r'<think>.*?</think>', '', sample, flags=re.DOTALL)
-        cleaned = cleaned.replace("<|end|>", "")
-        return cleaned.strip()
+    # Using remove_thinking_content from base class
 
     def process(
         self,
@@ -50,39 +32,28 @@ class BigBenchAudioPostprocessor(Postprocessor):
             metric: Placeholder for evaluation metric (not used in current implementation).
 
         Returns:
-            tuple:
-                - targets (list[tuple[str, str]]): Tuples of (transcript, official answer).
-                - processed_predictions (dict[str, list[str]]): Cleaned predictions per model.
-                - list: Placeholder (currently empty).
-                - list: Placeholder (currently empty).
+            dict: Dictionary containing processed data for evaluation including targets and processed predictions.
         """
         logger.info("Processing predictions with BigBenchAudioPostprocessor...")
 
-        processed_predictions: dict[str, list[str]] = {}
-
-        for model_name, preds in predictions.items():
-            logger.debug(f"Processing predictions for model: {model_name}")
-            processed = [self.remove_thinking_content(pred) for pred in preds]
-            processed_predictions[model_name] = processed
-            logger.debug(f"Cleaned {len(processed)} predictions for model: {model_name}")
+        # Process predictions using base class method
+        processed_predictions = self.process_predictions(predictions)
 
         # Prepare (transcript, target) pairs
         targets = [
             (record["transcript"], record["model_target"])
             for record in dataset
-            if "model_target" in record
+            if "model_target" in record and "transcript" in record
         ]
         
-        # Extract instructions
-        instructions = [record.get("instruction", "") for record in dataset]
+        # Extract instructions using base class method
+        instructions = self.extract_instructions(dataset)
 
         logger.info(f"Extracted {len(targets)} target-reference pairs from dataset.")
 
-        output = {
-            "model_targets": targets,
-            "processed_predictions": processed_predictions,
-            "instructions": instructions
-        }
-        
-        self.validate_output(output)
-        return output
+        # Create standardized output using base class method
+        return self.create_output(
+            model_targets=targets,
+            processed_predictions=processed_predictions,
+            instructions=instructions
+        )

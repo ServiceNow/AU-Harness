@@ -1,3 +1,5 @@
+#Python 3.12
+
 # Core numerical & data libraries
 numpy==1.26.0
 
