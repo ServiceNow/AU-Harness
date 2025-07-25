@@ -2,19 +2,19 @@
   "audiocaps_qa_test": {
     "hf_repo": "AudioLLMs/audiocaps_qa_test",
     "language": "en",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   },
   "clotho_aqa_test": {
     "hf_repo": "AudioLLMs/clotho_aqa_test",
     "language": "en",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   },
   "wavcaps_qa_test": {
     "hf_repo": "AudioLLMs/wavcaps_qa_test",
     "language": "en",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   }
 }
