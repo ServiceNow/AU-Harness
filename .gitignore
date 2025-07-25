@@ -1,6 +1,7 @@
 # env
 lite
 env
+env_py312
 
 # config files
 config.yaml

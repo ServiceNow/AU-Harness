@@ -1,48 +1,48 @@
 {
   "earnings21_test": {
     "hf_repo": "AudioLLMs/earnings21_test",
-    "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   },
   "earnings22_test": {
     "hf_repo": "AudioLLMs/earnings22_test",
-    "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   },
   "tedlium3_long_form_test": {
     "hf_repo": "AudioLLMs/tedlium3_long_form_test",
-    "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
   },
   "callhome_eng": {
-    "language": "english",
+    "language": "en",
     "preprocessor": "CallhomePreprocessor",
     "postprocessor": "CallhomePostprocessor",
     "path": "private_datasets/CallHome_eng"
   },
   "callhome_deu": {
-    "language": "german",
+    "language": "de",
     "preprocessor": "CallhomePreprocessor",
     "postprocessor": "CallhomePostprocessor",
     "path": "private_datasets/CallHome_eng"
   },
   "callhome_jpn": {
-    "language": "japanese",
+    "language": "ja",
     "preprocessor": "CallhomePreprocessor",
     "postprocessor": "CallhomePostprocessor",
     "path": "private_datasets/CallHome_eng"
   },
   "callhome_spa": {
-    "language": "spanish",
+    "language": "es",
     "preprocessor": "CallhomePreprocessor",
     "postprocessor": "CallhomePostprocessor",
     "path": "private_datasets/CallHome_eng"
   },
   "callhome_zho": {
-    "language": "chinese",
+    "language": "zh",
     "preprocessor": "CallhomePreprocessor",
     "postprocessor": "CallhomePostprocessor",
     "path": "private_datasets/CallHome_eng"

@@ -1,16 +1,18 @@
 {
-    "ifeval_audio": {
+    "voicebench_ifeval_audio": {
         "hf_repo": "hlt-lab/voicebench",
         "subset": "ifeval",
-        "language": "english",
-        "preprocessor": "IfevalAudioPreprocessor",
-        "postprocessor": "IfevalPostprocessor"
+        "modality": "audio",
+        "language": "en",
+        "preprocessor": "VoiceBenchIfevalPreprocessor",
+        "postprocessor": "VoiceBenchIfevalPostprocessor"
     },
-    "ifeval_text": {
+    "voicebench_ifeval_text": {
         "hf_repo": "hlt-lab/voicebench",
         "subset": "ifeval",
-        "language": "english",
-        "preprocessor": "IfevalTextPreprocessor",
-        "postprocessor": "IfevalPostprocessor"
+        "modality": "text",
+        "language": "en",
+        "preprocessor": "VoiceBenchIfevalPreprocessor",
+        "postprocessor": "VoiceBenchIfevalPostprocessor"
     }
 }

@@ -92,6 +92,10 @@ class CallhomePostprocessor(Postprocessor):
         model_targets = self.extract_targets(dataset)
         
         # Special handling for word_error_rate metric
+        output = {
+            "model_targets": model_targets,
+            "processed_predictions": processed_predictions
+        }
         if metric == "word_error_rate":
             # Extract audio metadata
             ids, lengths = self.extract_audio_metadata(dataset)

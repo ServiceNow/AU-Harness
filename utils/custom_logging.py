@@ -1,5 +1,5 @@
 """
-Shared logging utilities for AudioBench.
+Shared logging utilities.
 
 Central logging setup and record-level logging for metrics.
 

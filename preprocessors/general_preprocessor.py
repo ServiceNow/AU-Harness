@@ -5,7 +5,7 @@ from tqdm import tqdm
 logger = logging.getLogger(__name__)
 
 class GeneralPreprocessor(Preprocessor):
-    """Preprocessor for Audio benchmarks from AudioBench on HF."""
+    """Preprocessor for Audio benchmarks from "AudioLLMs" and more on HF."""
     
     # Using the extract_audio_info method from the base class
 

@@ -1,4 +1,18 @@
 {
+    "big_bench_audio": {
+        "hf_repo": "fixie-ai/big_bench_audio",
+        "subset": "default",
+        "language": "english",
+        "preprocessor": "BigBenchAudioPreprocessor",
+        "postprocessor": "BigBenchAudioPostprocessor"
+    },
+    "big_bench_audio_text_only": {
+        "hf_repo": "fixie-ai/big_bench_audio",
+        "subset": "default",
+        "language": "english",
+        "preprocessor": "BigBenchAudioTextOnlyPreprocessor",
+        "postprocessor": "BigBenchAudioPostprocessor"
+    },
     "openbookqa": {
         "hf_repo": "hlt-lab/voicebench",
         "subset": "openbookqa",
@@ -10,6 +24,86 @@
         "hf_repo": "hlt-lab/voicebench",
         "subset": "sd-qa",
         "split": "usa",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_zaf": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "zaf",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_phl": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "phl",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_nzl": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "nzl",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_nga": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "nga",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_kenya": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "kenya",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_irl": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "irl",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_ind_s": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "ind_s",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_ind_n": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "ind_n",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_gbr": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "gbr",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
+    "sd-qa_aus": {
+        "hf_repo": "hlt-lab/voicebench",
+        "subset": "sd-qa",
+        "split": "aus",
         "language": "english",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -50,7 +144,7 @@
         "hf_repo": "hlt-lab/voicebench",
         "subset": "mmsu",
         "split": "business",
-        "language": "english",
+        "language": "en",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
     },
@@ -58,7 +152,7 @@
         "hf_repo": "hlt-lab/voicebench",
         "subset": "mmsu",
         "split": "economics",
-        "language": "english",
+        "language": "en",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
     },
@@ -66,7 +160,7 @@
         "hf_repo": "hlt-lab/voicebench",
         "subset": "mmsu",
         "split": "health",
-        "language": "english",
+        "language": "en",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
     },
@@ -74,7 +168,7 @@
         "hf_repo": "hlt-lab/voicebench",
         "subset": "mmsu",
         "split": "philosophy",
-        "language": "english",
+        "language": "en",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
     },
@@ -82,7 +176,7 @@
         "hf_repo": "hlt-lab/voicebench",
         "subset": "mmsu",
         "split": "psychology",
-        "language": "english",
+        "language": "en",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
     },
@@ -90,7 +184,7 @@
         "hf_repo": "hlt-lab/voicebench",
         "subset": "mmsu",
         "split": "history",
-        "language": "english",
+        "language": "en",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
     },
@@ -98,7 +192,7 @@
         "hf_repo": "hlt-lab/voicebench",
         "subset": "mmsu",
         "split": "chemistry",
-        "language": "english",
+        "language": "en",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
     },
@@ -106,7 +200,7 @@
         "hf_repo": "hlt-lab/voicebench",
         "subset": "mmsu",
         "split": "physics",
-        "language": "english",
+        "language": "en",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
     }

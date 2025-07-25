@@ -60,7 +60,9 @@ class Preprocessor():
             "user_prompt_add_ons": properties.get("user_prompt_add_ons", []),
             "system_prompts": properties.get("system_prompts", []),
             "length_filter": properties.get("length_filter", None),  # Optional (min_seconds, max_seconds) tuple
-            "dataset_info": properties.get("dataset_info", {})
+            "dataset_info": properties.get("dataset_info", {}),
+            "modality": properties.get("modality", ""),
+            "judge_type": properties.get("judge_type", "")
         }
         
         logger.debug(f"Extracted properties: {extracted}")
