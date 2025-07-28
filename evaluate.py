@@ -67,17 +67,19 @@ class Engine:
     async def _infer_all(self):
         logger.info(f"[Engine._infer_all] Starting inference for all models: {[m.name() for m in self.models]}")
         results = {}
-        
-        # Process each unique model type (for sharding)
+        all_tasks = []
+        task_info = {}
+
+        # Prepare all tasks for concurrent execution
         for model_type, models in self.model_groups.items():
             if len(models) > 1:  # Multiple instances of the same model type - need sharding
                 logger.info(f"[Engine._infer_all] Sharding dataset for {len(models)} instances of model type '{model_type}'")
                 # Divide dataset among model instances
                 shard_size = len(self.dataset) // len(models)
-                tasks = {}
                 
                 # Track the mapping of original indices to shard indices for recombination
                 index_mappings = {}
+                sharded_tasks = {}
                 
                 # Distribute samples and create tasks
                 for i, model in enumerate(models):
@@ -89,32 +91,55 @@ class Engine:
                     # Keep track of original indices
                     index_mappings[model.name()] = list(range(start_idx, end_idx))
                     
-                    tasks[model.name()] = asyncio.create_task(self._infer_single_model(model, shard))
+                    task = asyncio.create_task(self._infer_single_model(model, shard))
+                    sharded_tasks[model.name()] = task
+                    all_tasks.append(task)
                     logger.info(f"[Engine._infer_all] Model {model.name()} assigned {len(shard)} samples (indices {start_idx}-{end_idx-1})")
                 
-                # Wait for all sharded tasks to complete
-                shard_results = {name: await t for name, t in tasks.items()}
+                # Store info for later reconstruction
+                task_info[model_type] = {
+                    "is_sharded": True,
+                    "tasks": sharded_tasks,
+                    "index_mappings": index_mappings
+                }
+            else:
+                # Single instance, normal processing
+                model = models[0]
+                model_name = model.name()
+                task = asyncio.create_task(self._infer_single_model(model))
+                all_tasks.append(task)
+                task_info[model_name] = {
+                    "is_sharded": False,
+                    "task": task
+                }
+        
+        # Wait for all tasks to complete concurrently
+        await asyncio.gather(*all_tasks)
+        
+        # Process results according to task type
+        for key, info in task_info.items():
+            if info["is_sharded"]:
+                # Reconstruct sharded results
+                shard_results = {name: task.result() for name, task in info["tasks"].items()}
                 
                 # Combine results under model_type as the key
                 combined_results = [None] * len(self.dataset)
                 
                 # Use index mappings to put results back in correct order
                 for model_name, model_results in shard_results.items():
-                    original_indices = index_mappings[model_name]
+                    original_indices = info["index_mappings"][model_name]
                     for shard_idx, orig_idx in enumerate(original_indices):
                         if shard_idx < len(model_results):
                             combined_results[orig_idx] = model_results[shard_idx]
                 
                 # Use the model_type as the key for combined results
-                results[model_type] = combined_results
-                logger.info(f"[Engine._infer_all] Combined results for {len(models)} instances of '{model_type}'")
+                results[key] = combined_results
+                logger.info(f"[Engine._infer_all] Combined results for sharded model type '{key}'")
             else:
-                # Single instance, normal processing
-                model = models[0]
-                model_name = model.name()
-                results[model_name] = await self._infer_single_model(model)
+                # Single instance result
+                results[key] = info["task"].result()
         
-        logger.info(f"[Engine._infer_all] All models finished inference.")
+        logger.info(f"[Engine._infer_all] All models finished inference concurrently.")
         return results
 
     async def run(self):
@@ -131,19 +156,21 @@ class Engine:
         ids = process_result.get("ids", [])
         lengths = process_result.get("lengths", [])
 
-        # Determine if this is an LLM-judge metric
-        is_llm_judge = isinstance(self.metric, _BaseLLMJudge)
-        # For LLM-judge, split concurrency
-        if is_llm_judge and self.available_judge_calls:
-            num_models = len(predictions)
-            per_model_conc = max(1, self.available_judge_calls // num_models)
-            # Instantiate a separate metric for each model with correct concurrency
-            metric_instances = {
-                model_name: type(self.metric)(max_concurrency=per_model_conc)
-                for model_name in predictions.keys()
-            }
-        else:
-            metric_instances = {model_name: self.metric for model_name in predictions.keys()}
+        # Create fresh metric instances for each model
+        metric_instances = {}
+        for model_name in predictions.keys():
+            if isinstance(self.metric, _BaseLLMJudge) and self.available_judge_calls:
+                # For LLM-judge, split concurrency among models
+                num_models = len(predictions)
+                per_model_conc = max(1, self.available_judge_calls // num_models)
+                # Create new LLM-judge instance with proper concurrency
+                metric_instances[model_name] = type(self.metric)(max_concurrency=per_model_conc)
+            else:
+                # For all other metrics, create fresh instances to avoid state sharing
+                metric_instances[model_name] = type(self.metric)()
+                # Copy any important attributes from the original metric
+                if hasattr(self.metric, 'language'):
+                    metric_instances[model_name].language = self.metric.language
 
         async def score_model(model_name, outs):
             metric = metric_instances[model_name]
