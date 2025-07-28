@@ -30,3 +30,5 @@ client_test.py
 # local configs
 .venv/
 .vscode/
+
+data/spider/
