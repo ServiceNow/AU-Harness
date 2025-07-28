@@ -19,18 +19,18 @@ from models.model import Model
 from metrics.metrics import Metrics
 from postprocessors.base import Postprocessor
 from utils.constants import metric_map
+from metrics.llm_judge import _BaseLLMJudge
 
 class Engine:
     """Evaluate one or many models over the same dataset concurrently."""
-    def __init__(self, models: list[Model], dataset: list[dict], metric: Metrics, postprocessor, dataset_name: str):
+    def __init__(self, models: list[Model], dataset: list[dict], metric: Metrics, postprocessor, dataset_name: str, available_judge_calls: int = None):
         logger.info(f"[Engine.__init__] Initializing Engine with {len(models)} model(s), dataset size: {len(dataset)}, metric: {metric.name}")
         self.models = models
         self.dataset = dataset
         self.metric = metric
         self.postprocessor = postprocessor
-        # Keep track of dataset name so we can create per-dataset log files
         self.dataset_name = dataset_name
-        
+        self.available_judge_calls = available_judge_calls  # For LLM-judge concurrency splitting
         # Group models by their model attribute for sharding
         self.model_groups = {}
         for model in models:
@@ -38,7 +38,6 @@ class Engine:
             if model_type not in self.model_groups:
                 self.model_groups[model_type] = []
             self.model_groups[model_type].append(model)
-        
         # Log model grouping information
         for model_type, group_models in self.model_groups.items():
             if len(group_models) > 1:
@@ -118,15 +117,13 @@ class Engine:
         logger.info(f"[Engine._infer_all] All models finished inference.")
         return results
 
-    def run(self):
+    async def run(self):
         logger.info("[Engine.run] Starting evaluation run.")
-        predictions = asyncio.run(self._infer_all())
+        predictions = await self._infer_all()
         logger.info(f"[Engine.run] Predictions complete. Calculating scores...")
         scores = {}
-        
         # Pass the metric name to the postprocessor
         process_result = self.postprocessor.process(dataset=self.dataset, predictions=predictions, metric=self.metric.name)
-        
         # Extract values from the dictionary returned by the postprocessor
         model_targets = process_result["model_targets"]
         predictions = process_result["processed_predictions"]
@@ -134,12 +131,31 @@ class Engine:
         ids = process_result.get("ids", [])
         lengths = process_result.get("lengths", [])
 
-        for model_name, outs in predictions.items():
-            # Let the metric handle per-record logging internally
+        # Determine if this is an LLM-judge metric
+        is_llm_judge = isinstance(self.metric, _BaseLLMJudge)
+        # For LLM-judge, split concurrency
+        if is_llm_judge and self.available_judge_calls:
+            num_models = len(predictions)
+            per_model_conc = max(1, self.available_judge_calls // num_models)
+            # Instantiate a separate metric for each model with correct concurrency
+            metric_instances = {
+                model_name: type(self.metric)(max_concurrency=per_model_conc)
+                for model_name in predictions.keys()
+            }
+        else:
+            metric_instances = {model_name: self.metric for model_name in predictions.keys()}
+
+        async def score_model(model_name, outs):
+            metric = metric_instances[model_name]
             if ids and lengths:
-                model_score = self.metric(outs, model_targets, ids, lengths, instructions=instructions, dataset_name=self.dataset_name, model_name=model_name)
+                return model_name, await asyncio.to_thread(metric, outs, model_targets, ids, lengths, instructions=instructions, dataset_name=self.dataset_name, model_name=model_name)
             else:
-                model_score = self.metric(outs, model_targets, instructions=instructions, dataset_name=self.dataset_name, model_name=model_name)
+                return model_name, await asyncio.to_thread(metric, outs, model_targets, instructions=instructions, dataset_name=self.dataset_name, model_name=model_name)
+
+        # Run all model scoring concurrently
+        tasks = [score_model(model_name, outs) for model_name, outs in predictions.items()]
+        results = await asyncio.gather(*tasks)
+        for model_name, model_score in results:
             scores[model_name] = model_score
         logger.info(f"[Engine.run] Evaluation complete. Returning scores.")
         logger.info(f"[Engine.run] Scores: {scores}")
@@ -430,7 +446,7 @@ def main(cfg_path='config.yaml'):
             if accented_filter is False and dataset_info.get("accented", False) is True:
                 logger.info(f"[main] Skipping dataset '{dataset_name}' because it is accented and accented filter is False")
                 continue
-                
+
             # Check if we need to filter by language
             if language_filter is not None:
                 dataset_language = dataset_info.get("language", "").lower()
@@ -480,11 +496,10 @@ def main(cfg_path='config.yaml'):
             postprocessor = PostprocessorClass()
             
             logger.info("[main] Initializing Engine and running evaluation...")
-            result = Engine(models, dataset, metric, postprocessor, dataset_name).run()
-            key = f"{dataset_name}_{metric_name}"
-            all_scores[key] = result
-    
-    logger.info("[main] Evaluation scores:")
+            engine = Engine(models, dataset, metric, postprocessor, dataset_name, available_judge_calls=judge_concurrency)
+            scores = asyncio.run(engine.run())
+            all_scores[dataset_name] = scores
+            logger.info(f"[main] Finished evaluation for dataset: {dataset_name}")
     logger.info(json.dumps(all_scores, indent=2))
 
 if __name__ == "__main__":
