@@ -1,6 +1,6 @@
 {
     "bfcl_v3_simple_text": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_simple",
         "modality": "text",
         "with_prompt": false,
@@ -9,7 +9,7 @@
         "postprocessor": "BfclPostprocessor"
     },
     "bfcl_v3_simple_text_with_prompt": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_simple",
         "modality": "text",
         "with_prompt": true,
@@ -18,7 +18,7 @@
         "postprocessor": "BfclPostprocessor"
     },
     "bfcl_v3_simple_audio": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_simple",
         "modality": "audio",
         "with_prompt": false,
@@ -27,7 +27,7 @@
         "postprocessor": "BfclPostprocessor"
     },
     "bfcl_v3_simple_audio_with_prompt": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_simple",
         "modality": "audio",
         "with_prompt": true,
@@ -36,7 +36,7 @@
         "postprocessor": "BfclPostprocessor"
     },
     "bfcl_v3_multiple_text": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_multiple",
         "modality": "text",
         "with_prompt": false,
@@ -45,7 +45,7 @@
         "postprocessor": "BfclPostprocessor"
     },
     "bfcl_v3_multiple_text_with_prompt": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_multiple",
         "modality": "text",
         "with_prompt": true,
@@ -54,7 +54,7 @@
         "postprocessor": "BfclPostprocessor"
     },
     "bfcl_v3_multiple_audio": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_multiple",
         "modality": "audio",
         "with_prompt": false,
@@ -63,7 +63,7 @@
         "postprocessor": "BfclPostprocessor"
     },
     "bfcl_v3_multiple_audio_with_prompt": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_multiple",
         "modality": "audio",
         "with_prompt": true,
@@ -72,7 +72,7 @@
         "postprocessor": "BfclPostprocessor"
     },
     "bfcl_v3_parallel_multiple_text": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_parallel_multiple",
         "modality": "text",
         "with_prompt": false,
@@ -81,7 +81,7 @@
         "postprocessor": "BfclPostprocessor"
     },
     "bfcl_v3_parallel_multiple_text_with_prompt": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_parallel_multiple",
         "modality": "text",
         "with_prompt": true,
@@ -90,7 +90,7 @@
         "postprocessor": "BfclPostprocessor"
     },
     "bfcl_v3_parallel_multiple_audio": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_parallel_multiple",
         "modality": "audio",
         "with_prompt": false,
@@ -99,7 +99,7 @@
         "postprocessor": "BfclPostprocessor"
     },
     "bfcl_v3_parallel_multiple_audio_with_prompt": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_parallel_multiple",
         "modality": "audio",
         "with_prompt": true,
@@ -108,7 +108,7 @@
         "postprocessor": "BfclPostprocessor"
     },
     "bfcl_v3_parallel_text": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_parallel",
         "modality": "text",
         "with_prompt": false,
@@ -117,7 +117,7 @@
         "postprocessor": "BfclPostprocessor"
     },
     "bfcl_v3_parallel_text_with_prompt": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_parallel",
         "modality": "text",
         "with_prompt": true,
@@ -126,7 +126,7 @@
         "postprocessor": "BfclPostprocessor"
     },
     "bfcl_v3_parallel_audio": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_parallel",
         "modality": "audio",
         "with_prompt": false,
@@ -135,7 +135,7 @@
         "postprocessor": "BfclPostprocessor"
     },
     "bfcl_v3_parallel_audio_with_prompt": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_parallel",
         "modality": "audio",
         "with_prompt": true,
@@ -144,7 +144,7 @@
         "postprocessor": "BfclPostprocessor"
     },
     "bfcl_v3_irrelevance_text": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_irrelevance",
         "modality": "text",
         "with_prompt": false,
@@ -153,7 +153,7 @@
         "postprocessor": "BfclPostprocessor"
     },
     "bfcl_v3_irrelevance_text_with_prompt": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_irrelevance",
         "modality": "text",
         "with_prompt": true,
@@ -162,7 +162,7 @@
         "postprocessor": "BfclPostprocessor"
     },
     "bfcl_v3_irrelevance_audio": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_irrelevance",
         "modality": "audio",
         "with_prompt": false,
@@ -171,7 +171,7 @@
         "postprocessor": "BfclPostprocessor"
     },
     "bfcl_v3_irrelevance_audio_with_prompt": {
-        "hf_repo": "ServiceNow-AI/LALMEval",
+        "hf_repo": "ServiceNow-AI/BFCL_v3_audio",
         "subset": "BFCL_v3_irrelevance",
         "modality": "audio",
         "with_prompt": true,
