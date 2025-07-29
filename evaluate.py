@@ -218,19 +218,18 @@ class Engine:
 
         # Determine if this is an LLM-judge metric
         is_llm_judge = isinstance(self.metric, _BaseLLMJudge)
-        # For LLM-judge, split concurrency
-        if is_llm_judge and self.available_judge_calls:
-            num_models = len(predictions)
-            per_model_conc = max(1, self.available_judge_calls // num_models)
+        
+        # Create a separate metric instance for each model, but without splitting concurrency
+        if is_llm_judge:
             # Get the judge model from the original metric
             judge_model = getattr(self.metric, '_model', None)
-            
-            # Instantiate a separate metric for each model with correct concurrency and preserving the judge model
+            # Use the same concurrency for all instances
             metric_instances = {
-                model_name: type(self.metric)(max_concurrency=per_model_conc, model=judge_model)
+                model_name: type(self.metric)(max_concurrency=self.metric._max_concurrency, model=judge_model)
                 for model_name in predictions.keys()
             }
         else:
+            # For non-LLM judges, use the same instance for all models
             metric_instances = {model_name: self.metric for model_name in predictions.keys()}
         
         async def score_model_with_tokens(model_name, outs):
