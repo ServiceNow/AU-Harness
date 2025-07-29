@@ -64,10 +64,10 @@ class Engine:
         pending_samples = list(range(len(samples)))  # Indices of samples waiting for tokens
         completed_samples = set()  # Indices of samples that have completed processing
         
-        # Single token management task that handles all token requests
+        # Continuously ask for tokens(with backoff if none available) based on pending samples
         async def token_manager():
             request_count = 0
-            while len(completed_samples) < len(samples):
+            while len(pending_samples) > 0:
                 request_count += 1
                 # Request as many tokens as we need for pending samples
                 request_amount = min(model.batch_size, len(pending_samples))
@@ -88,12 +88,11 @@ class Engine:
                         # Backoff if we didn't get any tokens
                         await asyncio.sleep(0.1 * min(request_count, 10))
                 else:
-                    # No pending samples, just wait briefly
-                    await asyncio.sleep(0.5)
+                    break
         
-        # Start the token management task without awaiting it
         asyncio.create_task(token_manager())
             
+        # Wait for token to be available, run task, and add to completed
         async def _call_with_token_mgmt(idx: int, sample: dict):
             # Acquire a token
             await token_sem.acquire()
@@ -109,9 +108,7 @@ class Engine:
                 
                 # Return token to model's pool
                 await self.request_manager.return_tokens(model_type, model_instance_id, 1)
-                
-                # No need to request new tokens here - the token_manager handles that
-                
+                                
                 return idx, result
             except Exception as e:
                 # Make sure to return token on error
@@ -236,53 +233,40 @@ class Engine:
         else:
             metric_instances = {model_name: self.metric for model_name in predictions.keys()}
         
-        # Define score_model with tokens
         async def score_model_with_tokens(model_name, outs):
             metric = metric_instances[model_name]
             
-            # Determine evaluator model type (for LLM judge we use the model attribute from the metric)
-            evaluator_model_type = metric._model if is_llm_judge and hasattr(metric, '_model') else "evaluator"
-            
-            # Generate a unique evaluator instance ID
-            evaluator_id = f"{model_name}_evaluator_{id(metric)}"
-            
-            # Request tokens for evaluation
-            requested_tokens = min(1000, len(outs))  # Higher default for regular metrics
-            
+            # Check if this is an LLM judge
             if is_llm_judge:
-                # For LLM judges, use their concurrency setting
-                requested_tokens = metric.max_concurrency if hasattr(metric, 'max_concurrency') else requested_tokens
-            
-            # Request tokens from the request manager, specifying the evaluator model type
-            granted = await self.request_manager.request_tokens(
-                evaluator_model_type, evaluator_id, requested_tokens)
-            
-            # Create a wrapper function for evaluation
-            def token_limited_evaluation(outs, targets, *args, **kwargs):
-                # Perform the actual evaluation - this runs in a thread
-                return metric(outs, targets, *args, **kwargs)
-            
-            try:
-                # Run the evaluation in a thread
+                # For LLM judges, set the request manager
+                # The metric will handle token management internally with the Engine Manager
+                metric.set_request_manager(self.request_manager)
+                
+                # Run the evaluation
                 if ids and lengths:
                     result = await asyncio.to_thread(
-                        token_limited_evaluation, outs, model_targets, ids, lengths,
+                        metric, outs, model_targets, ids, lengths,
                         instructions=instructions, dataset_name=self.dataset_name, model_name=model_name
                     )
                 else:
                     result = await asyncio.to_thread(
-                        token_limited_evaluation, outs, model_targets,
+                        metric, outs, model_targets,
                         instructions=instructions, dataset_name=self.dataset_name, model_name=model_name
                     )
-                
-                # Return tokens after evaluation completes
-                await self.request_manager.return_tokens(evaluator_model_type, evaluator_id, granted)
                 return model_name, result
-            except Exception as e:
-                logger.error(f"Error during evaluation for {model_name}: {e}")
-                # Make sure to return tokens on error
-                await self.request_manager.return_tokens(evaluator_model_type, evaluator_id, granted)
-                raise
+            else:
+                # For regular metrics, just run them directly (no token management needed)
+                if ids and lengths:
+                    result = await asyncio.to_thread(
+                        metric, outs, model_targets, ids, lengths,
+                        instructions=instructions, dataset_name=self.dataset_name, model_name=model_name
+                    )
+                else:
+                    result = await asyncio.to_thread(
+                        metric, outs, model_targets,
+                        instructions=instructions, dataset_name=self.dataset_name, model_name=model_name
+                    )
+                return model_name, result
 
         # Run all model scoring concurrently
         tasks = [score_model_with_tokens(model_name, outs) for model_name, outs in predictions.items()]
@@ -406,11 +390,10 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="G
 
 
 
-
+# Model Loader
 def _load_models(cfg_list: list[dict]) -> list[Model]:
     models = []
     for cfg in cfg_list:
-        model_name = cfg["info"].get("name")
         model_obj = Model(cfg["info"])
         models.append(model_obj)
     if not models:
@@ -421,7 +404,7 @@ def _load_models(cfg_list: list[dict]) -> list[Model]:
 
 
 
-
+# Metric Loader
 def _load_metric(name: str, language: str = "en", judge_concurrency: int | None = None, judge_model: str | None = None):
 
     if name not in metric_map:
@@ -451,8 +434,6 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
 
 
 
-#TO-DO: need to implement command line override, add common configs, group by task type
-#main that runs
 def main(cfg_path='config.yaml'):
     logger.info(f"[main] Loading config from {cfg_path}")
     with open(cfg_path, 'r') as f:
@@ -476,9 +457,6 @@ def main(cfg_path='config.yaml'):
     if judge_model:
         logger.info(f"[main] Registering judge model '{judge_model}' with concurrency {judge_concurrency}")
         central_request_controller.register_model_type(judge_model, judge_concurrency)
-        
-    # Register generic evaluator for non-LLM evaluations
-    central_request_controller.register_model_type("evaluator", 10000)  # Default concurrency for regular evaluators
     
     # Load runspec files from the runspecs directory
     runspecs_dir = Path("runspecs")
@@ -536,10 +514,9 @@ def main(cfg_path='config.yaml'):
     # Flatten dataset-metric pairs from config/runspecs
     for dataset_name, metric_name in dataset_metric_pairs:
         
-        # Step 1: Look for a matching runspec file
+        # Look for a matching runspec file
         found_runspec = False
         
-        # Try to match the dataset name with one of the runspec files
         for runspec_file in runspec_files:
             runspec_name = runspec_file.stem
             
@@ -560,7 +537,7 @@ def main(cfg_path='config.yaml'):
                         
                 break
         
-        # Step 2: If no matching runspec file by name, search within all runspec files for the specific dataset
+        # If no matching runspec file by name, search within all runspec files for the specific dataset
         if not found_runspec:            
             # Search through all runspec files to find the dataset
             for runspec_file in runspec_files:
@@ -584,6 +561,7 @@ def main(cfg_path='config.yaml'):
     
     all_engines = []  # Track all engines for concurrent execution
     
+    # Build engines for each dataset-metric pair
     for dataset_name, metric_name, dataset_info in flattened_dataset_metric_pairs:
         logger.info(f"[main] Creating engine for dataset '{dataset_name}' with metric '{metric_name}'")
         

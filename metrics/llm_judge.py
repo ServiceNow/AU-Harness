@@ -31,19 +31,29 @@ _DEFAULT_OPENAI_MODEL = "gpt-4o-mini"
 _DEFAULT_MAX_CONCURRENCY = 5
 
 class _BaseLLMJudge(Metrics):
-    """Common LLM-as-judge scaffolding."""
+    """Common LLM-as-judge class."""
 
     def __init__(self, max_concurrency: int | None = None, model: str | None = None, *_, **__):
         super().__init__()
         # If not supplied, fall back to defaults
         self._max_concurrency = max_concurrency or _DEFAULT_MAX_CONCURRENCY
         self._model = model or _DEFAULT_OPENAI_MODEL
+        self._request_manager = None # Set in Engine
         # Azure OpenAI async client
         self._client = AsyncAzureOpenAI(
             api_key=os.environ.get("AZURE_OPENAI_KEY"),  # set in your shell
             api_version=os.environ.get("AZURE_OPENAI_VERSION", "2025-01-01-preview"),
             azure_endpoint=os.environ.get("AZURE_OPENAI_ENDPOINT", "https://corelmm-gpt-4t.openai.azure.com"),
         )
+    
+    def set_request_manager(self, manager):
+        """Set the request manager and register the model type."""
+        self._request_manager = manager
+        if self._request_manager is not None:
+            # Register the model type directly with the central controller
+            asyncio.create_task(self._request_manager.central_controller.register_model_type(
+                self._model, self._max_concurrency
+            ))
 
     async def _score_once(self, system_prompt: str, user_prompt: str) -> float | dict | None:
 
@@ -97,40 +107,98 @@ class _BaseLLMJudge(Metrics):
     ) -> list:
         """Run the LLM judge over *candidates* vs *references*.
 
-        *prompt_add_on* is extra text appended to the base system prompt.  Each
+        *prompt_add_on* is extra text appended to the base system prompt. Each
         concrete metric can inject task-specific instructions without changing
         the core helper.
         """
-        sem = asyncio.Semaphore(self._max_concurrency)
-        sys_prompt_template = _get_prompt(self._prompt_key)
-
-        async def _run(cand, ref):
-            # Use the prompt template as system prompt
-            sys_prompt = sys_prompt_template
-            # Format candidate and reference as user prompt
-            user_prompt = f"candidate: {cand}\nreference: {ref}"
-            async with sem:
-                return await self._score_once(sys_prompt, user_prompt)  # Use sys_prompt_template as system prompt
-
-        # Create tasks for all candidate-reference pairs and track their indices
-        tasks_with_indices = [(i, _run(c, r)) for i, (c, r) in enumerate(zip(candidates, references))]
-        pending = {asyncio.create_task(coro): i for i, coro in tasks_with_indices}
-        results = [None] * len(tasks_with_indices)  # Pre-allocate results list
+        if self._request_manager is None:
+            raise ValueError("Request manager must be set before calling _judge_all")
         
-        # Use tqdm to monitor progress across asynchronous completions
-        with tqdm(total=len(pending), desc=f"LLM Judge ({self._prompt_key})") as progress:
-            while pending:
-                done, _ = await asyncio.wait(pending.keys(), return_when=asyncio.FIRST_COMPLETED)
-                for task in done:
-                    index = pending.pop(task)
-                    result = task.result()
-                    results[index] = result  # Store result at the correct index
-                    progress.update(1)
+        # Setup for token management
+        token_sem = asyncio.Semaphore(0)  # Start with 0 tokens
+        pending_samples = list(range(len(candidates)))
+        completed_samples = set()
+        results = [None] * len(candidates)
+        sys_prompt_template = _get_prompt(self._prompt_key)
+        
+        # Generate unique evaluator instance ID
+        evaluator_id = f"llm_judge_{self._prompt_key}_{id(self)}"
+        
+        # Continuously ask for tokens based on pending samples
+        async def token_manager():
+            request_count = 0
+            while len(pending_samples) > 0:
+                request_count += 1
+                # Request as many tokens as needed for pending samples, up to max_concurrency
+                request_amount = min(self._max_concurrency, len(pending_samples))
+                
+                if request_amount > 0:
+                    granted = await self.request_manager.request_tokens(
+                        self._model, evaluator_id, request_amount)
+                    
+                    if granted > 0:
+                        # Remove samples from pending list based on granted tokens
+                        # This doesn't affect the pending_samples list we iterate over in other functions
+                        for _ in range(granted):
+                            if pending_samples:
+                                # Release semaphore permits for each granted token
+                                token_sem.release()
+                        # Short wait if we got tokens
+                        await asyncio.sleep(0.5)
+                    else:
+                        # Backoff if we didn't get any tokens
+                        await asyncio.sleep(0.1 * min(request_count, 10))
+                else:
+                    # This shouldn't happen with the loop condition, but just in case
+                    break
+        
+        # Start the token management task without awaiting it
+        asyncio.create_task(token_manager())
+        
+        # Process each candidate-reference pair with token management
+        async def _evaluate_with_token_mgmt(idx, cand, ref):
+            # Acquire a token
+            await token_sem.acquire()
+            
+            try:
+                # Use the prompt template as system prompt
+                sys_prompt = sys_prompt_template
+                # Format candidate and reference as user prompt
+                user_prompt = f"candidate: {cand}\nreference: {ref}"
+                
+                # Call the scoring function
+                result = await self._score_once(sys_prompt, user_prompt)
+                
+                # Add to completed set and remove from pending
+                completed_samples.add(idx)
+                if idx in pending_samples:
+                    pending_samples.remove(idx)
+                
+                # Return token to model's pool
+                await self.request_manager.return_tokens(self._model, evaluator_id, 1)
+                
+                return idx, result
+            except Exception as e:
+                # Make sure to return token on error
+                logger.error(f"[_BaseLLMJudge._evaluate_with_token_mgmt] Error processing sample {idx}: {e}")
+                completed_samples.add(idx)
+                if idx in pending_samples:
+                    pending_samples.remove(idx)
+                await self.request_manager.return_tokens(self._model, evaluator_id, 1)
+                return idx, None
+        
+        # Create tasks for all samples
+        tasks = [_evaluate_with_token_mgmt(i, c, r) for i, (c, r) in enumerate(zip(candidates, references))]
+        
+        # Use tqdm to show progress
+        with tqdm(total=len(tasks), desc=f"LLM Judge ({self._prompt_key})") as progress_bar:
+            for coro in asyncio.as_completed(tasks):
+                idx, result = await coro
+                results[idx] = result
+                progress_bar.update(1)
+        
         return results
 
-    # ---------------------------------------------------
-    # Internal helper for per-record logging
-    # ---------------------------------------------------
 
 #All of these judges always return on a scale of 100
 
