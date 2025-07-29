@@ -1,5 +1,5 @@
 from __future__ import annotations
-import asyncio, json, yaml, os, re
+import asyncio, json, yaml, os, re, math
 from pathlib import Path
 from openai import AsyncAzureOpenAI, APIConnectionError
 from tqdm import tqdm
@@ -127,10 +127,22 @@ class _BaseLLMJudge(Metrics):
         evaluator_id = f"llm_judge_{self._prompt_key}_{id(self)}"
         
         # Continuously ask for tokens based on pending samples
+        # Have dynamic wait times for by dataset size - this "layering" of Engine priority gives models in the same Engine similar priority, so they don't wait on each other as often
         async def token_manager():
             request_count = 0
+            # Calculate wait times based on dataset size
+            dataset_size = len(candidates)
+            
+            # Calculate a scale factor from 0 to 1 based on dataset size
+            scale_factor = min(1.0, max(0.0, math.log10(dataset_size + 10) / 4.0))
+            
+            # Scale the no-token wait time between 0.5s and 2s
+            no_token_wait = scale_factor * 2.0
+            
+            # Double the wait time when tokens are granted
+            token_wait = no_token_wait * 2.0
+            
             while len(pending_samples) > 0:
-                
                 request_count += 1
                 # Request as many tokens as needed for pending samples, up to max_concurrency
                 request_amount = min(self._max_concurrency, len(pending_samples))
@@ -146,11 +158,13 @@ class _BaseLLMJudge(Metrics):
                             if pending_samples:
                                 # Release semaphore permits for each granted token
                                 token_sem.release()
-                        # Short wait if we got tokens
-                        await asyncio.sleep(0.5)
+                        # Wait based on dataset size when tokens were granted
+                        await asyncio.sleep(token_wait)
                     else:
-                        # Backoff if we didn't get any tokens
-                        await asyncio.sleep(0.1 * min(request_count, 10))
+                        # Backoff when no tokens were granted, based on dataset size
+                        # Apply a small multiplier for repeated failures, but cap it
+                        backoff_multiplier = min(3.0, 1.0 + (request_count / 10))
+                        await asyncio.sleep(no_token_wait * backoff_multiplier)
                 else:
                     # This shouldn't happen with the loop condition, but just in case
                     break

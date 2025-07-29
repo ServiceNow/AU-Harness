@@ -15,6 +15,7 @@ import importlib
 import argparse
 import json
 import yaml
+import math
 from datasets import load_dataset
 from pathlib import Path
 import time
@@ -65,8 +66,21 @@ class Engine:
         completed_samples = set()  # Indices of samples that have completed processing
         
         # Continuously ask for tokens(with backoff if none available) based on pending samples
+        # Have dynamic wait times for by dataset size - this "layering" of Engine priority gives models in the same Engine similar priority, so they don't wait on each other as often
         async def token_manager():
             request_count = 0
+            # Calculate wait times based on dataset size
+            dataset_size = len(samples)
+            
+            # Calculate a scale factor from 0 to 1 based on dataset size
+            scale_factor = min(1.0, max(0.0, math.log10(dataset_size + 10) / 4.0))
+            
+            # Scale the no-token wait time between 0.5s and 2s
+            no_token_wait = scale_factor * 2.0
+            
+            # Double the wait time when tokens are granted
+            token_wait = no_token_wait * 2.0
+            
             while len(pending_samples) > 0:
                 request_count += 1
                 # Request as many tokens as we need for pending samples
@@ -82,11 +96,13 @@ class Engine:
                         # Release semaphore permits for each granted token
                         for _ in range(granted):
                             token_sem.release()
-                        # Short wait if we got tokens
-                        await asyncio.sleep(0.5)
+                        # Wait based on dataset size when tokens were granted
+                        await asyncio.sleep(token_wait)
                     else:
-                        # Backoff if we didn't get any tokens
-                        await asyncio.sleep(0.1 * min(request_count, 10))
+                        # Backoff when no tokens were granted, based on dataset size
+                        # Apply a small multiplier for repeated failures, but cap it
+                        backoff_multiplier = min(3.0, 1.0 + (request_count / 10))
+                        await asyncio.sleep(no_token_wait * backoff_multiplier)
                 else:
                     break
         
