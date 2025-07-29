@@ -118,8 +118,9 @@ class _BaseLLMJudge(Metrics):
         
         # Setup for token management
         token_sem = asyncio.Semaphore(0)  # Start with 0 tokens
-        pending_samples = list(range(len(candidates)))
-        completed_samples = set()
+        pending_samples = list(range(len(candidates)))  # Samples waiting for tokens
+        processing_samples = set()  # Samples currently being processed
+        completed_samples = set()  # Samples that are completed
         results = [None] * len(candidates)
         sys_prompt_template = _get_prompt(self._prompt_key)
         
@@ -127,7 +128,6 @@ class _BaseLLMJudge(Metrics):
         evaluator_id = f"llm_judge_{self._prompt_key}_{id(self)}"
         
         # Continuously ask for tokens based on pending samples
-        # Have dynamic wait times for by dataset size - this "layering" of Engine priority gives models in the same Engine similar priority, so they don't wait on each other as often
         async def token_manager():
             request_count = 0
             # Calculate wait times based on dataset size
@@ -142,32 +142,31 @@ class _BaseLLMJudge(Metrics):
             # Double the wait time when tokens are granted
             token_wait = no_token_wait * 2.0
             
+            # Continue running until all samples have been given tokens
             while len(pending_samples) > 0:
                 request_count += 1
                 # Request as many tokens as needed for pending samples, up to max_concurrency
                 request_amount = min(self._max_concurrency, len(pending_samples))
                 
-                if request_amount > 0:
-                    granted = await self._request_manager.request_tokens(
-                        self._model, evaluator_id, request_amount)
-                    
-                    if granted > 0:
-                        # Remove samples from pending list based on granted tokens
-                        # This doesn't affect the pending_samples list we iterate over in other functions
-                        for _ in range(granted):
-                            if pending_samples:
-                                # Release semaphore permits for each granted token
-                                token_sem.release()
-                        # Wait based on dataset size when tokens were granted
-                        await asyncio.sleep(token_wait)
-                    else:
-                        # Backoff when no tokens were granted, based on dataset size
-                        # Apply a small multiplier for repeated failures, but cap it
-                        backoff_multiplier = min(3.0, 1.0 + (request_count / 10))
-                        await asyncio.sleep(no_token_wait * backoff_multiplier)
+                granted = await self._request_manager.request_tokens(
+                    self._model, evaluator_id, request_amount)
+                
+                if granted > 0:
+                    # Process the granted tokens
+                    for _ in range(granted):
+                        if pending_samples:
+                            # Move sample from pending to processing and release token
+                            sample_idx = pending_samples.pop(0)
+                            processing_samples.add(sample_idx)
+                            # Release semaphore permits for each granted token
+                            token_sem.release()
+                    # Wait based on dataset size when tokens were granted
+                    await asyncio.sleep(token_wait)
                 else:
-                    # This shouldn't happen with the loop condition, but just in case
-                    break
+                    # Backoff when no tokens were granted, based on dataset size
+                    # Apply a small multiplier for repeated failures, but cap it
+                    backoff_multiplier = min(3.0, 1.0 + (request_count / 10))
+                    await asyncio.sleep(no_token_wait * backoff_multiplier)
         
         # Start the token management task
         token_task = asyncio.create_task(token_manager())
@@ -186,10 +185,9 @@ class _BaseLLMJudge(Metrics):
                 # Call the scoring function
                 result = await self._score_once(sys_prompt, user_prompt)
                 
-                # Add to completed set and remove from pending
+                # Move from processing to completed
+                processing_samples.remove(idx)
                 completed_samples.add(idx)
-                if idx in pending_samples:
-                    pending_samples.remove(idx)
                 
                 # Return token to model's pool
                 await self._request_manager.return_tokens(self._model, evaluator_id, 1)
@@ -198,9 +196,11 @@ class _BaseLLMJudge(Metrics):
             except Exception as e:
                 # Make sure to return token on error
                 logger.error(f"[_BaseLLMJudge._evaluate_with_token_mgmt] Error processing sample {idx}: {e}")
+                
+                # Move sample from processing to completed
+                processing_samples.remove(idx)
                 completed_samples.add(idx)
-                if idx in pending_samples:
-                    pending_samples.remove(idx)
+                
                 await self._request_manager.return_tokens(self._model, evaluator_id, 1)
                 return idx, None
         
