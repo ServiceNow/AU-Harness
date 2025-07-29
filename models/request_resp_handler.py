@@ -1,6 +1,9 @@
 import time
+import re
 import httpx
 from openai import AsyncAzureOpenAI, AsyncOpenAI
+from torch.utils.hipify.hipify_python import mapping
+
 from models.model_response import ModelResponse
 from utils import constants
 import logging
@@ -31,6 +34,91 @@ class RequestRespHandler:
         ] and self.auth.startswith("Bearer "):
             self.auth = self.auth.replace("Bearer ", "")
         self.set_client(verify_ssl=True, timeout=self.timeout)
+
+    def _cast_to_openai_type(self, properties, mapping):
+        for key, value in properties.items():
+            if "type" not in value:
+                properties[key]["type"] = "string"
+            else:
+                var_type = value["type"]
+                if var_type == "float":
+                    properties[key]["format"] = "float"
+                    properties[key]["description"] += " This is a float type value."
+                if var_type in mapping:
+                    properties[key]["type"] = mapping[var_type]
+                else:
+                    properties[key]["type"] = "string"
+
+            # Currently support:
+            # - list of any
+            # - list of list of any
+            # - list of dict
+            # - list of list of dict
+            # - dict of any
+
+            if properties[key]["type"] == "array" or properties[key]["type"] == "object":
+                if "properties" in properties[key]:
+                    properties[key]["properties"] = self._cast_to_openai_type(
+                        properties[key]["properties"], mapping
+                    )
+                elif "items" in properties[key]:
+                    properties[key]["items"]["type"] = mapping[properties[key]["items"]["type"]]
+                    if (
+                            properties[key]["items"]["type"] == "array"
+                            and "items" in properties[key]["items"]
+                    ):
+                        properties[key]["items"]["items"]["type"] = mapping[
+                            properties[key]["items"]["items"]["type"]
+                        ]
+                    elif (
+                            properties[key]["items"]["type"] == "object"
+                            and "properties" in properties[key]["items"]
+                    ):
+                        properties[key]["items"]["properties"] = self._cast_to_openai_type(
+                            properties[key]["items"]["properties"], mapping
+                        )
+        return properties
+    def convert_to_tool(self, functions):
+        mapping = {
+            "integer": "integer",
+            "number": "number",
+            "float": "number",
+            "string": "string",
+            "boolean": "boolean",
+            "bool": "boolean",
+            "array": "array",
+            "list": "array",
+            "dict": "object",
+            "object": "object",
+            "tuple": "array",
+            "any": "string",
+            "byte": "integer",
+            "short": "integer",
+            "long": "integer",
+            "double": "number",
+            "char": "string",
+            "ArrayList": "array",
+            "Array": "array",
+            "HashMap": "object",
+            "Hashtable": "object",
+            "Queue": "array",
+            "Stack": "array",
+            "Any": "string",
+            "String": "string",
+            "Bigint": "integer",
+        }
+        new_functions = []
+        for item in functions:
+            item["name"] = re.sub(r"\.", "_", item["name"])
+            item["parameters"]["type"] = "object"
+            item["parameters"]["properties"] = self._cast_to_openai_type(
+                item["parameters"]["properties"], mapping
+            )
+
+            new_functions.append({"type": "function", "function": item})
+
+        return new_functions
+
 
     def set_client(self, verify_ssl: bool, timeout: int):
         #use python client wrapper
@@ -71,7 +159,7 @@ class RequestRespHandler:
         else:
             raise ValueError(f"Invalid inference type: {self.inference_type}")
 
-    async def request_server(self, msg_body) -> ModelResponse:
+    async def request_server(self, msg_body, tools=None) -> ModelResponse:
         """Send a request to the inference server and return a `Model Response`.
 
         Logic:
@@ -79,6 +167,8 @@ class RequestRespHandler:
         2. Any exception is wrapped in a `ModelResponse` with ``response_code = 500``.
         """
         model_name: str | None = self.model_info.get("model")
+        if tools:
+            tools = self.convert_to_tool(tools)
 
         start_time = time.time()
         # Re-create a fresh client for this request to avoid closed-loop issues
@@ -121,7 +211,7 @@ class RequestRespHandler:
             #openai chat completions, vllm chat completions
             elif self.inference_type in [constants.OPENAI_CHAT_COMPLETION, constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION]:
                 prediction = await self.client.chat.completions.create(
-                    model=model_name, messages=msg_body
+                    model=model_name, messages=msg_body, tools=tools
                 )
                 response_data = prediction.model_dump()
                 raw_response: str = response_data
