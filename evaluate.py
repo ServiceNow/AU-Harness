@@ -54,6 +54,8 @@ class Engine:
         async def _call(idx: int, sample: dict):
             async with sem:
                 resp = await model._generate_text_with_retry(sample, {"chunk_size": model.chunk_size, "metric": self.metric.name})
+                if 'tools' in sample.keys():
+                    return idx, resp
                 return idx, (resp.llm_response if resp else "")
         # Create tasks paired with their original index
         tasks = [_call(i, ex) for i, ex in enumerate(samples)]
