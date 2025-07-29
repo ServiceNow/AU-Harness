@@ -3,18 +3,24 @@ configure()
 import logging
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
+
+# Apply nest_asyncio to allow nested event loops in Azure OpenAI client calls
+import nest_asyncio
+nest_asyncio.apply()
 from postprocessors.base import Postprocessor
 from preprocessors.base import Preprocessor
 import os
-import json
-from pathlib import Path
 import asyncio
-from datasets import load_dataset
-import yaml
-from tqdm import tqdm
 import importlib
 import argparse
-# Central logging setup
+import json
+import yaml
+from datasets import load_dataset
+from pathlib import Path
+import time
+from tqdm import tqdm
+import logging
+from utils.request_manager import CentralRequestController, EngineRequestManager
 from models.model import Model
 from metrics.metrics import Metrics
 from postprocessors.base import Postprocessor
@@ -23,7 +29,7 @@ from metrics.llm_judge import _BaseLLMJudge
 
 class Engine:
     """Evaluate one or many models over the same dataset concurrently."""
-    def __init__(self, models: list[Model], dataset: list[dict], metric: Metrics, postprocessor, dataset_name: str, available_judge_calls: int = None):
+    def __init__(self, models: list[Model], dataset: list[dict], metric: Metrics, postprocessor, dataset_name: str, engine_id: str, request_manager, available_judge_calls: int = None):
         logger.info(f"[Engine.__init__] Initializing Engine with {len(models)} model(s), dataset size: {len(dataset)}, metric: {metric.name}")
         self.models = models
         self.dataset = dataset
@@ -31,6 +37,8 @@ class Engine:
         self.postprocessor = postprocessor
         self.dataset_name = dataset_name
         self.available_judge_calls = available_judge_calls  # For LLM-judge concurrency splitting
+        self.engine_id = engine_id
+        self.request_manager = request_manager
         # Group models by their model attribute for sharding
         self.model_groups = {}
         for model in models:
@@ -45,21 +53,91 @@ class Engine:
 
 
     # ---------------- internal helpers ----------------x
-    #infer by batch size, calling generate text with retry for each sample
+    # infer by batch size, calling generate text with retry for each sample
     async def _infer_single_model(self, model: Model, samples=None) -> list[str]:
         samples = samples if samples is not None else self.dataset  # Use provided samples or full dataset
         logger.info(f"[Engine._infer_single_model] Running model: {model.name()} on dataset of size {len(samples)}")
-        sem = asyncio.Semaphore(model.batch_size)  # Use per-model batch size
-        async def _call(idx: int, sample: dict):
-            async with sem:
-                resp = await model._generate_text_with_retry(sample, {"chunk_size": model.chunk_size, "metric": self.metric.name})
-                return idx, (resp.llm_response if resp else "")
+        
+        # Get model type for request management
+        model_type = model.model  # The actual model type (e.g., "gpt-4o-mini-audio-preview")
+        # Generate a unique model instance ID
+        model_instance_id = f"{model.name()}_{id(model)}"
+        
+        # Create an adjustable semaphore based on granted tokens
+        token_sem = asyncio.Semaphore(0)  # Start with 0 tokens
+        
+        # Keep track of pending and completed samples
+        pending_samples = list(range(len(samples)))  # Indices of samples waiting for tokens
+        completed_samples = set()  # Indices of samples that have completed processing
+        
+        # Single token management task that handles all token requests
+        async def token_manager():
+            request_count = 0
+            while len(completed_samples) < len(samples):
+                request_count += 1
+                # Request as many tokens as we need for pending samples
+                request_amount = min(model.batch_size, len(pending_samples))
+                
+                if request_amount > 0:
+                    #logger.info(f"Engine {self.engine_id}, Model {model_type}/{model_instance_id}: Requesting {request_amount} tokens (attempt {request_count})")
+                    granted = await self.request_manager.request_tokens(
+                        model_type, model_instance_id, request_amount)
+                    
+                    if granted > 0:
+                        #logger.info(f"Engine {self.engine_id}, Model {model_type}/{model_instance_id}: Granted {granted} tokens")
+                        # Remove samples from pending list based on granted tokens
+                        pending_samples[:] = pending_samples[granted:]
+                        # Release semaphore permits for each granted token
+                        for _ in range(granted):
+                            token_sem.release()
+                        # Short wait if we got tokens
+                        await asyncio.sleep(0.5)
+                    else:
+                        # Backoff if we didn't get any tokens
+                        await asyncio.sleep(0.1 * min(request_count, 10))
+                else:
+                    # No pending samples, just wait briefly
+                    await asyncio.sleep(0.5)
+        
+        # Start the token management task without awaiting it
+        asyncio.create_task(token_manager())
+            
+        async def _call_with_token_mgmt(idx: int, sample: dict):
+            # Acquire a token
+            await token_sem.acquire()
+            try:
+                # Process the sample
+                resp = await model._generate_text_with_retry(sample, 
+                                                          {"chunk_size": model.chunk_size, 
+                                                           "metric": self.metric.name})
+                result = resp.llm_response if resp else ""
+                
+                # Add to completed set
+                completed_samples.add(idx)
+                
+                # Return token to model's pool
+                await self.request_manager.return_tokens(model_type, model_instance_id, 1)
+                
+                # No need to request new tokens here - the token_manager handles that
+                
+                return idx, result
+            except Exception as e:
+                # Make sure to return token on error
+                logger.error(f"[Engine._infer_single_model] Error processing sample {idx} in {self.dataset_name}: {e}")
+                completed_samples.add(idx)
+                await self.request_manager.return_tokens(model_type, model_instance_id, 1)
+                return idx, ""
+        
         # Create tasks paired with their original index
-        tasks = [_call(i, ex) for i, ex in enumerate(samples)]
+        tasks = [_call_with_token_mgmt(i, ex) for i, ex in enumerate(samples)]
+        
+        # Process results in order of completion
         results: list[str | None] = [None] * len(tasks)
-        for coro in tqdm(asyncio.as_completed(tasks), total=len(tasks), desc=f"Inference ({model.name()})"):
+        for coro in tqdm(asyncio.as_completed(tasks), total=len(tasks), 
+                          desc=f"Inference ({self.dataset_name} | {model.name()} | {self.metric.name})"):
             idx, text = await coro
             results[idx] = text
+            
         logger.info(f"[Engine._infer_single_model] Model {model.name()} finished inference.")
         return results
 
@@ -94,7 +172,7 @@ class Engine:
                     task = asyncio.create_task(self._infer_single_model(model, shard))
                     sharded_tasks[model.name()] = task
                     all_tasks.append(task)
-                    logger.info(f"[Engine._infer_all] Model {model.name()} assigned {len(shard)} samples (indices {start_idx}-{end_idx-1})")
+                    #logger.info(f"[Engine._infer_all] Model {model.name()} assigned {len(shard)} samples (indices {start_idx}-{end_idx-1})")
                 
                 # Store info for later reconstruction
                 task_info[model_type] = {
@@ -112,10 +190,10 @@ class Engine:
                     "is_sharded": False,
                     "task": task
                 }
-        
+        logger.info("Available model groups: ", self.model_groups, "for dataset: ", self.dataset_name)
         # Wait for all tasks to complete concurrently
         await asyncio.gather(*all_tasks)
-        
+        logger.info(f"[Engine._infer_all] All tasks completed for engine with dataset {self.dataset_name}")
         # Process results according to task type
         for key, info in task_info.items():
             if info["is_sharded"]:
@@ -143,9 +221,9 @@ class Engine:
         return results
 
     async def run(self):
-        logger.info("[Engine.run] Starting evaluation run.")
+        logger.info(f"[Engine.run] Starting evaluation run for {self.dataset_name} with metric {self.metric.name}.")
         predictions = await self._infer_all()
-        logger.info(f"[Engine.run] Predictions complete. Calculating scores...")
+        logger.info(f"[Engine.run] Predictions complete for {self.dataset_name}. Calculating scores...")
         scores = {}
         # Pass the metric name to the postprocessor
         process_result = self.postprocessor.process(dataset=self.dataset, predictions=predictions, metric=self.metric.name)
@@ -156,31 +234,74 @@ class Engine:
         ids = process_result.get("ids", [])
         lengths = process_result.get("lengths", [])
 
-        # Create fresh metric instances for each model
-        metric_instances = {}
-        for model_name in predictions.keys():
-            if isinstance(self.metric, _BaseLLMJudge) and self.available_judge_calls:
-                # For LLM-judge, split concurrency among models
-                num_models = len(predictions)
-                per_model_conc = max(1, self.available_judge_calls // num_models)
-                # Create new LLM-judge instance with proper concurrency
-                metric_instances[model_name] = type(self.metric)(max_concurrency=per_model_conc)
-            else:
-                # For all other metrics, create fresh instances to avoid state sharing
-                metric_instances[model_name] = type(self.metric)()
-                # Copy any important attributes from the original metric
-                if hasattr(self.metric, 'language'):
-                    metric_instances[model_name].language = self.metric.language
-
-        async def score_model(model_name, outs):
+        # Determine if this is an LLM-judge metric
+        is_llm_judge = isinstance(self.metric, _BaseLLMJudge)
+        # For LLM-judge, split concurrency
+        if is_llm_judge and self.available_judge_calls:
+            num_models = len(predictions)
+            per_model_conc = max(1, self.available_judge_calls // num_models)
+            # Get the judge model from the original metric
+            judge_model = getattr(self.metric, '_model', None)
+            logger.info(f"[Engine.run] Using judge model: {judge_model} for {len(predictions)} models")
+            
+            # Instantiate a separate metric for each model with correct concurrency and preserving the judge model
+            metric_instances = {
+                model_name: type(self.metric)(max_concurrency=per_model_conc, model=judge_model)
+                for model_name in predictions.keys()
+            }
+        else:
+            metric_instances = {model_name: self.metric for model_name in predictions.keys()}
+        
+        # Define score_model with tokens
+        async def score_model_with_tokens(model_name, outs):
             metric = metric_instances[model_name]
-            if ids and lengths:
-                return model_name, await asyncio.to_thread(metric, outs, model_targets, ids, lengths, instructions=instructions, dataset_name=self.dataset_name, model_name=model_name)
-            else:
-                return model_name, await asyncio.to_thread(metric, outs, model_targets, instructions=instructions, dataset_name=self.dataset_name, model_name=model_name)
+            
+            # Determine evaluator model type (for LLM judge we use the model attribute from the metric)
+            evaluator_model_type = metric._model if is_llm_judge and hasattr(metric, '_model') else "evaluator"
+            
+            # Generate a unique evaluator instance ID
+            evaluator_id = f"{model_name}_evaluator_{id(metric)}"
+            
+            # Request tokens for evaluation
+            requested_tokens = min(1000, len(outs))  # Higher default for regular metrics
+            
+            if is_llm_judge:
+                # For LLM judges, use their concurrency setting
+                requested_tokens = metric.max_concurrency if hasattr(metric, 'max_concurrency') else requested_tokens
+            
+            # Request tokens from the request manager, specifying the evaluator model type
+            granted = await self.request_manager.request_tokens(
+                evaluator_model_type, evaluator_id, requested_tokens)
+            
+            # Create a wrapper function for evaluation
+            def token_limited_evaluation(outs, targets, *args, **kwargs):
+                # Perform the actual evaluation - this runs in a thread
+                return metric(outs, targets, *args, **kwargs)
+            
+            try:
+                # Run the evaluation in a thread
+                if ids and lengths:
+                    result = await asyncio.to_thread(
+                        token_limited_evaluation, outs, model_targets, ids, lengths,
+                        instructions=instructions, dataset_name=self.dataset_name, model_name=model_name
+                    )
+                else:
+                    result = await asyncio.to_thread(
+                        token_limited_evaluation, outs, model_targets,
+                        instructions=instructions, dataset_name=self.dataset_name, model_name=model_name
+                    )
+                
+                # Return tokens after evaluation completes
+                await self.request_manager.return_tokens(evaluator_model_type, evaluator_id, granted)
+                return model_name, result
+            except Exception as e:
+                logger.error(f"Error during evaluation for {model_name}: {e}")
+                # Make sure to return tokens on error
+                await self.request_manager.return_tokens(evaluator_model_type, evaluator_id, granted)
+                raise
 
         # Run all model scoring concurrently
-        tasks = [score_model(model_name, outs) for model_name, outs in predictions.items()]
+        tasks = [score_model_with_tokens(model_name, outs) for model_name, outs in predictions.items()]
         results = await asyncio.gather(*tasks)
         for model_name, model_score in results:
             scores[model_name] = model_score
@@ -370,6 +491,29 @@ def main(cfg_path='config.yaml'):
     logger.info(f"[main] Loading config from {cfg_path}")
     with open(cfg_path, 'r') as f:
         cfg = yaml.safe_load(f)
+        
+    # Initialize the model-centric Central Request Controller
+    central_request_controller = CentralRequestController()
+    logger.info("[main] Initialized model-centric CentralRequestController")
+    
+    # Register all models with the controller
+    if "models" in cfg:
+        for model_cfg in cfg.get("models", []):
+            model_type = model_cfg["info"].get("model") 
+            batch_size = model_cfg["info"].get("batch_size", 1)
+            if model_type:
+                logger.info(f"[main] Registering model type '{model_type}' with batch size {batch_size}")
+                central_request_controller.register_model_type(model_type, batch_size)
+    
+    # Register judge model for LLM-judge evaluations
+    judge_model = cfg.get("judge_model")
+    judge_concurrency = cfg.get("judge_concurrency", 1)  
+    if judge_model:
+        logger.info(f"[main] Registering judge model '{judge_model}' with concurrency {judge_concurrency}")
+        central_request_controller.register_model_type(judge_model, judge_concurrency)
+        
+    # Register generic evaluator for non-LLM evaluations
+    central_request_controller.register_model_type("evaluator", 10000)  # Default concurrency for regular evaluators
     
     # Load runspec files from the runspecs directory
     runspecs_dir = Path("runspecs")
@@ -409,10 +553,11 @@ def main(cfg_path='config.yaml'):
     
     # Store all scores in a flat dict with keys in format: 'dataset_name_metric_name'
     all_scores = {}
+    all_engines = []  # Track all engines for concurrent execution
     
-    # Process each dataset-metric pair
-    for dname, metric_name in dataset_metric_pairs:
-        logger.info(f"[main] Processing dataset '{dname}' with metric '{metric_name}' ...")
+    # Process each dataset-metric pair individually
+    for dataset_name, metric_name in dataset_metric_pairs:
+        logger.info(f"[main] Processing dataset '{dataset_name}' with metric '{metric_name}'...")
         
         # Step 1: Look for a matching runspec file
         found_runspec = False
@@ -423,7 +568,7 @@ def main(cfg_path='config.yaml'):
             runspec_name = runspec_file.stem
             
             # First, check if dataset name exactly matches the runspec file name
-            if dname == runspec_name:
+            if dataset_name == runspec_name:
                 logger.info(f"[main] Found matching runspec file: {runspec_file}")
                 found_runspec = True
                 
@@ -438,23 +583,22 @@ def main(cfg_path='config.yaml'):
         
         # Step 2: If no matching runspec file by name, search within all runspec files for the specific dataset
         if not found_runspec:
-            logger.info(f"[main] No matching runspec file for '{dname}'. Searching within individual runspec files...")
+            logger.info(f"[main] No matching runspec file for '{dataset_name}'. Searching within individual runspec files...")
             
             # Search through all runspec files to find the dataset
             for runspec_file in runspec_files:
                 with open(runspec_file, 'r') as f:
                     runspec_db = json.load(f)
                 
-                if dname in runspec_db:
-                    logger.info(f"[main] Found dataset '{dname}' in {runspec_file}")
+                if dataset_name in runspec_db:
+                    logger.info(f"[main] Found dataset '{dataset_name}' in {runspec_file}")
                     # Use only this specific dataset
-                    selected_datasets = {dname: runspec_db[dname]}
+                    selected_datasets = {dataset_name: runspec_db[dataset_name]}
                     found_runspec = True
                     break
             
             if not found_runspec:
-                logger.warning(f"[main] Dataset '{dname}' not found in any runspec file")
-                logger.info(f"[main] Dataset not found: {dname}")
+                logger.warning(f"[main] Dataset '{dataset_name}' not found in any runspec file")
                 continue
         
         # Check for accented filter setting
@@ -467,66 +611,119 @@ def main(cfg_path='config.yaml'):
         if language_filter is not None:
             logger.info(f"[main] Applying language filter setting: {language_filter}")
         
-        # Process each selected dataset
-        for dataset_name, dataset_info in selected_datasets.items():
-            # Check if we need to filter out accented datasets
-            if accented_filter is False and dataset_info.get("accented", False) is True:
-                logger.info(f"[main] Skipping dataset '{dataset_name}' because it is accented and accented filter is False")
+        # Process the dataset
+        dataset_info = next(iter(selected_datasets.values()))
+        
+        # Check if we need to filter out accented datasets
+        if accented_filter is False and dataset_info.get("accented", False) is True:
+            logger.info(f"[main] Skipping dataset '{dataset_name}' because it is accented and accented filter is False")
+            continue
+
+        # Check if we need to filter by language
+        if language_filter is not None:
+            dataset_language = dataset_info.get("language", "").lower()
+            if dataset_language and language_filter.lower() != dataset_language:
+                logger.info(f"[main] Skipping dataset '{dataset_name}' because its language '{dataset_language}' doesn't match filter '{language_filter}'")
                 continue
+        
+        logger.info(f"[main] Loading dataset '{dataset_name}' with metric '{metric_name}' ...")
+        
+        repo = dataset_info.get("hf_repo", None)
+        split = None
+        if not repo:
+            repo = dataset_info.get("path", None)
+        subset = dataset_info.get("subset", "")
+        language = dataset_info.get("language", "en")
+        preprocessor_name = dataset_info["preprocessor"]
+        postprocessor_name = dataset_info["postprocessor"]
+        modality=dataset_info.get("modality", "audio")
 
-            # Check if we need to filter by language
-            if language_filter is not None:
-                dataset_language = dataset_info.get("language", "").lower()
-                if dataset_language and language_filter.lower() != dataset_language:
-                    logger.info(f"[main] Skipping dataset '{dataset_name}' because its language '{dataset_language}' doesn't match filter '{language_filter}'")
-                    continue
-            
-            logger.info(f"[main] Loading dataset '{dataset_name}' with metric '{metric_name}' ...")
-            
-            repo = dataset_info.get("hf_repo", None)
-            split = None
-            if not repo:
-                repo = dataset_info.get("path", None)
-            subset = dataset_info.get("subset", "")
-            language = dataset_info.get("language", "en")
-            preprocessor_name = dataset_info["preprocessor"]
-            postprocessor_name = dataset_info["postprocessor"]
-            modality=dataset_info.get("modality", "audio")
+        if cfg.get("split", None) is not None:
+            split = cfg.get("split")
 
-            if cfg.get("split", None) is not None:
-                split = cfg.get("split")
+        if dataset_info.get("split", None) is not None:
+            split = dataset_info["split"]
 
-            if dataset_info.get("split", None) is not None:
-                split = dataset_info["split"]
-
-            
-            dataset = _load_dataset(
-                repo, subset=subset, 
-                num_samples=num_samples, 
-                preprocessor_name=preprocessor_name, 
-                user_prompt_add_ons=user_prompt_add_ons, 
-                system_prompts=system_prompts, 
-                length_filter=length_filter, 
-                metric=metric_name, 
-                split=split, 
-                dataset_info=dataset_info,
-                modality=modality
-                )
-            metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
-            
-            # Dynamically import postprocessor class
-            PostprocessorClass = get_class_from_module('postprocessors', postprocessor_name)
-            if PostprocessorClass is None:
-                logger.warning(f"Could not load postprocessor {postprocessor_name}, using default GeneralPostprocessor")
-                # Try to load the default postprocessor
-                PostprocessorClass = get_class_from_module('postprocessors', 'GeneralPostprocessor')
-            postprocessor = PostprocessorClass()
-            
-            logger.info("[main] Initializing Engine and running evaluation...")
-            engine = Engine(models, dataset, metric, postprocessor, dataset_name, available_judge_calls=judge_concurrency)
-            scores = asyncio.run(engine.run())
-            all_scores[dataset_name] = scores
+        
+        dataset = _load_dataset(
+            repo, subset=subset, 
+            num_samples=num_samples, 
+            preprocessor_name=preprocessor_name, 
+            user_prompt_add_ons=user_prompt_add_ons, 
+            system_prompts=system_prompts, 
+            length_filter=length_filter, 
+            metric=metric_name, 
+            split=split, 
+            dataset_info=dataset_info,
+            modality=modality
+            )
+        metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
+        
+        # Dynamically import postprocessor class
+        PostprocessorClass = get_class_from_module('postprocessors', postprocessor_name)
+        if PostprocessorClass is None:
+            logger.warning(f"Could not load postprocessor {postprocessor_name}, using default GeneralPostprocessor")
+            # Try to load the default postprocessor
+            PostprocessorClass = get_class_from_module('postprocessors', 'GeneralPostprocessor')
+        postprocessor = PostprocessorClass()
+        
+        # Run evaluation for this dataset and metric
+        logger.info(f"[main] Running evaluation for {dataset_name} with metric {metric.name}")
+        
+        # Set up engine request manager with central controller
+        engine_id = f"{dataset_name}_{metric.name}_{int(time.time())}"
+        logger.info(f"[main] Setting up EngineRequestManager for {engine_id}")
+        engine_request_manager = EngineRequestManager(engine_id, central_request_controller)
+        
+        # Create Engine with request manager
+        engine = Engine(
+            models=models,
+            dataset=dataset,
+            metric=metric,
+            postprocessor=postprocessor,
+            dataset_name=dataset_name,
+            available_judge_calls=judge_concurrency,
+            engine_id=engine_id,
+            request_manager=engine_request_manager
+        )
+        
+        # Add the engine to our collection for concurrent execution
+        all_engines.append((engine, dataset_name))
+        logger.info(f"[main] Created engine for dataset: {dataset_name}")
+    
+    # Now run all engines concurrently
+    logger.info(f"[main] Running {len(all_engines)} engines concurrently...")
+    
+    async def run_all_engines():
+        # Create tasks for each engine
+        tasks = []
+        logger.info(f"[main] Creating tasks for {len(all_engines)} engines...")
+        for engine, dataset_name in all_engines:
+            tasks.append(engine.run())
+        
+        # Run all tasks concurrently and gather results
+        results = await asyncio.gather(*tasks)
+        
+        # Store results in all_scores dictionary
+        for (engine, dataset_name), result in zip(all_engines, results):
+            if dataset_name not in all_scores:
+                all_scores[dataset_name] = {}
+                
+            # Result is in format: {metric_name: {model_name: scores}}
+            for metric_name, model_scores in result.items():
+                if metric_name not in all_scores[dataset_name]:
+                    all_scores[dataset_name][metric_name] = {}
+                    
+                # Add model scores to the right metric bucket
+                for model_name, scores in model_scores.items():
+                    all_scores[dataset_name][metric_name][model_name] = scores
+                    
             logger.info(f"[main] Finished evaluation for dataset: {dataset_name}")
+            
+        return all_scores
+    
+    # Run the async function
+    all_scores = asyncio.run(run_all_engines())
     logger.info(json.dumps(all_scores, indent=2))
 
 if __name__ == "__main__":
