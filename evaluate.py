@@ -242,17 +242,12 @@ class Engine:
                 # The metric will handle token management internally with the Engine Manager
                 metric.set_request_manager(self.request_manager)
                 
-                # Run the evaluation
                 if ids and lengths:
-                    result = await asyncio.to_thread(
-                        metric, outs, model_targets, ids, lengths,
-                        instructions=instructions, dataset_name=self.dataset_name, model_name=model_name
-                    )
+                    result = await metric(outs, model_targets, ids, lengths,
+                                        instructions=instructions, dataset_name=self.dataset_name, model_name=model_name)
                 else:
-                    result = await asyncio.to_thread(
-                        metric, outs, model_targets,
-                        instructions=instructions, dataset_name=self.dataset_name, model_name=model_name
-                    )
+                    result = await metric(outs, model_targets,
+                                        instructions=instructions, dataset_name=self.dataset_name, model_name=model_name)
                 return model_name, result
             else:
                 # For regular metrics, just run them directly (no token management needed)

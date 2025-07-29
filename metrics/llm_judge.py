@@ -51,9 +51,9 @@ class _BaseLLMJudge(Metrics):
         self._request_manager = manager
         if self._request_manager is not None:
             # Register the model type directly with the central controller
-            asyncio.create_task(self._request_manager.central_controller.register_model_type(
+            self._request_manager.central_controller.register_model_type(
                 self._model, self._max_concurrency
-            ))
+            )
 
     async def _score_once(self, system_prompt: str, user_prompt: str) -> float | dict | None:
 
@@ -104,6 +104,8 @@ class _BaseLLMJudge(Metrics):
         self,
         candidates: list[str],
         references: list[str],
+        dataset_name: str | None = None,
+        model_name: str | None = None,
     ) -> list:
         """Run the LLM judge over *candidates* vs *references*.
 
@@ -128,12 +130,13 @@ class _BaseLLMJudge(Metrics):
         async def token_manager():
             request_count = 0
             while len(pending_samples) > 0:
+                
                 request_count += 1
                 # Request as many tokens as needed for pending samples, up to max_concurrency
                 request_amount = min(self._max_concurrency, len(pending_samples))
                 
                 if request_amount > 0:
-                    granted = await self.request_manager.request_tokens(
+                    granted = await self._request_manager.request_tokens(
                         self._model, evaluator_id, request_amount)
                     
                     if granted > 0:
@@ -152,8 +155,8 @@ class _BaseLLMJudge(Metrics):
                     # This shouldn't happen with the loop condition, but just in case
                     break
         
-        # Start the token management task without awaiting it
-        asyncio.create_task(token_manager())
+        # Start the token management task
+        token_task = asyncio.create_task(token_manager())
         
         # Process each candidate-reference pair with token management
         async def _evaluate_with_token_mgmt(idx, cand, ref):
@@ -175,7 +178,7 @@ class _BaseLLMJudge(Metrics):
                     pending_samples.remove(idx)
                 
                 # Return token to model's pool
-                await self.request_manager.return_tokens(self._model, evaluator_id, 1)
+                await self._request_manager.return_tokens(self._model, evaluator_id, 1)
                 
                 return idx, result
             except Exception as e:
@@ -184,18 +187,28 @@ class _BaseLLMJudge(Metrics):
                 completed_samples.add(idx)
                 if idx in pending_samples:
                     pending_samples.remove(idx)
-                await self.request_manager.return_tokens(self._model, evaluator_id, 1)
+                await self._request_manager.return_tokens(self._model, evaluator_id, 1)
                 return idx, None
         
         # Create tasks for all samples
         tasks = [_evaluate_with_token_mgmt(i, c, r) for i, (c, r) in enumerate(zip(candidates, references))]
         
         # Use tqdm to show progress
-        with tqdm(total=len(tasks), desc=f"LLM Judge ({self._prompt_key})") as progress_bar:
+        desc = f"{self._prompt_key}"
+        if dataset_name and model_name:
+            desc = f"Evaluating {dataset_name} | {model_name} | {desc}"
+        with tqdm(total=len(tasks), desc=desc) as progress_bar:
             for coro in asyncio.as_completed(tasks):
                 idx, result = await coro
                 results[idx] = result
                 progress_bar.update(1)
+        
+        # Cancel the token_manager task when all samples are processed
+        token_task.cancel()
+        try:
+            await token_task
+        except asyncio.CancelledError:
+            pass
         
         return results
 
@@ -210,10 +223,10 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
     name: str = "llm_judge_binary"
     _prompt_key: str = "binary_judge_prompt"
 
-    def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None):
+    async def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None):
         """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
         self.instructions = instructions
-        overall = super().get_score(candidates, references)
+        overall = await super().get_score(candidates, references, dataset_name, model_name)
         if self.name in overall:
             overall[self.name] *= 100
         if dataset_name and model_name:
@@ -225,10 +238,9 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
             append_final_score(self, overall, dataset_name, model_name)
         return overall
 
-
-    def compute_record_level_scores(self, candidates: list, references: list):
+    async def compute_record_level_scores(self, candidates: list, references: list, dataset_name: str | None = None, model_name: str | None = None):
         # Here we can use self.instructions if needed
-        raw_scores = asyncio.run(self._judge_all(candidates, references))
+        raw_scores = await self._judge_all(candidates, references, dataset_name, model_name)
         # Expect {"score": number, "explanation": str}
         scores = [float(r.get("score", 0)) if isinstance(r, dict) else 0.0 for r in raw_scores]
         self.explanations = [r.get("explanation", "") if isinstance(r, dict) else "" for r in raw_scores]
@@ -243,11 +255,11 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):
     name: str = "llm_judge_detailed"
     _prompt_key: str = "detailed_judge_prompt"
 
-    def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None):
+    async def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None):
         """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
         # Store instructions for potential later use
         self.instructions = instructions
-        overall = super().get_score(candidates, references)
+        overall = await super().get_score(candidates, references, dataset_name, model_name)
         if self.name in overall:
             overall[self.name] *= 20
         if dataset_name and model_name:
@@ -259,24 +271,24 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):
             append_final_score(self, overall, dataset_name, model_name)
         return overall
 
-    def compute_record_level_scores(self, candidates: list, references: list):
+    async def compute_record_level_scores(self, candidates: list, references: list, dataset_name: str | None = None, model_name: str | None = None):
         # Here we can use self.instructions if needed
-        raw_scores = asyncio.run(self._judge_all(candidates, references))
+        raw_scores = await self._judge_all(candidates, references, dataset_name, model_name)
         # Expect {"score": number, "explanation": str}
         scores = [float(r.get("score", 0)) if isinstance(r, dict) else 0.0 for r in raw_scores]
         self.explanations = [r.get("explanation", "") if isinstance(r, dict) else "" for r in raw_scores]
         return {self.name: scores}
 
+
 class CallHomeLLMJudgeMetric(_BaseLLMJudge):
     name: str = "llm_judge_callhome"
     _prompt_key: str = "callhome_judge_prompt"
 
-    def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None):
+    async def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None):
         """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
         # Store instructions for potential later use
         self.instructions = instructions
-        overall = super().get_score(candidates, references)
-        print(overall)
+        overall = await super().get_score(candidates, references, dataset_name, model_name)
         if self.name in overall:
             overall[self.name] += 1
             overall[self.name] *= 10
@@ -288,17 +300,15 @@ class CallHomeLLMJudgeMetric(_BaseLLMJudge):
             # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
         return overall
-
-    def compute_record_level_scores(self, candidates: list, references: list):
+        
+    async def compute_record_level_scores(self, candidates: list, references: list, dataset_name: str | None = None, model_name: str | None = None):
         # Here we can use self.instructions if needed
-        raw_scores = asyncio.run(self._judge_all(candidates, references))
+        raw_scores = await self._judge_all(candidates, references, dataset_name, model_name)
         # Expect {"score": number, "explanation": str}
         scores = [float(r.get("score", 0)) if isinstance(r, dict) else 0.0 for r in raw_scores]
         self.explanations = [r.get("explanation", "") if isinstance(r, dict) else "" for r in raw_scores]
         return {self.name: scores}
-# ---------------------------------------------------------------------------
-# Original LLM judge
-# ---------------------------------------------------------------------------
+
 
 class LLMJudgeMetric(Metrics):  # noqa: D401
     name: str = "llm_judge"
@@ -322,7 +332,7 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
     name: str = "llm_judge_big_bench_audio"
     _prompt_key: str = "big_bench_audio_judge_prompt"
 
-    def __call__(
+    async def __call__(
         self,
         candidates: List[str],
         references: List[Tuple[str, str]],
@@ -345,7 +355,8 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
         """
         # Store instructions for potential later use
         self.instructions = instructions
-        scores = self.compute_record_level_scores(candidates, references)
+
+        scores = await self.compute_record_level_scores(candidates, references, dataset_name, model_name)
         all_scores = scores[self.name]
 
         num_correct = sum(1 for s in all_scores if s == 1.0)
@@ -367,10 +378,12 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
 
         return overall
 
-    def compute_record_level_scores(
+    async def compute_record_level_scores(
         self,
         candidates: List[str],
-        references: List[Tuple[str, str]]
+        references: List[Tuple[str, str]],
+        dataset_name: str | None = None,
+        model_name: str | None = None
     ) -> dict:
         """
         Calls the LLM to judge each (transcript, prediction, official_answer) triple and returns scores.
@@ -383,7 +396,7 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
             dict: A mapping from metric name to list of 1.0 (correct), 0.0 (incorrect), or None (failed).
         """
         # LLM input: (transcript, prediction, official_answer)
-        raw_responses = asyncio.run(self._judge_all(candidates, references))
+        raw_responses = await self._judge_all(candidates, references, dataset_name, model_name)
         scores = []
 
         for response in raw_responses:
