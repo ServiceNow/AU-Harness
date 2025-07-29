@@ -1,4 +1,5 @@
 import asyncio
+import copy
 from abc import ABC
 from tenacity import (
     AsyncRetrying,
@@ -197,6 +198,8 @@ class Model(ABC):
         total_samples: int = len(audio_array) if audio_array is not None else 0
         instruction = message.get("instruction")
 
+        tools = copy.deepcopy(message.get('tools', None))
+
         # If metric is judge types, only use first chunk (30s) regardless of length
         judge_metrics = {"llm_judge_binary", "llm_judge_detailed"}
         if metric_name in judge_metrics:
@@ -265,7 +268,7 @@ class Model(ABC):
                         })
                     
                     message["model_inputs"] = messages
-                    resp = await self.req_resp_hndlr.request_server(message["model_inputs"])
+                    resp = await self.req_resp_hndlr.request_server(message["model_inputs"], tools=tools)
                     concatenated_text += resp.llm_response or ""
                     responses.append(resp)
                 # Merge responses
@@ -345,7 +348,7 @@ class Model(ABC):
                 })
             
             message["model_inputs"] = messages
-            return await self.req_resp_hndlr.request_server(message["model_inputs"])
+            return await self.req_resp_hndlr.request_server(message["model_inputs"], tools=tools)
 
         #transcription
         elif self.inference_type in (
