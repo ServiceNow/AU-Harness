@@ -19,11 +19,9 @@ class BFCLMatchScore(Metrics):
             dataset_name: Optional[str] = None,
             model_name: Optional[str] = None,
     ) -> dict[str, dict[str, float] | float]:
-        # Compute strict and loose scores
-        outputs = self._compute_outputs(candidates, references)
 
         # Compute record-level scores for strict outputs (binary: all instructions followed or not)
-        record_scores = [float(all(out["tool_responses_result"])) for out in outputs]
+        record_scores = self.compute_record_level_scores(candidates, references)
         # Average final score over all components
         results = {"final": sum(record_scores) / len(candidates)}
 
