@@ -51,87 +51,86 @@ def get_context_indices_for_filter(key: str, value: Any, contexts: list[dict]) -
     return indices
 
 def validate_config(config_path: str) -> Dict:
-    """Validate configuration file against expected structure and types.
-    
-    Args:
-        config_path: Path to the config.yaml file
-        
-    Returns:
-        Dict: The validated configuration
-        
-    Raises:
-        ValueError: If the configuration is invalid
-    """
+    """Validate configuration file against expected structure and types."""
     if not os.path.exists(config_path):
         raise ValueError(f"Config file does not exist: {config_path}")
         
     try:
-        # Check if it's a well-formatted YAML file
+        # Load and validate YAML file
         with open(config_path, 'r') as file:
             config = yaml.safe_load(file)
             
         if config is None:
             raise ValueError(f"Config file is empty: {config_path}")
         
-        # Validate dataset_metric
-        if 'dataset_metric' not in config:
-            raise ValueError("'dataset_metric' is required")
-        if not isinstance(config['dataset_metric'], list):
-            raise ValueError("'dataset_metric' must be a list")
-        if len(config['dataset_metric']) == 0:
-            raise ValueError("'dataset_metric' must have at least one element")
+        # Define validation functions
+        def validate_required_section(section_name: str, expected_type: type, extra_check=None) -> None:
+            if section_name not in config:
+                raise ValueError(f"'{section_name}' is required")
+            if not isinstance(config[section_name], expected_type):
+                raise ValueError(f"'{section_name}' must be a {expected_type.__name__}")
+            if extra_check:
+                extra_check(config[section_name], section_name)
         
-        # Check that each dataset_metric entry has a value
-        for i, entry in enumerate(config['dataset_metric']):
-            if not entry or not isinstance(entry, str) or len(entry.strip()) == 0:
-                raise ValueError(f"Dataset-metric entry {i+1} must be a non-empty string")
+        def validate_optional_section(section_name: str, expected_type: type, extra_check=None) -> None:
+            if section_name in config:
+                if not isinstance(config[section_name], expected_type):
+                    raise ValueError(f"'{section_name}' must be a {expected_type.__name__}")
+                if extra_check:
+                    extra_check(config[section_name], section_name)
         
-        # Validate num_samples if it exists
-        if 'num_samples' in config:
-            if not isinstance(config['num_samples'], int):
-                raise ValueError("'num_samples' must be an integer")
+        def validate_non_empty_list(items: list, section_name: str) -> None:
+            if len(items) == 0:
+                raise ValueError(f"'{section_name}' must have at least one element")
         
-        # Validate judge_concurrency if it exists
-        if 'judge_concurrency' in config:
-            if not isinstance(config['judge_concurrency'], int):
-                raise ValueError("'judge_concurrency' must be an integer")
+        def validate_list_entries_are_non_empty_strings(items: list, section_name: str) -> None:
+            for i, entry in enumerate(items, start=1):
+                if not entry or not isinstance(entry, str) or not entry.strip():
+                    raise ValueError(f"{section_name} entry {i} must be a non-empty string")
         
-        # Validate judge_model if it exists
-        if 'judge_model' in config:
-            if not isinstance(config['judge_model'], str):
-                raise ValueError("'judge_model' must be a string")
+        def validate_length_filter(filter_list: list, section_name: str) -> None:
+            if len(filter_list) != 2:
+                raise ValueError(f"'{section_name}' must have exactly 2 elements")
+            if not all(isinstance(value, (int, float)) for value in filter_list):
+                raise ValueError(f"'{section_name}' elements must be numbers")
+
+        def validate_list_of_strings(items: list, section_name: str) -> None:
+            for i, item in enumerate(items, start=1):
+                if not isinstance(item, str):
+                    raise ValueError(f"'{section_name}' item {i} must be a string, not {type(item).__name__}")
+
+        # Required sections
+        validate_required_section('dataset_metric', list, 
+                                lambda x, name: validate_non_empty_list(x, name) or 
+                                validate_list_entries_are_non_empty_strings(x, name))
+
+        # Optional sections with simple type validation
+        type_validations = {
+            'num_samples': int,
+            'judge_concurrency': int,
+            'judge_model': str,
+            'accented': bool,
+            'language': str
+        }
         
-        # Validate user_prompt_add_ons if it exists
-        if 'user_prompt_add_ons' in config:
-            if not isinstance(config['user_prompt_add_ons'], list) or len(config['user_prompt_add_ons']) < 1:
-                raise ValueError("'user_prompt_add_ons' must be a list with at least one value")
+        for field, field_type in type_validations.items():
+            validate_optional_section(field, field_type)
         
-        # Validate length_filter if it exists
-        if 'length_filter' in config:
-            if not isinstance(config['length_filter'], list) or len(config['length_filter']) != 2:
-                raise ValueError("'length_filter' must be a list with exactly 2 elements")
-            for value in config['length_filter']:
-                if not isinstance(value, (int, float)):
-                    raise ValueError("'length_filter' elements must be numbers")
+
+        validate_optional_section('user_prompt_add_ons', list, 
+                                lambda x, name: validate_list_of_strings(x, name) if x else None)
+        validate_optional_section('system_prompts', list, 
+                                lambda x, name: validate_list_of_strings(x, name) if x else None)
         
-        # Validate accented if it exists
-        if 'accented' in config:
-            if not isinstance(config['accented'], bool):
-                raise ValueError("'accented' must be a boolean")
+        validate_optional_section('length_filter', list,
+                                lambda x, name: validate_length_filter(x, name))
         
-        # Validate language if it exists
-        if 'language' in config:
-            if not isinstance(config['language'], str):
-                raise ValueError("'language' must be a string")
-        
-        # Validate models section
+        # Delegate validation for complex sections
         _validate_models(config)
         
-        # Validate aggregate section if it exists
         if 'aggregate' in config:
             _validate_aggregate(config['aggregate'])
         
-        # Validate temperature_overrides section if it exists
         if 'temperature_overrides' in config:
             _validate_temperature_overrides(config['temperature_overrides'])
         
@@ -149,60 +148,27 @@ def _validate_models(config: Dict) -> None:
     Raises:
         ValueError: If the models section is invalid
     """
-    if 'models' not in config:
-        raise ValueError("'models' section is required")
-    
-    if not isinstance(config['models'], list):
-        raise ValueError("'models' must be a list")
-    
-    for i, model_entry in enumerate(config['models']):
-        if not isinstance(model_entry, dict) or 'info' not in model_entry:
-            raise ValueError(f"Model entry {i+1} must have an 'info' object")
-        
-        info = model_entry['info']
+    def validate_required_fields(info: Dict, index: int) -> None:
         required_fields = ['name', 'model', 'inference_type', 'url']
-        
-        # Check required fields exist and have values
         for field in required_fields:
-            if field not in info:
-                raise ValueError(f"Model {i+1} is missing required field: '{field}'")
-            if info[field] is None or (isinstance(info[field], str) and len(info[field].strip()) == 0):
-                raise ValueError(f"Model {i+1}: '{field}' must have a non-empty value")
-        
-        # Validate field types
-        if not isinstance(info['name'], str):
-            raise ValueError(f"Model {i+1}: 'name' must be a string")
-        
-        if not isinstance(info['model'], str):
-            raise ValueError(f"Model {i+1}: 'model' must be a string")
-        
-        if not isinstance(info['inference_type'], str):
-            raise ValueError(f"Model {i+1}: 'inference_type' must be a string")
-        
-        if not isinstance(info['url'], str):
-            raise ValueError(f"Model {i+1}: 'url' must be a string")
-        
-        # Optional fields with type validation
-        if 'delay' in info and not isinstance(info['delay'], int):
-            raise ValueError(f"Model {i+1}: 'delay' must be an integer")
-            
-        if 'retry_attempts' in info and not isinstance(info['retry_attempts'], int):
-            raise ValueError(f"Model {i+1}: 'retry_attempts' must be an integer")
-            
-        if 'timeout' in info and not isinstance(info['timeout'], int):
-            raise ValueError(f"Model {i+1}: 'timeout' must be an integer")
-            
-        if 'auth_token' in info and not isinstance(info['auth_token'], str):
-            raise ValueError(f"Model {i+1}: 'auth_token' must be a string")
-            
-        if 'api_version' in info and not isinstance(info['api_version'], str):
-            raise ValueError(f"Model {i+1}: 'api_version' must be a string")
-            
-        if 'batch_size' in info and not isinstance(info['batch_size'], int):
-            raise ValueError(f"Model {i+1}: 'batch_size' must be an integer")
-            
-        if 'chunk_size' in info and not isinstance(info['chunk_size'], int):
-            raise ValueError(f"Model {i+1}: 'chunk_size' must be an integer")
+            if not info.get(field) or not isinstance(info[field], str) or not info[field].strip():
+                raise ValueError(f"Model {index}: '{field}' must be a non-empty string")
+    def validate_optional_fields(info: Dict, index: int) -> None:
+        optional_fields = {
+            'delay': int, 'retry_attempts': int, 'timeout': int,
+            'auth_token': str, 'api_version': str, 'batch_size': int, 'chunk_size': int
+        }
+        for field, field_type in optional_fields.items():
+            if field in info and not isinstance(info[field], field_type):
+                raise ValueError(f"Model {index}: '{field}' must be of type {field_type.__name__}")
+    if 'models' not in config or not isinstance(config['models'], list):
+        raise ValueError("'models' section is required and must be a list")
+    for i, model_entry in enumerate(config['models'], start=1):
+        if not isinstance(model_entry, dict) or 'info' not in model_entry:
+            raise ValueError(f"Model entry {i} must have an 'info' object")
+        info = model_entry['info']
+        validate_required_fields(info, i)
+        validate_optional_fields(info, i)
 
 
 def _validate_aggregate(aggregate_section) -> None:
@@ -212,46 +178,33 @@ def _validate_aggregate(aggregate_section) -> None:
     Structure should be:
     aggregate:
       - ["name", [["dataset1", "metric1"], ["dataset2", "metric2"]]]
-    
-    Args:
-        aggregate_section: The aggregate section to validate
-        
-    Raises:
-        ValueError: If the aggregate section is invalid
     """
+    def validate_entry_structure(entry: list, entry_idx: int) -> None:
+        if not isinstance(entry, list) or len(entry) != 2:
+            raise ValueError(f"Aggregate entry {entry_idx} must be a list with exactly 2 elements")
+            
+        if not isinstance(entry[0], str) or not entry[0].strip():
+            raise ValueError(f"Aggregate entry {entry_idx}: first element must be a non-empty string name")
+            
+        if not isinstance(entry[1], list):
+            raise ValueError(f"Aggregate entry {entry_idx}: second element must be a list of dataset-metric pairs")
+            
+    def validate_dataset_metric_pair(pair: list, entry_idx: int, pair_idx: int) -> None:
+        if not isinstance(pair, list) or len(pair) != 2:
+            raise ValueError(f"Aggregate entry {entry_idx}, pair {pair_idx} must be a list with exactly 2 elements")
+        
+        if not all(isinstance(item, str) and item.strip() for item in pair):
+            raise ValueError(f"Aggregate entry {entry_idx}, pair {pair_idx}: both dataset and metric must be non-empty strings")
+            
     if not isinstance(aggregate_section, list):
         raise ValueError("'aggregate' must be a list")
     
-    for i, aggregate_entry in enumerate(aggregate_section):
-        # Check that the aggregate entry is a list with exactly 2 elements
-        if not isinstance(aggregate_entry, list):
-            raise ValueError(f"Aggregate entry {i+1} must be a list")
-            
-        if len(aggregate_entry) != 2:
-            raise ValueError(f"Aggregate entry {i+1} must have exactly 2 elements")
-            
-        # First element should be a string (name) and non-empty
-        if not isinstance(aggregate_entry[0], str):
-            raise ValueError(f"Aggregate entry {i+1}: first element must be a string name")
-        if len(aggregate_entry[0].strip()) == 0:
-            raise ValueError(f"Aggregate entry {i+1}: name cannot be empty")
-            
-        # Second element should be a list of dataset-metric pairs
-        if not isinstance(aggregate_entry[1], list):
-            raise ValueError(f"Aggregate entry {i+1}: second element must be a list of dataset-metric pairs")
-            
+    for i, aggregate_entry in enumerate(aggregate_section, start=1):
+        validate_entry_structure(aggregate_entry, i)
+        
         dataset_metrics = aggregate_entry[1]
-        for j, pair in enumerate(dataset_metrics):
-            if not isinstance(pair, list):
-                raise ValueError(f"Aggregate entry {i+1}, pair {j+1} must be a list")
-                
-            if len(pair) != 2:
-                raise ValueError(f"Aggregate entry {i+1}, pair {j+1} must have exactly 2 elements (dataset, metric)")
-                
-            if not isinstance(pair[0], str) or not isinstance(pair[1], str):
-                raise ValueError(f"Aggregate entry {i+1}, pair {j+1}: both dataset and metric must be strings")
-            if len(pair[0].strip()) == 0 or len(pair[1].strip()) == 0:
-                raise ValueError(f"Aggregate entry {i+1}, pair {j+1}: dataset and metric must be non-empty strings")
+        for j, pair in enumerate(dataset_metrics, start=1):
+            validate_dataset_metric_pair(pair, i, j)
 
 
 def _validate_temperature_overrides(temperature_overrides) -> None:
