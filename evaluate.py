@@ -553,15 +553,32 @@ def main(cfg_path='config.yaml'):
     
     # Store all scores in a flat dict with keys in format: 'dataset_name_metric_name'
     all_scores = {}
-    all_engines = []  # Track all engines for concurrent execution
+    flattened_dataset_metric_pairs = []  # Will hold individual dataset-metric pairs after expansion
     
-    # Process each dataset-metric pair individually
+    # Helper function to check if a dataset passes filters
+    def dataset_passes_filters(dataset_name, dataset_info, cfg):
+        # Check for accented filter setting
+        accented_filter = cfg.get("accented", None)
+        if accented_filter is not None and accented_filter is False and dataset_info.get("accented", False) is True:
+            logger.info(f"[main] Skipping dataset '{dataset_name}' because it is accented and accented filter is False")
+            return False
+            
+        # Check for language filter setting
+        language_filter = cfg.get("language", None)
+        if language_filter is not None:
+            dataset_language = dataset_info.get("language", "").lower()
+            if dataset_language and language_filter.lower() != dataset_language:
+                logger.info(f"[main] Skipping dataset '{dataset_name}' because its language '{dataset_language}' doesn't match filter '{language_filter}'")
+                return False
+                
+        return True
+    
+    # Flatten dataset-metric pairs from config/runspecs
     for dataset_name, metric_name in dataset_metric_pairs:
         logger.info(f"[main] Processing dataset '{dataset_name}' with metric '{metric_name}'...")
         
         # Step 1: Look for a matching runspec file
         found_runspec = False
-        selected_datasets = {}
         
         # Try to match the dataset name with one of the runspec files
         for runspec_file in runspec_files:
@@ -576,9 +593,14 @@ def main(cfg_path='config.yaml'):
                 with open(runspec_file, 'r') as f:
                     runspec_db = json.load(f)
                 
-                # Use all datasets in this runspec
-                selected_datasets = runspec_db
-                logger.info(f"[main] Using all {len(runspec_db)} datasets from {runspec_file}")
+                # Expand all datasets in this runspec
+                for expanded_dataset_name, dataset_info in runspec_db.items():
+                    # Add this dataset-metric pair to our flattened list if it passes filters
+                    if dataset_passes_filters(expanded_dataset_name, dataset_info, cfg):
+                        flattened_dataset_metric_pairs.append((expanded_dataset_name, metric_name, dataset_info))
+                        logger.info(f"[main] Added dataset-metric pair: ({expanded_dataset_name}, {metric_name})")
+                        
+                logger.info(f"[main] Expanded dataset from {runspec_file}")
                 break
         
         # Step 2: If no matching runspec file by name, search within all runspec files for the specific dataset
@@ -592,59 +614,44 @@ def main(cfg_path='config.yaml'):
                 
                 if dataset_name in runspec_db:
                     logger.info(f"[main] Found dataset '{dataset_name}' in {runspec_file}")
-                    # Use only this specific dataset
-                    selected_datasets = {dataset_name: runspec_db[dataset_name]}
-                    found_runspec = True
-                    break
+                    dataset_info = runspec_db[dataset_name]
+                    
+                    # Add this dataset-metric pair to our flattened list if it passes filters
+                    if dataset_passes_filters(dataset_name, dataset_info, cfg):
+                        flattened_dataset_metric_pairs.append((dataset_name, metric_name, dataset_info))
+                        logger.info(f"[main] Added dataset-metric pair: ({dataset_name}, {metric_name})")
+                        found_runspec = True
+                        break
             
             if not found_runspec:
                 logger.warning(f"[main] Dataset '{dataset_name}' not found in any runspec file")
-                continue
-        
-        # Check for accented filter setting
-        accented_filter = cfg.get("accented", None)
-        if accented_filter is not None:
-            logger.info(f"[main] Applying accented filter setting: {accented_filter}")
-            
-        # Check for language filter setting
-        language_filter = cfg.get("language", None)
-        if language_filter is not None:
-            logger.info(f"[main] Applying language filter setting: {language_filter}")
-        
-        # Process the dataset
-        dataset_info = next(iter(selected_datasets.values()))
-        
-        # Check if we need to filter out accented datasets
-        if accented_filter is False and dataset_info.get("accented", False) is True:
-            logger.info(f"[main] Skipping dataset '{dataset_name}' because it is accented and accented filter is False")
-            continue
 
-        # Check if we need to filter by language
-        if language_filter is not None:
-            dataset_language = dataset_info.get("language", "").lower()
-            if dataset_language and language_filter.lower() != dataset_language:
-                logger.info(f"[main] Skipping dataset '{dataset_name}' because its language '{dataset_language}' doesn't match filter '{language_filter}'")
-                continue
+    # Report the final count of dataset-metric pairs
+    
+    all_engines = []  # Track all engines for concurrent execution
+    
+    for dataset_name, metric_name, dataset_info in flattened_dataset_metric_pairs:
+        logger.info(f"[main] Creating engine for dataset '{dataset_name}' with metric '{metric_name}'")
         
-        logger.info(f"[main] Loading dataset '{dataset_name}' with metric '{metric_name}' ...")
-        
+        # Load dataset information
         repo = dataset_info.get("hf_repo", None)
-        split = None
         if not repo:
             repo = dataset_info.get("path", None)
+            
         subset = dataset_info.get("subset", "")
         language = dataset_info.get("language", "en")
         preprocessor_name = dataset_info["preprocessor"]
         postprocessor_name = dataset_info["postprocessor"]
-        modality=dataset_info.get("modality", "audio")
-
+        modality = dataset_info.get("modality", "audio")
+        
+        # Determine the split
+        split = None
         if cfg.get("split", None) is not None:
             split = cfg.get("split")
-
         if dataset_info.get("split", None) is not None:
             split = dataset_info["split"]
 
-        
+        # Load and preprocess the dataset
         dataset = _load_dataset(
             repo, subset=subset, 
             num_samples=num_samples, 
@@ -656,21 +663,17 @@ def main(cfg_path='config.yaml'):
             split=split, 
             dataset_info=dataset_info,
             modality=modality
-            )
+        )
         metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
         
         # Dynamically import postprocessor class
         PostprocessorClass = get_class_from_module('postprocessors', postprocessor_name)
         if PostprocessorClass is None:
             logger.warning(f"Could not load postprocessor {postprocessor_name}, using default GeneralPostprocessor")
-            # Try to load the default postprocessor
             PostprocessorClass = get_class_from_module('postprocessors', 'GeneralPostprocessor')
         postprocessor = PostprocessorClass()
         
-        # Run evaluation for this dataset and metric
-        logger.info(f"[main] Running evaluation for {dataset_name} with metric {metric.name}")
-        
-        # Set up engine request manager with central controller
+        # Set up engine request manager
         engine_id = f"{dataset_name}_{metric.name}_{int(time.time())}"
         logger.info(f"[main] Setting up EngineRequestManager for {engine_id}")
         engine_request_manager = EngineRequestManager(engine_id, central_request_controller)
@@ -690,15 +693,15 @@ def main(cfg_path='config.yaml'):
         # Add the engine to our collection for concurrent execution
         all_engines.append((engine, dataset_name))
         logger.info(f"[main] Created engine for dataset: {dataset_name}")
-    
+        
     # Now run all engines concurrently
     logger.info(f"[main] Running {len(all_engines)} engines concurrently...")
     
     async def run_all_engines():
         # Create tasks for each engine
         tasks = []
-        logger.info(f"[main] Creating tasks for {len(all_engines)} engines...")
         for engine, dataset_name in all_engines:
+            logger.info(f"[main] Creating task for engine: {dataset_name}")
             tasks.append(engine.run())
         
         # Run all tasks concurrently and gather results
@@ -718,12 +721,16 @@ def main(cfg_path='config.yaml'):
                 for model_name, scores in model_scores.items():
                     all_scores[dataset_name][metric_name][model_name] = scores
                     
-            logger.info(f"[main] Finished evaluation for dataset: {dataset_name}")
+            logger.info(f"[main] Processed results for dataset: {dataset_name}")
             
+        logger.info(f"[main] PHASE 3 COMPLETE: All engines finished, results collected")
         return all_scores
     
     # Run the async function
     all_scores = asyncio.run(run_all_engines())
+    
+    # Log the final results
+    logger.info(f"[main] Evaluation complete. Final results:")
     logger.info(json.dumps(all_scores, indent=2))
 
 if __name__ == "__main__":
