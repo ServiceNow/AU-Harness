@@ -1,0 +1,5 @@
+fastapi
+uvicorn
+aiohttp
+pydantic
+torch
