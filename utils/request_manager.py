@@ -33,20 +33,6 @@ class CentralRequestController:
                 "total_tokens": batch_size,
                 "available_tokens": batch_size
             }
-            logger.info(f"Registered model type '{model_type}' with batch_size {batch_size}")
-        
-    def log_token_status(self):
-        """
-        Log the current token status for all model types.
-        """
-        logger.info("==== TOKEN POOL STATUS =====")
-        for model_type, pool in self.model_pools.items():
-            total = pool["total_tokens"]
-            available = pool["available_tokens"]
-            used = total - available
-            usage_percent = (used / total) * 100 if total > 0 else 0
-            logger.info(f"Model: {model_type:25} | Total: {total:4} | Used: {used:4} | Available: {available:4} | Usage: {usage_percent:.1f}%")
-        logger.info("=============================")
     
     async def request_tokens(self, model_type: str, amount: int) -> int:
         """
@@ -122,7 +108,6 @@ class EngineRequestManager:
         # model_type -> model_instance_id -> allocation
         self.model_allocations: Dict[str, Dict[str, int]] = {}
         self.lock = asyncio.Lock()
-        logger.info(f"Model-specific EngineRequestManager initialized for engine {engine_id}")
     
     async def request_tokens(self, model_type: str, model_instance_id: str, amount: int) -> int:
         """
@@ -138,12 +123,10 @@ class EngineRequestManager:
         """
         async with self.lock:
             # Request tokens from central controller for this model type
-            #logger.info(f"Engine {self.engine_id}, Model {model_type}/{model_instance_id}: Requesting {amount} tokens")
             granted = await self.central_controller.request_tokens(
                 model_type, amount)
             self.model_allocations.setdefault(model_type, {}).setdefault(model_instance_id, 0)
             self.model_allocations[model_type][model_instance_id] += granted
-            #logger.info(f"Engine {self.engine_id}, Model {model_type}/{model_instance_id}: Granted {granted} tokens")
             return granted
     
     async def return_tokens(self, model_type: str, model_instance_id: str, amount: int) -> None:

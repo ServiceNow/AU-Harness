@@ -46,17 +46,11 @@ class Engine:
             if model_type not in self.model_groups:
                 self.model_groups[model_type] = []
             self.model_groups[model_type].append(model)
-        # Log model grouping information
-        for model_type, group_models in self.model_groups.items():
-            if len(group_models) > 1:
-                logger.info(f"[Engine.__init__] Model type '{model_type}' has {len(group_models)} instances - will shard dataset")
-
 
     # ---------------- internal helpers ----------------x
     # infer by batch size, calling generate text with retry for each sample
     async def _infer_single_model(self, model: Model, samples=None) -> list[str]:
         samples = samples if samples is not None else self.dataset  # Use provided samples or full dataset
-        logger.info(f"[Engine._infer_single_model] Running model: {model.name()} on dataset of size {len(samples)}")
         
         # Get model type for request management
         model_type = model.model  # The actual model type (e.g., "gpt-4o-mini-audio-preview")
@@ -79,12 +73,10 @@ class Engine:
                 request_amount = min(model.batch_size, len(pending_samples))
                 
                 if request_amount > 0:
-                    #logger.info(f"Engine {self.engine_id}, Model {model_type}/{model_instance_id}: Requesting {request_amount} tokens (attempt {request_count})")
                     granted = await self.request_manager.request_tokens(
                         model_type, model_instance_id, request_amount)
                     
                     if granted > 0:
-                        #logger.info(f"Engine {self.engine_id}, Model {model_type}/{model_instance_id}: Granted {granted} tokens")
                         # Remove samples from pending list based on granted tokens
                         pending_samples[:] = pending_samples[granted:]
                         # Release semaphore permits for each granted token
@@ -138,12 +130,10 @@ class Engine:
             idx, text = await coro
             results[idx] = text
             
-        logger.info(f"[Engine._infer_single_model] Model {model.name()} finished inference.")
         return results
 
     # Infer all models concurrently
     async def _infer_all(self):
-        logger.info(f"[Engine._infer_all] Starting inference for all models: {[m.name() for m in self.models]}")
         results = {}
         all_tasks = []
         task_info = {}
@@ -172,7 +162,6 @@ class Engine:
                     task = asyncio.create_task(self._infer_single_model(model, shard))
                     sharded_tasks[model.name()] = task
                     all_tasks.append(task)
-                    #logger.info(f"[Engine._infer_all] Model {model.name()} assigned {len(shard)} samples (indices {start_idx}-{end_idx-1})")
                 
                 # Store info for later reconstruction
                 task_info[model_type] = {
@@ -190,10 +179,8 @@ class Engine:
                     "is_sharded": False,
                     "task": task
                 }
-        logger.info("Available model groups: ", self.model_groups, "for dataset: ", self.dataset_name)
         # Wait for all tasks to complete concurrently
         await asyncio.gather(*all_tasks)
-        logger.info(f"[Engine._infer_all] All tasks completed for engine with dataset {self.dataset_name}")
         # Process results according to task type
         for key, info in task_info.items():
             if info["is_sharded"]:
@@ -212,12 +199,10 @@ class Engine:
                 
                 # Use the model_type as the key for combined results
                 results[key] = combined_results
-                logger.info(f"[Engine._infer_all] Combined results for sharded model type '{key}'")
             else:
                 # Single instance result
                 results[key] = info["task"].result()
         
-        logger.info(f"[Engine._infer_all] All models finished inference concurrently.")
         return results
 
     async def run(self):
@@ -242,7 +227,6 @@ class Engine:
             per_model_conc = max(1, self.available_judge_calls // num_models)
             # Get the judge model from the original metric
             judge_model = getattr(self.metric, '_model', None)
-            logger.info(f"[Engine.run] Using judge model: {judge_model} for {len(predictions)} models")
             
             # Instantiate a separate metric for each model with correct concurrency and preserving the judge model
             metric_instances = {
@@ -366,7 +350,6 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="G
     logger.info(f"[_load_dataset] Loading HuggingFace dataset repo: {repo}")
     # Determine the preferred split to load directly (more efficient)
     if split is not None:
-        logger.info(f"[_load_dataset] Using user-specified split: {split}")
         if isinstance(split, str):
             preferred_splits = [split]
         else:
@@ -378,39 +361,28 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="G
     dset = None
     # Try the preferred splits in order
     token=os.getenv("HF_TOKEN")
-    logger.info(f"[_load_dataset] Using token: {token}")
     for split_name in preferred_splits:
         try:
             args = {"path": repo, "split": split_name, "trust_remote_code": True}
             if subset:
                 args["name"] = subset
-                logger.info(f"[_load_dataset] Attempting to load subset: {subset}, split: {split_name}")
-            else:
-                logger.info(f"[_load_dataset] Attempting to load split: {split_name}")
             if token:
                 args["token"] = token
             dset = load_dataset(**args)
-            logger.info(f"[_load_dataset] Successfully loaded split: {split_name}")
             break
         except Exception as e:
-            logger.info(f"[_load_dataset] Split {split_name} not available: {e}")
+            pass
     
     # Raise an error if no valid split was found
     if dset is None:
-        logger.info(f"[_load_dataset] Attempting to load no split")
         try:
             args = {"path": repo, "trust_remote_code": True}
             if subset:
                 args["name"] = subset
-                logger.info(f"[_load_dataset] Attempting to load subset: {subset}")
-            else:
-                logger.info(f"[_load_dataset] Attempting to load dataset without subset")
             if token:
                 args["token"] = token
             dset = load_dataset(**args)
-            logger.info(f"[_load_dataset] Successfully loaded dataset without specific split")
         except Exception as e:
-            logger.info(f"[_load_dataset] Failed to load dataset: {str(e)}")
             error_msg = f"[_load_dataset] No valid dataset found in {repo}"
             logger.error(error_msg)
             raise ValueError(e)
@@ -423,7 +395,6 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="G
         dset = dset[:num_samples]
     else:
         dset = dset[:len(dset)]
-    logger.info(f"[_load_dataset] Preprocessing dataset using {preprocessor_name}...")
     PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
     if PreprocessorClass is None:
         error_msg = f"Could not load preprocessor {preprocessor_name}"
@@ -437,26 +408,21 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="G
 
 
 def _load_models(cfg_list: list[dict]) -> list[Model]:
-    logger.info(f"[_load_models] Instantiating models from config: {cfg_list}")
     models = []
     for cfg in cfg_list:
         model_name = cfg["info"].get("name")
-        logger.info(f"[_load_models] Instantiating model for {model_name}")
         model_obj = Model(cfg["info"])
         models.append(model_obj)
     if not models:
-        logger.info("[_load_models] ERROR: No valid models found in configuration.")
         raise ValueError("No valid models found in configuration.")
     for model in models:
         logger.info(f"Loaded {model.name()}")
-    logger.info(f"[_load_models] Successfully instantiated {len(models)} model(s).")
     return models
 
 
 
 
 def _load_metric(name: str, language: str = "en", judge_concurrency: int | None = None, judge_model: str | None = None):
-    logger.info(f"[_load_metric] Loading metric: {name} (judge_concurrency={judge_concurrency}, judge_model={judge_model})")
 
     if name not in metric_map:
         raise ValueError(f"Unknown metric: {name}. Available metrics: {list(metric_map.keys())}")
@@ -492,9 +458,8 @@ def main(cfg_path='config.yaml'):
     with open(cfg_path, 'r') as f:
         cfg = yaml.safe_load(f)
         
-    # Initialize the model-centric Central Request Controller
     central_request_controller = CentralRequestController()
-    logger.info("[main] Initialized model-centric CentralRequestController")
+    logger.info("[main] Initialized CentralRequestController")
     
     # Register all models with the controller
     if "models" in cfg:
@@ -520,7 +485,6 @@ def main(cfg_path='config.yaml'):
     
     # Get list of all runspec files in the runspecs directory
     runspec_files = list(runspecs_dir.glob("*.json"))
-    logger.info(f"[main] Found {len(runspec_files)} runspec files")
     
     # Load metric and model settings
     judge_concurrency = cfg.get("judge_concurrency", 1)
@@ -531,9 +495,7 @@ def main(cfg_path='config.yaml'):
     num_samples = cfg.get("num_samples", None)
     
     # Load models
-    logger.info(f"[main] Loading models...")
     models = _load_models(cfg.get("models", []))
-    logger.info(f"[main] Loaded {len(models)} model(s).")
     
     if len(models) == 0:
         raise ValueError(f"No models found in {cfg_path}")
@@ -548,9 +510,7 @@ def main(cfg_path='config.yaml'):
             raise ValueError(f"Invalid dataset_metric pair: {pair_str}. Must be in format '(dataset, metric)'")
         dataset_name, metric_name = items
         dataset_metric_pairs.append((dataset_name, metric_name))
-    
-    logger.info(f"[main] Dataset-metric pairs from config: {dataset_metric_pairs}")
-    
+        
     # Store all scores in a flat dict with keys in format: 'dataset_name_metric_name'
     all_scores = {}
     flattened_dataset_metric_pairs = []  # Will hold individual dataset-metric pairs after expansion
@@ -575,7 +535,6 @@ def main(cfg_path='config.yaml'):
     
     # Flatten dataset-metric pairs from config/runspecs
     for dataset_name, metric_name in dataset_metric_pairs:
-        logger.info(f"[main] Processing dataset '{dataset_name}' with metric '{metric_name}'...")
         
         # Step 1: Look for a matching runspec file
         found_runspec = False
@@ -586,7 +545,6 @@ def main(cfg_path='config.yaml'):
             
             # First, check if dataset name exactly matches the runspec file name
             if dataset_name == runspec_name:
-                logger.info(f"[main] Found matching runspec file: {runspec_file}")
                 found_runspec = True
                 
                 # Load the runspec file
@@ -600,20 +558,16 @@ def main(cfg_path='config.yaml'):
                         flattened_dataset_metric_pairs.append((expanded_dataset_name, metric_name, dataset_info))
                         logger.info(f"[main] Added dataset-metric pair: ({expanded_dataset_name}, {metric_name})")
                         
-                logger.info(f"[main] Expanded dataset from {runspec_file}")
                 break
         
         # Step 2: If no matching runspec file by name, search within all runspec files for the specific dataset
-        if not found_runspec:
-            logger.info(f"[main] No matching runspec file for '{dataset_name}'. Searching within individual runspec files...")
-            
+        if not found_runspec:            
             # Search through all runspec files to find the dataset
             for runspec_file in runspec_files:
                 with open(runspec_file, 'r') as f:
                     runspec_db = json.load(f)
                 
                 if dataset_name in runspec_db:
-                    logger.info(f"[main] Found dataset '{dataset_name}' in {runspec_file}")
                     dataset_info = runspec_db[dataset_name]
                     
                     # Add this dataset-metric pair to our flattened list if it passes filters
@@ -723,7 +677,6 @@ def main(cfg_path='config.yaml'):
                     
             logger.info(f"[main] Processed results for dataset: {dataset_name}")
             
-        logger.info(f"[main] PHASE 3 COMPLETE: All engines finished, results collected")
         return all_scores
     
     # Run the async function
