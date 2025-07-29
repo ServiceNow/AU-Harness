@@ -119,7 +119,7 @@ class _BaseLLMJudge(Metrics):
         # Setup for token management
         token_sem = asyncio.Semaphore(0)  # Start with 0 tokens
         pending_samples = list(range(len(candidates)))  # Samples waiting for tokens
-        processing_samples = set()  # Samples currently being processed
+        processing_samples = set(range(len(candidates)))
         completed_samples = set()  # Samples that are completed
         results = [None] * len(candidates)
         sys_prompt_template = _get_prompt(self._prompt_key)
@@ -155,9 +155,7 @@ class _BaseLLMJudge(Metrics):
                     # Process the granted tokens
                     for _ in range(granted):
                         if pending_samples:
-                            # Move sample from pending to processing and release token
                             sample_idx = pending_samples.pop(0)
-                            processing_samples.add(sample_idx)
                             # Release semaphore permits for each granted token
                             token_sem.release()
                     # Wait based on dataset size when tokens were granted
