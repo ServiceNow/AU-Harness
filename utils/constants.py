@@ -54,6 +54,7 @@ metric_map = {
     'bertscore': ("metrics.bertscore", "BertScore"),
     'diarization_metrics': ('metrics.diarization_metrics','DiarizationMetrics'),
     "instruction_following": ("metrics.voice_bench_ifeval_score", "InstructionFollowingScore"),
+    "bfcl_match_score": ("metrics.bfcl_metric", "BFCLMatchScore"),
 }
 
 # Dictionary mapping language names to their standard codes
