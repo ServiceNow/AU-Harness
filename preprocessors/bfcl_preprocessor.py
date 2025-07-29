@@ -66,7 +66,8 @@ class BfclPreprocessor(Preprocessor):
                 if isinstance(audio_data, list) and len(audio_data) == 1:
                     audio_data = audio_data[0]
                 elif isinstance(audio_data, list) and len(audio_data) > 1:
-                    raise ValueError("Support single audio only right now!")
+                    logger.warning(f"[{id}] Support single audio only right now!")
+                    break
                 elif isinstance(audio_data, dict):
                     audio_data = audio_data
 
@@ -77,7 +78,8 @@ class BfclPreprocessor(Preprocessor):
             if len(prompt) == 1:  # For now handle single turn only
                 prompt = prompt[0]
             else:
-                raise ValueError("Support only single turn")
+                logger.warning(f"[{id}] Support only single turn")
+                break
             function = dataset["tools"][i]
             reference = dataset["reference"][i]
 
