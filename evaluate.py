@@ -19,7 +19,7 @@ import statistics
 from models.model import Model
 from metrics.metrics import Metrics
 from postprocessors.base import Postprocessor
-from utils.constants import metric_map
+from utils.constants import metric_map, metric_output
 
 class Engine:
     """Evaluate one or many models over the same dataset concurrently."""
@@ -113,7 +113,8 @@ def _load_callhome_dataset(repo, preprocessor_name, num_samples, properties):
         logger.error(error_msg)
         raise ValueError(error_msg)
     dataset = PreprocessorClass().process(repo, num_samples=num_samples, properties=properties)
-    return dataset
+    dataset_size = len(dataset) if dataset else 0
+    return dataset, dataset_size
 
 def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="GeneralPreprocessor", user_prompt_add_ons: list[str] = [], system_prompts: list[str] = [], length_filter=None, metric=None, split=None, dataset_info=None):
     """Load and preprocess a dataset from a local or remote path."""
@@ -267,10 +268,10 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
 
 def _calculate_aggregates(aggregates, all_scores, models):
     """
-    Process aggregate metrics by calculating means across multiple dataset-metric pairs.
+    Process aggregate metrics by calculating means across multiple datasets for a specific metric.
     
     Args:
-        aggregates: List of aggregate configurations from the config file
+        aggregates: List of aggregate configurations from the config file in format [metric_name, [dataset1, dataset2, ...]]
         all_scores: Dictionary of scores keyed by dataset_metric pairs
         models: List of model instances used for evaluation
     """
@@ -278,102 +279,106 @@ def _calculate_aggregates(aggregates, all_scores, models):
     aggregate_scores = {}
     models_list = [model.name() for model in models]
     
+    # Load all runspec files
+    runspecs_dir = Path("runspecs")
+    runspec_files = list(runspecs_dir.glob("*.json"))
+    
     for agg_item in aggregates:
         # Skip invalid aggregates
         if not isinstance(agg_item, (list, tuple)) or len(agg_item) != 2:
             logger.warning(f"[calculate_aggregates] Invalid aggregate format: {agg_item}")
             continue
             
-        agg_name, pairs = agg_item
-        if not isinstance(pairs, list) or not pairs:
-            logger.warning(f"[calculate_aggregates] Invalid pairs in aggregate '{agg_name}'")
+        metric_name, dataset_specs = agg_item
+        if not isinstance(dataset_specs, list) or not dataset_specs:
+            logger.warning(f"[calculate_aggregates] Invalid dataset specs list in aggregate for metric '{metric_name}'")
             continue
         
-        # Filter valid pairs (each pair must be a tuple/list with 2 items)
-        # First, get the original pairs from the config
-        original_pairs = [(p[0], p[1]) for p in pairs if isinstance(p, (list, tuple)) and len(p) == 2]
+        # Step 1: Look up metric keys from constants.py
+        if metric_name not in metric_output:
+            logger.warning(f"[calculate_aggregates] Metric '{metric_name}' not found in metric_output dict")
+            continue
         
-        # Expand any pairs that use 'all' as the dataset name
-        pair_tuples = []
-        for dataset_name, metric_name in original_pairs:
-            if dataset_name.lower() == "all":
-                # Find all keys in all_scores that match this metric
-                all_datasets_for_metric = []
-                for key in all_scores.keys():
-                    if key.endswith(f"_{metric_name}") and isinstance(all_scores[key], dict):
-                        # Extract the dataset name from the key
-                        key_parts = key.split(f"_{metric_name}")
-                        if key_parts:
-                            dataset = key_parts[0]
-                            all_datasets_for_metric.append((dataset, metric_name))
+        metric_keys = metric_output[metric_name]
+        
+        # Step 2: Process each dataset/runspec entry
+        processed_datasets = []  # For actual calculations
+        display_names = []  # For display purposes (runspecs or dataset names)
+        
+        for dataset_spec in dataset_specs:
+            # Check if this is a runspec file name rather than a dataset name
+            found_runspec, runspec_data = _find_runspec_by_name(dataset_spec, runspec_files)
+            
+            if found_runspec:
+                datasets_in_runspec = runspec_data
                 
-                if all_datasets_for_metric:
-                    pair_tuples.extend(all_datasets_for_metric)
-                else:
-                    logger.warning(f"[_calculate_aggregates] No datasets found for metric '{metric_name}' when expanding 'all'")
+                # Add the runspec name for display, but use its datasets for processing
+                display_names.append(dataset_spec)
+                
+                # Add each dataset from the runspec for calculation
+                for ds_name in datasets_in_runspec.keys():
+                    processed_datasets.append(ds_name)
             else:
-                # Use the pair as-is
-                pair_tuples.append((dataset_name, metric_name))
-        if not pair_tuples:
-            logger.warning(f"[calculate_aggregates] No valid pairs found in aggregate '{agg_name}'")
+                # If not a runspec file, treat as a regular dataset name
+                processed_datasets.append(dataset_spec)
+                display_names.append(dataset_spec)  # Same for display
+        
+        if not processed_datasets:
+            logger.warning(f"[calculate_aggregates] No valid datasets found for metric '{metric_name}'")
             continue
-            
-        # Calculate model scores - one per metric key
+        
+        # Step 3: Calculate aggregates for each model using the metric keys
         model_agg_scores = {}
+        
         for model_name in models_list:
-            # First, collect all metric keys across all datasets to find common ones
-            all_metric_keys = {}
-            
-            # First pass: collect all available metric keys and their corresponding values
-            for dataset_name, metric_name in pair_tuples:
-                key = f"{dataset_name}_{metric_name}"
-                try:
-                    # Access scores within the model's dictionary - get result part
-                    score_data = all_scores[key]
-                    dataset_size = score_data.get("dataset_size", 1)  # Get dataset size, default to 1
-                    model_dict = score_data["result"][model_name]
-                    
-                    # Find all available numerical scores in this model's results
-                    numerical_scores = {k: v for k, v in model_dict.items() if isinstance(v, (int, float))}
-                    
-                    # For each numerical score, add it to our collection with dataset size for weighting
-                    for score_key, score_value in numerical_scores.items():
-                        if score_key not in all_metric_keys:
-                            all_metric_keys[score_key] = []
-                        all_metric_keys[score_key].append((score_value, dataset_size, key))
-                        
-                except KeyError as e:
-                    logger.warning(f"[_calculate_aggregates] Error accessing data for {model_name} in {key}: {str(e)}")
-            
-            # Create an aggregate for each metric key that has values
             model_scores = {}
-            for score_key, score_entries in all_metric_keys.items():
-                if score_entries:
-                    # Extract scores and weights for this metric key
-                    scores_for_key = []
-                    weights_for_key = []
-                    for score, weight, source_key in score_entries:
-                        scores_for_key.append(score)
-                        weights_for_key.append(weight)
+            
+            # For each metric key, collect values across all datasets
+            for metric_key in metric_keys:
+                values = []
+                dataset_sizes = []
+                
+                # Process each dataset
+                for dataset_name in processed_datasets:
+                    key = f"{dataset_name}_{metric_name}"
+                    
+                    try:
+                        # Access scores for this dataset and metric
+                        score_data = all_scores[key]
+                        dataset_size = score_data.get("dataset_size", 1)  # Get dataset size, default to 1
+                        model_dict = score_data["result"][model_name]
                         
-                    # Calculate weighted average for this metric key
-                    if sum(weights_for_key) > 0:
-                        weighted_avg = sum(s * w for s, w in zip(scores_for_key, weights_for_key)) / sum(weights_for_key)
-                        model_scores[score_key] = weighted_avg
+                        # Check if the specific metric key exists in this dataset's results
+                        if metric_key in model_dict:
+                            value = model_dict[metric_key]
+                            if isinstance(value, (int, float)):
+                                values.append(value)
+                                dataset_sizes.append(dataset_size)
+                    except KeyError as e:
+                        logger.warning(f"[calculate_aggregates] Error accessing data for {model_name} in {key}: {str(e)}")
+                
+                # Calculate weighted average for this metric key
+                if values:
+                    if sum(dataset_sizes) > 0:
+                        weighted_avg = sum(v * w for v, w in zip(values, dataset_sizes)) / sum(dataset_sizes)
+                        model_scores[metric_key] = weighted_avg
                     else:
                         # Fallback to simple mean if weights are all zero
-                        model_scores[score_key] = statistics.mean(scores_for_key)
+                        model_scores[metric_key] = statistics.mean(values)
             
-            # Store all the aggregated scores for this model
+            # Add scores for this model
             if model_scores:
                 model_agg_scores[model_name] = model_scores
             else:
-                logger.warning(f"[_calculate_aggregates] No scores to aggregate for {model_name} in '{agg_name}'")
-            
-            # Note: We're handling all aggregation above, no need for additional calculations
-
+                logger.warning(f"[calculate_aggregates] No scores to aggregate for {model_name} in '{metric_name}'")
+        
+        # Add aggregate scores to the results
         if model_agg_scores:
-            aggregate_scores[str(agg_name)] = model_agg_scores
+            # Create a key with metric name and original runspec/dataset names
+            display_names_str = ", ".join(display_names)
+            aggregate_key = f"{metric_name} - {display_names_str}"
+            aggregate_scores[aggregate_key] = model_agg_scores
+            logger.info(f"[calculate_aggregates] Created aggregate '{aggregate_key}' with {len(processed_datasets)} datasets")
     
     # Add aggregate scores to all_scores
     if aggregate_scores:
@@ -397,21 +402,18 @@ def _find_runspec_by_name(dataset_name, runspec_files):
         runspec_name = runspec_file.stem
         
         # Check if dataset name exactly matches the runspec file name
-        if dataset_name == runspec_name:
-            logger.info(f"[find_runspec_by_name] Found matching runspec file: {runspec_file}")
-            
+        if dataset_name == runspec_name:            
             # Load the runspec file
             with open(runspec_file, 'r') as f:
                 runspec_db = json.load(f)
             
             # Use all datasets in this runspec
-            logger.info(f"[find_runspec_by_name] Using all {len(runspec_db)} datasets from {runspec_file}")
             return True, runspec_db
     
     return False, {}
 
 
-def _process_dataset_and_evaluate(dataset_name, dataset_info, metric_name, cfg, settings, models, all_scores):
+def _process_dataset_and_evaluate(dataset_name, dataset_info, metric_name, cfg, models, all_scores):
     """
     Process a dataset and run evaluation on it.
     
@@ -420,22 +422,21 @@ def _process_dataset_and_evaluate(dataset_name, dataset_info, metric_name, cfg, 
         dataset_info: Dictionary containing dataset information
         metric_name: Name of the metric to use
         cfg: Configuration dictionary
-        settings: Dictionary of settings extracted from config
         models: List of model instances
         all_scores: Dictionary to store evaluation results
         
     Returns:
         bool: True if evaluation was performed, False if dataset was skipped
     """
-    # Extract needed settings
-    accented_filter = settings["accented"]
-    language_filter = settings["language"]
-    num_samples = settings["num_samples"]
-    user_prompt_add_ons = settings["user_prompt_add_ons"]
-    system_prompts = settings["system_prompts"]
-    length_filter = settings["length_filter"]
-    judge_concurrency = settings["judge_concurrency"]
-    judge_model = settings["judge_model"]
+    # Get needed settings directly from cfg
+    accented_filter = cfg.get("accented", None)
+    language_filter = cfg.get("language", None)
+    num_samples = cfg.get("num_samples", None)
+    user_prompt_add_ons = cfg.get("user_prompt_add_ons", [])
+    system_prompts = cfg.get("system_prompts", [])
+    length_filter = cfg.get("length_filter", None)
+    judge_concurrency = cfg.get("judge_concurrency", 1)
+    judge_model = cfg.get("judge_model", None)
     
     # Check if we need to filter out accented datasets
     if accented_filter is False and dataset_info.get("accented", False) is True:
@@ -519,13 +520,13 @@ def _find_dataset_in_runspecs(dataset_name, runspec_files):
 
 def _load_config(cfg_path):
     """
-    Load configuration from YAML file and extract settings.
+    Load configuration from YAML file.
     
     Args:
         cfg_path: Path to the configuration YAML file
         
     Returns:
-        tuple: (cfg, runspec_files, settings_dict)
+        tuple: (cfg, runspec_files)
     """
     logger.info(f"[load_config] Loading config from {cfg_path}")
     with open(cfg_path, 'r') as f:
@@ -538,30 +539,17 @@ def _load_config(cfg_path):
     runspec_files = list(runspecs_dir.glob("*.json"))
     logger.info(f"[load_config] Found {len(runspec_files)} runspec files")
     
-    # Extract settings
-    settings = {
-        "judge_concurrency": cfg.get("judge_concurrency", 1),
-        "judge_model": cfg.get("judge_model", None),
-        "user_prompt_add_ons": cfg.get("user_prompt_add_ons", []),
-        "system_prompts": cfg.get("system_prompts", []),
-        "length_filter": cfg.get("length_filter", None),
-        "num_samples": cfg.get("num_samples", None),
-        "accented": cfg.get("accented", None),
-        "language": cfg.get("language", None)
-    }
-    
-    return cfg, runspec_files, settings
+    return cfg, runspec_files
 
 
 
 def main(cfg_path='config.yaml'):
     # Load configuration
-    cfg, runspec_files, settings = _load_config(cfg_path)
+    cfg, runspec_files = _load_config(cfg_path)
     
-    # Extract settings
-
-    accented_filter = settings["accented"]
-    language_filter = settings["language"]
+    # Get settings from cfg
+    accented_filter = cfg.get("accented", None)
+    language_filter = cfg.get("language", None)
     
     # Load models
     logger.info(f"[main] Loading models...")
@@ -611,7 +599,7 @@ def main(cfg_path='config.yaml'):
         # Process each selected dataset(if whole runspec could be multiple per dname/metric pair)
         for dataset_name, dataset_info in selected_datasets.items():
             # Process this dataset and evaluate
-            _process_dataset_and_evaluate(dataset_name, dataset_info, metric_name, cfg, settings, models, all_scores)
+            _process_dataset_and_evaluate(dataset_name, dataset_info, metric_name, cfg, models, all_scores)
     
     logger.info("[main] Evaluation scores:")
     logger.info(json.dumps(all_scores, indent=2))

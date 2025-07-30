@@ -2,8 +2,7 @@
 from bert_score import score
 from metrics.metrics import Metrics
 from utils.custom_logging import write_record_log, append_final_score
-from utils import util
-
+from tqdm import tqdm
 from metrics.word_error_rate_metrics import normalize_text
 
 
@@ -37,7 +36,6 @@ class BertScore(Metrics):
         """
 
         # TODO: Optimizing for batch processing (more efficient with GPU) later
-        from tqdm import tqdm
         score_list = []
         for i in tqdm(range(len(candidates)), desc="BERTSCORE"):
             #=== Consistent normalization with WER processing === 

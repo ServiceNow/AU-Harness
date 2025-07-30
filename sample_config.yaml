@@ -21,14 +21,13 @@ dataset_metric: #list of dataset-metric pairs, each as a two-item list of string
   - ["music_understanding", "llm_judge_binary"]
 
 # Optional: Aggregate multiple dataset-metric pairs into a single score
-# Format: ["name", [["dataset", "metric"], ["dataset", "metric"]]]
+#Use same metric datasets when making aggregate
 # Special feature: Use "all" as dataset name to include all datasets with the specified metric
 aggregate:
-  - ["overall_short_wer", [["wavcaps_qa_test", "word_error_rate"], ["alpaca_audio_test", "word_error_rate"]]]
-  - ["emotion_performance", [["emotion_recognition", "llm_judge_binary"]]]
-  # Use "all" to automatically include all datasets with a specific metric
-  - ["all_wer_datasets", [["all", "word_error_rate"]]]
-  - ["all_binary_judgements", [["all", "llm_judge_binary"]]]
+  - ["overall_short_wer", ["wavcaps_qa_test", "alpaca_audio_test"]]
+  - ["emotion_performance", ["emotion_recognition"]]
+  # Use "all" to automatically include all datasets
+  - ["all_datasets", ["all"]]
 num_samples: 100 #number of samples to run(remove for all)
 judge_concurrency: 8 #judge call(optional)
 judge_model: "gpt-4o-mini" #optional(only supported model right no2)
