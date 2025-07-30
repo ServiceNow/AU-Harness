@@ -33,7 +33,7 @@ class GeneralPostprocessor(Postprocessor):
         logger.info("Processing predictions with GeneralPostprocessor...")
         
         # Process predictions (in this case, just pass them through)
-        processed_predictions = predictions
+        processed_predictions = self.process_predictions(predictions)
         
         # Extract targets using base class method
         targets = self.extract_targets(dataset)

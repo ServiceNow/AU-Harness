@@ -35,7 +35,6 @@ class Postprocessor():
             str: Cleaned version of the prediction.
         """
         cleaned = re.sub(r'<think>.*?</think>', '', sample, flags=re.DOTALL)
-        cleaned = cleaned.replace("<|end|>", "")
         return cleaned.strip()
     
     def process_predictions(self, predictions: dict[str, list[str]]) -> dict[str, list[str]]:
