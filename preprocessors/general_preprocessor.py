@@ -31,8 +31,9 @@ class GeneralPreprocessor(Preprocessor):
         modality = props.get("dataset_info", {}).get("modality", "audio")
         audio_column_name = props.get("dataset_info", {}).get("audio_column", None)
         target_column_name = props.get("dataset_info", {}).get("target_column", None)
-        user_instruction_column_name = props.get("dataset_info", {}).get("additional_instruction_column", None)
+        user_instruction_column_name = props.get("dataset_info", {}).get("instruction_column", None)
         user_query_column_name = props.get("dataset_info", {}).get("textual_input_column", None)
+        choices_column_name = props.get("dataset_info", {}).get("choices_column", None)
 
         # Load prompt add-ons and system prompts using base class method
         prompt_add_ons = self.load_yaml_file("prompt_add_ons.yaml")
@@ -53,7 +54,7 @@ class GeneralPreprocessor(Preprocessor):
             # Create record by accessing each feature by index
             record = {k: dataset[k][i] for k in keys}
 
-            # Extract audio information
+            # Extract audio information - if not found, extractor will try audio then context
             self.extract_audio_info(record, audio_column_name=audio_column_name)
 
             if modality == "text":
@@ -85,6 +86,13 @@ class GeneralPreprocessor(Preprocessor):
                 instruction = record.get("instruction") or record.get("question") or ""
             # Append any user-specified prompt add-ons
             instruction += " " + " ".join(prompt_add_ons[k] for k in user_prompt_add_ons if k in prompt_add_ons)
+            if choices_column_name and choices_column_name in record:
+                choices = record.get(choices_column_name, [])
+                if isinstance(choices, list):
+                    choices_text = " ".join(choices)
+                else:
+                    choices_text = str(choices)
+                instruction += "\n Choices: " + choices_text
             record["instruction"] = instruction.strip()
 
             # Process system prompts
