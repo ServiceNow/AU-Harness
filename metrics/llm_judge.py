@@ -1,14 +1,15 @@
 from __future__ import annotations
 import asyncio, json, yaml, os, re, math
 from pathlib import Path
-from openai import AsyncAzureOpenAI, APIConnectionError
+from openai import AsyncAzureOpenAI, AsyncOpenAI, APIConnectionError
 from tqdm import tqdm
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Dict
 import httpx
 import logging
 logger = logging.getLogger(__name__)
 from metrics.metrics import Metrics
 from utils.custom_logging import write_record_log, append_final_score
+from postprocessors.base import Postprocessor
 
 # ---------------------------------------------------------------------------
 # Helper to load prompt templates shipped with the package
@@ -33,18 +34,27 @@ _DEFAULT_MAX_CONCURRENCY = 5
 class _BaseLLMJudge(Metrics):
     """Common LLM-as-judge class."""
 
-    def __init__(self, max_concurrency: int | None = None, model: str | None = None, *_, **__):
+    def __init__(self, max_concurrency: int | None = None, model: str | None = None, judge_type: str | None = None, judge_properties: Dict | None = None, *_, **__):
         super().__init__()
         # If not supplied, fall back to defaults
         self._max_concurrency = max_concurrency or _DEFAULT_MAX_CONCURRENCY
         self._model = model or _DEFAULT_OPENAI_MODEL
+        self._judge_type = judge_type or "openai"
         self._request_manager = None # Set in Engine
-        # Azure OpenAI async client
-        self._client = AsyncAzureOpenAI(
-            api_key=os.environ.get("AZURE_OPENAI_KEY"),  # set in your shell
-            api_version=os.environ.get("AZURE_OPENAI_VERSION", "2025-01-01-preview"),
-            azure_endpoint=os.environ.get("AZURE_OPENAI_ENDPOINT", "https://corelmm-gpt-4t.openai.azure.com"),
-        )
+        self._judge_properties = judge_properties or {}
+        
+        # Initialize the appropriate client based on judge_type
+        if self._judge_type == "openai":
+            self._client = AsyncAzureOpenAI(
+                api_key=self._judge_properties.get("api_key"),
+                api_version=self._judge_properties.get("api_version"),
+                azure_endpoint=self._judge_properties.get("api_endpoint"),
+            )
+        elif self._judge_type == "vllm":
+            self._client = AsyncOpenAI(
+                base_url=self._judge_properties.get("api_endpoint"),
+                api_key=self._judge_properties.get("api_key"),
+            )
     
     def set_request_manager(self, manager):
         """Set the request manager and register the model type."""
@@ -60,15 +70,54 @@ class _BaseLLMJudge(Metrics):
         max_retries = 8
         for attempt in range(max_retries):
             try:
+                # Check if we should override the system prompt
+                model_name = self._judge_properties.get("prompt_override", None)
+                if model_name is not None:
+                    # Construct the key using model_name + metric_name
+                    # Extract the metric name from self._prompt_key (which is set in subclasses)
+                    metric_name = self._prompt_key
+                    prompt_key = f"{model_name}_{metric_name}"
+                    
+                    try:
+                        # Load the prompt from judge_prompts.yaml using the constructed key
+                        system_prompt = _get_prompt(prompt_key)
+                        logger.info(f"Using prompt for model {model_name} with key: {prompt_key}")
+                    except KeyError as e:
+                        logger.warning(f"Prompt key '{prompt_key}' not found in judge_prompts.yaml: {e}")
+                        # Keep using the original system prompt if the constructed key is not found
+                
+                #logger.info(f"System Prompt: {system_prompt}")
+                #logger.info(f"User Prompt: {user_prompt}")
+                
+                # Check if we should use no_sys_prompt mode
+                no_sys_prompt = self._judge_properties.get("no_sys_prompt", False)
+                
+                if no_sys_prompt:
+                    # Prepend system prompt to user message
+                    combined_prompt = f"{system_prompt}\n\n User Prompt to evaluate: {user_prompt}"
+                    messages = [
+                        {"role": "user", "content": combined_prompt}
+                    ]
+                else:
+                    # Use separate system and user messages
+                    messages = [
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_prompt}
+                    ]
+                
+                # Get temperature from judge_properties or use default 0.1
+                temperature = self._judge_properties.get("temperature", 0.1)
+                
                 resp = await self._client.chat.completions.create(
                     model=self._model,
-                    messages=[
-                        {"role": "system", "content": system_prompt},
-                        {"role": "user", "content": user_prompt},
-                    ],
-                    temperature=0.1,
+                    messages=messages,
+                    temperature=temperature,
                 )
                 content = resp.choices[0].message.content.strip()
+                # Clean response to remove thinking content
+                cleaned_content = Postprocessor.remove_thinking_content(content)
+                logger.info(f"Response (after cleaning): {cleaned_content}")
+                content = cleaned_content
                 try:
                     return json.loads(content)
                 except Exception:

@@ -18,6 +18,7 @@ binary_judge_prompt: |-
     "explanation": (string, provide a concise explanation of your rating, comparing the reference answer with the model's response. For example: "The reference answer is [XXX], while the model's answer is [YYY]. I think …")
   }}
   Do not return anything except this JSON object.
+
 detailed_judge_prompt: |-
   [Persona]
   You are an expert evaluator, who specialized in seeing how well a model-generated candidate answer aligns with a reference answer.
@@ -98,3 +99,111 @@ big_bench_audio_judge_prompt: |-
     END CANDIDATE ANSWER TO ASSESS
 
     Reply only with CORRECT or INCORRECT.
+
+Qwen3-32b_binary_judge_prompt: |-
+  <|im_start|>system
+  [Persona]
+  You are an expert evaluator, who specialized in seeing how well a model-generated candidate answer aligns with a reference answer. You ALWAYS provide a score and explanation for the given candidate answer, in the correct specified json format.
+
+  [Task]
+  You are given a model-generated candidate answer, and a reference answer.
+  Rate the candidate answer based on its alignment with the reference answer, focusing on accuracy and relevance to the reference provided. Please be critical on the details. If the model response is something like "cannot decide", please rate as 0.
+  Criteria: Assess if the candidate response mirrors the reference in terms of content, accuracy, and relevance. Please give a score of 0 or 1. 
+  Score0: The candidate answer is refusing to give concrete results, providing something like 'cannot decide'.
+  Score0: The candidate answer is wrong, providing incorrect or completely irrelevant information compared to the reference. 
+  Score1: The candidate answer is correct, capturing or covering the meaning from the reference.
+
+  **Note**: Do not punish the candidate answer for providing too much detail of information, unless directly conflicting with the reference. Only focus on if the information in the reference is present in the candidate answer.
+   
+  Your response MUST be a single valid JSON object with the following fields and nothing else:
+  {{
+    "score": (int),
+    "explanation": (string, provide a concise explanation of your rating, comparing the reference answer with the model's response. For example: "The reference answer is [XXX], while the model's answer is [YYY]. I think …")
+  }}
+  Do not return anything except this JSON object.
+  <|im_end|>
+
+Qwen3-32b_detailed_judge_prompt: |-
+  <|im_start|>system
+  [Persona]
+  You are an expert evaluator, who specialized in seeing how well a model-generated candidate answer aligns with a reference answer. You ALWAYS provide a detailed score and explanation for the given candidate answer.
+
+  [Task]
+  You are given a model-generated candidate answer, and a reference answer.
+  Rate the candidate answer based on its alignment with the reference answer, focusing on accuracy and relevance to the reference provided. Please be critical on the details. If the model response is something like "cannot decide", please rate as 0.
+  Criteria: Assess if the candidate response mirrors the reference in terms of content, accuracy, and relevance.
+
+  Score0: The candidate answer is refusing to give concrete results, providing something like "cannot decide".
+  Score0: The candidate answer is completely mis-aligned, providing incorrect information compared to the reference or not answering the question.
+  Score1: The candidate answer shows minimal alignment, misunderstanding the question and/or providing incorrect information.
+  Score2: The candidate answer recognizes the topic but diverges significantly from the reference in accuracy or relevance.
+  Score3: The candidate answer aligns with the reference generally but lacks detail or precise accuracy in some aspects.
+  Score4: The candidate answer is mostly accurate and relevant, closely following the reference but could be missing small details.
+  Score5: The candidate answer is highly accurate, detailed, and contains all the information from the reference
+
+  **Note**: Do not punish the candidate answer for providing too much detail or being too verbose, unless directly conflicting with the reference. Only focus on if the information in the reference is present in the candidate answer.
+
+  Your response MUST be a single valid JSON object with the following fields and nothing else:
+  {{
+    "score": (int),
+    "explanation": (string, provide a concise explanation of your rating, comparing the reference answer with the candidate's response. For example: "The reference answer is [XXX], while the candidate's answer is [YYY]. I think …")
+  }}
+  Do not return anything except this JSON object.
+  <|im_end|>
+
+Qwen3-32b_callhome_judge_prompt: |-
+  <|im_start|>system
+  [Persona]
+  You are an expert evaluator, who specialized in seeing how well a model-generated candidate answer aligns with a reference answer. You ALWAYS provide separate scores for different evaluation dimensions.
+
+  [Task]
+  You are given a candidate transcript of a phone call, and a reference transcript. Evaluate the candidate across three dimensions:
+  
+  1. **Word-Level Accuracy** (0–3): How well the candidate transcript captures the *words* used in the reference. This includes transcription of names, places, numbers.
+  2. **Semantic Similarity** (0–3): How well the candidate captures the *meaning* of the reference, even if exact words differ.
+  3. **Turn-by-Turn Segmentation & Attribution Faithfulness** (0–3): How well the candidate preserves *who said what* and the structure of the speaker turns. This includes speaker consistency and proper segmentation of turns.
+
+  Use the following scoring rubric for each category:
+
+  Score 0: The candidate fails entirely in this dimension (e.g., refuses to answer, is completely wrong or irrelevant).  
+  Score 1: Minimal alignment; severe issues or inaccuracies.  
+  Score 2: Partial alignment; noticeable deviations from the reference but some correct content.  
+  Score 3: Strong alignment; mostly accurate with only minor issues.
+
+  Report the individual sub-scores for each dimension. Then, add the three sub-scores to compute the final **score** (range: 0 to 9). Be critical in your assessment. If the model says something like "I cannot decide", give a 0 for that dimension.
+
+  Your response MUST be a **single valid JSON object** with the following fields and nothing else:
+
+  {{
+    "asr_score": (integer from 0 to 3),
+    "semantic_score": (integer from 0 to 3),
+    "turn_score": (integer from 0 to 3),
+    "score": (integer from 0 to 9),
+    "explanation": (string explaining your rating across all 3 criteria)
+  }}
+  Do not return anything except this JSON object.
+  <|im_end|>
+
+Qwen3-32b_big_bench_audio_judge_prompt: |-
+  <|im_start|>system
+  Assess whether the following CANDIDATE ANSWER is CORRECT or INCORRECT.
+  For the CANDIDATE ANSWER to be correct, it must be consistent with the OFFICIAL ANSWER.
+  If the CANDIDATE ANSWER contradicts itself, assess the first proposed answer.
+  If the CANDIDATE ANSWER provides a final answer and working, assess the final answer only.
+  If the CANDIDATE ANSWER includes irrelevant information, assess only the relevant information.
+  If the CANDIDATE ANSWER includes a numeric value it is ok if it is spelled e.g. 7 or seven
+  It is ok if the CANDIDATE ANSWER involves a misspelling of a person's name e.g. Leda or Lida, Autry or Audrie.
+
+  The question, for reference only: START QUESTION {reference[0]} \n\nEND QUESTION
+
+  The OFFICIAL ANSWER: {reference[1]}
+
+  BEGIN CANDIDATE ANSWER TO ASSESS
+
+  {prediction}
+
+  END CANDIDATE ANSWER TO ASSESS
+
+  Reply only with CORRECT or INCORRECT.
+  <|im_end|>
+  

@@ -241,7 +241,7 @@ class Engine:
             judge_model = getattr(self.metric, '_model', None)
             # Use the same concurrency for all instances
             metric_instances = {
-                model_name: type(self.metric)(max_concurrency=self.metric._max_concurrency, model=judge_model)
+                model_name: type(self.metric)(max_concurrency=self.metric._max_concurrency, model=judge_model, judge_type=self.metric._judge_type, judge_properties=self.metric._judge_properties)
                 for model_name in predictions.keys()
             }
         else:
@@ -415,7 +415,7 @@ def _load_models(cfg_list: list[dict]) -> list[Model]:
 
 
 # Metric Loader
-def _load_metric(name: str, language: str = "en", judge_concurrency: int | None = None, judge_model: str | None = None):
+def _load_metric(name: str, language: str = "en", judge_concurrency: int | None = None, judge_model: str | None = None, judge_type: str | None = None, judge_api_version: str | None = None, judge_api_endpoint: str | None = None, judge_api_key: str | None = None, judge_no_sys_prompt: bool = False, judge_temperature: float | None = None, judge_prompt_override: str | None = None):
 
     if name not in metric_map:
         raise ValueError(f"Unknown metric: {name}. Available metrics: {list(metric_map.keys())}")
@@ -431,7 +431,23 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
         if "wer" in name.lower():
             metric = MetricClass(language=language)
         elif "judge" in name.lower():
-            metric = MetricClass(max_concurrency=judge_concurrency, model=judge_model)
+            # Create judge_properties dictionary
+            judge_properties = {
+                "api_version": judge_api_version,
+                "api_endpoint": judge_api_endpoint,
+                "api_key": judge_api_key,
+                "no_sys_prompt": judge_no_sys_prompt,
+                "temperature": judge_temperature,
+                "prompt_override": judge_prompt_override
+            }
+            
+            # Pass all judge-related parameters
+            metric = MetricClass(
+                max_concurrency=judge_concurrency, 
+                model=judge_model,
+                judge_type=judge_type,
+                judge_properties=judge_properties
+            )
         else:
             # Default initialization for other metrics
             metric = MetricClass()
@@ -474,9 +490,16 @@ def main(cfg_path='config.yaml'):
     # Get list of all runspec files in the runspecs directory
     runspec_files = list(runspecs_dir.glob("*.json"))
     
-    # Load metric and model settings
-    judge_concurrency = cfg.get("judge_concurrency", 1)
+    # Extract judge-related configs
+    judge_concurrency = cfg.get("judge_concurrency", None)
     judge_model = cfg.get("judge_model", None)
+    judge_type = cfg.get("judge_type", "openai")
+    judge_api_version = cfg.get("judge_api_version", None)
+    judge_api_endpoint = cfg.get("judge_api_endpoint", None)
+    judge_api_key = cfg.get("judge_api_key", None)
+    judge_no_sys_prompt = cfg.get("judge_no_sys_prompt", False)
+    judge_temperature = cfg.get("judge_temperature", None)
+    judge_prompt_override = cfg.get("judge_prompt_model_override", None)
     user_prompt_add_ons = cfg.get("user_prompt_add_ons", [])
     system_prompts = cfg.get("system_prompts", [])
     length_filter = cfg.get("length_filter", None)
@@ -606,7 +629,19 @@ def main(cfg_path='config.yaml'):
             dataset_info=dataset_info,
             modality=modality
         )
-        metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
+        metric = _load_metric(
+            metric_name, 
+            language=language, 
+            judge_concurrency=judge_concurrency, 
+            judge_model=judge_model,
+            judge_type=judge_type,
+            judge_api_version=judge_api_version,
+            judge_api_endpoint=judge_api_endpoint,
+            judge_api_key=judge_api_key,
+            judge_no_sys_prompt=judge_no_sys_prompt,
+            judge_temperature=judge_temperature,
+            judge_prompt_override=judge_prompt_override
+        )
         
         # Dynamically import postprocessor class
         PostprocessorClass = get_class_from_module('postprocessors', postprocessor_name)
