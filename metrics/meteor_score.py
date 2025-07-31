@@ -1,26 +1,27 @@
 import nltk
 from nltk.translate.meteor_score import single_meteor_score
-from metrics.metrics import Metrics
-from utils import util
 from tqdm import tqdm
-from utils.custom_logging import write_record_log, append_final_score
+
+from metrics.metrics import Metrics
 from metrics.word_error_rate_metrics import normalize_text
+from utils import util
+from utils.custom_logging import write_record_log, append_final_score
 
 
 class MeteorScore(Metrics):
-    def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None):
+    def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None,
+                 model_name: str | None = None):
         # Store instructions for potential later use
         self.instructions = instructions
         overall = self.compute_record_level_scores(candidates, references)
         if dataset_name and model_name:
             scores = overall.get(self.name, [])
             # write_record_log will also write to run.log internally
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, instructions=self.instructions)
+            write_record_log(self, references, candidates, scores, dataset_name, model_name,
+                             instructions=self.instructions)
             # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
         return overall
-
-
 
     def __init__(self):
         super().__init__()
@@ -29,7 +30,6 @@ class MeteorScore(Metrics):
         nltk.download("wordnet")
         nltk.download('punkt')
         nltk.download('punkt_tab')
-        
 
     def compute_record_level_scores(self, candidates: list, references: list) -> dict[str, list | None]:
         # Here we can use self.instructions if needed
@@ -47,11 +47,11 @@ class MeteorScore(Metrics):
             # default preprocess is str.lower()
             # default stemmer is PorterStemmer()
             # default wordnet is nltk.corpus.wordnet
-            
-            #=== Consistent normalization with WER processing === 
+
+            # === Consistent normalization with WER processing ===
             reference, candidate = references[i], candidates[i]
             norm_reference = normalize_text(reference)
-            norm_candidate = normalize_text(candidate) 
+            norm_candidate = normalize_text(candidate)
 
             # Compute METEOR Score
             score = self.scorer(norm_reference.split(), norm_candidate.split())

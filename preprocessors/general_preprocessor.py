@@ -7,9 +7,10 @@ from preprocessors.base import Preprocessor
 
 logger = logging.getLogger(__name__)
 
+
 class GeneralPreprocessor(Preprocessor):
     """Preprocessor for Audio benchmarks from "AudioLLMs" and more on HF."""
-    
+
     # Using the extract_audio_info method from the base class
 
     def process(self, dataset: dict, num_samples: int = None, properties: dict = None) -> list[dict]:
@@ -21,7 +22,7 @@ class GeneralPreprocessor(Preprocessor):
                        to filter samples by audio length.
         """
         logger.info("In [GeneralPreprocessor] Processing dataset...")
-        
+
         # Extract common properties using base class method
         props = self.extract_properties(properties)
         user_prompt_add_ons = props["user_prompt_add_ons"]
@@ -42,12 +43,12 @@ class GeneralPreprocessor(Preprocessor):
         keys = list(dataset.keys())
         dataset_size = len(dataset[keys[0]]) if keys else 0
         self.log_dataset_info(keys, dataset_size)
-        
+
         total_duration = 0
         new_dataset = []
         dataset_size = len(dataset[keys[0]]) if keys else 0
         indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
-        
+
         for i in tqdm(indices, desc="Processing samples"):
             # Create record by accessing each feature by index
             record = {k: dataset[k][i] for k in keys}
@@ -63,7 +64,7 @@ class GeneralPreprocessor(Preprocessor):
             # Calculate audio duration in seconds
             audio_duration = len(record["array"]) / record["sampling_rate"]
             total_duration += audio_duration
-            
+
             # Apply length filtering if specified
             if not self.check_audio_length(record["array"], record["sampling_rate"], length_filter):
                 continue
@@ -86,12 +87,13 @@ class GeneralPreprocessor(Preprocessor):
             # Append any user-specified prompt add-ons
             instruction += " " + " ".join(prompt_add_ons[k] for k in user_prompt_add_ons if k in prompt_add_ons)
             record["instruction"] = instruction.strip()
-            
+
             # Process system prompts
-            system_prompt_text = "\n\n".join(system_prompts_mapping[k] for k in system_prompts if k in system_prompts_mapping)
+            system_prompt_text = "\n\n".join(
+                system_prompts_mapping[k] for k in system_prompts if k in system_prompts_mapping)
             if system_prompt_text:
                 record["system_prompt"] = system_prompt_text
-                
+
             record["judge_type"] = properties.get("judge_type", "detailed")
             new_dataset.append(record)
 

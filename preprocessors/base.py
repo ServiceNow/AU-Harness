@@ -8,8 +8,10 @@ from scipy.signal import resample
 
 logger = logging.getLogger(__name__)
 
+
 class Preprocessor():
-    def process(self, dataset: Dict[str, List[Any]], num_samples: Optional[int] = None, properties: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+    def process(self, dataset: Dict[str, List[Any]], num_samples: Optional[int] = None,
+                properties: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
         """Base implementation of the process method to be overridden by subclasses.
         
         Args:
@@ -21,7 +23,7 @@ class Preprocessor():
             List of dictionaries where each dictionary represents a processed sample
         """
         raise NotImplementedError
-    
+
     def load_yaml_file(self, file_name):
         """
         Load a YAML file from the prompts directory.
@@ -40,7 +42,7 @@ class Preprocessor():
         except FileNotFoundError:
             logger.warning(f"File not found at {yaml_path}. Returning empty dictionary.")
             return {}
-        
+
     def extract_properties(self, properties=None):
         """
         Extract common properties from the properties dictionary with default values.
@@ -54,7 +56,7 @@ class Preprocessor():
         """
         if properties is None:
             properties = {}
-            
+
         extracted = {
             "metric": properties.get("metric", None),
             "user_prompt_add_ons": properties.get("user_prompt_add_ons", []),
@@ -64,7 +66,7 @@ class Preprocessor():
             "modality": properties.get("modality", ""),
             "judge_type": properties.get("judge_type", "")
         }
-        
+
         logger.debug(f"Extracted properties: {extracted}")
         return extracted
 
@@ -96,7 +98,7 @@ class Preprocessor():
         else:
             raise KeyError(
                 "Neither 'audio' nor 'context' keys found in data, try passing audio column name via runspec using key \"audio_column\"")
-            
+
     def resample_audio(self, audio_array, source_sr, target_sr=16000):
         """
         Resample audio array to target sampling rate.
@@ -113,7 +115,7 @@ class Preprocessor():
             target_length = int(target_sr * len(audio_array) / source_sr)
             return resample(audio_array, target_length), target_sr
         return audio_array, source_sr
-        
+
     def check_audio_length(self, audio_array, sampling_rate, length_filter=None):
         """
         Check if audio duration meets the specified length filter.
@@ -128,14 +130,14 @@ class Preprocessor():
         """
         if length_filter is None:
             return True
-            
+
         if isinstance(length_filter, tuple) and len(length_filter) == 2:
             min_length, max_length = length_filter
             audio_duration = len(audio_array) / sampling_rate
             return min_length <= audio_duration <= max_length
-            
+
         return True
-        
+
     def log_dataset_info(self, dataset_keys, original_size, processed_size=None, total_duration=None):
         """
         Log information about the dataset being processed.
@@ -147,9 +149,9 @@ class Preprocessor():
             total_duration (float, optional): Total audio duration in seconds
         """
         logger.info(f"Dataset keys: {dataset_keys}, total samples: {original_size}")
-        
+
         if processed_size is not None:
             logger.info(f"Processed dataset size: {processed_size}")
-            
+
         if total_duration is not None:
             logger.info(f"Dataset is {total_duration / 3600:.2f} hours long")

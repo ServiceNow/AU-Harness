@@ -63,7 +63,7 @@ class BFCLMatchScore(Metrics):
                 tool_match_list.append(False)
             elif len(tool_response) != len(reference_tool_response):
                 tool_match_list.append(False)
-            elif len(tool_response)==0 and len(reference_tool_response)==0:
+            elif len(tool_response) == 0 and len(reference_tool_response) == 0:
                 tool_match_list.append(True)
             else:
                 # Compare each tool call one-by-one

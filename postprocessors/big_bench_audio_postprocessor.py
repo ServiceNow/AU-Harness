@@ -1,6 +1,7 @@
 import logging
-from utils.custom_logging import configure
+
 from postprocessors.base import Postprocessor
+from utils.custom_logging import configure
 
 configure()
 logger = logging.getLogger(__name__)
@@ -18,10 +19,10 @@ class BigBenchAudioPostprocessor(Postprocessor):
     # Using remove_thinking_content from base class
 
     def process(
-        self,
-        dataset: list[dict],
-        predictions: dict[str, list[str]],
-        metric
+            self,
+            dataset: list[dict],
+            predictions: dict[str, list[str]],
+            metric
     ) -> dict:
         """
         Process and clean model predictions and prepare target-label pairs.
@@ -45,7 +46,7 @@ class BigBenchAudioPostprocessor(Postprocessor):
             for record in dataset
             if "model_target" in record and "transcript" in record
         ]
-        
+
         # Extract instructions using base class method
         instructions = self.extract_instructions(dataset)
 
