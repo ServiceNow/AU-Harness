@@ -1,11 +1,12 @@
-import re
 import logging
-from utils.custom_logging import configure
+
 from postprocessors.base import Postprocessor
+from utils.custom_logging import configure
 
 configure()
 logger = logging.getLogger(__name__)
 logger.propagate = True
+
 
 class VoiceBenchIfevalPostprocessor(Postprocessor):
     """
@@ -13,10 +14,10 @@ class VoiceBenchIfevalPostprocessor(Postprocessor):
     """
 
     def process(
-        self,
-        dataset: list[dict],
-        predictions: dict[str, list[str]],
-        metric
+            self,
+            dataset: list[dict],
+            predictions: dict[str, list[str]],
+            metric
     ) -> tuple[list[tuple[str, str]], dict[str, list[str]], list, list]:
         """
         Process and clean model predictions and prepare target-label pairs.

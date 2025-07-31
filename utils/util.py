@@ -1,11 +1,11 @@
-
+import logging
 from typing import Any
 
-import logging
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 from . import constants
+
 
 def smart_round(val: float, precision: int = constants.ROUND_DIGITS) -> float:
     """Round off metrics to global precision value.
@@ -31,8 +31,9 @@ def smart_round(val: float, precision: int = constants.ROUND_DIGITS) -> float:
             f"Invalid precision provided: {precision}. Using the default precision: {constants.ROUND_DIGITS}"
         )
         precision = constants.ROUND_DIGITS
-    rounded_off_val = round(val * 10**precision) / 10**precision
+    rounded_off_val = round(val * 10 ** precision) / 10 ** precision
     return rounded_off_val
+
 
 def get_context_indices_for_filter(key: str, value: Any, contexts: list[dict]) -> list[int]:
     """Get indices for rows satisfying the given filter.
@@ -50,6 +51,3 @@ def get_context_indices_for_filter(key: str, value: Any, contexts: list[dict]) -
     """
     indices = [_ for _, c in enumerate(contexts) if c[key] == value]
     return indices
-
-
-

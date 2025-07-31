@@ -1,28 +1,33 @@
-import json
-import re
 import ast
+import json
 import logging
-from utils.custom_logging import configure
+import re
+
 from models.model_response import ModelResponse
 from postprocessors.base import Postprocessor
+from utils.custom_logging import configure
 
 configure()
 logger = logging.getLogger(__name__)
 logger.propagate = True
 
+
 class BfclPostprocessor(Postprocessor):
     """
     Postprocessor for bfcl predictions.
     """
+
     @staticmethod
     def extract_json_from_message(message: str):
         """
         Extracts the JSON object from a message.
         """
+
         def fix_json_like_string(s):
             # Add double quotes to all keys
             s = re.sub(r'([{,])\s*([a-zA-Z_][\w\.]*)\s*:', r'\1"\2":', s)
             return s
+
         pattern = r"```json(.*?)```"
         match = re.search(pattern, message, re.DOTALL)
         if match:
@@ -39,10 +44,10 @@ class BfclPostprocessor(Postprocessor):
                     return None
 
     def process(
-        self,
-        dataset: list[dict],
-        predictions: ModelResponse,
-        metric
+            self,
+            dataset: list[dict],
+            predictions: ModelResponse,
+            metric
     ) -> tuple[list[tuple[str, str]], dict[str, list[str]], list, list] | dict:
         """
         Process and clean model predictions and prepare target-label pairs.
@@ -55,7 +60,7 @@ class BfclPostprocessor(Postprocessor):
             for pred, dataset_row in zip(preds, dataset):
                 tool_responses = []
                 if isinstance(pred.raw_response, dict):
-                    tools = pred.raw_response.get('choices',[])[0]['message']['tool_calls']
+                    tools = pred.raw_response.get('choices', [])[0]['message']['tool_calls']
                     raw_llm_response = pred.llm_response
                     raw_tool_responses = tools
                 else:

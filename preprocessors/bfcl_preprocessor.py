@@ -1,7 +1,7 @@
-import json
 import ast
-import re
+import json
 import logging
+import re
 from typing import Dict, List, Optional, Any
 
 import numpy as np
@@ -137,8 +137,9 @@ class BfclPreprocessor(Preprocessor):
             # but still allow to check ability to choose function
             if prompt_mode:
                 system_prompt = SYSTEM_PROMPT
-                system_prompt += 'Here is a list of functions in JSON format that you can invoke.\n{functions}\n'.format(functions=json.dumps(function, indent=4))
-                function=None
+                system_prompt += 'Here is a list of functions in JSON format that you can invoke.\n{functions}\n'.format(
+                    functions=json.dumps(function, indent=4))
+                function = None
 
             # Create structured sample
             sample = {
