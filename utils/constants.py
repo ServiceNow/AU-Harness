@@ -14,12 +14,13 @@ from jiwer import (
     Strip,
     ToLowerCase,
 )
+
 from metrics.wer.normalizers import JapaneseTextNormalizer
-from metrics.wer.whisper_normalizer.english import EnglishTextNormalizer
 from metrics.wer.whisper_normalizer.basic import BasicTextNormalizer
+from metrics.wer.whisper_normalizer.english import EnglishTextNormalizer
 
 # Define WER/CER related constants
-NORMALIZERS = {"en": EnglishTextNormalizer(), "ja": JapaneseTextNormalizer()}
+NORMALIZERS = {'en': EnglishTextNormalizer(), 'ja': JapaneseTextNormalizer()}
 DEFAULT_NORMALIZER = BasicTextNormalizer()
 BASIC_TRANSFORMATIONS = Compose(
     [
@@ -29,7 +30,7 @@ BASIC_TRANSFORMATIONS = Compose(
     ]
 )
 # CER stands for Character Error Rate
-CER_LANGUAGES = {"ja"}
+CER_LANGUAGES = {'ja'}
 CER_DEFAULTS = Compose(
     [
         RemoveWhiteSpace(),
@@ -44,17 +45,38 @@ INVERTED_METRIC_INDICATOR = '↓'
 
 # Dictionary mapping metric names to their implementation details (module, class)
 metric_map = {
-    "word_error_rate": ("metrics.word_error_rate_metrics", "WERMetrics"),
-    "bleu": ("metrics.bleu_metrics", "BleuMetrics"),
-    "llm_judge_binary": ("metrics.llm_judge", "BinaryLLMJudgeMetric"),
-    "llm_judge_detailed": ("metrics.llm_judge", "DetailedLLMJudgeMetric"),
-    "llm_judge_callhome": ("metrics.llm_judge", "CallHomeLLMJudgeMetric"),
-    "meteor": ("metrics.meteor_score", "MeteorScore"),
-    "llm_judge_big_bench_audio": ("metrics.llm_judge", "BigBenchAudioLLMJudgeMetric"),
-    'bertscore': ("metrics.bertscore", "BertScore"),
-    'diarization_metrics': ('metrics.diarization_metrics','DiarizationMetrics'),
-    "instruction_following": ("metrics.voice_bench_ifeval_score", "InstructionFollowingScore"),
+    'bertscore': ('metrics.bertscore', 'BertScore'),
+    'bfcl_match_score': ('metrics.bfcl_metric', 'BFCLMatchScore'),
+    'bleu': ('metrics.bleu_metrics', 'BleuMetrics'),
+    'diarization_metrics': ('metrics.diarization_metrics', 'DiarizationMetrics'),
+    'instruction_following': ('metrics.voice_bench_ifeval_score', 'InstructionFollowingScore'),
+    'llm_judge_big_bench_audio': ('metrics.llm_judge', 'BigBenchAudioLLMJudgeMetric'),
+    'llm_judge_binary': ('metrics.llm_judge', 'BinaryLLMJudgeMetric'),
+    'llm_judge_callhome': ('metrics.llm_judge', 'CallHomeLLMJudgeMetric'),
+    'llm_judge_detailed': ('metrics.llm_judge', 'DetailedLLMJudgeMetric'),
+    'meteor': ('metrics.meteor_score', 'MeteorScore'),
+    'word_error_rate': ('metrics.word_error_rate_metrics', 'WERMetrics'),
     "sql_score": ("metrics.sql_score", "SqlScore"),
+}
+
+allowed_task_metrics = {
+    'callhome': ['llm_judge_callhome', 'word_error_rate', 'diarization_metrics'],
+    'accent_recognition': ['llm_judge_binary'],
+    'emotion_recognition': ['llm_judge_binary'],
+    'gender_recognition': ['llm_judge_binary'],
+    'speaker_recognition': ['llm_judge_binary'],
+    'ASR': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
+    'code_switching': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
+    'long_form_ASR': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
+    'translation': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
+    'ifeval': ['instruction_following'],
+    'music_understanding': ['llm_judge_binary'],
+    'scene_captioning': ['llm_judge_detailed'],
+    'scene_QA': ['llm_judge_binary', 'llm_judge_detailed'],
+    'speech_instruction': ['llm_judge_detailed'],
+    'spoken_dialogue_summarization': ['llm_judge_detailed'],
+    'spoken_QA': ['llm_judge_detailed', 'llm_judge_binary'],
+    'sqqa': ['llm_judge_big_bench_audio', 'llm_judge_binary'],
 }
 
 # Dictionary mapping language names to their standard codes

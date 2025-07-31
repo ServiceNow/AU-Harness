@@ -24,7 +24,7 @@ __pycache__/
 private_datasets/
 
 # tests
-test.py
+#test.py
 client_test.py
 
 # local configs
