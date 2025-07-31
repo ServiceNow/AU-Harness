@@ -5,7 +5,7 @@ dataset_metric: #tuple of dataset, metric(can run by task or dataset)
    #run by task_type
   - "(emotion_recognition, llm_judge_binary)"
   #run by task category
-  - "(Spoken Language Reasoning, instruction_following)"
+  - "(spoken_language_reasoning, instruction_following)"
 num_samples: 100 #number of samples to run(remove for all)
 judge_concurrency: 8 #judge call(optional)
 judge_model: "gpt-4o-mini" #optional(only supported model right no2)
