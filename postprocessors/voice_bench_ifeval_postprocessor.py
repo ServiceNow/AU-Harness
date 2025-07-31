@@ -24,11 +24,8 @@ class VoiceBenchIfevalPostprocessor(Postprocessor):
         """
         logger.info("Processing predictions with VoiceBenchIfevalPostprocessor...")
 
-        processed_predictions: dict[str, list[str]] = {}
-        for model_name, preds in predictions.items():
-            processed = [self.remove_thinking_content(pred) for pred in preds]
-            processed_predictions[model_name] = processed
-
+        processed_predictions = self.process_predictions(predictions)
+        
         output = {
             "instruction": [record.get("instruction", "") for record in dataset],
             "model_targets": [record["model_target"] for record in dataset if "model_target" in record],
