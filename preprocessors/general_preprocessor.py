@@ -86,8 +86,10 @@ class GeneralPreprocessor(Preprocessor):
                 instruction += " " + inst
             # Append any user-specified prompt add-ons
             instruction += " " + " ".join(prompt_add_ons[k] for k in user_prompt_add_ons if k in prompt_add_ons)
+            if record.get("choices"):
+                instruction += f"\nAvailable choices: {', '.join(record['choices'])}"
             record["instruction"] = instruction.strip()
-
+            
             # Process system prompts
             system_prompt_text = "\n\n".join(
                 system_prompts_mapping[k] for k in system_prompts if k in system_prompts_mapping)
