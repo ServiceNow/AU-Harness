@@ -56,6 +56,7 @@ metric_map = {
     'llm_judge_detailed': ('metrics.llm_judge', 'DetailedLLMJudgeMetric'),
     'meteor': ('metrics.meteor_score', 'MeteorScore'),
     'word_error_rate': ('metrics.word_error_rate_metrics', 'WERMetrics'),
+    "sql_score": ("metrics.sql_score", "SqlScore"),
 }
 
 allowed_task_metrics = {
