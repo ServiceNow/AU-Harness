@@ -1,22 +1,24 @@
 #!/usr/bin/env python3
 
+import glob
+import logging
 import os
 import shutil
-import glob
-from datasets import config as datasets_config
-import logging
-from huggingface_hub import constants as hf_hub_constants
-import tempfile
 import subprocess
+import tempfile
 
-logging.basicConfig(level=logging.INFO, 
+from datasets import config as datasets_config
+from huggingface_hub import constants as hf_hub_constants
+
+logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
 
 def clear_datasets_cache():
     cache_dir = datasets_config.HF_DATASETS_CACHE
     logger.info(f"Datasets cache directory: {cache_dir}")
-    
+
     if os.path.exists(cache_dir):
         logger.info(f"Clearing datasets cache at: {cache_dir}")
         try:
@@ -29,9 +31,9 @@ def clear_datasets_cache():
                     if os.path.exists(fp):
                         total_size += os.path.getsize(fp)
                         file_count += 1
-            
-            logger.info(f"Found {file_count} files totaling {total_size / (1024*1024*1024):.2f} GB")
-            
+
+            logger.info(f"Found {file_count} files totaling {total_size / (1024 * 1024 * 1024):.2f} GB")
+
             # Delete the cache
             shutil.rmtree(cache_dir, ignore_errors=True)
             logger.info("Datasets cache cleared successfully.")
@@ -40,10 +42,11 @@ def clear_datasets_cache():
     else:
         logger.info("No datasets cache found.")
 
+
 def clear_models_cache():
     try:
         models_cache = hf_hub_constants.HF_HUB_CACHE
-        
+
         logger.info(f"Models cache directory: {models_cache}")
         if os.path.exists(models_cache):
             logger.info(f"Clearing models cache at: {models_cache}")
@@ -57,9 +60,9 @@ def clear_models_cache():
                         if os.path.exists(fp):
                             total_size += os.path.getsize(fp)
                             file_count += 1
-                
-                logger.info(f"Found {file_count} files totaling {total_size / (1024*1024*1024):.2f} GB")
-                
+
+                logger.info(f"Found {file_count} files totaling {total_size / (1024 * 1024 * 1024):.2f} GB")
+
                 shutil.rmtree(models_cache, ignore_errors=True)
                 logger.info("Models cache cleared successfully.")
             except Exception as e:
@@ -69,13 +72,14 @@ def clear_models_cache():
     except Exception as e:
         logger.error(f"Error clearing models cache: {e}")
 
+
 def clear_temp_files():
     temp_dir = tempfile.gettempdir()
     logger.info(f"Temp directory: {temp_dir}")
-    
+
     hf_temp_pattern = os.path.join(temp_dir, "tmphf_*")
     hf_temp_files = glob.glob(hf_temp_pattern)
-    
+
     if hf_temp_files:
         logger.info(f"Found {len(hf_temp_files)} temporary HF files")
         for file in hf_temp_files:
@@ -90,6 +94,7 @@ def clear_temp_files():
     else:
         logger.info("No HF temporary files found.")
 
+
 def print_disk_usage():
     try:
         logger.info("Disk usage before cleaning:")
@@ -99,17 +104,19 @@ def print_disk_usage():
     except Exception as e:
         logger.error(f"Error getting disk usage: {e}")
 
+
 def main():
     logger.info("Starting cache cleanup process")
-    
+
     print_disk_usage()
-    
+
     clear_datasets_cache()
     clear_models_cache()
     clear_temp_files()
-    
+
     logger.info("Cache cleanup completed")
     print_disk_usage()
+
 
 if __name__ == "__main__":
     main()

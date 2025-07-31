@@ -3,7 +3,6 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_serial
 from utils.constants import INVERTED_METRIC_INDICATOR
 
 
-
 class MetricMetadata(BaseModel):
     """Class to handle metric metadata."""
 
