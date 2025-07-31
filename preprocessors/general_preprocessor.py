@@ -53,7 +53,7 @@ class GeneralPreprocessor(Preprocessor):
             if not self.check_audio_length(record["array"], record["sampling_rate"], length_filter):
                 continue
             
-            possible_keys = ["reference", "answer", "text", "transcription", "sentence", "transcript", "normalized_text"]
+            possible_keys = ["reference", "answer", "text", "transcription", "sentence", "transcript", "normalized_text", "label"]
             record["model_target"] = next((record[k] for k in possible_keys if k in record), None)
             if record["model_target"] is None:
                 raise ValueError("No valid target key found in record")
@@ -61,6 +61,8 @@ class GeneralPreprocessor(Preprocessor):
             instruction = record.get("instruction") or record.get("question") or ""
             # Append any user-specified prompt add-ons
             instruction += " " + " ".join(prompt_add_ons[k] for k in user_prompt_add_ons if k in prompt_add_ons)
+            if record.get("choices"):
+                instruction += "Available choices: ".join(record["choices"])
             record["instruction"] = instruction
             
             # Process system prompts

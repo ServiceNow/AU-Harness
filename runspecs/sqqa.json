@@ -20,6 +20,13 @@
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
     },
+    "SLURP-intent": {
+        "hf_repo": "DynamicSuperb/SuperbIC_SLURP-Intent",
+        "subset": "default",
+        "language": "english",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor"
+    },
     "sd-qa_usa": {
         "hf_repo": "hlt-lab/voicebench",
         "subset": "sd-qa",
