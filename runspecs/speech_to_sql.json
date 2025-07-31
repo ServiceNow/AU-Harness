@@ -1,0 +1,20 @@
+{
+  "spider_audio": {
+    "hf_repo": "ServiceNow-AI/spider_audio",
+    "subset": "default",
+    "split": "train",
+    "modality": "audio",
+    "language": "en",
+    "preprocessor": "SpiderPreprocessor",
+    "postprocessor": "SpiderPostprocessor"
+  },
+  "spider_text": {
+    "hf_repo": "ServiceNow-AI/spider_audio",
+    "subset": "default",
+    "split": "train",
+    "modality": "text",
+    "language": "en",
+    "preprocessor": "SpiderPreprocessor",
+    "postprocessor": "SpiderPostprocessor"
+  }
+}
