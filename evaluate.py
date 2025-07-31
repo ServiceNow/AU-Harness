@@ -18,7 +18,7 @@ import argparse
 from models.model import Model
 from metrics.metrics import Metrics
 from postprocessors.base import Postprocessor
-from utils.constants import metric_map
+from utils.constants import metric_map, allowed_task_metrics
 
 class Engine:
     """Evaluate one or many models over the same dataset concurrently."""
@@ -333,9 +333,18 @@ def main(cfg_path='config.yaml'):
     # Load runspec files from the runspecs directory
     runspecs_dir = Path("runspecs")
     
-    # Get list of all runspec files in the runspecs directory
-    runspec_files = list(runspecs_dir.glob("*.json"))
-    logger.info(f"[main] Found {len(runspec_files)} runspec files")
+    # Get list of all category directories in the runspecs directory
+    category_dirs = [d for d in runspecs_dir.iterdir() if d.is_dir()]
+    logger.info(f"[main] Found {len(category_dirs)} category directories in runspecs")
+    
+    # Get list of all runspec files in all category directories
+    runspec_files = []
+    for category_dir in category_dirs:
+        category_json_files = list(category_dir.glob("*.json"))
+        runspec_files.extend(category_json_files)
+        logger.info(f"[main] Found {len(category_json_files)} runspec files in {category_dir.name}")
+    
+    logger.info(f"[main] Found {len(runspec_files)} total runspec files")
     
     # Load metric and model settings
     judge_concurrency = cfg.get("judge_concurrency", 1)
@@ -377,14 +386,56 @@ def main(cfg_path='config.yaml'):
         found_runspec = False
         selected_datasets = {}
         
-        # Try to match the dataset name with one of the runspec files
+        # Try to match the dataset name with one of the runspec files or categories
         for runspec_file in runspec_files:
+            category_name = runspec_file.parent.name  # Get the category directory name
             runspec_name = runspec_file.stem
             
-            # First, check if dataset name exactly matches the runspec file name
-            if dname == runspec_name:
-                logger.info(f"[main] Found matching runspec file: {runspec_file}")
+            # Check if dataset name exactly matches the category name
+            if dname == category_name:
+                logger.info(f"[main] Found matching category: {category_name}")
                 found_runspec = True
+                
+                # Load all runspec files in this category
+                category_datasets = {}
+                category_files = list(runspec_file.parent.glob("*.json"))
+                for cat_file in category_files:
+                    with open(cat_file, 'r') as f:
+                        file_db = json.load(f)
+                    category_datasets.update(file_db)
+                
+                # Check if the metric is allowed for any runspec in this category
+                allowed = False
+                matched_runspecs = []
+                
+                # Get all runspec names in this category (just the filenames without extensions)
+                runspec_names = [cf.stem for cf in category_files]
+                
+                # Check if any of those runspecs are in allowed_task_metrics
+                for runspec_name in runspec_names:
+                    if runspec_name in allowed_task_metrics:
+                        matched_runspecs.append(runspec_name)
+                        if metric_name in allowed_task_metrics[runspec_name]:
+                            allowed = True
+                            break
+                # If we found matches but the metric isn't allowed for any of them, skip
+                if matched_runspecs and not allowed:
+                    logger.warning(f"[main] Metric '{metric_name}' is not allowed for any task in category '{category_name}'. Skipping.")
+                    continue
+                
+                # Use all datasets in this category
+                selected_datasets = category_datasets
+                break
+                
+            # Check if dataset name exactly matches the runspec file name
+            elif dname == runspec_name:
+                found_runspec = True
+                
+                # Check if the metric is allowed for this runspec/task
+                if runspec_name in allowed_task_metrics:
+                    if metric_name not in allowed_task_metrics[runspec_name]:
+                        logger.warning(f"[main] Metric '{metric_name}' is not allowed for task '{runspec_name}'. Allowed metrics: {allowed_task_metrics[runspec_name]}. Skipping.")
+                        continue
                 
                 # Load the runspec file
                 with open(runspec_file, 'r') as f:
@@ -392,7 +443,6 @@ def main(cfg_path='config.yaml'):
                 
                 # Use all datasets in this runspec
                 selected_datasets = runspec_db
-                logger.info(f"[main] Using all {len(runspec_db)} datasets from {runspec_file}")
                 break
         
         # Step 2: If no matching runspec file by name, search within all runspec files for the specific dataset
@@ -401,19 +451,27 @@ def main(cfg_path='config.yaml'):
             
             # Search through all runspec files to find the dataset
             for runspec_file in runspec_files:
+                category_name = runspec_file.parent.name  # Get the category directory name
+                
                 with open(runspec_file, 'r') as f:
                     runspec_db = json.load(f)
                 
                 if dname in runspec_db:
-                    logger.info(f"[main] Found dataset '{dname}' in {runspec_file}")
+                    # Get the runspec name (task name) to check allowed metrics
+                    runspec_name = runspec_file.stem
+                    
+                    # Check if the metric is allowed for this runspec/task
+                    if runspec_name in allowed_task_metrics:
+                        if metric_name not in allowed_task_metrics[runspec_name]:
+                            logger.warning(f"[main] Metric '{metric_name}' is not allowed for task '{runspec_name}'. Allowed metrics: {allowed_task_metrics[runspec_name]}. Skipping.")
+                            continue
+                    
                     # Use only this specific dataset
                     selected_datasets = {dname: runspec_db[dname]}
                     found_runspec = True
                     break
             
             if not found_runspec:
-                logger.warning(f"[main] Dataset '{dname}' not found in any runspec file")
-                logger.info(f"[main] Dataset not found: {dname}")
                 continue
         
         # Check for accented filter setting
