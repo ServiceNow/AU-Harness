@@ -353,7 +353,9 @@ def main(cfg_path='config.yaml'):
         runspec_files.extend(category_json_files)
         logger.info(f"[main] Found {len(category_json_files)} runspec files in {category_dir.name}")
 
+
     logger.info(f"[main] Found {len(runspec_files)} total runspec files")
+
 
     # Load metric and model settings
     judge_concurrency = cfg.get("judge_concurrency", 1)
