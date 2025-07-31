@@ -74,6 +74,7 @@ allowed_task_metrics = {
     "spoken_dialogue_summarization": ["llm_judge_detailed"],
     "spoken_QA": ["llm_judge_detailed", "llm_judge_binary"],
     "sqqa": ["llm_judge_big_bench_audio", "llm_judge_binary"],
+    "bfcl_match_score": ("metrics.bfcl_metric", "BFCLMatchScore"),
 }
 
 # Dictionary mapping language names to their standard codes
