@@ -35,11 +35,11 @@ class Model(ABC):
         """
         self.model_info = model_info
         self._name = model_info.get("name")
-        self.model = model_info["model"]
+        self.model = model_info.get("model")
         self.api_key = model_info.get("auth_token", "")
-        self.model_url = model_info.get("url", "")
-        self.api_version = model_info.get("api_version", "")  # Optional API version
-        self.inference_type = model_info["inference_type"]
+        self.model_url = model_info.get("url")
+        self.api_version = model_info.get("api_version")
+        self.inference_type = model_info.get("inference_type")
         self.batch_size = model_info.get("batch_size", 1)
         # sleep before every call - in ms
         self.delay = model_info.get("delay", 100)
