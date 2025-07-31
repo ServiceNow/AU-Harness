@@ -1,10 +1,10 @@
 import logging
-import yaml
-import numpy as np
 from pathlib import Path
-from tqdm import tqdm
+from typing import Dict, List, Any, Optional
+
+import numpy as np
+import yaml
 from scipy.signal import resample
-from typing import Dict, List, Any, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -67,8 +67,8 @@ class Preprocessor():
         
         logger.debug(f"Extracted properties: {extracted}")
         return extracted
-        
-    def extract_audio_info(self, record):
+
+    def extract_audio_info(self, record, audio_column_name=None):
         """
         Extract audio information from a record, standardizing the format.
         
@@ -81,7 +81,11 @@ class Preprocessor():
         Raises:
             KeyError: If neither 'audio' nor 'context' keys are found in the record
         """
-        if "audio" in record:
+        if audio_column_name is not None and audio_column_name in record:
+            record["array"] = record[audio_column_name]["array"]
+            record["sampling_rate"] = record[audio_column_name]["sampling_rate"]
+            record.pop(audio_column_name)
+        elif "audio" in record:
             record["array"] = record["audio"]["array"]
             record["sampling_rate"] = record["audio"]["sampling_rate"]
             record.pop("audio")
@@ -90,7 +94,8 @@ class Preprocessor():
             record["sampling_rate"] = record["context"]["sampling_rate"]
             record.pop("context")
         else:
-            raise KeyError("Neither 'audio' nor 'context' keys found in data")
+            raise KeyError(
+                "Neither 'audio' nor 'context' keys found in data, try passing audio column name via runspec using key \"audio_column\"")
             
     def resample_audio(self, audio_array, source_sr, target_sr=16000):
         """
