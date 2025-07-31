@@ -7,11 +7,14 @@ Same for english.json
 import json
 import os
 import re
-from fractions import Fraction
 from collections.abc import Iterator
+from fractions import Fraction
 from typing import Match
-from .basic import remove_symbols_and_diacritics
+
 from more_itertools import windowed
+
+from .basic import remove_symbols_and_diacritics
+
 
 class EnglishNumberNormalizer:
     """Convert any spelled-out numbers into arabic numbers, while handling:
@@ -133,18 +136,18 @@ class EnglishNumberNormalizer:
             [
                 key
                 for mapping in [
-                    self.zeros,
-                    self.ones,
-                    self.ones_suffixed,
-                    self.tens,
-                    self.tens_suffixed,
-                    self.multipliers,
-                    self.multipliers_suffixed,
-                    self.preceding_prefixers,
-                    self.following_prefixers,
-                    self.suffixers,
-                    self.specials,
-                ]
+                self.zeros,
+                self.ones,
+                self.ones_suffixed,
+                self.tens,
+                self.tens_suffixed,
+                self.multipliers,
+                self.multipliers_suffixed,
+                self.preceding_prefixers,
+                self.following_prefixers,
+                self.suffixers,
+                self.specials,
+            ]
                 for key in mapping
             ]
         )
