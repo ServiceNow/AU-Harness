@@ -28,7 +28,7 @@ class GeneralPreprocessor(Preprocessor):
         user_prompt_add_ons = props["user_prompt_add_ons"]
         system_prompts = props["system_prompts"]
         length_filter = props["length_filter"]
-        modality = props.get("modality", "audio")
+        modality = props.get("dataset_info", {}).get("modality", "audio")
         audio_column_name = props.get("dataset_info", {}).get("audio_column", None)
         target_column_name = props.get("dataset_info", {}).get("target_column", None)
         user_instruction_column_name = props.get("dataset_info", {}).get("additional_instruction_column", None)
@@ -37,7 +37,6 @@ class GeneralPreprocessor(Preprocessor):
         # Load prompt add-ons and system prompts using base class method
         prompt_add_ons = self.load_yaml_file("prompt_add_ons.yaml")
         system_prompts_mapping = self.load_yaml_file("system_prompts.yaml")
-        instruction = ""
 
         # Get dataset keys and size
         keys = list(dataset.keys())
@@ -50,6 +49,7 @@ class GeneralPreprocessor(Preprocessor):
         indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
 
         for i in tqdm(indices, desc="Processing samples"):
+            instruction = ""
             # Create record by accessing each feature by index
             record = {k: dataset[k][i] for k in keys}
 
@@ -80,10 +80,9 @@ class GeneralPreprocessor(Preprocessor):
                 raise ValueError("No valid target key found in record")
 
             if user_instruction_column_name and user_instruction_column_name in record:
-                instruction += " " + record.get(user_instruction_column_name, "")
+                instruction = record.get(user_instruction_column_name, "")
             else:
-                inst = record.get("instruction") or record.get("question") or ""
-                instruction += " " + inst
+                instruction = record.get("instruction") or record.get("question") or ""
             # Append any user-specified prompt add-ons
             instruction += " " + " ".join(prompt_add_ons[k] for k in user_prompt_add_ons if k in prompt_add_ons)
             record["instruction"] = instruction.strip()

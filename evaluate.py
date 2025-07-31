@@ -186,10 +186,13 @@ def _load_callhome_dataset(repo, preprocessor_name, num_samples, properties):
     return dataset
 
 
-def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="GeneralPreprocessor",
-                  user_prompt_add_ons: list[str] = [], system_prompts: list[str] = [], length_filter=None, metric=None,
-                  split=None, dataset_info=None, modality=None):
+def _load_dataset(repo=None, num_samples=None, user_prompt_add_ons: list[str] = [], 
+                  system_prompts: list[str] = [], length_filter=None, metric=None, split=None, dataset_info=None):
     """Load and preprocess a dataset from a local or remote path."""
+    # Extract parameters from dataset_info
+    preprocessor_name = dataset_info.get("preprocessor", "GeneralPreprocessor") if dataset_info else "GeneralPreprocessor"
+    subset = dataset_info.get("subset", None) if dataset_info else None
+    
     logger.info(f"[_load_dataset] Loading dataset {repo} with preprocessor {preprocessor_name}")
 
     # Set up properties that will be passed to any preprocessor
@@ -203,8 +206,6 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="G
         properties["length_filter"] = tuple(length_filter)  # Convert list to tuple
     if dataset_info:
         properties["dataset_info"] = dataset_info
-    if modality:
-        properties["modality"] = modality
 
     # Special handling for local CallHome dataset
     if preprocessor_name.startswith("Callhome"):
@@ -520,11 +521,8 @@ def main(cfg_path='config.yaml'):
             split = None
             if not repo:
                 repo = dataset_info.get("path", None)
-            subset = dataset_info.get("subset", "")
             language = dataset_info.get("language", "en")
-            preprocessor_name = dataset_info["preprocessor"]
             postprocessor_name = dataset_info["postprocessor"]
-            modality = dataset_info.get("modality", "audio")
 
             if cfg.get("split", None) is not None:
                 split = cfg.get("split")
@@ -533,16 +531,14 @@ def main(cfg_path='config.yaml'):
                 split = dataset_info["split"]
 
             dataset = _load_dataset(
-                repo, subset=subset,
+                repo=repo,
                 num_samples=num_samples,
-                preprocessor_name=preprocessor_name,
                 user_prompt_add_ons=user_prompt_add_ons,
                 system_prompts=system_prompts,
                 length_filter=length_filter,
                 metric=metric_name,
                 split=split,
-                dataset_info=dataset_info,
-                modality=modality
+                dataset_info=dataset_info
             )
             metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency,
                                   judge_model=judge_model)
