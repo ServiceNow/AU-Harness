@@ -3,9 +3,6 @@
     "hf_repo": "AudioLLMs/mu_chomusic_test",
     "language": "en",
     "preprocessor": "GeneralPreprocessor",
-    "postprocessor": "GeneralPostprocessor",
-    "tasks": [
-      "Music Understanding"
-    ]
+    "postprocessor": "GeneralPostprocessor"
   }
 }

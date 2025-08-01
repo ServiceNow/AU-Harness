@@ -99,6 +99,65 @@ models:
       chunk_size: 45  # Max audio length in seconds
 ```
 
+### Adding Datasets
+
+LALMEval supports adding custom datasets through runspec JSON files. These files define the dataset properties and how they should be processed.
+
+#### Creating a Runspec File
+
+Create a JSON file in the `runspecs` directory under the appropriate task category. Each dataset should be defined with the following properties:
+
+```json
+{
+  "dataset_name": {
+    "hf_repo": "HuggingFace/repository-name",
+    "subset": "subset-name",  // Optional
+    "language": "language-code",
+    "preprocessor": "PreprocessorClass",
+    "postprocessor": "PostprocessorClass",
+    "accented": true|false  // Optional
+  }
+}
+```
+
+#### Fields
+
+**Required:**
+- `hf_repo`: The HuggingFace repository containing the dataset
+- `language`: The language code (e.g., "en" for English)
+- `preprocessor`: The preprocessor class to use for preparing the data
+- `postprocessor`: The postprocessor class to use for formatting results
+
+**Optional:**
+- `subset`: The specific subset within the repository to use
+- `accented`: Boolean indicating whether the dataset contains accented speech
+
+#### Example
+
+Here's an example runspec for spoken dialogue summarization datasets:
+
+```json
+{
+  "mnsc_sds_part3_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "SDS-PART3-Test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true
+  }
+}
+```
+
+#### Using Your Dataset
+
+After creating the runspec file, you can reference your dataset in the `config.yaml` file:
+
+```yaml
+dataset_metric:
+  - "(your_dataset_name, word_error_rate)"  # Or any other appropriate metric
+```
+
 ## License
 
 LALMEval is licensed under the ___ License. See [LICENSE](LICENSE) for more information.
