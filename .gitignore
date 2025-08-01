@@ -8,6 +8,7 @@ config.yaml
 
 # log files
 *.log
+*.csv
 *.out
 *.csv
 
@@ -26,3 +27,5 @@ private_datasets/
 # local configs
 .venv/
 .vscode/
+
+data/spider/

@@ -96,7 +96,7 @@ class GeneralPreprocessor(Preprocessor):
             if not instruction:
                 logger.warning("Instruction is empty for sample", i)
             record["instruction"] = instruction.strip()
-
+            
             # Process system prompts
             system_prompt_text = "\n\n".join(
                 system_prompts_mapping[k] for k in system_prompts if k in system_prompts_mapping)

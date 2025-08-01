@@ -400,6 +400,8 @@ dataset_metric:
   - "(mmsu_physics, llm_judge_binary)"
   - "(voicebench_ifeval_audio, instruction_following)"
   - "(voicebench_ifeval_text, instruction_following)"
+  - "(spider_audio, sql_score)"
+  - "(spider_text, sql_score)"
   - "(bfcl_v3_simple_text, bfcl_match_score)"
   - "(bfcl_v3_simple_text_with_prompt, bfcl_match_score)"
   - "(bfcl_v3_simple_audio, bfcl_match_score)"

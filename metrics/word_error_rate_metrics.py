@@ -55,17 +55,18 @@ def normalize_text(text: str, language: str = 'en') -> str:
 
 
 class WERMetrics(Metrics):
-    def __call__(self, candidates, references, ids=None, lengths=None, instructions=None, *,
-                 dataset_name: str | None = None, model_name: str | None = None):
-        # Store instructions for potential later use
+    def __call__(self, candidates, references, ids=None, lengths=None, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
+        # Store instructions and model_responses for potential later use
         self.instructions = instructions
+        self.model_responses = model_responses if model_responses else []
+        
         overall = self.get_score(candidates, references, ids, lengths)
         if dataset_name and model_name:
             # WER record scores are stored under 'wer_per_row'
             scores = self.record_level_scores.get("wer_per_row", [])
             # write_record_log will also write to run.log internally
-            write_record_log(self, references, candidates, scores, dataset_name, model_name,
-                             instructions=self.instructions)
+            write_record_log(self, references, candidates, scores, dataset_name, model_name, 
+                          instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score for the overall metric
             append_final_score(self, overall, dataset_name, model_name)
         return overall
@@ -256,34 +257,3 @@ class WERMetrics(Metrics):
             results["gender"] = gender
         return results
 
-    def get_reporting_summary_score(self, overall_score: dict[str, float]) -> dict:
-        """Gets the score to display in wandb. If a metric says lower-is-better, highlight with an ↓.
-
-        Args:
-            overall_score: The overall score that was computed for the metric
-        Returns:
-            The dictionary of columns and values to actually present in wandb
-        """
-        return overall_score
-
-    def get_metadata(self) -> dict:
-        """Return metadata info."""
-        metadata = {
-            "wer": MetricMetadata(
-                name="wer",
-                display_name=f"{constants.INVERTED_METRIC_INDICATOR} Word Error Rate",
-                description=self.description,
-                higher_is_better=False,
-            )
-        }
-        for attribute in ("accent", "gender"):
-            current_attr = set(self.record_level_scores.get(attribute, []))
-            for attr_value in current_attr:
-                if attr_value is not None:
-                    metadata[f"wer_{attribute}_{attr_value}"] = MetricMetadata(
-                        name=f"wer_{attribute}_{attr_value}",
-                        display_name=f"{constants.INVERTED_METRIC_INDICATOR} Word Error Rate {attribute.title()} ({attr_value})",
-                        description=self.description,
-                        higher_is_better=False,
-                    )
-        return metadata

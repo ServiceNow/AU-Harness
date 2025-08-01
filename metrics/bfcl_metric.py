@@ -1,9 +1,9 @@
 import re
+import json
 from typing import List, Tuple, Dict, Optional, Union
-
 from metrics.metrics import Metrics
 from utils.custom_logging import write_record_log, append_final_score
-
+from models.model_response import ModelResponse
 
 class BFCLMatchScore(Metrics):
     def __init__(self):
@@ -18,8 +18,8 @@ class BFCLMatchScore(Metrics):
             instructions: Optional[List[str]] = None,
             dataset_name: Optional[str] = None,
             model_name: Optional[str] = None,
+            model_responses: Optional[List[ModelResponse]] = None,
     ) -> dict[str, dict[str, float] | float]:
-
         # Compute record-level scores for strict outputs (binary: all instructions followed or not)
         record_scores = self.compute_record_level_scores(candidates, references)
         # Average final score over all components
@@ -28,10 +28,15 @@ class BFCLMatchScore(Metrics):
         # Write detailed record-level logs (if dataset_name and model_name provided)
         if dataset_name and model_name:
             append_final_score(self, results, dataset_name, model_name)
+            
+            # Very simple approach: just stringify everything
+            serializable_candidates = [str(candidate) for candidate in candidates]
+            serializable_refs = [str(ref[0]) for ref in references]
+            
             write_record_log(
                 self,
-                refs=[ref[0] for ref in references],
-                cands=candidates,
+                refs=serializable_refs,
+                cands=serializable_candidates,
                 scores=record_scores,
                 dataset_name=dataset_name,
                 model_name=model_name,

@@ -17,7 +17,8 @@ class Metrics(ABC, MetricMetadata):
     record_level_scores: dict = Field(default_factory=dict, exclude=True, description="Record level scores")
     contexts: list[dict] = Field(default_factory=list, exclude=True, description="Contexts for the metric")
     params: dict = Field(default_factory=dict, exclude=True, description="Parameters for the metric")
-
+    model_responses: list = Field(default_factory=list, exclude=True, description="Model responses from inference")
+    
     def __init__(self, **data):
         super().__init__(**data)
 
@@ -32,6 +33,13 @@ class Metrics(ABC, MetricMetadata):
     def set_contexts(self, contexts: list[dict]):
         """Add additional columns from the dataset which can be leveraged in compute_record_level_scores."""
         self.contexts = contexts
+        
+    def reset(self):
+        """Reset the record level scores dictionary.
+        
+        This should be called before evaluating a new model to ensure scores from previous evaluations don't affect the current one.
+        """
+        self.record_level_scores = {}
 
     def get_score(self, candidates, references) -> dict:
         """Get overall score.
