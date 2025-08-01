@@ -90,10 +90,10 @@ metric_output = {
     "llm_judge_binary": ["llm_judge_binary"],
     "llm_judge_big_bench_audio": ["llm_judge_big_bench_audio"],
     "meteor": ["meteor"],
-    "bfcl_match_score": ["bfcl_match_score"], # need to find real metric
+    "bfcl_match_score": ["final"],
     "sql_score": ["sql_score"], # need to find real metric
     "instruction_following": ["strict_instruction", "loose_instruction", "final"],
-    "diarization_metrics": ["diarization_metrics"] # need to find real metric
+    "diarization_metrics": ["average_sample_wder", "overall_wder", "average_sample_cpwer", "overall_cpwer", "speaker_count_absolute_error"] 
 }
 
 # Dictionary mapping language names to their standard codes
