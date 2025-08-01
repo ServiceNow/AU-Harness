@@ -7,7 +7,7 @@ num_samples: 100 # number of samples to run(remove for all)
 user_prompt_add_ons: ["asr_clean_output"] # optional - additional prompting in text instructions for each sample
 length_filter: [1.0, 3.0] # optional - filters for only audio samples in this length(seconds)
 accented: false # optional - filters for only audio samples in this length(seconds)
-language: "english" # optional - filters for only audio samples in this language
+language: "english" # optional - filters for only audio samples in this language - use language code
 
 judge_concurrency: 250 # optional - default is 1
 judge_model: "infer-qwen3-32b" # mandatory

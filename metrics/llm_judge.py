@@ -34,26 +34,27 @@ _DEFAULT_MAX_CONCURRENCY = 5
 class _BaseLLMJudge(Metrics):
     """Common LLM-as-judge class."""
 
-    def __init__(self, max_concurrency: int | None = None, model: str | None = None, judge_type: str | None = None, judge_properties: Dict | None = None, *_, **__):
+    def __init__(self, judge_properties: Dict | None = None, *_, **__):
         super().__init__()
-        # If not supplied, fall back to defaults
-        self._max_concurrency = max_concurrency or _DEFAULT_MAX_CONCURRENCY
-        self._model = model or _DEFAULT_OPENAI_MODEL
-        self._judge_type = judge_type or "openai"
-        self._request_manager = None # Set in Engine
+        # Store the properties dictionary
         self._judge_properties = judge_properties or {}
+        # Extract parameters from judge_properties or use defaults
+        self._max_concurrency = self._judge_properties.get("judge_concurrency") or _DEFAULT_MAX_CONCURRENCY
+        self._model = self._judge_properties.get("judge_model") or _DEFAULT_OPENAI_MODEL
+        self._judge_type = self._judge_properties.get("judge_type") or "openai"
+        self._request_manager = None # Set in Engine
         
         # Initialize the appropriate client based on judge_type
         if self._judge_type == "openai":
             self._client = AsyncAzureOpenAI(
-                api_key=self._judge_properties.get("api_key"),
-                api_version=self._judge_properties.get("api_version"),
-                azure_endpoint=self._judge_properties.get("api_endpoint"),
+                api_key=self._judge_properties.get("judge_api_key"),
+                api_version=self._judge_properties.get("judge_api_version"),
+                azure_endpoint=self._judge_properties.get("judge_api_endpoint"),
             )
         elif self._judge_type == "vllm":
             self._client = AsyncOpenAI(
-                base_url=self._judge_properties.get("api_endpoint"),
-                api_key=self._judge_properties.get("api_key"),
+                base_url=self._judge_properties.get("judge_api_endpoint"),
+                api_key=self._judge_properties.get("judge_api_key"),
             )
     
     def set_request_manager(self, manager):
@@ -91,7 +92,7 @@ class _BaseLLMJudge(Metrics):
                 ]
                 
                 # Get temperature from judge_properties or use default 0.1
-                temperature = self._judge_properties.get("temperature", 0.1)
+                temperature = self._judge_properties.get("judge_temperature", 0.1)
                 
                 resp = await self._client.chat.completions.create(
                     model=self._model,
