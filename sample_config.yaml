@@ -1,26 +1,33 @@
 
-dataset_metric: #tuple of dataset, metric(can run by task or dataset)
-  - "(wavcaps_qa_test, word_error_rate)"
-  - "(alpaca_audio_test, word_error_rate)"
-   #run by task_type
-  - "(emotion_recognition, llm_judge_binary)"
-  #run by task category
-  - "(spoken_language_reasoning, instruction_following)"
+dataset_metric: #list of dataset-metric pairs, each as a two-item list of strings ["dataset_name", "metric_name"]
+  # Speech recognition datasets
+  - ["alpaca_audio_test", "llm_judge_detailed"]
+  - ["librispeech_test_clean", "word_error_rate"]
+  
+  # Emotion recognition runspec
+  - ["emotion_recognition", "llm_judge_binary"]
+  
+  # Gender recognition datasets
+  - ["voxceleb_gender_test", "llm_judge_binary"]
+  - ["iemocap_gender_recognition", "llm_judge_binary"]
+  
+  # Question-answering datasets and runspecs
+  - ["big_bench_audio", "llm_judge_big_bench_audio"]
+  - ["music_understanding", "llm_judge_binary"]
+
+# Optional: Aggregate multiple dataset-metric pairs into a single score
+# aggregate has x two-item lists, each as a two-item list of strings ["metric_name", ["dataset/runspec1", "dataset2", ..., "datasetN"]]
+aggregate:
+  - ["llm_judge_binary", ["emotion_recognition"]]
+  - ["llm_judge_binary", ["voxceleb_gender_test", "iemocap_gender_recognition"]]
+  
 num_samples: 100 #number of samples to run(remove for all)
 judge_concurrency: 8 #judge call(optional)
 judge_model: "gpt-4o-mini" #optional
 user_prompt_add_ons: ["asr_clean_output"] #optional - additional prompting in text instructions for each sample
-length_filter: [1.0, 3.0] #optional - filters for only audio samples in this length(seconds)
+length_filter: [1.0, 3.0] #optional - filters for only audio samples in this length(seconds) - only supported for general and callhome preprocessors
 accented: false #optional - filters for only audio samples in this length(seconds)
 language: "english" #optional - filters for only audio samples in this language
-
-#optional - aggregate multiple dataset-metric pairs into a single score
-#can go by datset-metric or all datasets evaluate on x metric
-aggregate:
-  - ["emotion performance", [["meld_emotion_test", "llm_judge_binary"]]]
-  - ["gender performance", [["voxceleb_gender_test", "llm_judge_binary"], ["iemocap_gender_recognition", "llm_judge_binary"]]]
-  - ["all binary judgements", [["all", "llm_judge_binary"]]]
-  - ["all word error rates", [["all", "word_error_rate"]]]
 
 #override the requester temperature values by task or model
 temperature_overrides:

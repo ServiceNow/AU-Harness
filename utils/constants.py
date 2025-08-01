@@ -65,11 +65,13 @@ allowed_task_metrics = {
     'emotion_recognition': ['llm_judge_binary'],
     'gender_recognition': ['llm_judge_binary'],
     'speaker_recognition': ['llm_judge_binary'],
-    'ASR': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
-    'code_switching': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
-    'long_form_ASR': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
+    'asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
+    'code_switching_asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
+    'long_form_asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
     'translation': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
+    'bfcl': ['bfcl_match_score'],
     'ifeval': ['instruction_following'],
+    'speech_to_sql': ['sql_score'],
     'music_understanding': ['llm_judge_binary'],
     'scene_captioning': ['llm_judge_detailed'],
     'scene_QA': ['llm_judge_binary', 'llm_judge_detailed'],
@@ -77,6 +79,21 @@ allowed_task_metrics = {
     'spoken_dialogue_summarization': ['llm_judge_detailed'],
     'spoken_QA': ['llm_judge_detailed', 'llm_judge_binary'],
     'sqqa': ['llm_judge_big_bench_audio', 'llm_judge_binary'],
+}
+
+metric_output = {
+    "llm_judge_detailed": ["llm_judge_detailed"],
+    "word_error_rate": ["average_sample_wer", "overall_wer"],
+    "bertscore": ["bertscore"],
+    "bleu": ["BLEU"],
+    "llm_judge_callhome": ["llm_judge_callhome"],
+    "llm_judge_binary": ["llm_judge_binary"],
+    "llm_judge_big_bench_audio": ["llm_judge_big_bench_audio"],
+    "meteor": ["meteor"],
+    "bfcl_match_score": ["bfcl_match_score"], # need to find real metric
+    "sql_score": ["sql_score"], # need to find real metric
+    "instruction_following": ["strict_instruction", "loose_instruction", "final"],
+    "diarization_metrics": ["diarization_metrics"] # need to find real metric
 }
 
 # Dictionary mapping language names to their standard codes

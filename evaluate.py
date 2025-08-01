@@ -15,12 +15,13 @@ import yaml
 from tqdm import tqdm
 import importlib
 import argparse
+import statistics
 # Central logging setup
 from models.model import Model
 from metrics.metrics import Metrics
 from postprocessors.base import Postprocessor
-from utils.constants import metric_map, allowed_task_metrics
-from utils.util import validate_config
+from utils.constants import metric_map, metric_output
+from utils.util import validate_config, _find_runspec_by_name, _find_dataset_in_runspecs, find_runspec_files
 
 
 class Engine:
@@ -148,6 +149,9 @@ class Engine:
         lengths = process_result.get("lengths", [])
 
         for model_name, outs in predictions.items():
+            # Reset the metric's record_level_scores before each model evaluation
+            self.metric.reset()
+            
             # Let the metric handle per-record logging internally
             if ids and lengths:
                 model_score = self.metric(outs, model_targets, ids, lengths, instructions=instructions,
@@ -158,7 +162,8 @@ class Engine:
             scores[model_name] = model_score
         logger.info(f"[Engine.run] Evaluation complete. Returning scores.")
         logger.info(f"[Engine.run] Scores: {scores}")
-        return {self.metric.name: scores}
+        # Return scores directly without nesting under metric name
+        return scores
 
 
 def get_class_from_module(module_prefix, module_name) -> Preprocessor | Postprocessor:
@@ -184,7 +189,8 @@ def _load_callhome_dataset(repo, preprocessor_name, num_samples, properties):
         logger.error(error_msg)
         raise ValueError(error_msg)
     dataset = PreprocessorClass().process(repo, num_samples=num_samples, properties=properties)
-    return dataset
+    dataset_size = len(dataset) if dataset else 0
+    return dataset, dataset_size
 
 
 def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="GeneralPreprocessor",
@@ -282,8 +288,11 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="G
         logger.error(error_msg)
         raise ValueError(error_msg)
     processed = PreprocessorClass().process(dset, num_samples, properties)
-    logger.info(f"[_load_dataset] Dataset loaded and processed. Size: {len(processed)}")
-    return processed
+    dataset_size = len(processed)
+    logger.info(f"[_load_dataset] Dataset loaded and processed. Size: {dataset_size}")
+    
+    # Return both the processed dataset and its size
+    return processed, dataset_size
 
 
 def _load_models(cfg_list: list[dict]) -> list[Model]:
@@ -333,6 +342,200 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
         raise ValueError(f"Failed to load metric {name}: {e}")
 
 
+
+def _calculate_aggregates(aggregates, all_scores, models):
+    """
+    Process aggregate metrics by calculating means across multiple datasets for a specific metric.
+    
+    Args:
+        aggregates: List of aggregate configurations from the config file in format [metric_name, [dataset1, dataset2, ...]]
+        all_scores: Dictionary of scores keyed by dataset_metric pairs
+        models: List of model instances used for evaluation
+    """
+    logger.info("[calculate_aggregates] Processing aggregate metrics...")
+    aggregate_scores = {}
+    models_list = [model.name() for model in models]
+    
+    # Load all runspec files
+    runspecs_dir = Path("runspecs")
+    runspec_files = list(runspecs_dir.glob("*.json"))
+    
+    for agg_item in aggregates:
+        # Skip invalid aggregates
+        if not isinstance(agg_item, (list, tuple)) or len(agg_item) != 2:
+            logger.warning(f"[calculate_aggregates] Invalid aggregate format: {agg_item}")
+            continue
+            
+        metric_name, dataset_specs = agg_item
+        if not isinstance(dataset_specs, list) or not dataset_specs:
+            logger.warning(f"[calculate_aggregates] Invalid dataset specs list in aggregate for metric '{metric_name}'")
+            continue
+        
+        # Step 1: Look up metric keys from constants.py
+        if metric_name not in metric_output:
+            logger.warning(f"[calculate_aggregates] Metric '{metric_name}' not found in metric_output dict")
+            continue
+        
+        metric_keys = metric_output[metric_name]
+        
+        # Step 2: Process each dataset/runspec entry
+        processed_datasets = []  # For actual calculations
+        display_names = []  # For display purposes (runspecs or dataset names)
+        
+        for dataset_spec in dataset_specs:
+            # Check if this is a runspec file name rather than a dataset name
+            found_runspec, runspec_data, _ = _find_runspec_by_name(dataset_spec, runspec_files)
+            
+            # Always add the dataset/runspec name for display
+            display_names.append(dataset_spec)
+            
+            if found_runspec:
+                # Add each dataset from the runspec for calculation
+                processed_datasets.extend(runspec_data.keys())
+            else:
+                # If not a runspec file, treat as a regular dataset name
+                processed_datasets.append(dataset_spec)
+        
+        if not processed_datasets:
+            logger.warning(f"[calculate_aggregates] No valid datasets found for metric '{metric_name}'")
+            continue
+        
+        # Step 3: Calculate aggregates for each model using the metric keys
+        model_agg_scores = {}
+        
+        for model_name in models_list:
+            model_scores = {}
+            
+            # For each metric key, collect values across all datasets
+            for metric_key in metric_keys:
+                values = []
+                dataset_sizes = []
+                
+                # Process each dataset
+                for dataset_name in processed_datasets:
+                    key = f"{dataset_name}_{metric_name}"
+                    
+                    try:
+                        # Access scores for this dataset and metric
+                        score_data = all_scores[key]
+                        dataset_size = score_data.get("dataset_size", 1)  # Get dataset size, default to 1
+                        model_dict = score_data["result"][model_name]
+                        
+                        # Check if the specific metric key exists in this dataset's results
+                        if metric_key in model_dict:
+                            value = model_dict[metric_key]
+                            if isinstance(value, (int, float)):
+                                values.append(value)
+                                dataset_sizes.append(dataset_size)
+                    except KeyError as e:
+                        logger.warning(f"[calculate_aggregates] Error accessing data for {model_name} in {key}: {str(e)}")
+                
+                # Calculate weighted average for this metric key
+                if values:
+                    if sum(dataset_sizes) > 0:
+                        weighted_avg = sum(v * w for v, w in zip(values, dataset_sizes)) / sum(dataset_sizes)
+                        model_scores[metric_key] = weighted_avg
+                    else:
+                        # Fallback to simple mean if weights are all zero
+                        model_scores[metric_key] = statistics.mean(values)
+            
+            # Add scores for this model
+            if model_scores:
+                model_agg_scores[model_name] = model_scores
+            else:
+                logger.warning(f"[calculate_aggregates] No scores to aggregate for {model_name} in '{metric_name}'")
+        
+        # Add aggregate scores to the results
+        if model_agg_scores:
+            # Create a key with metric name and original runspec/dataset names
+            display_names_str = ", ".join(display_names)
+            aggregate_key = f"{metric_name} - {display_names_str}"
+            aggregate_scores[aggregate_key] = model_agg_scores
+            logger.info(f"[calculate_aggregates] Created aggregate '{aggregate_key}' with {len(processed_datasets)} datasets")
+    
+    # Add aggregate scores to all_scores
+    if aggregate_scores:
+        logger.info(f"[calculate_aggregates] Final aggregate scores: {json.dumps(aggregate_scores, indent=2)}")
+        all_scores["aggregates"] = aggregate_scores
+
+def _process_dataset_and_evaluate(dataset_name, dataset_info, metric_name, cfg, models, all_scores):
+    """
+    Process a dataset and run evaluation on it.
+    
+    Args:
+        dataset_name: Name of the dataset to process
+        dataset_info: Dictionary containing dataset information
+        metric_name: Name of the metric to use
+        cfg: Configuration dictionary
+        models: List of model instances
+        all_scores: Dictionary to store evaluation results
+        
+    Returns:
+        bool: True if evaluation was performed, False if dataset was skipped
+    """
+    # Get needed settings directly from cfg
+    accented_filter = cfg.get("accented", None)
+    language_filter = cfg.get("language", None)
+    num_samples = cfg.get("num_samples", None)
+    user_prompt_add_ons = cfg.get("user_prompt_add_ons", [])
+    system_prompts = cfg.get("system_prompts", [])
+    length_filter = cfg.get("length_filter", None)
+    judge_concurrency = cfg.get("judge_concurrency", 1)
+    judge_model = cfg.get("judge_model", None)
+    
+    # Check if we need to filter out accented datasets
+    if accented_filter is False and dataset_info.get("accented", False) is True:
+        logger.info(f"[_process_dataset] Skipping dataset '{dataset_name}' because it is accented and accented filter is False")
+        return False
+        
+    # Check if we need to filter by language
+    if language_filter is not None:
+        dataset_language = dataset_info.get("language", "").lower()
+        if dataset_language and language_filter.lower() != dataset_language:
+            logger.info(f"[_process_dataset] Skipping dataset '{dataset_name}' because its language '{dataset_language}' doesn't match filter '{language_filter}'")
+            return False
+    
+    logger.info(f"[_process_dataset] Loading dataset '{dataset_name}' with metric '{metric_name}' ...")
+    
+    # Extract dataset parameters
+    repo = dataset_info.get("hf_repo", None)
+    split = None
+    if not repo:
+        repo = dataset_info.get("path", None)
+    subset = dataset_info.get("subset", "")
+    language = dataset_info.get("language", "en")
+    preprocessor_name = dataset_info["preprocessor"]
+    postprocessor_name = dataset_info["postprocessor"]
+
+    if cfg.get("split", None) is not None:
+        split = cfg.get("split")
+
+    if dataset_info.get("split", None) is not None:
+        split = dataset_info["split"]
+
+    
+    # Load dataset, metric, and postprocessor
+    dataset, dataset_size = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, user_prompt_add_ons=user_prompt_add_ons, 
+                                    system_prompts=system_prompts, length_filter=length_filter, metric=metric_name, split=split, dataset_info=dataset_info)
+    metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
+    
+    # Dynamically import postprocessor class
+    PostprocessorClass = get_class_from_module('postprocessors', postprocessor_name)
+    if PostprocessorClass is None:
+        logger.warning(f"Could not load postprocessor {postprocessor_name}, using default GeneralPostprocessor")
+        # Try to load the default postprocessor
+        PostprocessorClass = get_class_from_module('postprocessors', 'GeneralPostprocessor')
+    postprocessor = PostprocessorClass()
+    
+    logger.info("[_process_dataset] Initializing Engine and running evaluation...")
+    result = Engine(models, dataset, metric, postprocessor, dataset_name).run()
+    key = f"{dataset_name}_{metric_name}"
+    # Store both the result and dataset size together
+    all_scores[key] = {"result": result, "dataset_size": dataset_size}
+    
+    return True
+
+
 # TO-DO: need to implement command line override, add common configs, group by task type
 # main that runs
 def main(cfg_path='config.yaml'):
@@ -341,36 +544,14 @@ def main(cfg_path='config.yaml'):
     # Validate the configuration file
     try:
         logger.info(f"[main] Validating config file: {cfg_path}")
-        # MOCK VALIDATION UNTIL MERGES DONE - when done we load config direct from here
-        #cfg = validate_config(cfg_path)
+        cfg = validate_config(cfg_path)
         logger.info(f"[main] Config file validation successful")
     except ValueError as e:
         logger.error(f"[main] Config validation error: {e}")
         raise
     
-    with open(cfg_path, 'r') as f:
-        cfg = yaml.safe_load(f)
-
-    # Load runspec files from the runspecs directory
-    runspecs_dir = Path("runspecs")
-
-    # Get list of all category directories in the runspecs directory
-    category_dirs = [d for d in runspecs_dir.iterdir() if d.is_dir()]
-    
-    # Get list of all runspec files in all category directories
-    runspec_files = []
-    for category_dir in category_dirs:
-        category_json_files = list(category_dir.glob("*.json"))
-        runspec_files.extend(category_json_files)
-    
-
-    # Load metric and model settings
-    judge_concurrency = cfg.get("judge_concurrency", 1)
-    judge_model = cfg.get("judge_model", None)
-    user_prompt_add_ons = cfg.get("user_prompt_add_ons", [])
-    system_prompts = cfg.get("system_prompts", [])
-    length_filter = cfg.get("length_filter", None)
-    num_samples = cfg.get("num_samples", None)
+    # Load runspec files using the utility function
+    runspec_files = find_runspec_files()
 
     # Load models
     logger.info(f"[main] Loading models...")
@@ -382,13 +563,12 @@ def main(cfg_path='config.yaml'):
 
     # Get dataset-metric pairs from config.yaml
     dataset_metric_pairs = []
-    for pair_str in cfg.get("dataset_metric", []):
-        # Remove parentheses and split by comma
-        pair_str = pair_str.strip().strip("()").strip()
-        items = [x.strip() for x in pair_str.split(",")]
-        if len(items) != 2:
-            raise ValueError(f"Invalid dataset_metric pair: {pair_str}. Must be in format '(dataset, metric)'")
-        dataset_name, metric_name = items
+    for pair in cfg.get("dataset_metric", []):
+        # Validate the pair format - should be a list with two elements
+        if not isinstance(pair, list) or len(pair) != 2:
+            raise ValueError(f"Invalid dataset_metric pair: {pair}. Must be a list with two elements [dataset, metric]")
+        
+        dataset_name, metric_name = pair
         dataset_metric_pairs.append((dataset_name, metric_name))
 
     logger.info(f"[main] Dataset-metric pairs from config: {dataset_metric_pairs}")
@@ -401,174 +581,31 @@ def main(cfg_path='config.yaml'):
         logger.info(f"[main] Processing dataset '{dname}' with metric '{metric_name}' ...")
 
         # Step 1: Look for a matching runspec file
-        found_runspec = False
-        selected_datasets = {}
-
-        # Try to match the dataset name with one of the runspec files or categories
-        for runspec_file in runspec_files:
-            category_name = runspec_file.parent.name  # Get the category directory name
-            runspec_name = runspec_file.stem
-
-            # Check if dataset name exactly matches the category name
-            if dname == category_name:
-                logger.info(f"[main] Found matching category: {category_name}")
-                found_runspec = True
-
-                # Load all runspec files in this category
-                category_datasets = {}
-                category_files = list(runspec_file.parent.glob("*.json"))
-                for cat_file in category_files:
-                    with open(cat_file, 'r') as f:
-                        file_db = json.load(f)
-                    category_datasets.update(file_db)
-
-                # Check if the metric is allowed for any runspec in this category
-                allowed = False
-                matched_runspecs = []
-
-                # Get all runspec names in this category (just the filenames without extensions)
-                runspec_names = [cf.stem for cf in category_files]
-
-                # Check if any of those runspecs are in allowed_task_metrics
-                for runspec_name in runspec_names:
-                    if runspec_name in allowed_task_metrics:
-                        matched_runspecs.append(runspec_name)
-                        if metric_name in allowed_task_metrics[runspec_name]:
-                            allowed = True
-                            break
-                # If we found matches but the metric isn't allowed for any of them, skip
-                if matched_runspecs and not allowed:
-                    logger.warning(
-                        f"[main] Metric '{metric_name}' is not allowed for any task in category '{category_name}'. Skipping.")
-                    continue
-
-                # Use all datasets in this category
-                selected_datasets = category_datasets
-                break
-
-            # Check if dataset name exactly matches the runspec file name
-            elif dname == runspec_name:
-                found_runspec = True
-
-                # Check if the metric is allowed for this runspec/task
-                if runspec_name in allowed_task_metrics:
-                    if metric_name not in allowed_task_metrics[runspec_name]:
-                        logger.warning(
-                            f"[main] Metric '{metric_name}' is not allowed for task '{runspec_name}'. Allowed metrics: {allowed_task_metrics[runspec_name]}. Skipping.")
-                        continue
-
-                # Load the runspec file
-                with open(runspec_file, 'r') as f:
-                    runspec_db = json.load(f)
-
-                # Use all datasets in this runspec
-                selected_datasets = runspec_db
-                break
-
+        found_runspec, selected_datasets, _ = _find_runspec_by_name(dname, runspec_files)
+        
         # Step 2: If no matching runspec file by name, search within all runspec files for the specific dataset
         if not found_runspec:
-            logger.info(f"[main] No matching runspec file for '{dname}'. Searching within individual runspec files...")
-
-            # Search through all runspec files to find the dataset
-            for runspec_file in runspec_files:
-                category_name = runspec_file.parent.name  # Get the category directory name
-
-                with open(runspec_file, 'r') as f:
-                    runspec_db = json.load(f)
-
-                if dname in runspec_db:
-                    # Get the runspec name (task name) to check allowed metrics
-                    runspec_name = runspec_file.stem
-
-                    # Check if the metric is allowed for this runspec/task
-                    if runspec_name in allowed_task_metrics:
-                        if metric_name not in allowed_task_metrics[runspec_name]:
-                            logger.warning(
-                                f"[main] Metric '{metric_name}' is not allowed for task '{runspec_name}'. Allowed metrics: {allowed_task_metrics[runspec_name]}. Skipping.")
-                            continue
-
-                    # Use only this specific dataset
-                    selected_datasets = {dname: runspec_db[dname]}
-                    found_runspec = True
-                    break
-
+            found_runspec, selected_datasets, _ = _find_dataset_in_runspecs(dname, runspec_files)
+            
             if not found_runspec:
+                logger.info(f"[main] Dataset not found, skipping: {dname}")
                 continue
-
-        # Check for accented filter setting
-        accented_filter = cfg.get("accented", None)
-        if accented_filter is not None:
-            logger.info(f"[main] Applying accented filter setting: {accented_filter}")
-
-        # Check for language filter setting
-        language_filter = cfg.get("language", None)
-        if language_filter is not None:
-            logger.info(f"[main] Applying language filter setting: {language_filter}")
-
-        # Process each selected dataset
+        
+        # Process each selected dataset(if whole runspec could be multiple per dname/metric pair)
         for dataset_name, dataset_info in selected_datasets.items():
-            # Check if we need to filter out accented datasets
-            if accented_filter is False and dataset_info.get("accented", False) is True:
-                logger.info(
-                    f"[main] Skipping dataset '{dataset_name}' because it is accented and accented filter is False")
-                continue
-
-            # Check if we need to filter by language
-            if language_filter is not None:
-                dataset_language = dataset_info.get("language", "").lower()
-                if dataset_language and language_filter.lower() != dataset_language:
-                    logger.info(
-                        f"[main] Skipping dataset '{dataset_name}' because its language '{dataset_language}' doesn't match filter '{language_filter}'")
-                    continue
-
-            logger.info(f"[main] Loading dataset '{dataset_name}' with metric '{metric_name}' ...")
-
-            repo = dataset_info.get("hf_repo", None)
-            split = None
-            if not repo:
-                repo = dataset_info.get("path", None)
-            subset = dataset_info.get("subset", "")
-            language = dataset_info.get("language", "en")
-            preprocessor_name = dataset_info["preprocessor"]
-            postprocessor_name = dataset_info["postprocessor"]
-            modality = dataset_info.get("modality", "audio")
-
-            if cfg.get("split", None) is not None:
-                split = cfg.get("split")
-
-            if dataset_info.get("split", None) is not None:
-                split = dataset_info["split"]
-
-            dataset = _load_dataset(
-                repo, subset=subset,
-                num_samples=num_samples,
-                preprocessor_name=preprocessor_name,
-                user_prompt_add_ons=user_prompt_add_ons,
-                system_prompts=system_prompts,
-                length_filter=length_filter,
-                metric=metric_name,
-                split=split,
-                dataset_info=dataset_info,
-                modality=modality
-            )
-            metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency,
-                                  judge_model=judge_model)
-
-            # Dynamically import postprocessor class
-            PostprocessorClass = get_class_from_module('postprocessors', postprocessor_name)
-            if PostprocessorClass is None:
-                logger.warning(f"Could not load postprocessor {postprocessor_name}, using default GeneralPostprocessor")
-                # Try to load the default postprocessor
-                PostprocessorClass = get_class_from_module('postprocessors', 'GeneralPostprocessor')
-            postprocessor = PostprocessorClass()
-
-            logger.info("[main] Initializing Engine and running evaluation...")
-            result = Engine(models, dataset, metric, postprocessor, dataset_name).run()
-            key = f"{dataset_name}_{metric_name}"
-            all_scores[key] = result
-
+            # Process this dataset and evaluate
+            _process_dataset_and_evaluate(dataset_name, dataset_info, metric_name, cfg, models, all_scores)
+    
     logger.info("[main] Evaluation scores:")
     logger.info(json.dumps(all_scores, indent=2))
+    
+    # Process aggregate metrics if present in config
+    aggregates = cfg.get("aggregate", [])
+    if aggregates:
+        logger.info("[main] Processing aggregate metrics...")
+        _calculate_aggregates(aggregates, all_scores, models)
+    
+    return all_scores
 
 
 if __name__ == "__main__":
@@ -578,4 +615,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Pass the config path to main
-    main(cfg_path=args.config)
+    all_scores = main(cfg_path=args.config)
+    logger.info("[main] Evaluation complete.")

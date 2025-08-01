@@ -256,34 +256,3 @@ class WERMetrics(Metrics):
             results["gender"] = gender
         return results
 
-    def get_reporting_summary_score(self, overall_score: dict[str, float]) -> dict:
-        """Gets the score to display in wandb. If a metric says lower-is-better, highlight with an ↓.
-
-        Args:
-            overall_score: The overall score that was computed for the metric
-        Returns:
-            The dictionary of columns and values to actually present in wandb
-        """
-        return overall_score
-
-    def get_metadata(self) -> dict:
-        """Return metadata info."""
-        metadata = {
-            "wer": MetricMetadata(
-                name="wer",
-                display_name=f"{constants.INVERTED_METRIC_INDICATOR} Word Error Rate",
-                description=self.description,
-                higher_is_better=False,
-            )
-        }
-        for attribute in ("accent", "gender"):
-            current_attr = set(self.record_level_scores.get(attribute, []))
-            for attr_value in current_attr:
-                if attr_value is not None:
-                    metadata[f"wer_{attribute}_{attr_value}"] = MetricMetadata(
-                        name=f"wer_{attribute}_{attr_value}",
-                        display_name=f"{constants.INVERTED_METRIC_INDICATOR} Word Error Rate {attribute.title()} ({attr_value})",
-                        description=self.description,
-                        higher_is_better=False,
-                    )
-        return metadata
