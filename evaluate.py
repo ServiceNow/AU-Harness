@@ -30,14 +30,13 @@ from metrics.llm_judge import _BaseLLMJudge
 
 class Engine:
     """Evaluate one or many models over the same dataset concurrently."""
-    def __init__(self, models: list[Model], dataset: list[dict], metric: Metrics, postprocessor, dataset_name: str, engine_id: str, request_manager, available_judge_calls: int = None):
+    def __init__(self, models: list[Model], dataset: list[dict], metric: Metrics, postprocessor, dataset_name: str, engine_id: str, request_manager):
         logger.info(f"[Engine.__init__] Initializing Engine with {len(models)} model(s), dataset size: {len(dataset)}, metric: {metric.name}")
         self.models = models
         self.dataset = dataset
         self.metric = metric
         self.postprocessor = postprocessor
         self.dataset_name = dataset_name
-        self.available_judge_calls = available_judge_calls  # For LLM-judge concurrency splitting
         self.engine_id = engine_id
         self.request_manager = request_manager
         # Group models by their model attribute for sharding
@@ -235,18 +234,21 @@ class Engine:
         # Determine if this is an LLM-judge metric
         is_llm_judge = isinstance(self.metric, _BaseLLMJudge)
         
-        # Create a separate metric instance for each model, but without splitting concurrency
-        if is_llm_judge:
-            # Get the judge model from the original metric
-            judge_model = getattr(self.metric, '_model', None)
-            # Use the same concurrency for all instances
-            metric_instances = {
-                model_name: type(self.metric)(max_concurrency=self.metric._max_concurrency, model=judge_model)
-                for model_name in predictions.keys()
-            }
-        else:
-            # For non-LLM judges, use the same instance for all models
-            metric_instances = {model_name: self.metric for model_name in predictions.keys()}
+        # Get the metric name from the current metric instance
+        metric_name = self.metric.name
+        
+        # Get judge_properties from the metric if it's a LLM judge
+        judge_settings = getattr(self.metric, '_judge_properties', None) if is_llm_judge else None
+        
+        # Get language attribute from the metric if available or default to 'en'
+        language = getattr(self.metric, 'language', 'en')
+        
+        # Create metric instances for each model using _load_metric
+        # _load_metric will handle deciding which parameters to use based on the metric type
+        metric_instances = {
+            model_name: _load_metric(metric_name, language=language, judge_settings=judge_settings)
+            for model_name in predictions.keys()
+        }
         
         async def score_model_with_tokens(model_name, outs):
             metric = metric_instances[model_name]
@@ -415,7 +417,7 @@ def _load_models(cfg_list: list[dict]) -> list[Model]:
 
 
 # Metric Loader
-def _load_metric(name: str, language: str = "en", judge_concurrency: int | None = None, judge_model: str | None = None):
+def _load_metric(name: str, language: str = "en", judge_settings: dict = None):
 
     if name not in metric_map:
         raise ValueError(f"Unknown metric: {name}. Available metrics: {list(metric_map.keys())}")
@@ -431,7 +433,11 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
         if "wer" in name.lower():
             metric = MetricClass(language=language)
         elif "judge" in name.lower():
-            metric = MetricClass(max_concurrency=judge_concurrency, model=judge_model)
+            # Extract judge settings or use empty dict if None
+            judge_settings = judge_settings or {}
+            
+            # Pass all judge settings as judge_properties
+            metric = MetricClass(judge_properties=judge_settings)
         else:
             # Default initialization for other metrics
             metric = MetricClass()
@@ -462,8 +468,16 @@ def main(cfg_path='config.yaml'):
                 central_request_controller.register_model_type(model_type, batch_size)
     
     # Register judge model for LLM-judge evaluations
-    judge_model = cfg.get("judge_model")
-    judge_concurrency = cfg.get("judge_concurrency", 1)  
+    # Convert judge_properties list of one-item dicts to a simple dict
+    judge_properties = {}
+    for item in cfg.get("judge_properties", []):
+        if isinstance(item, dict):
+            judge_properties.update(item)
+    
+    # Get values from the dict
+    judge_model = judge_properties.get("judge_model")
+    judge_concurrency = judge_properties.get("judge_concurrency", 1)
+    
     if judge_model:
         logger.info(f"[main] Registering judge model '{judge_model}' with concurrency {judge_concurrency}")
         central_request_controller.register_model_type(judge_model, judge_concurrency)
@@ -472,15 +486,18 @@ def main(cfg_path='config.yaml'):
     runspecs_dir = Path("runspecs")
     
     # Get list of all runspec files in the runspecs directory
-    runspec_files = list(runspecs_dir.glob("*.json"))
+    runspec_files = list(runspecs_dir.glob("*.json"))    
+    # Convert filters list of one-item dicts to a simple dict
+    filters = {}
+    for item in cfg.get("filters", []):
+        if isinstance(item, dict):
+            filters.update(item)
     
-    # Load metric and model settings
-    judge_concurrency = cfg.get("judge_concurrency", 1)
-    judge_model = cfg.get("judge_model", None)
-    user_prompt_add_ons = cfg.get("user_prompt_add_ons", [])
-    system_prompts = cfg.get("system_prompts", [])
-    length_filter = cfg.get("length_filter", None)
-    num_samples = cfg.get("num_samples", None)
+    # Get values from the dict
+    user_prompt_add_ons = filters.get("user_prompt_add_ons", [])
+    system_prompts = filters.get("system_prompts", [])
+    length_filter = filters.get("length_filter")
+    num_samples = filters.get("num_samples")
     
     # Load models
     models = _load_models(cfg.get("models", []))
@@ -504,21 +521,17 @@ def main(cfg_path='config.yaml'):
     flattened_dataset_metric_pairs = []  # Will hold individual dataset-metric pairs after expansion
     
     # Helper function to check if a dataset passes filters
-    def dataset_passes_filters(dataset_name, dataset_info, cfg):
+    def dataset_passes_filters(dataset_info, filters):
         # Check for accented filter setting
-        accented_filter = cfg.get("accented", None)
+        accented_filter = filters.get("accented")
         if accented_filter is not None and accented_filter is False and dataset_info.get("accented", False) is True:
-            logger.info(f"[main] Skipping dataset '{dataset_name}' because it is accented and accented filter is False")
             return False
             
         # Check for language filter setting
-        language_filter = cfg.get("language", None)
-        if language_filter is not None:
-            dataset_language = dataset_info.get("language", "").lower()
-            if dataset_language and language_filter.lower() != dataset_language:
-                logger.info(f"[main] Skipping dataset '{dataset_name}' because its language '{dataset_language}' doesn't match filter '{language_filter}'")
-                return False
-                
+        language_filter = filters.get("language")
+        if language_filter is not None and language_filter != dataset_info.get("language", ""):
+            return False
+          
         return True
     
     # Flatten dataset-metric pairs from config/runspecs
@@ -541,10 +554,11 @@ def main(cfg_path='config.yaml'):
                 # Expand all datasets in this runspec
                 for expanded_dataset_name, dataset_info in runspec_db.items():
                     # Add this dataset-metric pair to our flattened list if it passes filters
-                    if dataset_passes_filters(expanded_dataset_name, dataset_info, cfg):
+                    logger.info(f"{dataset_info}")
+                    if dataset_passes_filters(dataset_info, filters):
                         flattened_dataset_metric_pairs.append((expanded_dataset_name, metric_name, dataset_info))
-                        logger.info(f"[main] Added dataset-metric pair: ({expanded_dataset_name}, {metric_name})")
-                        
+                    else:
+                        logger.warning(f"[main] Skipping dataset '{expanded_dataset_name}' because it does not pass filters")
                 break
         
         # If no matching runspec file by name, search within all runspec files for the specific dataset
@@ -556,12 +570,15 @@ def main(cfg_path='config.yaml'):
                 
                 if dataset_name in runspec_db:
                     dataset_info = runspec_db[dataset_name]
-                    
+                    logger.info(f"{dataset_info}")
                     # Add this dataset-metric pair to our flattened list if it passes filters
-                    if dataset_passes_filters(dataset_name, dataset_info, cfg):
+                    if dataset_passes_filters(dataset_info, filters):
                         flattened_dataset_metric_pairs.append((dataset_name, metric_name, dataset_info))
                         logger.info(f"[main] Added dataset-metric pair: ({dataset_name}, {metric_name})")
                         found_runspec = True
+                        break
+                    else:
+                        logger.warning(f"[main] Skipping dataset '{dataset_name}' because it does not pass filters")
                         break
             
             if not found_runspec:
@@ -606,7 +623,11 @@ def main(cfg_path='config.yaml'):
             dataset_info=dataset_info,
             modality=modality
         )
-        metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
+        metric = _load_metric(
+            metric_name, 
+            language=language,
+            judge_settings=judge_properties
+        )
         
         # Dynamically import postprocessor class
         PostprocessorClass = get_class_from_module('postprocessors', postprocessor_name)
@@ -627,7 +648,6 @@ def main(cfg_path='config.yaml'):
             metric=metric,
             postprocessor=postprocessor,
             dataset_name=dataset_name,
-            available_judge_calls=judge_concurrency,
             engine_id=engine_id,
             request_manager=engine_request_manager
         )
@@ -635,7 +655,7 @@ def main(cfg_path='config.yaml'):
         # Add the engine to our collection for concurrent execution
         all_engines.append((engine, dataset_name))
         logger.info(f"[main] Created engine for dataset: {dataset_name}")
-        
+    
     # Now run all engines concurrently
     logger.info(f"[main] Running {len(all_engines)} engines concurrently...")
     

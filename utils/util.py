@@ -23,10 +23,7 @@ def smart_round(val: float, precision: int = constants.ROUND_DIGITS) -> float:
     -------
         float: Rounded off value
     """
-    if not isinstance(val, (int, float)):
-        logger.error(f"Invalid value type: {type(val)}. Expected int or float.")
-        raise ValueError("Invalid value passed, cannot be rounded off.")
-    elif not isinstance(precision, int) or precision <= 0:
+    if not isinstance(precision, int) or precision <= 0:
         logger.warning(
             f"Invalid precision provided: {precision}. Using the default precision: {constants.ROUND_DIGITS}"
         )

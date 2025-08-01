@@ -4,12 +4,19 @@ dataset_metric: # tuple of dataset, metric(can run by task or dataset)
   - "(alpaca_audio_test, word_error_rate)"
   - "(emotion_recognition, llm_judge_binary)"
 num_samples: 100 # number of samples to run(remove for all)
-judge_concurrency: 8 # judge call(optional)
-judge_model: "gpt-4o-mini" # mandatory
 user_prompt_add_ons: ["asr_clean_output"] # optional - additional prompting in text instructions for each sample
 length_filter: [1.0, 3.0] # optional - filters for only audio samples in this length(seconds)
 accented: false # optional - filters for only audio samples in this length(seconds)
-language: "english" # optional - filters for only audio samples in this language
+language: "english" # optional - filters for only audio samples in this language - use language code
+
+judge_concurrency: 250 # optional - default is 1
+judge_model: "infer-qwen3-32b" # mandatory
+judge_type: "vllm" # mandatory (vllm or openai)
+#judge_api_version: "2025-01-01-preview" # optional(needed for openai)
+judge_api_endpoint: "https://infer-qwen3-32b-runai-nowllm.inference.ta121237.dgxcloud.ai/v1" # mandatory
+judge_api_key: "8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q" # mandatory
+judge_temperature: 0.1 # optional
+#judge_prompt_model_override: "Qwen3-32b" # optional
 
 models:
   - info:
