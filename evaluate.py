@@ -415,7 +415,7 @@ def _load_models(cfg_list: list[dict]) -> list[Model]:
 
 
 # Metric Loader
-def _load_metric(name: str, language: str = "en", judge_concurrency: int | None = None, judge_model: str | None = None, judge_type: str | None = None, judge_api_version: str | None = None, judge_api_endpoint: str | None = None, judge_api_key: str | None = None, judge_no_sys_prompt: bool = False, judge_temperature: float | None = None, judge_prompt_override: str | None = None):
+def _load_metric(name: str, language: str = "en", judge_concurrency: int | None = None, judge_model: str | None = None, judge_type: str | None = None, judge_api_version: str | None = None, judge_api_endpoint: str | None = None, judge_api_key: str | None = None, judge_temperature: float | None = None, judge_prompt_override: str | None = None):
 
     if name not in metric_map:
         raise ValueError(f"Unknown metric: {name}. Available metrics: {list(metric_map.keys())}")
@@ -436,7 +436,6 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
                 "api_version": judge_api_version,
                 "api_endpoint": judge_api_endpoint,
                 "api_key": judge_api_key,
-                "no_sys_prompt": judge_no_sys_prompt,
                 "temperature": judge_temperature,
                 "prompt_override": judge_prompt_override
             }
@@ -497,7 +496,6 @@ def main(cfg_path='config.yaml'):
     judge_api_version = cfg.get("judge_api_version", None)
     judge_api_endpoint = cfg.get("judge_api_endpoint", None)
     judge_api_key = cfg.get("judge_api_key", None)
-    judge_no_sys_prompt = cfg.get("judge_no_sys_prompt", False)
     judge_temperature = cfg.get("judge_temperature", None)
     judge_prompt_override = cfg.get("judge_prompt_model_override", None)
     user_prompt_add_ons = cfg.get("user_prompt_add_ons", [])
@@ -638,7 +636,6 @@ def main(cfg_path='config.yaml'):
             judge_api_version=judge_api_version,
             judge_api_endpoint=judge_api_endpoint,
             judge_api_key=judge_api_key,
-            judge_no_sys_prompt=judge_no_sys_prompt,
             judge_temperature=judge_temperature,
             judge_prompt_override=judge_prompt_override
         )

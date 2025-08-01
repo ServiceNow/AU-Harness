@@ -85,21 +85,10 @@ class _BaseLLMJudge(Metrics):
                         logger.warning(f"Prompt key '{prompt_key}' not found in judge_prompts.yaml: {e}")
                         # Keep using the original system prompt if the constructed key is not found
                 
-                # Check if we should use no_sys_prompt mode
-                no_sys_prompt = self._judge_properties.get("no_sys_prompt", False)
-                
-                if no_sys_prompt:
-                    # Prepend system prompt to user message
-                    combined_prompt = f"{system_prompt}\n\n User Prompt to evaluate: {user_prompt}"
-                    messages = [
-                        {"role": "user", "content": combined_prompt}
-                    ]
-                else:
-                    # Use separate system and user messages
-                    messages = [
-                        {"role": "system", "content": system_prompt},
-                        {"role": "user", "content": user_prompt}
-                    ]
+                messages = [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ]
                 
                 # Get temperature from judge_properties or use default 0.1
                 temperature = self._judge_properties.get("temperature", 0.1)
