@@ -5,6 +5,7 @@ import pandas as pd
 import nltk
 from utils.custom_logging import write_record_log, append_final_score
 from metrics.text2sql.evaluation import evaluate
+from models.model_response import ModelResponse
 
 # Constants for file paths and data selection
 SPIDER_DATA_DIR = "data/spider/"
@@ -34,6 +35,7 @@ class SqlScore(Metrics):
         instructions: Optional[List[str]] = None,
         dataset_name: Optional[str] = None,
         model_name: Optional[str] = None,
+        model_responses: Optional[List[ModelResponse]] = None,
     ) -> dict[str, dict[str, float] | float]:
         """
         Evaluate SQL execution accuracy and exact set match using Spider evaluation.

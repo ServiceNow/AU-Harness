@@ -178,9 +178,10 @@ class DiarizationMetrics(Metrics):
     """
 
     def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None,
-                 model_name: str | None = None):
-        # Store instructions for potential later use
+                 model_name: str | None = None, model_responses=None):
+        # Store instructions and model_responses for potential later use
         self.instructions = instructions
+        self.model_responses = model_responses if model_responses else []
         overall = self.get_score(candidates, references)
 
         if dataset_name and model_name:

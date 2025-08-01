@@ -1,7 +1,7 @@
 from typing import List, Tuple, Dict, Optional, Union
 
 import numpy as np
-
+from models.model_response import ModelResponse
 from metrics.metrics import Metrics
 from utils.custom_logging import write_record_log, append_final_score
 from .instruction_following_eval import instructions_registry
@@ -20,6 +20,7 @@ class InstructionFollowingScore(Metrics):
             instructions: Optional[List[str]] = None,
             dataset_name: Optional[str] = None,
             model_name: Optional[str] = None,
+            model_responses: Optional[List[ModelResponse]] = None,
     ) -> dict[str, dict[str, float] | float]:
         # Compute strict and loose scores
         strict_outputs = self._compute_outputs(candidates, references, strict=True)

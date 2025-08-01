@@ -1,17 +1,14 @@
-from utils.custom_logging import configure
-
-configure()
-import logging
-
-logging.getLogger("httpx").setLevel(logging.WARNING)
-logger = logging.getLogger(__name__)
-from preprocessors.base import Preprocessor
 import os
-import json
+import yaml
+import sys
 from pathlib import Path
+import logging
+from utils.custom_logging import configure
+from postprocessors.base import Postprocessor
+from preprocessors.base import Preprocessor
+import json
 import asyncio
 from datasets import load_dataset
-import yaml
 from tqdm import tqdm
 import importlib
 import argparse
@@ -24,19 +21,25 @@ from utils.constants import metric_map, metric_output
 from utils.util import validate_config, _find_runspec_by_name, _find_dataset_in_runspecs, find_runspec_files
 
 
+# Create logger at module level
+logger = logging.getLogger(__name__)
+# Removed duplicate imports that were moved to the top
+
 class Engine:
     """Evaluate one or many models over the same dataset concurrently."""
-
-    def __init__(self, models: list[Model], dataset: list[dict], metric: Metrics, postprocessor, dataset_name: str):
-        logger.info(
-            f"[Engine.__init__] Initializing Engine with {len(models)} model(s), dataset size: {len(dataset)}, metric: {metric.name}")
+    def __init__(self, models: list[Model], dataset: list[dict], metric: Metrics, postprocessor, dataset_name: str, task_type: str = None, temperature_overrides: list[dict] = None):
+        logger.info(f"[Engine.__init__] Initializing Engine with {len(models)} model(s), dataset size: {len(dataset)}, metric: {metric.name}")
         self.models = models
         self.dataset = dataset
         self.metric = metric
         self.postprocessor = postprocessor
         # Keep track of dataset name so we can create per-dataset log files
         self.dataset_name = dataset_name
-
+        # Store task_type for temperature setting
+        self.task_type = task_type
+        # Store temperature overrides
+        self.temperature_overrides = temperature_overrides or []
+        
         # Group models by their model attribute for sharding
         self.model_groups = {}
         for model in models:
@@ -45,33 +48,40 @@ class Engine:
                 self.model_groups[model_type] = []
             self.model_groups[model_type].append(model)
 
-        # Log model grouping information
-        for model_type, group_models in self.model_groups.items():
-            if len(group_models) > 1:
-                logger.info(
-                    f"[Engine.__init__] Model type '{model_type}' has {len(group_models)} instances - will shard dataset")
-
     # ---------------- internal helpers ----------------x
     # infer by batch size, calling generate text with retry for each sample
-    async def _infer_single_model(self, model: Model, samples=None) -> list[str]:
+    async def _infer_single_model(self, model: Model, samples=None) -> list:
         samples = samples if samples is not None else self.dataset  # Use provided samples or full dataset
         logger.info(f"[Engine._infer_single_model] Running model: {model.name()} on dataset of size {len(samples)}")
+        
+        # Set temperature based on the task_type if provided
+        task_type = self.task_type
+        
+        # Check for temperature override for this specific model and task combination
+        override_temp = _get_temperature_override(model.name(), task_type, self.temperature_overrides)
+        
+        if override_temp is not None:
+            # Use the override temperature directly
+            logger.info(f"[Engine._infer_single_model] Using override temperature {override_temp} for model {model.name()} and task {task_type}")
+            model.temperature = override_temp
+            model.req_resp_hndlr.temperature = override_temp
+        else:
+            # Use the standard task-based temperature setting
+            model.set_temp(task_type)
         sem = asyncio.Semaphore(model.batch_size)  # Use per-model batch size
 
         async def _call(idx: int, sample: dict):
             async with sem:
                 resp = await model._generate_text_with_retry(sample, {"chunk_size": model.chunk_size,
                                                                       "metric": self.metric.name})
-                if 'tools' in sample.keys():
-                    return idx, resp
-                return idx, (resp.llm_response if resp else "")
+                return idx, resp
 
         # Create tasks paired with their original index
         tasks = [_call(i, ex) for i, ex in enumerate(samples)]
         results: list[str | None] = [None] * len(tasks)
         for coro in tqdm(asyncio.as_completed(tasks), total=len(tasks), desc=f"Inference ({model.name()})"):
-            idx, text = await coro
-            results[idx] = text
+            idx, resp = await coro
+            results[idx] = resp
         logger.info(f"[Engine._infer_single_model] Model {model.name()} finished inference.")
         return results
 
@@ -133,12 +143,12 @@ class Engine:
 
     def run(self):
         logger.info("[Engine.run] Starting evaluation run.")
-        predictions = asyncio.run(self._infer_all())
+        model_responses_by_model = asyncio.run(self._infer_all())
         logger.info(f"[Engine.run] Predictions complete. Calculating scores...")
         scores = {}
-
-        # Pass the metric name to the postprocessor
-        process_result = self.postprocessor.process(dataset=self.dataset, predictions=predictions,
+        
+        # Pass raw model responses directly to the postprocessor - it will handle different response types internally
+        process_result = self.postprocessor.process(dataset=self.dataset, predictions=model_responses_by_model,
                                                     metric=self.metric.name)
 
         # Extract values from the dictionary returned by the postprocessor
@@ -153,12 +163,16 @@ class Engine:
             self.metric.reset()
             
             # Let the metric handle per-record logging internally
+            # Pass the full ModelResponse objects to the metric
+            model_responses = model_responses_by_model.get(model_name, [])
             if ids and lengths:
-                model_score = self.metric(outs, model_targets, ids, lengths, instructions=instructions,
-                                          dataset_name=self.dataset_name, model_name=model_name)
+                model_score = self.metric(outs, model_targets, ids, lengths, instructions=instructions, 
+                                         dataset_name=self.dataset_name, model_name=model_name, 
+                                         model_responses=model_responses)
             else:
-                model_score = self.metric(outs, model_targets, instructions=instructions,
-                                          dataset_name=self.dataset_name, model_name=model_name)
+                model_score = self.metric(outs, model_targets, instructions=instructions, 
+                                         dataset_name=self.dataset_name, model_name=model_name, 
+                                         model_responses=model_responses)
             scores[model_name] = model_score
         logger.info(f"[Engine.run] Evaluation complete. Returning scores.")
         logger.info(f"[Engine.run] Scores: {scores}")
@@ -295,13 +309,51 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="G
     return processed, dataset_size
 
 
+def _get_temperature_override(model_name: str, task_type: str, temperature_overrides: list[dict]) -> float | None:
+    """Check if there's a temperature override for this model and task combination.
+    
+    Args:
+        model_name: The name of the model
+        task_type: The type of task being performed
+        temperature_overrides: List of override dictionaries from config.yaml
+        
+    Returns:
+        The override temperature if found, None otherwise
+    """
+    if not temperature_overrides:
+        return None
+        
+    for override in temperature_overrides:
+        # Get the temperature value if present
+        temp = override.get("temperature")
+        if temp is None:
+            continue
+            
+        # Check if this override applies to our model/task
+        override_model = override.get("model")
+        override_task = override.get("task")
+        
+        # Case 1: Model+Task specific override
+        if override_model == model_name and override_task == task_type:
+            return float(temp)
+            
+        # Case 2: Model-only override
+        if override_model == model_name and not override_task:
+            return float(temp)
+            
+        # Case 3: Task-only override
+        if not override_model and override_task == task_type:
+            return float(temp)
+    
+    return None
+
 def _load_models(cfg_list: list[dict]) -> list[Model]:
     logger.info(f"[_load_models] Instantiating models from config: {cfg_list}")
     models = []
     for cfg in cfg_list:
         model_name = cfg["info"].get("name")
         logger.info(f"[_load_models] Instantiating model for {model_name}")
-        model_obj = Model(cfg["info"])
+        model_obj = Model(cfg["info"], 0.7)
         models.append(model_obj)
     if not models:
         logger.info("[_load_models] ERROR: No valid models found in configuration.")
@@ -342,6 +394,36 @@ def _load_metric(name: str, language: str = "en", judge_concurrency: int | None 
         raise ValueError(f"Failed to load metric {name}: {e}")
 
 
+
+#TO-DO: need to implement command line override, add common configs, group by task type
+#main that runs
+def setup_logging(log_config=None, log_file=None):
+    """
+    Set up logging with configuration from config file or specified log file
+    
+    Args:
+        log_config: Dictionary containing logging configuration (optional)
+        log_file: Path to log file (optional, overrides log_config if provided)
+    """
+    # Get log file path and level from config if provided
+    if log_config is not None and isinstance(log_config, dict):
+        file_path = log_file or log_config.get("log_file", "default.log")
+        log_level = log_config.get("level", "INFO")
+    else:
+        file_path = log_file or "default.log"
+        log_level = "INFO"
+    
+    # Configure logging using the custom_logging module
+    configure(file_path)
+    
+    # Set root logger level
+    logging_level = getattr(logging, log_level.upper()) if hasattr(logging, log_level.upper()) else logging.INFO
+    logging.getLogger().setLevel(logging_level)
+    
+    # Set httpx logger to WARNING level to reduce noise
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    
+    logger.info(f"Logging setup complete - using file: {file_path}, level: {log_level}")
 
 def _calculate_aggregates(aggregates, all_scores, models):
     """
@@ -536,9 +618,15 @@ def _process_dataset_and_evaluate(dataset_name, dataset_info, metric_name, cfg, 
     return True
 
 
-# TO-DO: need to implement command line override, add common configs, group by task type
-# main that runs
 def main(cfg_path='config.yaml'):
+    # Load config without validation first to get logging settings
+    with open(cfg_path) as f:
+        raw_cfg = yaml.safe_load(f)
+    
+    # Set up logging using the enhanced setup_logging function
+    # This encapsulates all the logging configuration in one call
+    setup_logging(log_config=raw_cfg.get("logging"))
+    
     logger.info(f"[main] Loading config from {cfg_path}")
     
     # Validate the configuration file

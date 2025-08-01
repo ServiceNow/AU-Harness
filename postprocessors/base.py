@@ -38,21 +38,31 @@ class Postprocessor():
         cleaned = re.sub(r'<think>.*?</think>', '', sample, flags=re.DOTALL)
         return cleaned.strip()
 
-    def process_predictions(self, predictions: dict[str, list[str]]) -> dict[str, list[str]]:
+    def process_predictions(self, predictions: dict[str, list]) -> dict[str, list[str]]:
         """
         Process model predictions by removing thinking content and other artifacts.
+        Handles only ModelResponse objects.
         
         Args:
-            predictions (dict[str, list[str]]): Dictionary mapping model names to lists of predictions
+            predictions (dict[str, list]): Dictionary mapping model names to lists of ModelResponse objects
             
         Returns:
-            dict[str, list[str]]: Dictionary with processed predictions
+            dict[str, list[str]]: Dictionary with processed predictions as strings
         """
         logger.info("Processing predictions...")
         processed_predictions = {}
 
         for model_name, preds in predictions.items():
-            processed = [self.remove_thinking_content(pred) for pred in preds]
+            processed = []
+            for pred in preds:
+                if pred is None:
+                    # Handle None values
+                    processed.append("")
+                else:
+                    # Only handle ModelResponse objects
+                    text = pred.llm_response if pred.llm_response else ""
+                    processed.append(self.remove_thinking_content(text))
+            
             processed_predictions[model_name] = processed
 
         return processed_predictions

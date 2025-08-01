@@ -21,13 +21,14 @@ logger.propagate = True
 from models.model_response import ErrorTracker, ModelResponse
 from models.request_resp_handler import RequestRespHandler
 from utils import constants
+from utils.constants import task_temp_map
 from utils.multimodal import encode_audio_array_base64, audio_array_to_wav_file
 
 
 class Model(ABC):
     """TODO: Need SME to add."""
 
-    def __init__(self, model_info: dict):
+    def __init__(self, model_info: dict, temperature: float = 0.7):
         """Initialize model configuration here.
 
         Args:
@@ -48,6 +49,8 @@ class Model(ABC):
         self.retry_attempts = model_info.get("retry_attempts", 8)
         # chunk_size in seconds (default 30)
         self.chunk_size = model_info.get("chunk_size", 30)
+        # temperature for LLM requests (default 0.7)
+        self.temperature = temperature
         # some flow does not work with async client like internal private network
         self.postprocessor_path = model_info.get("postprocessor", [])
         # model_name = model_info.get("model", model_info.get("alias", self.name()))
@@ -55,6 +58,7 @@ class Model(ABC):
             self.inference_type,
             self.model_info,
             timeout=self.timeout,
+            temperature=self.temperature
         )
         # prevent data races when updating self.errors asynchronously
         self.errors_lock = asyncio.Lock()
@@ -62,6 +66,18 @@ class Model(ABC):
 
     def name(self):
         return self._name
+
+    def set_temp(self, task_type: str) -> None:
+        """Set temperature based on task type using task_temp_map.
+        
+        Args:
+            task_type: The type of task being performed.
+        """
+        if task_type in task_temp_map:
+            self.temperature = task_temp_map[task_type]
+            # Also update the request handler's temperature
+            self.req_resp_hndlr.temperature = self.temperature
+            logging.info(f"[Model.set_temp] Set temperature to {self.temperature} for task type {task_type} and model {self.name()}")
 
     def _is_retryable_error(self, result: ModelResponse):
         """Check if the error is a rate limit error by checking response code."""
@@ -100,16 +116,22 @@ class Model(ABC):
                 f"[{self.name()}] Retrying the request in {retry_state.next_action.sleep} seconds as it returned {resp_code} code in attempt {retry_state.attempt_number}"
             )
 
-    async def _mark_errors(self, result: ModelResponse):
+    async def _mark_errors(self, result: ModelResponse, error_tracker: ErrorTracker):
         """Update error tracker."""
         if result.response_code != 200:
-            async with self.errors_lock:
-                self.errors.increment(result.response_code)
+            # No lock needed since this is a per-call error tracker
+            error_tracker.increment(result.response_code)
+            # Make sure the error tracker is attached to the ModelResponse
+            result.error_tracker = error_tracker
+            # Log that we're tracking this error
+            logger.info(f"[_mark_errors] Recorded error {result.response_code} in error tracker: {error_tracker.__dict__}")
 
     # pure retry and exception logic
     async def _generate_text_with_retry(
             self, message: dict | str, run_params: dict
     ) -> ModelResponse:
+        # Create a new error tracker instance for this specific call
+        call_errors = ErrorTracker()
         result = None
         try:
             async for attempt in AsyncRetrying(
@@ -123,8 +145,12 @@ class Model(ABC):
                         # All data prep is now in _generate_text
                         # Set attempt number for downstream logging
                         self.req_resp_hndlr.current_attempt = attempt.retry_state.attempt_number
-                        result: ModelResponse = await self._generate_text(message, run_params)
-                        await self._mark_errors(result)
+                        # Pass the error tracker to _generate_text
+                        result: ModelResponse = await self._generate_text(message, run_params, call_errors)
+                        # Ensure the result has our error tracker
+                        if not result.error_tracker:
+                            result.error_tracker = call_errors
+                        await self._mark_errors(result, call_errors)
                     except Exception as e:
                         logger.error(f"Exception during text generation: {e}")
                         result = ModelResponse(
@@ -134,6 +160,7 @@ class Model(ABC):
                             response_code=500,
                             performance=None,
                             wait_time=0,
+                            error_tracker=call_errors,
                         )
                 attempt.retry_state.set_result(result)
                 # Set backoff for next retry based on current result
@@ -149,6 +176,7 @@ class Model(ABC):
                 response_code=500,
                 performance=None,
                 wait_time=0,
+                error_tracker=call_errors,
             )
         except RetryError:
             logger.error(
@@ -161,6 +189,7 @@ class Model(ABC):
                 response_code=500,
                 performance=None,
                 wait_time=0,
+                error_tracker=call_errors,
             )
         except Exception as e:
             logger.error(f"Unexpected error in _generate_text_with_retry: {e}")
@@ -171,10 +200,16 @@ class Model(ABC):
                 response_code=500,
                 performance=None,
                 wait_time=0,
-            )
+                error_tracker=call_errors,
+            ) 
         return result
 
-    async def _generate_text(self, message: dict, run_params: dict) -> ModelResponse:
+
+
+
+
+
+    async def _generate_text(self, message: dict, run_params: dict, error_tracker: ErrorTracker = None) -> ModelResponse:
         """
         Implements model query by building message header and body with the help of Request Response Handler.
         Args:
@@ -258,9 +293,8 @@ class Model(ABC):
                                 },
                             ],
                         })
-
                     message["model_inputs"] = messages
-                    resp = await self.req_resp_hndlr.request_server(message["model_inputs"], tools=tools)
+                    resp = await self.req_resp_hndlr.request_server(message["model_inputs"], tools=tools, error_tracker=error_tracker)
                     concatenated_text += resp.llm_response or ""
                     responses.append(resp)
                 # Merge responses
@@ -279,7 +313,7 @@ class Model(ABC):
                     chunk_array = audio_array[start:end]
                     wav_path = audio_array_to_wav_file(chunk_array, sampling_rate)
                     # Pass closed file (file path) to request_server
-                    resp = await self.req_resp_hndlr.request_server(wav_path)
+                    resp = await self.req_resp_hndlr.request_server(wav_path, error_tracker)
                     concatenated_text += resp.llm_response or ""
                     responses.append(resp)
                 # ---------- Merge chunk responses ------------------
@@ -335,9 +369,8 @@ class Model(ABC):
                         }
                     ],
                 })
-
             message["model_inputs"] = messages
-            return await self.req_resp_hndlr.request_server(message["model_inputs"], tools=tools)
+            return await self.req_resp_hndlr.request_server(message["model_inputs"], tools=tools, error_tracker=error_tracker)
 
         # transcription
         elif self.inference_type in (
@@ -346,7 +379,7 @@ class Model(ABC):
         ):
             wav_path = audio_array_to_wav_file(audio_array, sampling_rate)
             # Pass closed file (file path) to request_server
-            resp = await self.req_resp_hndlr.request_server(wav_path)
+            resp = await self.req_resp_hndlr.request_server(wav_path, error_tracker)
             return resp
         else:
             raise ValueError("Unsupported inference type")

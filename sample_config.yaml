@@ -28,7 +28,10 @@ user_prompt_add_ons: ["asr_clean_output"] #optional - additional prompting in te
 system_prompts: ["audio_expert", "try_best"]
 length_filter: [1.0, 3.0] #optional - filters for only audio samples in this length(seconds) - only supported for general and callhome preprocessors
 accented: false #optional - filters for only audio samples in this length(seconds)
-language: "english" #optional - filters for only audio samples in this language
+language: "en" #optional - filters for only audio samples in this language
+logging:
+  log_file: "audiobench.log"  # Path to the main log file
+  level: "INFO"    # Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
 #override the requester temperature values by task or model
 temperature_overrides:
