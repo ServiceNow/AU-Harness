@@ -41,9 +41,9 @@ class BigBenchAudioPostprocessor(Postprocessor):
 
         # Prepare (transcript, target) pairs
         targets = [
-            (record["transcript"], record["model_target"])
+            (record["audio_content_in_text"], record["model_target"])
             for record in dataset
-            if "model_target" in record and "transcript" in record
+            if "model_target" in record and "audio_content_in_text" in record
         ]
         
         # Extract instructions using base class method

@@ -57,7 +57,7 @@ dataset_metric:
   - "(wavcaps_qa_test, llm_judge_detailed)"
   - "(wavcaps_test, llm_judge_detailed)"
   - "(big_bench_audio, llm_judge_big_bench_audio)"
-  - "(big_bench_audio_text_only, llm_judge_big_bench_audio)"
+  - "(big_bench_audio_text, llm_judge_big_bench_audio)"
   - "(librispeech_multilingual_dutch, word_error_rate)"
   - "(librispeech_multilingual_french, word_error_rate)"
   - "(librispeech_multilingual_german, word_error_rate)"
