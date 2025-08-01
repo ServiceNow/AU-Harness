@@ -93,6 +93,8 @@ class GeneralPreprocessor(Preprocessor):
                 else:
                     choices_text = str(choices)
                 instruction += "\n Choices: " + choices_text
+            if not instruction:
+                logger.warning("Instruction is empty for sample", i)
             record["instruction"] = instruction.strip()
 
             # Process system prompts
