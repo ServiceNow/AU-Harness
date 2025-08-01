@@ -1,0 +1,87 @@
+dataset_metric: #list of dataset-metric pairs, each as a two-item list of strings ["dataset_name", "metric_name"]
+  # Speech recognition datasets
+  - ["alpaca_audio_test", "llm_judge_detailed"]
+  - ["openhermes_instruction_test", "llm_judge_detailed"]
+  - ["librispeech_test_other", "word_error_rate"]
+  - ["librispeech_test_clean", "word_error_rate"]
+  # Emotion recognition runspec
+  - ["emotion_recognition", "llm_judge_binary"]
+  - ["ifeval", "instruction_following"]
+  #- ["bfcl", "bfcl_match_score"]
+  #- ["speech_to_sql", "sql_score"]
+  #- ["librispeech_test_other", "diarization_metrics"]
+  # Gender recognition datasets
+  
+  # Question-answering datasets and runspecs
+  - ["big_bench_audio", "llm_judge_big_bench_audio"]
+
+  #- "(mmsu_law, llm_judge_binary)"
+
+
+
+
+# Optional: Aggregate multiple datasets for a specific metric
+# Format: ["metric_name", ["dataset1", "dataset2", ..., "datasetN"]]
+# Special feature: Use "all" as a dataset entry to include all datasets with the specified metric
+
+# Use same metric datasets when making aggregate
+aggregate:
+  - ["llm_judge_binary", ["emotion_recognition"]]
+  - ["llm_judge_detailed", ["alpaca_audio_test", "openhermes_instruction_test"]]
+  - ["word_error_rate", ["librispeech_test_clean", "librispeech_test_other"]]
+
+
+num_samples: 20
+#user_prompt_add_ons: ["asr_clean_output"]
+system_prompts: ["audio_expert", "try_best"]
+accented: false
+length_filter: [1.0, 30.0] 
+#logging:
+#  log_file: "audiobench.log"  # Path to the main log file
+#  level: "INFO"               # Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+
+# Temperature overrides by model and task
+# These override the task_temp_map in constants.py
+#temperature_overrides:
+#  - model: "gpt-4o-mini-audio-preview"
+#    task: "emotion_recognition"
+#    temperature: 0.9
+#  - model: "gpt-4o-mini-audio-preview"
+#    temperature: 0.3
+#  - task: "ASR"
+#    temperature: 0.5
+
+judge_concurrency: 250
+judge_model: "gpt-4o-mini"
+#judge_type: "openai"
+judge_api_version: "2025-01-01-preview"
+judge_api_endpoint: "https://corelmm-gpt-4t.openai.azure.com"
+judge_api_key: "e6458032207a4920b3b0d2d797242eda"
+#judge_temperature: 0.1
+#judge_prompt_model_override: "Qwen3-32b"
+
+models:
+  - info:
+      name: "gpt-4o-mini-audio-preview"
+      inference_type: "openai"
+      url: "https://corelmm-gpt-4t.openai.azure.com"
+      delay: 100
+      retry_attempts: 8
+      timeout: 30
+      model: "gpt-4o-mini-audio-preview"
+      api_version: "2025-01-01-preview"
+      auth_token: "e6458032207a4920b3b0d2d797242eda"
+      batch_size: 350
+      chunk_size: 30
+  - info:
+      name: "infer-phi4-multimodal-instruct"
+      inference_type: "vllm"
+      url: "https://infer-phi4-multimodal-instruct-runai-nowllm.inference.ta121237.dgxcloud.ai/v1"
+      delay: 100
+      retry_attempts: 8
+      timeout: 30
+      model: "infer-phi4-multimodal-instruct"
+      #api_version: "2025-01-01-preview"
+      auth_token: "8o30OElfDYV_D6YbbznT0A:GDC2BsXIfSdfjv9iWka3V4MkazpvHfe0cCwXohzbP0Q"
+      batch_size: 200
+      chunk_size: 30

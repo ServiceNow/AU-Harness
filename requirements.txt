@@ -1,3 +1,5 @@
+#Python 3.12
+
 # Core numerical & data libraries
 numpy==1.26.0
 
@@ -39,6 +41,7 @@ scipy==1.15.3            # librosa, scikit-learn
 joblib==1.5.1            # scikit-learn
 soundfile==0.13.1        # librosa dependency, explicitly required
 
+word-levenshtein         # alignment tool for diarization metrics
 
 langdetect==1.0.9
 immutabledict==4.2.1

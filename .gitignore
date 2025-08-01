@@ -4,7 +4,7 @@ env
 env_py312
 
 # config files
-config.yaml
+#config.yaml
 
 # log files
 *.log
@@ -24,9 +24,11 @@ __pycache__/
 private_datasets/
 
 # tests
-test.py
+#test.py
 client_test.py
 
 # local configs
 .venv/
 .vscode/
+
+data/spider/

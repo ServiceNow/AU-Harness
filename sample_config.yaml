@@ -4,14 +4,14 @@ dataset_metric: #list of dataset-metric pairs, each as a two-item list of string
   - ["alpaca_audio_test", "llm_judge_detailed"]
   - ["librispeech_test_clean", "word_error_rate"]
   
-  # Emotion recognition datasets
+  # Emotion recognition runspec
   - ["emotion_recognition", "llm_judge_binary"]
   
   # Gender recognition datasets
   - ["voxceleb_gender_test", "llm_judge_binary"]
   - ["iemocap_gender_recognition", "llm_judge_binary"]
   
-  # Question-answering datasets
+  # Question-answering datasets and runspecs
   - ["big_bench_audio", "llm_judge_big_bench_audio"]
   - ["music_understanding", "llm_judge_binary"]
 
@@ -23,11 +23,24 @@ aggregate:
   
 num_samples: 100 #number of samples to run(remove for all)
 judge_concurrency: 8 #judge call(optional)
-judge_model: "gpt-4o-mini" #optional(only supported model right no2)
+judge_model: "gpt-4o-mini" #optional
 user_prompt_add_ons: ["asr_clean_output"] #optional - additional prompting in text instructions for each sample
 length_filter: [1.0, 3.0] #optional - filters for only audio samples in this length(seconds) - only supported for general and callhome preprocessors
 accented: false #optional - filters for only audio samples in this length(seconds)
 language: "english" #optional - filters for only audio samples in this language
+
+#override the requester temperature values by task or model
+temperature_overrides:
+  #model and task override
+  - model: "gpt-4o-mini-audio-preview"
+    task: "emotion_recognition"
+    temperature: 0.9
+  #model only override
+  - model: "gpt-4o-mini-audio-preview"
+    temperature: 0.3
+  #task only override
+  - task: "ASR"
+    temperature: 0.5
 
 models:
   - info:

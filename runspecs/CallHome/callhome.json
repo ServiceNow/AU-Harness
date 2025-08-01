@@ -1,22 +1,4 @@
 {
-  "earnings21_test": {
-    "hf_repo": "AudioLLMs/earnings21_test",
-    "language": "en",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
-  },
-  "earnings22_test": {
-    "hf_repo": "AudioLLMs/earnings22_test",
-    "language": "en",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
-  },
-  "tedlium3_long_form_test": {
-    "hf_repo": "AudioLLMs/tedlium3_long_form_test",
-    "language": "en",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor"
-  },
   "callhome_eng": {
     "language": "en",
     "preprocessor": "CallhomePreprocessor",
