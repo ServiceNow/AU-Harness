@@ -41,7 +41,6 @@ class BigBenchAudioTextOnlyPreprocessor(Preprocessor):
 
         dataset_keys = list(dataset.keys())
         dataset_size = len(dataset.get("id", []))
-        self.log_dataset_info(dataset_keys, dataset_size)
 
         processed_data = []
         dataset_size = len(dataset.get("id", []))

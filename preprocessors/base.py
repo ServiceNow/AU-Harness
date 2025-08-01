@@ -63,11 +63,9 @@ class Preprocessor():
             "system_prompts": properties.get("system_prompts", []),
             "length_filter": properties.get("length_filter", None),  # Optional (min_seconds, max_seconds) tuple
             "dataset_info": properties.get("dataset_info", {}),
-            "modality": properties.get("modality", ""),
             "judge_type": properties.get("judge_type", "")
         }
 
-        logger.debug(f"Extracted properties: {extracted}")
         return extracted
 
     def extract_audio_info(self, record, audio_column_name=None):

@@ -5,7 +5,10 @@
     "language": "en",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor",
-    "accented": true
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
   },
   "mnsc_pqa_ar_sentence_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
@@ -13,13 +16,19 @@
     "language": "en",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor",
-    "accented": true
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
   },
   "voxceleb_accent_test": {
     "hf_repo": "AudioLLMs/voxceleb_accent_test",
     "language": "en",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor",
-    "accented": true
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
   }
 }

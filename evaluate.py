@@ -207,10 +207,13 @@ def _load_callhome_dataset(repo, preprocessor_name, num_samples, properties):
     return dataset, dataset_size
 
 
-def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="GeneralPreprocessor",
-                  user_prompt_add_ons: list[str] = [], system_prompts: list[str] = [], length_filter=None, metric=None,
-                  split=None, dataset_info=None, modality=None):
+def _load_dataset(repo=None, num_samples=None, user_prompt_add_ons: list[str] = [], 
+                  system_prompts: list[str] = [], length_filter=None, metric=None, split=None, dataset_info=None):
     """Load and preprocess a dataset from a local or remote path."""
+    # Extract parameters from dataset_info
+    preprocessor_name = dataset_info.get("preprocessor", "GeneralPreprocessor") if dataset_info else "GeneralPreprocessor"
+    subset = dataset_info.get("subset", None) if dataset_info else None
+    
     logger.info(f"[_load_dataset] Loading dataset {repo} with preprocessor {preprocessor_name}")
 
     # Set up properties that will be passed to any preprocessor
@@ -224,8 +227,6 @@ def _load_dataset(repo=None, subset=None, num_samples=None, preprocessor_name="G
         properties["length_filter"] = tuple(length_filter)  # Convert list to tuple
     if dataset_info:
         properties["dataset_info"] = dataset_info
-    if modality:
-        properties["modality"] = modality
 
     # Special handling for local CallHome dataset
     if preprocessor_name.startswith("Callhome"):
@@ -438,9 +439,8 @@ def _calculate_aggregates(aggregates, all_scores, models):
     aggregate_scores = {}
     models_list = [model.name() for model in models]
     
-    # Load all runspec files
-    runspecs_dir = Path("runspecs")
-    runspec_files = list(runspecs_dir.glob("*.json"))
+    # Load all runspec files using the utility function
+    runspec_files = find_runspec_files()
     
     for agg_item in aggregates:
         # Skip invalid aggregates
@@ -472,9 +472,11 @@ def _calculate_aggregates(aggregates, all_scores, models):
             display_names.append(dataset_spec)
             
             if found_runspec:
+                logger.info(f"[calculate_aggregates] Found runspec file for '{dataset_spec}'")
                 # Add each dataset from the runspec for calculation
                 processed_datasets.extend(runspec_data.keys())
             else:
+                logger.info(f"[calculate_aggregates] Found dataset file for '{dataset_spec}'")
                 # If not a runspec file, treat as a regular dataset name
                 processed_datasets.append(dataset_spec)
         
@@ -496,7 +498,6 @@ def _calculate_aggregates(aggregates, all_scores, models):
                 # Process each dataset
                 for dataset_name in processed_datasets:
                     key = f"{dataset_name}_{metric_name}"
-                    
                     try:
                         # Access scores for this dataset and metric
                         score_data = all_scores[key]
@@ -597,7 +598,7 @@ def _process_dataset_and_evaluate(dataset_name, dataset_info, metric_name, cfg, 
 
     
     # Load dataset, metric, and postprocessor
-    dataset, dataset_size = _load_dataset(repo, subset=subset, num_samples=num_samples, preprocessor_name=preprocessor_name, user_prompt_add_ons=user_prompt_add_ons, 
+    dataset, dataset_size = _load_dataset(repo, num_samples=num_samples, user_prompt_add_ons=user_prompt_add_ons, 
                                     system_prompts=system_prompts, length_filter=length_filter, metric=metric_name, split=split, dataset_info=dataset_info)
     metric = _load_metric(metric_name, language=language, judge_concurrency=judge_concurrency, judge_model=judge_model)
     

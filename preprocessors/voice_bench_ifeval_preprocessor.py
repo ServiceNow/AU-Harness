@@ -37,8 +37,7 @@ class VoiceBenchIfevalPreprocessor(Preprocessor):
 
         # Extract properties using the base class method
         props = self.extract_properties(properties)
-        modality = props.get("modality", "audio")
-        logger.info(f"Processing modality: {modality}")
+        modality = props.get("dataset_info", {}).get("modality", "audio")
 
         # Get dataset info using base class method
         dataset_keys = list(dataset.keys())

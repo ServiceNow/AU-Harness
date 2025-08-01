@@ -3,18 +3,27 @@
     "hf_repo": "AudioLLMs/audiocaps_qa_test",
     "language": "en",
     "preprocessor": "GeneralPreprocessor",
-    "postprocessor": "GeneralPostprocessor"
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
   },
   "clotho_aqa_test": {
     "hf_repo": "AudioLLMs/clotho_aqa_test",
     "language": "en",
     "preprocessor": "GeneralPreprocessor",
-    "postprocessor": "GeneralPostprocessor"
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
   },
   "wavcaps_qa_test": {
     "hf_repo": "AudioLLMs/wavcaps_qa_test",
     "language": "en",
     "preprocessor": "GeneralPreprocessor",
-    "postprocessor": "GeneralPostprocessor"
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
   }
 }
