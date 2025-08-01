@@ -1,55 +1,18 @@
-
+import logging
 import re
 import unicodedata
 from collections import defaultdict
-import re
-from jiwer import (
-    Compose,
-    ReduceToListOfListOfChars,
-    RemovePunctuation,
-    RemoveWhiteSpace,
-    Strip,
-    ToLowerCase,
-    process_words,
-)
-from tqdm import tqdm
+
+from jiwer import process_words
 from num2words import num2words
-import logging
+from tqdm import tqdm
+
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 from metrics.base_metric_metadata import MetricMetadata
 from metrics.metrics import Metrics
-from metrics.wer.normalizers import JapaneseTextNormalizer
-from metrics.wer.whisper_normalizer.english import EnglishTextNormalizer
-from metrics.wer.whisper_normalizer.basic import BasicTextNormalizer
 from utils.custom_logging import write_record_log, append_final_score
-
 from utils import constants
-
-# Mapping to normalize language codes
-language_map = {
-    "en": "en",
-    "english": "en",
-    "ja": "ja", 
-    "japanese": "ja",
-}
-NORMALIZERS = {"en": EnglishTextNormalizer(), "ja": JapaneseTextNormalizer()}
-DEFAULT_NORMALIZER = BasicTextNormalizer()
-BASIC_TRANSFORMATIONS = Compose(
-    [
-        ToLowerCase(),
-        RemovePunctuation(),
-        Strip(),
-    ]
-)
-# CER stands for Character Error Rate
-CER_LANGUAGES = {"ja"}
-CER_DEFAULTS = Compose(
-    [
-        RemoveWhiteSpace(),
-        ReduceToListOfListOfChars(),
-    ]
-)
 
 
 def convert_unicode_to_characters(text: str) -> str:
@@ -60,19 +23,12 @@ def convert_unicode_to_characters(text: str) -> str:
         # Optionally log the error
         logger.warning(f"Unicode normalization failed: {e}. Returning original text.")
         return text
-    """Convert unicode to composed form."""
-    try:
-        return unicodedata.normalize("NFC", text)
-    except Exception as e:
-        # Optionally log the error
-        logger.warning(f"Unicode normalization failed: {e}. Returning original text.")
-        return text
 
 
 def convert_digits_to_words(text: str, language: str):
+    """Convert numbers to words (e.g., "3" to "three")."""
     if not language:
         return text
-    """Convert numbers to words (e.g., "3" to "three")."""
     try:
         return re.sub(r"\d+", lambda m: num2words(int(m.group()), lang=language), text)
     except Exception as e:
@@ -86,22 +42,16 @@ def normalize_text(text: str, language: str = 'en') -> str:
 
     Args:
         text: input text
-        language: language code or full name (e.g. 'en', 'english')
+        language: language code (e.g. 'en', 'es')
     """
-    # Convert language to lowercase for case-insensitive matching
-    if isinstance(language, str):
-        language = language.lower()
-    
-    # Normalize language code
-    normalized_language = language_map.get(language, '')
-    
+    # Use language code directly without conversion
     # Get the appropriate normalizer
-    normalizer = NORMALIZERS.get(normalized_language, DEFAULT_NORMALIZER)
-    
+    normalizer = constants.NORMALIZERS.get(language, constants.DEFAULT_NORMALIZER)
+
     # Process the text
     text = convert_unicode_to_characters(text)
-    text = convert_digits_to_words(text, normalized_language)
-    return BASIC_TRANSFORMATIONS([normalizer(text)])[0]
+    text = convert_digits_to_words(text, language)
+    return constants.BASIC_TRANSFORMATIONS([normalizer(text)])[0]
 
 
 class WERMetrics(Metrics):
@@ -121,14 +71,13 @@ class WERMetrics(Metrics):
             append_final_score(self, overall, dataset_name, model_name)
         return overall
 
-
-
     def __init__(self, language="en"):
         super().__init__()
         self.name = "word_error_rate"
         self.lower_better = True
-        self.description = "The proportion of words that are incorrectly predicted, when compared to the reference text. The dataset is considered as one big conversation."
+        # Use language code directly without conversion
         self.language = language
+        self.description = "The proportion of words that are incorrectly predicted, when compared to the reference text. The dataset is considered as one big conversation."
 
     def compute_attributes(self, incorrect: list[int | float], total: list[int | float], attributes: list[str]) -> dict:
         """Compute the attributes (e.g., accent, gender) that should be saved in the record level file for analysis."""
@@ -169,7 +118,7 @@ class WERMetrics(Metrics):
         overall_wer = incorrect_chars / total_chars if total_chars > 0 else 0
         # Cap at 1.0
         overall_wer = min(overall_wer, 1.0)
-        
+
         # We also track per-sample average for a more balanced view
         avg_sample_wer = sum(scores["wer_per_row"]) / len(scores["wer_per_row"]) if scores["wer_per_row"] else 0
         # Cap the WER at 1.0
@@ -187,13 +136,13 @@ class WERMetrics(Metrics):
             id_to_wers = defaultdict(list)
             id_to_incorrect = defaultdict(int)
             id_to_total = defaultdict(int)
-            
+
             for i, conv_id in enumerate(ids):
                 if i < len(scores["wer_per_row"]) and i < len(scores["incorrect"]) and i < len(scores["total"]):
                     id_to_wers[conv_id].append(scores["wer_per_row"][i])
                     id_to_incorrect[conv_id] += scores["incorrect"][i]
                     id_to_total[conv_id] += scores["total"][i]
-            
+
             # Calculate average WER for each conversation ID
             for conv_id, wers in id_to_wers.items():
                 # Using ratio of sums for conversation WER
@@ -201,30 +150,30 @@ class WERMetrics(Metrics):
                 # Cap at 1.0
                 conv_wer = min(conv_wer, 1.0)
                 conversation_wer[conv_id] = conv_wer
-            
+
             result["conversation_wer"] = conversation_wer
-        
+
         # If lengths are provided, calculate WER by length buckets
         if lengths and len(lengths) == len(scores["wer_per_row"]):
             # Define length buckets
             buckets = [(0, 0.5), (0.5, 1), (1, 1.5), (1.5, 2), (2, 3), (3, float('inf'))]
             bucket_labels = ["0-0.5", "0.5-1", "1-1.5", "1.5-2", "2-3", "3+"]
             length_wer = {}
-            
+
             # Group WERs by length bucket
             bucket_to_incorrect = {label: 0 for label in bucket_labels}
             bucket_to_total = {label: 0 for label in bucket_labels}
-            
+
             for i, length in enumerate(lengths):
                 if i < len(scores["wer_per_row"]) and i < len(scores["incorrect"]) and i < len(scores["total"]):
                     # Find which bucket this length belongs to
-                    bucket_idx = next((j for j, (min_len, max_len) in enumerate(buckets) 
-                                      if min_len <= length < max_len), len(buckets) - 1)
+                    bucket_idx = next((j for j, (min_len, max_len) in enumerate(buckets)
+                                       if min_len <= length < max_len), len(buckets) - 1)
                     bucket_label = bucket_labels[bucket_idx]
-                    
+
                     bucket_to_incorrect[bucket_label] += scores["incorrect"][i]
                     bucket_to_total[bucket_label] += scores["total"][i]
-            
+
             # Calculate WER for each length bucket
             for bucket_label in bucket_labels:
                 if bucket_to_total[bucket_label] > 0:
@@ -234,7 +183,7 @@ class WERMetrics(Metrics):
                     length_wer[bucket_label] = bucket_wer
                 else:
                     length_wer[bucket_label] = 0.0
-            
+
             result["length_wer"] = length_wer
 
         # Store the scores for later record level reporting
@@ -261,10 +210,11 @@ class WERMetrics(Metrics):
         references_clean = []
         candidates_clean = []
 
-        for i, (reference, candidate) in enumerate(tqdm(zip(references, candidates), desc="word_error_rate", total=len(references))):
-            lang_code = getattr(self, 'language', 'en')
-            references_clean.append(normalize_text(reference, lang_code))
-            candidates_clean.append(normalize_text(candidate, lang_code))
+        for i, (reference, candidate) in enumerate(
+                tqdm(zip(references, candidates), desc="word_error_rate", total=len(references))):
+            # Use the normalized language code from instance variable
+            references_clean.append(normalize_text(reference, self.language))
+            candidates_clean.append(normalize_text(candidate, self.language))
             if references_clean[-1].strip() == "":
                 logger.warning(
                     f"After normalization, '{reference}' is empty. Considering all words in '{candidate}' as incorrect."
@@ -273,8 +223,8 @@ class WERMetrics(Metrics):
                 total_scores.append(1)
             else:
                 kwargs = (
-                    {kwarg: CER_DEFAULTS for kwarg in ("truth_transform", "hypothesis_transform")}
-                    if lang_code in CER_LANGUAGES
+                    {kwarg: constants.CER_DEFAULTS for kwarg in ("truth_transform", "hypothesis_transform")}
+                    if self.language in constants.CER_LANGUAGES
                     else {}
                 )
                 measures = process_words(references_clean[-1], candidates_clean[-1], **kwargs)
@@ -307,34 +257,3 @@ class WERMetrics(Metrics):
             results["gender"] = gender
         return results
 
-    def get_reporting_summary_score(self, overall_score: dict[str, float]) -> dict:
-        """Gets the score to display in wandb. If a metric says lower-is-better, highlight with an ↓.
-
-        Args:
-            overall_score: The overall score that was computed for the metric
-        Returns:
-            The dictionary of columns and values to actually present in wandb
-        """
-        return overall_score
-
-    def get_metadata(self) -> dict:
-        """Return metadata info."""
-        metadata = {
-            "wer": MetricMetadata(
-                name="wer",
-                display_name=f"{constants.INVERTED_METRIC_INDICATOR} Word Error Rate",
-                description=self.description,
-                higher_is_better=False,
-            )
-        }
-        for attribute in ("accent", "gender"):
-            current_attr = set(self.record_level_scores.get(attribute, []))
-            for attr_value in current_attr:
-                if attr_value is not None:
-                    metadata[f"wer_{attribute}_{attr_value}"] = MetricMetadata(
-                        name=f"wer_{attribute}_{attr_value}",
-                        display_name=f"{constants.INVERTED_METRIC_INDICATOR} Word Error Rate {attribute.title()} ({attr_value})",
-                        description=self.description,
-                        higher_is_better=False,
-                    )
-        return metadata

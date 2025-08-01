@@ -1,11 +1,18 @@
 from __future__ import annotations
-import asyncio, json, yaml, os, re
+
+import asyncio
+import json
+import logging
+import os
+import re
 from pathlib import Path
+from typing import List, Tuple, Optional
+
+import httpx
+import yaml
 from openai import AsyncAzureOpenAI, APIConnectionError
 from tqdm import tqdm
-from typing import List, Tuple, Optional
-import httpx
-import logging
+
 logger = logging.getLogger(__name__)
 from metrics.metrics import Metrics
 from utils.custom_logging import write_record_log, append_final_score
@@ -16,6 +23,8 @@ from utils.custom_logging import write_record_log, append_final_score
 
 _template_cache: dict[str, str] | None = None
 PROMPT_FILE_PATH = Path(__file__).resolve().parents[1] / "prompts/judge_prompts.yaml"
+
+
 def _get_prompt(kind: str) -> str:
     """Load and return the prompt string for *kind* every call (no caching)."""
     data = yaml.safe_load(PROMPT_FILE_PATH.read_text()) or {}
@@ -23,12 +32,14 @@ def _get_prompt(kind: str) -> str:
         raise KeyError(f"Prompt '{kind}' not found in {PROMPT_FILE_PATH}")
     return data[kind]
 
+
 # ---------------------------------------------------------------------------
 # Base LLM judge – uses gpt-4o via async OpenAI SDK
 # ---------------------------------------------------------------------------
 
 _DEFAULT_OPENAI_MODEL = "gpt-4o-mini"
 _DEFAULT_MAX_CONCURRENCY = 5
+
 
 class _BaseLLMJudge(Metrics):
     """Common LLM-as-judge scaffolding."""
@@ -64,14 +75,15 @@ class _BaseLLMJudge(Metrics):
                 except Exception:
                     return content
             except (APIConnectionError, httpx.ConnectError, httpx.HTTPError) as e:
-                logger.warning(f"API connection failed (attempt {attempt+1}/{max_retries}): {e}")
+                logger.warning(f"API connection failed (attempt {attempt + 1}/{max_retries}): {e}")
                 await asyncio.sleep(2)  # Wait before retrying
             except Exception as e:
                 error_message = str(e)
                 # Handle content policy violations separately
                 if "content management policy" in error_message and attempt < max_retries - 1:
-                    logger.warning(f"Content filter triggered (attempt {attempt+1}/{max_retries}). Modifying prompt...")
-                    
+                    logger.warning(
+                        f"Content filter triggered (attempt {attempt + 1}/{max_retries}). Modifying prompt...")
+
                     # Apply progressively stronger modifications to avoid content filter
                     if attempt == 0:
                         # First retry: Add a safety prefix to the system prompt
@@ -79,7 +91,7 @@ class _BaseLLMJudge(Metrics):
                     else:
                         # Second retry: Add a safety prefix to the user prompt
                         user_prompt = f"For academic evaluation purposes only: {user_prompt}"
-                    
+
                     # Continue to retry with modified prompts
                     await asyncio.sleep(1)
                     continue
@@ -91,9 +103,9 @@ class _BaseLLMJudge(Metrics):
         return None
 
     async def _judge_all(
-        self,
-        candidates: list[str],
-        references: list[str],
+            self,
+            candidates: list[str],
+            references: list[str],
     ) -> list:
         """Run the LLM judge over *candidates* vs *references*.
 
@@ -116,7 +128,7 @@ class _BaseLLMJudge(Metrics):
         tasks_with_indices = [(i, _run(c, r)) for i, (c, r) in enumerate(zip(candidates, references))]
         pending = {asyncio.create_task(coro): i for i, coro in tasks_with_indices}
         results = [None] * len(tasks_with_indices)  # Pre-allocate results list
-        
+
         # Use tqdm to monitor progress across asynchronous completions
         with tqdm(total=len(pending), desc=f"LLM Judge ({self._prompt_key})") as progress:
             while pending:
@@ -132,7 +144,8 @@ class _BaseLLMJudge(Metrics):
     # Internal helper for per-record logging
     # ---------------------------------------------------
 
-#All of these judges always return on a scale of 100
+
+# All of these judges always return on a scale of 100
 
 # ---------------------------------------------------------------------------
 # Binary (yes/no) judge
@@ -159,7 +172,6 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
             append_final_score(self, overall, dataset_name, model_name)
         return overall
 
-
     def compute_record_level_scores(self, candidates: list, references: list):
         # Here we can use self.instructions if needed
         raw_scores = asyncio.run(self._judge_all(candidates, references))
@@ -167,6 +179,7 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
         scores = [float(r.get("score", 0)) if isinstance(r, dict) else 0.0 for r in raw_scores]
         self.explanations = [r.get("explanation", "") if isinstance(r, dict) else "" for r in raw_scores]
         return {self.name: scores}
+
 
 class DetailedLLMJudgeMetric(_BaseLLMJudge):
     """Detailed LLM judge metric.
@@ -205,6 +218,7 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):
         self.explanations = [r.get("explanation", "") if isinstance(r, dict) else "" for r in raw_scores]
         return {self.name: scores}
 
+
 class CallHomeLLMJudgeMetric(_BaseLLMJudge):
     name: str = "llm_judge_callhome"
     _prompt_key: str = "callhome_judge_prompt"
@@ -237,6 +251,8 @@ class CallHomeLLMJudgeMetric(_BaseLLMJudge):
         scores = [float(r.get("score", 0)) if isinstance(r, dict) else 0.0 for r in raw_scores]
         self.explanations = [r.get("explanation", "") if isinstance(r, dict) else "" for r in raw_scores]
         return {self.name: scores}
+
+
 # ---------------------------------------------------------------------------
 # Original LLM judge
 # ---------------------------------------------------------------------------
@@ -313,9 +329,9 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
         return overall
 
     def compute_record_level_scores(
-        self,
-        candidates: List[str],
-        references: List[Tuple[str, str]]
+            self,
+            candidates: List[str],
+            references: List[Tuple[str, str]]
     ) -> dict:
         """
         Calls the LLM to judge each (transcript, prediction, official_answer) triple and returns scores.
@@ -355,6 +371,7 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
             dataset_name (str): Dataset identifier.
             model_name (str): Model identifier.
         """
+
         def _slug(text: str) -> str:
             return re.sub(r"[^A-Za-z0-9_]+", "_", text)
 

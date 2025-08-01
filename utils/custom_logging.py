@@ -1,5 +1,5 @@
 """
-Shared logging utilities for AudioBench.
+Shared logging utilities.
 
 Central logging setup and record-level logging for metrics.
 
@@ -14,6 +14,7 @@ import re
 import json
 from pathlib import Path
 from itertools import zip_longest
+from pathlib import Path
 from typing import Optional
 
 # Default log file name for central logging
@@ -48,15 +49,24 @@ def _install_handlers(log_path: Path):
 
 
 def configure(log_file: Optional[str] = None):
-    """Configure root logger. If *log_file* is None, use *_DEFAULT_NAME*."""
-    global _configured
-    if _configured:
-        return
+    """
+    Configure root logger. If *log_file* is None, use *_DEFAULT_NAME*.
+    Always reconfigures logging even if previously configured.
+    
+    Args:
+        log_file: Path to log file (optional)
+    """
+
     if log_file:
         path = Path(log_file)
     else:
         path = Path(__file__).parent.parent / _DEFAULT_NAME
+        
     _install_handlers(path)
+    
+    # Disable httpx INFO logs by setting its logger to WARNING level
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    
     _configured = True
 
 
@@ -77,10 +87,10 @@ def write_record_log(self, refs, cands, scores, dataset_name, model_name, explan
     """
     if not refs or not scores:
         return
-    
+
     def _slug(s):
         return re.sub(r"[^A-Za-z0-9_]+", "_", s)
-    
+
     log_dir = Path("run_logs")
     log_dir.mkdir(exist_ok=True)
     log_path = log_dir / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.csv"
@@ -88,7 +98,7 @@ def write_record_log(self, refs, cands, scores, dataset_name, model_name, explan
     # Use provided explanations or an empty list
     if explanations is None:
         explanations = [""] * len(scores)
-        
+
     # Use provided instructions or an empty list
     if instructions is None:
         instructions = [""] * len(scores)
@@ -152,12 +162,13 @@ def write_record_log(self, refs, cands, scores, dataset_name, model_name, explan
     
     # Write to shared run.log
     write_to_run_json(self, refs, cands, scores, dataset_name, model_name, explanations, instructions)
-    
+
     return log_path
 
 
 # Flag to track if run.log has been reset for this session
 _run_log_reset = False
+
 
 def write_to_run_json(self, refs, cands, scores, dataset_name, model_name, explanations=None, instructions=None):
     """
@@ -176,19 +187,19 @@ def write_to_run_json(self, refs, cands, scores, dataset_name, model_name, expla
     global _run_log_reset
     run_path = Path("run_logs") / "run.log"
     run_path.parent.mkdir(exist_ok=True)
-    
+
     # Use provided explanations or an empty list
     if explanations is None:
         explanations = [""] * len(scores)
-        
+
     # Use provided instructions or an empty list
     if instructions is None:
         instructions = [""] * len(scores)
-    
+
     # Determine file mode: 'w' to reset file on first call, 'a' to append on subsequent calls
     file_mode = "w" if not _run_log_reset else "a"
     _run_log_reset = True
-    
+
     # Open run.log in appropriate mode
     with open(run_path, file_mode, encoding="utf-8") as f:
         # Add entries for this metric/dataset/model
@@ -221,9 +232,10 @@ def append_final_score(self, overall, dataset_name, model_name):
     Returns:
         Path to the log file where the final score was appended
     """
+
     def _slug(s):
         return re.sub(r"[^A-Za-z0-9_]+", "_", s)
-    
+
     log_dir = Path("run_logs")
     log_dir.mkdir(exist_ok=True)
     log_path = log_dir / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.csv"

@@ -1,9 +1,9 @@
 {
     "mu_chomusic_test": {
     "hf_repo": "AudioLLMs/mu_chomusic_test",
-    "language": "english",
-    "preprocessor": "AudiobenchPreprocessor",
-    "postprocessor": "AudiobenchPostprocessor",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
     "tasks": [
       "Music Understanding"
     ]

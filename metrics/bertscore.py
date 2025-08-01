@@ -1,10 +1,9 @@
-
 from bert_score import score
 from metrics.metrics import Metrics
 from utils.custom_logging import write_record_log, append_final_score
-from utils import util
-
+from tqdm import tqdm
 from metrics.word_error_rate_metrics import normalize_text
+from utils.custom_logging import write_record_log, append_final_score
 
 
 class BertScore(Metrics):
@@ -40,15 +39,15 @@ class BertScore(Metrics):
         """
 
         # TODO: Optimizing for batch processing (more efficient with GPU) later
-        from tqdm import tqdm
         score_list = []
         for i in tqdm(range(len(candidates)), desc="BERTSCORE"):
-            #=== Consistent normalization with WER processing === 
+            # === Consistent normalization with WER processing ===
             reference, candidate = references[i], candidates[i]
             norm_reference = normalize_text(reference)
             norm_candidate = normalize_text(candidate)
 
-            precision,recall,f1 = self.scorer([norm_reference], [norm_candidate], model_type='bert-base-multilingual-cased')
+            precision, recall, f1 = self.scorer([norm_reference], [norm_candidate],
+                                                model_type='bert-base-multilingual-cased')
             f1_score = f1.numpy().tolist()
             score_list.extend(f1_score)
         return {self.name: score_list}

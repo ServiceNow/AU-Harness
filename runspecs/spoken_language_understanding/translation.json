@@ -1,0 +1,326 @@
+{
+  "covost2_fr_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "fr_en",
+    "split": "test",
+    "source_language": "fr",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_de_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "de_en",
+    "split": "test",
+    "source_language": "de",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_es_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "es_en",
+    "split": "test",
+    "source_language": "es",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_ca_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "ca_en",
+    "split": "test",
+    "source_language": "ca",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_it_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "it_en",
+    "split": "test",
+    "source_language": "it",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_ru_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "ru_en",
+    "split": "test",
+    "source_language": "ru",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_zh-CN_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "zh-CN_en",
+    "split": "test",
+    "source_language": "zh-CN",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_pt_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "pt_en",
+    "split": "test",
+    "source_language": "pt",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_fa_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "fa_en",
+    "split": "test",
+    "source_language": "fa",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_et_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "et_en",
+    "split": "test",
+    "source_language": "et",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_mn_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "mn_en",
+    "split": "test",
+    "source_language": "mn",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_nl_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "nl_en",
+    "split": "test",
+    "source_language": "nl",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_tr_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "tr_en",
+    "split": "test",
+    "source_language": "tr",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_ar_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "ar_en",
+    "split": "test",
+    "source_language": "ar",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_sv-SE_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "sv-SE_en",
+    "split": "test",
+    "source_language": "sv-SE",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_lv_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "lv_en",
+    "split": "test",
+    "source_language": "lv",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_sl_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "sl_en",
+    "split": "test",
+    "source_language": "sl",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_ta_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "ta_en",
+    "split": "test",
+    "source_language": "ta",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_ja_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "ja_en",
+    "split": "test",
+    "source_language": "ja",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_id_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "id_en",
+    "split": "test",
+    "source_language": "id",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_cy_en": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "cy_en",
+    "split": "test",
+    "source_language": "cy",
+    "target_language": "en",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_en_de": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "en_de",
+    "split": "test",
+    "source_language": "en",
+    "target_language": "de",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_en_ca": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "en_ca",
+    "split": "test",
+    "source_language": "en",
+    "target_language": "ca",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_en_zh-CN": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "en_zh-CN",
+    "split": "test",
+    "source_language": "en",
+    "target_language": "zh-CN",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_en_fa": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "en_fa",
+    "split": "test",
+    "source_language": "en",
+    "target_language": "fa",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_en_et": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "en_et",
+    "split": "test",
+    "source_language": "en",
+    "target_language": "et",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_en_mn": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "en_mn",
+    "split": "test",
+    "source_language": "en",
+    "target_language": "mn",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_en_tr": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "en_tr",
+    "split": "test",
+    "source_language": "en",
+    "target_language": "tr",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_en_ar": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "en_ar",
+    "split": "test",
+    "source_language": "en",
+    "target_language": "ar",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_en_sv-SE": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "en_sv-SE",
+    "split": "test",
+    "source_language": "en",
+    "target_language": "sv-SE",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_en_lv": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "en_lv",
+    "split": "test",
+    "source_language": "en",
+    "target_language": "lv",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_en_sl": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "en_sl",
+    "split": "test",
+    "source_language": "en",
+    "target_language": "sl",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_en_ta": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "en_ta",
+    "split": "test",
+    "source_language": "en",
+    "target_language": "ta",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_en_ja": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "en_ja",
+    "split": "test",
+    "source_language": "en",
+    "target_language": "ja",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_en_id": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "en_id",
+    "split": "test",
+    "source_language": "en",
+    "target_language": "id",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  },
+  "covost2_en_cy": {
+    "hf_repo": "fixie-ai/covost2",
+    "subset": "en_cy",
+    "split": "test",
+    "source_language": "en",
+    "target_language": "cy",
+    "preprocessor": "Covost2Preprocessor",
+    "postprocessor": "Covost2Postprocessor"
+  }
+}

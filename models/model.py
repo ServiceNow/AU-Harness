@@ -1,5 +1,7 @@
 import asyncio
+import copy
 from abc import ABC
+
 from tenacity import (
     AsyncRetrying,
     RetryError,
@@ -10,16 +12,18 @@ from tenacity import (
 )
 
 from utils.custom_logging import configure
+
 configure()
 import logging
+
 logger = logging.getLogger(__name__)
 logger.propagate = True
 from models.model_response import ErrorTracker, ModelResponse
 from models.request_resp_handler import RequestRespHandler
-from copy import deepcopy
 from utils import constants
 from utils.constants import task_temp_map
 from utils.multimodal import encode_audio_array_base64, audio_array_to_wav_file
+
 
 class Model(ABC):
     """TODO: Need SME to add."""
@@ -32,11 +36,11 @@ class Model(ABC):
         """
         self.model_info = model_info
         self._name = model_info.get("name")
-        self.model = model_info["model"]
+        self.model = model_info.get("model")
         self.api_key = model_info.get("auth_token", "")
-        self.model_url = model_info.get("url", "")
-        self.api_version = model_info.get("api_version", "")  # Optional API version
-        self.inference_type = model_info["inference_type"]
+        self.model_url = model_info.get("url")
+        self.api_version = model_info.get("api_version")
+        self.inference_type = model_info.get("inference_type")
         self.batch_size = model_info.get("batch_size", 1)
         # sleep before every call - in ms
         self.delay = model_info.get("delay", 100)
@@ -49,7 +53,7 @@ class Model(ABC):
         self.temperature = temperature
         # some flow does not work with async client like internal private network
         self.postprocessor_path = model_info.get("postprocessor", [])
-        #model_name = model_info.get("model", model_info.get("alias", self.name()))
+        # model_name = model_info.get("model", model_info.get("alias", self.name()))
         self.req_resp_hndlr = RequestRespHandler(
             self.inference_type,
             self.model_info,
@@ -88,8 +92,8 @@ class Model(ABC):
     def _set_max_backoff(self, attempt):
         """Set exponential backoff for 429 and 1 second for 599 error codes."""
         if (
-            attempt.retry_state.outcome.result().response_code == 429
-            or attempt.retry_state.outcome.result().response_code == 504
+                attempt.retry_state.outcome.result().response_code == 429
+                or attempt.retry_state.outcome.result().response_code == 504
         ):
             attempt.retry_state.retry_object.wait = wait_random_exponential(multiplier=1, max=100)
         elif attempt.retry_state.outcome.result().response_code == 450:
@@ -122,20 +126,19 @@ class Model(ABC):
             # Log that we're tracking this error
             logger.info(f"[_mark_errors] Recorded error {result.response_code} in error tracker: {error_tracker.__dict__}")
 
-
-    #pure retry and exception logic
+    # pure retry and exception logic
     async def _generate_text_with_retry(
-        self, message: dict | str, run_params: dict
+            self, message: dict | str, run_params: dict
     ) -> ModelResponse:
         # Create a new error tracker instance for this specific call
         call_errors = ErrorTracker()
         result = None
         try:
             async for attempt in AsyncRetrying(
-                retry=retry_if_result(self._is_retryable_error),
-                wait=wait_random_exponential(multiplier=1, max=300),
-                stop=stop_after_attempt(self.retry_attempts),
-                before_sleep=self._log_before_retry,
+                    retry=retry_if_result(self._is_retryable_error),
+                    wait=wait_random_exponential(multiplier=1, max=300),
+                    stop=stop_after_attempt(self.retry_attempts),
+                    before_sleep=self._log_before_retry,
             ):
                 with attempt:
                     try:
@@ -216,24 +219,21 @@ class Model(ABC):
             Response and http return code
         """
 
-
-
-        #getting attributes
-        audio_array = message.get("array")
-        sampling_rate = message.get("sampling_rate")
+        # getting attributes
+        audio_array = message.get("array", None)
+        sampling_rate = message.get("sampling_rate", 0)
         chunk_seconds: int = int(run_params.get("chunk_size", 30))  # default to 30s
         metric_name: str | None = run_params.get("metric")
         max_samples: int = int(chunk_seconds * sampling_rate) if sampling_rate else 0
         total_samples: int = len(audio_array) if audio_array is not None else 0
         instruction = message.get("instruction")
 
+        tools = copy.deepcopy(message.get('tools', None))
+
         # If metric is judge types, only use first chunk (30s) regardless of length
         judge_metrics = {"llm_judge_binary", "llm_judge_detailed"}
         if metric_name in judge_metrics:
             total_samples = max_samples  # force single chunk
-
-
-
 
         # --- CHUNKING LOGIC FIRST ---
         if total_samples > max_samples:
@@ -243,8 +243,8 @@ class Model(ABC):
 
             # chat completion – process each chunk and concatenate
             if self.inference_type in (
-                constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION,
-                constants.OPENAI_CHAT_COMPLETION,
+                    constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION,
+                    constants.OPENAI_CHAT_COMPLETION,
             ):
                 for i in range(num_chunks):
                     start = i * max_samples
@@ -262,7 +262,7 @@ class Model(ABC):
 
                     # Prepare messages list starting with system prompt if available
                     messages = []
-                    
+
                     # Add system prompt if available
                     system_prompt = message.get("system_prompt")
                     if system_prompt:
@@ -270,7 +270,7 @@ class Model(ABC):
                             "role": "system",
                             "content": system_prompt
                         })
-                
+
                     # Handle text-only vs audio+text scenarios
                     if encoded == "":
                         # Text-only case
@@ -294,7 +294,7 @@ class Model(ABC):
                             ],
                         })
                     message["model_inputs"] = messages
-                    resp = await self.req_resp_hndlr.request_server(message["model_inputs"], error_tracker)
+                    resp = await self.req_resp_hndlr.request_server(message["model_inputs"], tools=tools, error_tracker=error_tracker)
                     concatenated_text += resp.llm_response or ""
                     responses.append(resp)
                 # Merge responses
@@ -302,10 +302,10 @@ class Model(ABC):
                 final_resp.llm_response = concatenated_text
                 return final_resp
 
-            #audio transcription - append values
+            # audio transcription - append values
             elif self.inference_type in (
-                constants.INFERENCE_SERVER_VLLM_TRANSCRIPTION,
-                constants.OPENAI_TRANSCRIPTION,
+                    constants.INFERENCE_SERVER_VLLM_TRANSCRIPTION,
+                    constants.OPENAI_TRANSCRIPTION,
             ):
                 for i in range(num_chunks):
                     start = i * max_samples
@@ -323,22 +323,22 @@ class Model(ABC):
             else:
                 raise ValueError("Unsupported inference type")
 
-
-
-
         # --- SINGLE-CHUNK LOGIC ---
-        #chat completion
+        # chat completion
         if self.inference_type in (
-            constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION,
-            constants.OPENAI_CHAT_COMPLETION,
+                constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION,
+                constants.OPENAI_CHAT_COMPLETION,
         ):
             # Cut to first 30s, then process as chat completion
-            chunk_array = audio_array[:max_samples]
-            encoded = encode_audio_array_base64(chunk_array, sampling_rate)
+            if audio_array is not None and len(audio_array) > 0:
+                chunk_array = audio_array[:max_samples]
+                encoded = encode_audio_array_base64(chunk_array, sampling_rate)
+            else:
+                encoded = ""
 
             # Prepare messages list starting with system prompt if available
             messages = []
-            
+
             # Add system prompt if available
             system_prompt = message.get("system_prompt")
             if system_prompt:
@@ -346,7 +346,7 @@ class Model(ABC):
                     "role": "system",
                     "content": system_prompt
                 })
-            
+
             # Handle text-only vs audio+text scenarios
             if encoded == "":
                 # Text-only case
@@ -370,12 +370,12 @@ class Model(ABC):
                     ],
                 })
             message["model_inputs"] = messages
-            return await self.req_resp_hndlr.request_server(message["model_inputs"], error_tracker)
+            return await self.req_resp_hndlr.request_server(message["model_inputs"], tools=tools, error_tracker=error_tracker)
 
-        #transcription
+        # transcription
         elif self.inference_type in (
-            constants.INFERENCE_SERVER_VLLM_TRANSCRIPTION,
-            constants.OPENAI_TRANSCRIPTION,
+                constants.INFERENCE_SERVER_VLLM_TRANSCRIPTION,
+                constants.OPENAI_TRANSCRIPTION,
         ):
             wav_path = audio_array_to_wav_file(audio_array, sampling_rate)
             # Pass closed file (file path) to request_server
