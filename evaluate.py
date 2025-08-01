@@ -309,19 +309,15 @@ def _calculate_aggregates(aggregates, all_scores, models):
             # Check if this is a runspec file name rather than a dataset name
             found_runspec, runspec_data = _find_runspec_by_name(dataset_spec, runspec_files)
             
+            # Always add the dataset/runspec name for display
+            display_names.append(dataset_spec)
+            
             if found_runspec:
-                datasets_in_runspec = runspec_data
-                
-                # Add the runspec name for display, but use its datasets for processing
-                display_names.append(dataset_spec)
-                
                 # Add each dataset from the runspec for calculation
-                for ds_name in datasets_in_runspec.keys():
-                    processed_datasets.append(ds_name)
+                processed_datasets.extend(runspec_data.keys())
             else:
                 # If not a runspec file, treat as a regular dataset name
                 processed_datasets.append(dataset_spec)
-                display_names.append(dataset_spec)  # Same for display
         
         if not processed_datasets:
             logger.warning(f"[calculate_aggregates] No valid datasets found for metric '{metric_name}'")
