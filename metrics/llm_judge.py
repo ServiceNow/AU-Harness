@@ -81,13 +81,9 @@ class _BaseLLMJudge(Metrics):
                     try:
                         # Load the prompt from judge_prompts.yaml using the constructed key
                         system_prompt = _get_prompt(prompt_key)
-                        logger.info(f"Using prompt for model {model_name} with key: {prompt_key}")
                     except KeyError as e:
                         logger.warning(f"Prompt key '{prompt_key}' not found in judge_prompts.yaml: {e}")
                         # Keep using the original system prompt if the constructed key is not found
-                
-                #logger.info(f"System Prompt: {system_prompt}")
-                #logger.info(f"User Prompt: {user_prompt}")
                 
                 # Check if we should use no_sys_prompt mode
                 no_sys_prompt = self._judge_properties.get("no_sys_prompt", False)
@@ -116,7 +112,6 @@ class _BaseLLMJudge(Metrics):
                 content = resp.choices[0].message.content.strip()
                 # Clean response to remove thinking content
                 cleaned_content = Postprocessor.remove_thinking_content(content)
-                logger.info(f"Response (after cleaning): {cleaned_content}")
                 content = cleaned_content
                 try:
                     return json.loads(content)
