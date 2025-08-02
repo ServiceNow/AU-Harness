@@ -19,6 +19,7 @@ soundfile==0.13.1        # depends on system libsndfile
 sacrebleu==2.5.1
 nltk==3.9.1
 bert-score
+unbabel-comet
 
 # Misc utilities
 PyYAML==6.0.2
@@ -48,4 +49,3 @@ immutabledict==4.2.1
 
 # Debugging
 debugpy==1.8.0           # VSCode debugging support
-

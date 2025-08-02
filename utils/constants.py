@@ -57,6 +57,8 @@ metric_map = {
     "meteor": ("metrics.meteor_score", "MeteorScore"),
     'sql_score': ("metrics.sql_score", "SqlScore"),
     "word_error_rate": ("metrics.word_error_rate_metrics", "WERMetrics"),
+    "comet": ("metrics.comet_score", "CometScore"),
+
 }
 
 task_temp_map = {
@@ -86,6 +88,7 @@ task_temp_map = {
     'meteor': ('metrics.meteor_score', 'MeteorScore'),
     'word_error_rate': ('metrics.word_error_rate_metrics', 'WERMetrics'),
     "sql_score": ("metrics.sql_score", "SqlScore"),
+    "comet": ("metrics.comet_score", "CometScore"),
 }
 
 allowed_task_metrics = {
@@ -97,7 +100,7 @@ allowed_task_metrics = {
     'asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
     'code_switching_asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
     'long_form_asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
-    'translation': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
+    'translation': ['word_error_rate', 'meteor', 'bleu', 'bertscore', 'comet'],
     'bfcl': ['bfcl_match_score'],
     'ifeval': ['instruction_following'],
     'speech_to_sql': ['sql_score'],
@@ -122,7 +125,8 @@ metric_output = {
     "bfcl_match_score": ["final"],
     "sql_score": ["sql_score"], # need to find real metric
     "instruction_following": ["strict_instruction", "loose_instruction", "final"],
-    "diarization_metrics": ["average_sample_wder", "overall_wder", "average_sample_cpwer", "overall_cpwer", "speaker_count_absolute_error"] 
+    "diarization_metrics": ["average_sample_wder", "overall_wder", "average_sample_cpwer", "overall_cpwer", "speaker_count_absolute_error"],
+    "comet": ["comet"]
 }
 
 # Dictionary mapping language names to their standard codes

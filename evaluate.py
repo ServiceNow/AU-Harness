@@ -157,6 +157,8 @@ class Engine:
         instructions = process_result.get("instructions", None)
         ids = process_result.get("ids", [])
         lengths = process_result.get("lengths", [])
+        if (self.metric.name == 'comet'):
+            source_sentences = process_result['source_sentences']
 
         for model_name, outs in predictions.items():
             # Reset the metric's record_level_scores before each model evaluation
@@ -167,6 +169,12 @@ class Engine:
             model_responses = model_responses_by_model.get(model_name, [])
             if ids and lengths:
                 model_score = self.metric(outs, model_targets, ids, lengths, instructions=instructions, 
+                                         dataset_name=self.dataset_name, model_name=model_name, 
+                                         model_responses=model_responses)
+
+            # Add extra source_sentences argument to compute COMET for translation tasks
+            elif (self.metric.name == 'comet'):
+                model_score = self.metric(outs, model_targets, source_sentences, instructions=instructions, 
                                          dataset_name=self.dataset_name, model_name=model_name, 
                                          model_responses=model_responses)
             else:
