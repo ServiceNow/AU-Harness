@@ -12,15 +12,24 @@ class BertScore(Metrics):
         self.instructions = instructions
         self.model_responses = model_responses if model_responses else []
         
-        overall = self.compute_record_level_scores(candidates, references)
+        # Get individual scores
+        self.record_level_scores = self.compute_record_level_scores(candidates, references)
+        
+        # Calculate the mean score directly to avoid async issues
+        scores = self.record_level_scores.get(self.name, [])
+        valid_scores = [score for score in scores if score is not None]
+        mean_score = sum(valid_scores) / len(valid_scores) if valid_scores else 0.0
+        overall_score = {self.name: mean_score}
+        
         if dataset_name and model_name:
-            scores = overall.get(self.name, [])
             # write_record_log will also write to run.log internally
             write_record_log(self, references, candidates, scores, dataset_name, model_name, 
                            instructions=self.instructions, model_responses=self.model_responses)
-            # Directly call append_final_score
-            append_final_score(self, overall, dataset_name, model_name)
-        return overall
+            # Directly call append_final_score with the aggregate score
+            append_final_score(self, overall_score, dataset_name, model_name)
+        
+        # Return both individual scores and the aggregate score
+        return {**self.record_level_scores, **overall_score}
 
     def __init__(self):
         super().__init__()

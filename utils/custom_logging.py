@@ -1,11 +1,11 @@
-"""
-Shared logging utilities.
+"""Central logging setup
 
-Central logging setup and record-level logging for metrics.
+IMPORTANT: Call ``configure()`` ONLY ONCE from evaluate.py.
+DO NOT call this from any other module! All logging will be sent to default.log in the project root.
 
-For metrics logging:
-  Use write_record_log, write_to_run_json, and append_final_score functions
-  to manage record-level and final score logging for metrics.
+Other modules should simply use:
+  import logging
+  logger = logging.getLogger(__name__)
 """
 from __future__ import annotations
 import logging
@@ -14,7 +14,6 @@ import re
 import json
 from pathlib import Path
 from itertools import zip_longest
-from pathlib import Path
 from typing import Optional
 
 # Default log file name for central logging
@@ -48,20 +47,15 @@ def _install_handlers(log_path: Path):
     root_logger.addHandler(sh)
 
 
-def configure(log_file: Optional[str] = None):
-    """
-    Configure root logger. If *log_file* is None, use *_DEFAULT_NAME*.
-    Always reconfigures logging even if previously configured.
-    
-    Args:
-        log_file: Path to log file (optional)
-    """
-
+def configure(log_file: str):
+    """Configure root logger. Always uses default.log in the project root."""
+    global _configured
+    if _configured:
+        return
     if log_file:
         path = Path(log_file)
     else:
-        path = Path(__file__).parent.parent / _DEFAULT_NAME
-        
+        path = Path(_DEFAULT_NAME)
     _install_handlers(path)
     
     # Disable httpx INFO logs by setting its logger to WARNING level
@@ -145,8 +139,6 @@ def write_record_log(self, refs, cands, scores, dataset_name, model_name, explan
                 
                 if hasattr(resp, "wait_time") and resp.wait_time is not None:
                     row_values[header_to_index["wait_time"]] = resp.wait_time
-                
-                # Performance fields have been removed as requested
                 
                 # Add error tracker data if available
                 if resp.error_tracker:

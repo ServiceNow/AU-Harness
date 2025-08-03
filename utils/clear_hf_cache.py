@@ -10,8 +10,6 @@ import tempfile
 from datasets import config as datasets_config
 from huggingface_hub import constants as hf_hub_constants
 
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 

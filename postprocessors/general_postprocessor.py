@@ -1,6 +1,3 @@
-from utils.custom_logging import configure
-
-configure()
 import logging
 
 logger = logging.getLogger(__name__)
@@ -37,7 +34,6 @@ class GeneralPostprocessor(Postprocessor):
         Returns:
             dict: Dictionary containing processed data for evaluation
         """
-        logger.info("Processing predictions with GeneralPostprocessor...")
 
         # Process predictions (in this case, just pass them through)
         processed_predictions = self.process_predictions(predictions)

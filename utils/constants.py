@@ -60,18 +60,18 @@ metric_map = {
 }
 
 task_temp_map = {
-    "ASR": 0.1,
+    "asr": 0.1,
     "accent_recognition": 0.2,
-    "code_switching_ASR": 0.1,
+    "code_switching_asr": 0.1,
     "emotion_recognition": 0.2,
     "gender_recognition": 0.2,
-    "long_form_ASR": 0.1,
+    "long_form_asr": 0.1,
     "music_understanding": 0.7,
-    "scene_QA": 0.4,
+    "scene_qa": 0.4,
     "scene_captioning": 0.7,
     "speaker_recognition": 0.2,
     "speech_instuction": 0.7,
-    "spoken_QA": 0.5,
+    "spoken_qa": 0.5,
     "spoken_dialogue_summarization": 0.8,
     "translation": 0.2,
     'bertscore': ('metrics.bertscore', 'BertScore'),
@@ -103,10 +103,10 @@ allowed_task_metrics = {
     'speech_to_sql': ['sql_score'],
     'music_understanding': ['llm_judge_binary'],
     'scene_captioning': ['llm_judge_detailed'],
-    'scene_QA': ['llm_judge_binary', 'llm_judge_detailed'],
+    'scene_qa': ['llm_judge_binary', 'llm_judge_detailed'],
     'speech_instruction': ['llm_judge_detailed'],
     'spoken_dialogue_summarization': ['llm_judge_detailed'],
-    'spoken_QA': ['llm_judge_detailed', 'llm_judge_binary'],
+    'spoken_qa': ['llm_judge_detailed', 'llm_judge_binary'],
     'sqqa': ['llm_judge_big_bench_audio', 'llm_judge_binary'],
 }
 
