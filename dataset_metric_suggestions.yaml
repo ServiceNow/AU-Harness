@@ -424,3 +424,4 @@ dataset_metric:
   - "(bfcl_v3_irrelevance_audio_with_prompt, bfcl_match_score)"
   - "(safety, detailed_judge_prompt)"
   - "(spoofing, detailed_judge_prompt)"
+  - "(spoofing, llm_judge_binary)"
