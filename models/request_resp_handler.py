@@ -1,19 +1,20 @@
+import logging
+import re
 import time
 import httpx
 from openai import AsyncAzureOpenAI, AsyncOpenAI
-from models.model_response import ModelResponse
+from models.model_response import ModelResponse, ErrorTracker
 from utils import constants
-import logging
-import requests
+
 logger = logging.getLogger(__name__)  # handlers configured in utils/logging.py
 import json
 import os
-import httpx
+
 
 class RequestRespHandler:
     """Class responsible for creating request and processing response for each type of inference server."""
 
-    def __init__(self, inference_type: str, model_info: dict, timeout: int = 30):
+    def __init__(self, inference_type: str, model_info: dict, timeout: int = 30, temperature: float = 0.7):
         self.inference_type = inference_type
         self.model_info = model_info
         self.api = model_info.get("url")
@@ -21,6 +22,8 @@ class RequestRespHandler:
         self.api_version = model_info.get("api_version", "")
         self.client = None
         self.timeout = timeout
+        # Use provided temperature parameter (overrides model_info)  
+        self.temperature = temperature
         # current retry attempt (set by caller). Default 1.
         self.current_attempt: int = 1
         # Remove Bearer if present for vllm/openai
@@ -32,9 +35,94 @@ class RequestRespHandler:
             self.auth = self.auth.replace("Bearer ", "")
         self.set_client(verify_ssl=True, timeout=self.timeout)
 
+    def _cast_to_openai_type(self, properties, mapping):
+        for key, value in properties.items():
+            if "type" not in value:
+                properties[key]["type"] = "string"
+            else:
+                var_type = value["type"]
+                if var_type == "float":
+                    properties[key]["format"] = "float"
+                    properties[key]["description"] += " This is a float type value."
+                if var_type in mapping:
+                    properties[key]["type"] = mapping[var_type]
+                else:
+                    properties[key]["type"] = "string"
+
+            # Currently support:
+            # - list of any
+            # - list of list of any
+            # - list of dict
+            # - list of list of dict
+            # - dict of any
+
+            if properties[key]["type"] == "array" or properties[key]["type"] == "object":
+                if "properties" in properties[key]:
+                    properties[key]["properties"] = self._cast_to_openai_type(
+                        properties[key]["properties"], mapping
+                    )
+                elif "items" in properties[key]:
+                    properties[key]["items"]["type"] = mapping[properties[key]["items"]["type"]]
+                    if (
+                            properties[key]["items"]["type"] == "array"
+                            and "items" in properties[key]["items"]
+                    ):
+                        properties[key]["items"]["items"]["type"] = mapping[
+                            properties[key]["items"]["items"]["type"]
+                        ]
+                    elif (
+                            properties[key]["items"]["type"] == "object"
+                            and "properties" in properties[key]["items"]
+                    ):
+                        properties[key]["items"]["properties"] = self._cast_to_openai_type(
+                            properties[key]["items"]["properties"], mapping
+                        )
+        return properties
+
+    def convert_to_tool(self, functions):
+        mapping = {
+            "integer": "integer",
+            "number": "number",
+            "float": "number",
+            "string": "string",
+            "boolean": "boolean",
+            "bool": "boolean",
+            "array": "array",
+            "list": "array",
+            "dict": "object",
+            "object": "object",
+            "tuple": "array",
+            "any": "string",
+            "byte": "integer",
+            "short": "integer",
+            "long": "integer",
+            "double": "number",
+            "char": "string",
+            "ArrayList": "array",
+            "Array": "array",
+            "HashMap": "object",
+            "Hashtable": "object",
+            "Queue": "array",
+            "Stack": "array",
+            "Any": "string",
+            "String": "string",
+            "Bigint": "integer",
+        }
+        new_functions = []
+        for item in functions:
+            item["name"] = re.sub(r"\.", "_", item["name"])
+            item["parameters"]["type"] = "object"
+            item["parameters"]["properties"] = self._cast_to_openai_type(
+                item["parameters"]["properties"], mapping
+            )
+
+            new_functions.append({"type": "function", "function": item})
+
+        return new_functions
+
     def set_client(self, verify_ssl: bool, timeout: int):
-        #use python client wrapper
-        #vllm chat completions compatibility
+        # use python client wrapper
+        # vllm chat completions compatibility
         if self.inference_type in [
             constants.OPENAI_CHAT_COMPLETION,
             constants.OPENAI_TRANSCRIPTION
@@ -63,7 +151,7 @@ class RequestRespHandler:
                     http_client=httpx.AsyncClient(verify=verify_ssl),
                 )
             )
-        #basic post
+        # basic post
         elif self.inference_type in [
             constants.INFERENCE_SERVER_VLLM_TRANSCRIPTION,
         ]:
@@ -71,7 +159,7 @@ class RequestRespHandler:
         else:
             raise ValueError(f"Invalid inference type: {self.inference_type}")
 
-    async def request_server(self, msg_body) -> ModelResponse:
+    async def request_server(self, msg_body, tools=None, error_tracker: ErrorTracker = None) -> ModelResponse:
         """Send a request to the inference server and return a `Model Response`.
 
         Logic:
@@ -79,16 +167,17 @@ class RequestRespHandler:
         2. Any exception is wrapped in a `ModelResponse` with ``response_code = 500``.
         """
         model_name: str | None = self.model_info.get("model")
+        if tools:
+            tools = self.convert_to_tool(tools)
 
         start_time = time.time()
         # Re-create a fresh client for this request to avoid closed-loop issues
         self.set_client(verify_ssl=True, timeout=self.timeout)
 
-
-        #same input, different calls
+        # same input, different calls
         try:
             # -------- vLLM transcription path --------------------------------------------------
-            #vllm transcription
+            # vllm transcription
             if self.inference_type == constants.INFERENCE_SERVER_VLLM_TRANSCRIPTION:
 
                 # Ensure 'Bearer' prefix for VLLM
@@ -109,19 +198,20 @@ class RequestRespHandler:
                 llm_response = self.get_response_text(raw_response)
                 response_code = 200
                 elapsed_time: float = time.time() - start_time
-                return ModelResponse (
-                input_prompt=str(msg_body),
-                llm_response=llm_response if llm_response else " ",
-                raw_response=raw_response,
-                response_code=response_code,
-                performance=None,
-                wait_time=elapsed_time,
+                return ModelResponse(
+                    input_prompt=str(msg_body),
+                    llm_response=llm_response if llm_response else " ",
+                    raw_response=raw_response,
+                    response_code=response_code,
+                    performance=None,
+                    wait_time=elapsed_time,
                 )
 
-            #openai chat completions, vllm chat completions
-            elif self.inference_type in [constants.OPENAI_CHAT_COMPLETION, constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION]:
+            # openai chat completions, vllm chat completions
+            elif self.inference_type in [constants.OPENAI_CHAT_COMPLETION,
+                                         constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION]:
                 prediction = await self.client.chat.completions.create(
-                    model=model_name, messages=msg_body
+                    model=model_name, messages=msg_body, tools=tools, temperature=self.temperature
                 )
                 response_data = prediction.model_dump()
                 raw_response: str = response_data
@@ -139,17 +229,17 @@ class RequestRespHandler:
                                 break
                         if user_prompt:
                             break
-                
-                return ModelResponse (
-                input_prompt=user_prompt,
-                llm_response=llm_response if llm_response else " ",
-                raw_response=raw_response,
-                response_code=response_code,
-                performance=None,
-                wait_time=elapsed_time,
+
+                return ModelResponse(
+                    input_prompt=user_prompt,
+                    llm_response=llm_response if llm_response else " ",
+                    raw_response=raw_response,
+                    response_code=response_code,
+                    performance=None,
+                    wait_time=elapsed_time,
                 )
 
-            #openai transcription
+            # openai transcription
             elif self.inference_type == constants.OPENAI_TRANSCRIPTION:
                 prediction = await self.client.audio.transcriptions.create(
                     model=model_name, file=f
@@ -160,19 +250,37 @@ class RequestRespHandler:
                 response_code: int = 200
                 elapsed_time: float = time.time() - start_time
 
-                return ModelResponse (
-                input_prompt=str(msg_body),
-                llm_response=llm_response if llm_response else " ",
-                raw_response=raw_response,
-                response_code=response_code,
-                performance=None,
-                wait_time=elapsed_time,
+                return ModelResponse(
+                    input_prompt=str(msg_body),
+                    llm_response=llm_response if llm_response else " ",
+                    raw_response=raw_response,
+                    response_code=response_code,
+                    performance=None,
+                    wait_time=elapsed_time,
                 )
 
         except Exception as e:
             logger.error(f"Attempt {self.current_attempt}: audio_raw_response={e!r}")
             # First attempt to wrap the error in ModelResponse
             try:
+                # Use the provided error_tracker if available, or create a new one
+                if not error_tracker:
+                    error_tracker = ErrorTracker()
+            
+                # Increment the appropriate counter based on error type
+                if "Connection error" in str(e):
+                    error_tracker.connection_error += 1
+                elif "rate limit" in str(e).lower() or "rate_limit" in str(e).lower():
+                    error_tracker.rate_limit += 1
+                elif "timeout" in str(e).lower():
+                    error_tracker.request_timeout += 1
+                elif "internal server" in str(e).lower() or "5" == str(e)[0]:
+                    error_tracker.internal_server += 1
+                elif "4" == str(e)[0]:
+                    error_tracker.api_error += 1
+                else:
+                    error_tracker.other += 1
+            
                 return ModelResponse(
                     input_prompt=str(msg_body) if msg_body is not None else "error",
                     llm_response="",
@@ -180,10 +288,15 @@ class RequestRespHandler:
                     response_code=500,
                     performance=None,
                     wait_time=0,
+                    error_tracker=error_tracker,
                 )
             except Exception as inner:
                 logger.error(f"ModelResponse construction failed: {inner!r}")
                 # Second ultra-safe fallback with hard-coded fields
+                # Use provided error_tracker or create a fallback one
+                if not error_tracker:
+                    error_tracker = ErrorTracker()
+                error_tracker.other += 1
                 return ModelResponse(
                     input_prompt="error",
                     llm_response="",
@@ -191,7 +304,9 @@ class RequestRespHandler:
                     response_code=500,
                     performance=None,
                     wait_time=0,
+                    error_tracker=error_tracker
                 )
+
     def get_response_text(self, resp_text):
         """Extract transcription text from the response."""
         try:

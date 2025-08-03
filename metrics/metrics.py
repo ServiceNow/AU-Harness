@@ -1,22 +1,25 @@
-from abc import ABC, abstractmethod
-from operator import itemgetter
+import json
+import logging
+from abc import abstractmethod, ABC
+import os
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import pandas as pd
 from pydantic import Field
 
-import logging
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
 from metrics.base_metric_metadata import MetricMetadata
 from utils import util
 
 
 class Metrics(ABC, MetricMetadata):
     """Standard Metrics Base Class."""
-    
+
     record_level_scores: dict = Field(default_factory=dict, exclude=True, description="Record level scores")
     contexts: list[dict] = Field(default_factory=list, exclude=True, description="Contexts for the metric")
     params: dict = Field(default_factory=dict, exclude=True, description="Parameters for the metric")
+    model_responses: list = Field(default_factory=list, exclude=True, description="Model responses from inference")
     
     def __init__(self, **data):
         super().__init__(**data)

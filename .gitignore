@@ -8,6 +8,7 @@ config.yaml
 
 # log files
 *.log
+*.csv
 *.out
 *.csv
 
@@ -23,10 +24,10 @@ __pycache__/
 # datasets
 private_datasets/
 
-# tests
-test.py
-client_test.py
-
 # local configs
 .venv/
 .vscode/
+
+data/spider/
+
+CLAUDE.md

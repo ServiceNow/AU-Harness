@@ -1,8 +1,10 @@
-from metrics.metrics import Metrics
 from typing import List, Tuple, Dict, Optional, Union
+
 import numpy as np
-from .instruction_following_eval import instructions_registry
+from models.model_response import ModelResponse
+from metrics.metrics import Metrics
 from utils.custom_logging import write_record_log, append_final_score
+from .instruction_following_eval import instructions_registry
 
 
 class InstructionFollowingScore(Metrics):
@@ -11,13 +13,14 @@ class InstructionFollowingScore(Metrics):
         self.name = "instruction_following"
 
     def __call__(
-        self,
-        candidates: List[str],
-        references: List[Tuple[List[str], List[Dict[str, Optional[Union[str, int]]]]]],
-        *,
-        instructions: Optional[List[str]] = None,
-        dataset_name: Optional[str] = None,
-        model_name: Optional[str] = None,
+            self,
+            candidates: List[str],
+            references: List[Tuple[List[str], List[Dict[str, Optional[Union[str, int]]]]]],
+            *,
+            instructions: Optional[List[str]] = None,
+            dataset_name: Optional[str] = None,
+            model_name: Optional[str] = None,
+            model_responses: Optional[List[ModelResponse]] = None,
     ) -> dict[str, dict[str, float] | float]:
         # Compute strict and loose scores
         strict_outputs = self._compute_outputs(candidates, references, strict=True)
@@ -44,22 +47,22 @@ class InstructionFollowingScore(Metrics):
         if dataset_name and model_name:
             append_final_score(self, results, dataset_name, model_name)
             write_record_log(
-                self, 
-                refs=[ref[2] for ref in references], 
-                cands=candidates, 
-                scores=record_scores, 
-                dataset_name=dataset_name, 
-                model_name=model_name, 
-                explanations=None, 
+                self,
+                refs=[ref[2] for ref in references],
+                cands=candidates,
+                scores=record_scores,
+                dataset_name=dataset_name,
+                model_name=model_name,
+                explanations=None,
                 instructions=instructions
             )
         return results
 
     def _compute_outputs(
-        self,
-        candidates: List[str],
-        references: List[Tuple[List[str], List[Dict[str, Optional[Union[str, int]]]]]],
-        strict: bool = True,
+            self,
+            candidates: List[str],
+            references: List[Tuple[List[str], List[Dict[str, Optional[Union[str, int]]]]]],
+            strict: bool = True,
     ) -> List[dict]:
         outputs = []
         for i in range(len(candidates)):
@@ -130,9 +133,9 @@ class InstructionFollowingScore(Metrics):
         }
 
     def compute_record_level_scores(
-        self,
-        candidates: List[str],
-        references: List[Tuple[List[str], List[Dict[str, Optional[Union[str, int]]]]]],
+            self,
+            candidates: List[str],
+            references: List[Tuple[List[str], List[Dict[str, Optional[Union[str, int]]]]]],
     ) -> List[float]:
         outputs = self._compute_outputs(candidates, references, strict=True)
         return [float(all(out["follow_instruction_list"])) for out in outputs]

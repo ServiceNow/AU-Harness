@@ -17,6 +17,8 @@ from postprocessors.base import Postprocessor
 
 _template_cache: dict[str, str] | None = None
 PROMPT_FILE_PATH = Path(__file__).resolve().parents[1] / "prompts/judge_prompts.yaml"
+
+
 def _get_prompt(kind: str) -> str:
     """Load and return the prompt string for *kind* every call (no caching)."""
     data = yaml.safe_load(PROMPT_FILE_PATH.read_text()) or {}
@@ -24,12 +26,14 @@ def _get_prompt(kind: str) -> str:
         raise KeyError(f"Prompt '{kind}' not found in {PROMPT_FILE_PATH}")
     return data[kind]
 
+
 # ---------------------------------------------------------------------------
 # Base LLM judge – uses gpt-4o via async OpenAI SDK
 # ---------------------------------------------------------------------------
 
 _DEFAULT_OPENAI_MODEL = "gpt-4o-mini"
 _DEFAULT_MAX_CONCURRENCY = 5
+
 
 class _BaseLLMJudge(Metrics):
     """Common LLM-as-judge class."""
@@ -108,14 +112,15 @@ class _BaseLLMJudge(Metrics):
                 except Exception:
                     return content
             except (APIConnectionError, httpx.ConnectError, httpx.HTTPError) as e:
-                logger.warning(f"API connection failed (attempt {attempt+1}/{max_retries}): {e}")
+                logger.warning(f"API connection failed (attempt {attempt + 1}/{max_retries}): {e}")
                 await asyncio.sleep(2)  # Wait before retrying
             except Exception as e:
                 error_message = str(e)
                 # Handle content policy violations separately
                 if "content management policy" in error_message and attempt < max_retries - 1:
-                    logger.warning(f"Content filter triggered (attempt {attempt+1}/{max_retries}). Modifying prompt...")
-                    
+                    logger.warning(
+                        f"Content filter triggered (attempt {attempt + 1}/{max_retries}). Modifying prompt...")
+
                     # Apply progressively stronger modifications to avoid content filter
                     if attempt == 0:
                         # First retry: Add a safety prefix to the system prompt
@@ -123,7 +128,7 @@ class _BaseLLMJudge(Metrics):
                     else:
                         # Second retry: Add a safety prefix to the user prompt
                         user_prompt = f"For academic evaluation purposes only: {user_prompt}"
-                    
+
                     # Continue to retry with modified prompts
                     await asyncio.sleep(1)
                     continue
@@ -259,7 +264,8 @@ class _BaseLLMJudge(Metrics):
         return results
 
 
-#All of these judges always return on a scale of 100
+
+# All of these judges always return on a scale of 100
 
 # ---------------------------------------------------------------------------
 # Binary (yes/no) judge
@@ -269,9 +275,10 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
     name: str = "llm_judge_binary"
     _prompt_key: str = "binary_judge_prompt"
 
-    async def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None):
+    async def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
         """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
         self.instructions = instructions
+        self.model_responses = model_responses if model_responses else []
         overall = await super().get_score(candidates, references, dataset_name, model_name)
         if self.name in overall:
             overall[self.name] *= 100
@@ -279,7 +286,8 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
             scores = self.record_level_scores.get(self.name, [])
             # write_record_log will also write to run.log internally
             explanations = getattr(self, "explanations", None)
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, instructions=self.instructions)
+            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, 
+                           instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
         return overall
@@ -292,6 +300,7 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
         self.explanations = [r.get("explanation", "") if isinstance(r, dict) else "" for r in raw_scores]
         return {self.name: scores}
 
+
 class DetailedLLMJudgeMetric(_BaseLLMJudge):
     """Detailed LLM judge metric.
     On a scale of 0 to 5, how well does the candidate text match the reference text?
@@ -301,18 +310,22 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):
     name: str = "llm_judge_detailed"
     _prompt_key: str = "detailed_judge_prompt"
 
-    async def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None):
+    async def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
         """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
-        # Store instructions for potential later use
+        # Store instructions and model_responses for potential later use
         self.instructions = instructions
+        self.model_responses = model_responses if model_responses else []
+
         overall = await super().get_score(candidates, references, dataset_name, model_name)
         if self.name in overall:
+            # From 0-5 scale to 0-100 scale
             overall[self.name] *= 20
         if dataset_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
             # write_record_log will also write to run.log internally
             explanations = getattr(self, "explanations", None)
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, instructions=self.instructions)
+            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, 
+                          instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
         return overall
@@ -330,10 +343,11 @@ class CallHomeLLMJudgeMetric(_BaseLLMJudge):
     name: str = "llm_judge_callhome"
     _prompt_key: str = "callhome_judge_prompt"
 
-    async def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None):
+    async def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
         """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
-        # Store instructions for potential later use
+        # Store instructions and model_responses for potential later use
         self.instructions = instructions
+        self.model_responses = model_responses if model_responses else []
         overall = await super().get_score(candidates, references, dataset_name, model_name)
         if self.name in overall:
             overall[self.name] += 1
@@ -342,7 +356,8 @@ class CallHomeLLMJudgeMetric(_BaseLLMJudge):
             scores = self.record_level_scores.get(self.name, [])
             # write_record_log will also write to run.log internally
             explanations = getattr(self, "explanations", None)
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, instructions=self.instructions)
+            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, 
+                      instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
         return overall
@@ -385,7 +400,8 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
         instructions=None,
         *,
         dataset_name: Optional[str] = None,
-        model_name: Optional[str] = None
+        model_name: Optional[str] = None,
+        model_responses=None
     ) -> dict:
         """
         Evaluate the predictions using LLM-based judgment and return overall accuracy.
@@ -399,8 +415,10 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
         Returns:
             dict: Evaluation result with accuracy and counts for correct, incorrect, and failed responses.
         """
-        # Store instructions for potential later use
+        # Store instructions and model_responses for potential later use
         self.instructions = instructions
+        self.model_responses = model_responses if model_responses else []
+
 
         scores = await self.compute_record_level_scores(candidates, references, dataset_name, model_name)
         all_scores = scores[self.name]
@@ -418,7 +436,8 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
 
         if dataset_name and model_name:
             # write_record_log will also write to run.log internally
-            write_record_log(self, references, candidates, all_scores, dataset_name, model_name, instructions=self.instructions)
+            write_record_log(self, references, candidates, all_scores, dataset_name, model_name, 
+                       instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
 
@@ -469,6 +488,7 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
             dataset_name (str): Dataset identifier.
             model_name (str): Model identifier.
         """
+
         def _slug(text: str) -> str:
             return re.sub(r"[^A-Za-z0-9_]+", "_", text)
 

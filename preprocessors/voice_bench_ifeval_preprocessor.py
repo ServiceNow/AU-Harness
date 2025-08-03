@@ -1,10 +1,13 @@
 import logging
 from typing import Dict, List, Optional, Any
+
 import numpy as np
-from preprocessors.base import Preprocessor
 from tqdm import tqdm
 
+from preprocessors.base import Preprocessor
+
 logger = logging.getLogger(__name__)
+
 
 class VoiceBenchIfevalPreprocessor(Preprocessor):
     """
@@ -13,10 +16,10 @@ class VoiceBenchIfevalPreprocessor(Preprocessor):
     """
 
     def process(
-        self, 
-        dataset: Dict[str, List[Any]], 
-        num_samples: Optional[int] = None, 
-        properties: Optional[Dict[str, Any]] = None
+            self,
+            dataset: Dict[str, List[Any]],
+            num_samples: Optional[int] = None,
+            properties: Optional[Dict[str, Any]] = None
     ) -> List[Dict[str, Any]]:
         """
         Process the VoiceBench IFEval dataset.
@@ -29,13 +32,11 @@ class VoiceBenchIfevalPreprocessor(Preprocessor):
         Returns:
             A list of dictionaries where each dictionary represents a sample
         """
-        
-        logger.info("In [VoiceBenchIfevalPreprocessor] Processing dataset...")
-        
+
+
         # Extract properties using the base class method
         props = self.extract_properties(properties)
-        modality = props.get("modality", "audio")
-        logger.info(f"Processing modality: {modality}")
+        modality = props.get("dataset_info", {}).get("modality", "audio")
 
         # Get dataset info using base class method
         dataset_keys = list(dataset.keys())
@@ -45,7 +46,7 @@ class VoiceBenchIfevalPreprocessor(Preprocessor):
         processed_data = []
         dataset_size = len(dataset.get("key", []))
         indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
-        
+
         for i in tqdm(indices, desc="Processing samples"):
             key = dataset["key"][i]
 
