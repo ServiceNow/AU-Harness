@@ -1,22 +1,20 @@
 import logging
 import re
 import time
-
+import httpx
 from openai import AsyncAzureOpenAI, AsyncOpenAI
-
-from models.model_response import ModelResponse
+from models.model_response import ModelResponse, ErrorTracker
 from utils import constants
 
 logger = logging.getLogger(__name__)  # handlers configured in utils/logging.py
 import json
 import os
-import httpx
 
 
 class RequestRespHandler:
     """Class responsible for creating request and processing response for each type of inference server."""
 
-    def __init__(self, inference_type: str, model_info: dict, timeout: int = 30):
+    def __init__(self, inference_type: str, model_info: dict, timeout: int = 30, temperature: float = 0.7):
         self.inference_type = inference_type
         self.model_info = model_info
         self.api = model_info.get("url")
@@ -24,6 +22,8 @@ class RequestRespHandler:
         self.api_version = model_info.get("api_version", "")
         self.client = None
         self.timeout = timeout
+        # Use provided temperature parameter (overrides model_info)  
+        self.temperature = temperature
         # current retry attempt (set by caller). Default 1.
         self.current_attempt: int = 1
         # Remove Bearer if present for vllm/openai
@@ -159,7 +159,7 @@ class RequestRespHandler:
         else:
             raise ValueError(f"Invalid inference type: {self.inference_type}")
 
-    async def request_server(self, msg_body, tools=None) -> ModelResponse:
+    async def request_server(self, msg_body, tools=None, error_tracker: ErrorTracker = None) -> ModelResponse:
         """Send a request to the inference server and return a `Model Response`.
 
         Logic:
@@ -211,7 +211,7 @@ class RequestRespHandler:
             elif self.inference_type in [constants.OPENAI_CHAT_COMPLETION,
                                          constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION]:
                 prediction = await self.client.chat.completions.create(
-                    model=model_name, messages=msg_body, tools=tools
+                    model=model_name, messages=msg_body, tools=tools, temperature=self.temperature
                 )
                 response_data = prediction.model_dump()
                 raw_response: str = response_data
@@ -263,6 +263,24 @@ class RequestRespHandler:
             logger.error(f"Attempt {self.current_attempt}: audio_raw_response={e!r}")
             # First attempt to wrap the error in ModelResponse
             try:
+                # Use the provided error_tracker if available, or create a new one
+                if not error_tracker:
+                    error_tracker = ErrorTracker()
+            
+                # Increment the appropriate counter based on error type
+                if "Connection error" in str(e):
+                    error_tracker.connection_error += 1
+                elif "rate limit" in str(e).lower() or "rate_limit" in str(e).lower():
+                    error_tracker.rate_limit += 1
+                elif "timeout" in str(e).lower():
+                    error_tracker.request_timeout += 1
+                elif "internal server" in str(e).lower() or "5" == str(e)[0]:
+                    error_tracker.internal_server += 1
+                elif "4" == str(e)[0]:
+                    error_tracker.api_error += 1
+                else:
+                    error_tracker.other += 1
+            
                 return ModelResponse(
                     input_prompt=str(msg_body) if msg_body is not None else "error",
                     llm_response="",
@@ -270,10 +288,15 @@ class RequestRespHandler:
                     response_code=500,
                     performance=None,
                     wait_time=0,
+                    error_tracker=error_tracker,
                 )
             except Exception as inner:
                 logger.error(f"ModelResponse construction failed: {inner!r}")
                 # Second ultra-safe fallback with hard-coded fields
+                # Use provided error_tracker or create a fallback one
+                if not error_tracker:
+                    error_tracker = ErrorTracker()
+                error_tracker.other += 1
                 return ModelResponse(
                     input_prompt="error",
                     llm_response="",
@@ -281,6 +304,7 @@ class RequestRespHandler:
                     response_code=500,
                     performance=None,
                     wait_time=0,
+                    error_tracker=error_tracker
                 )
 
     def get_response_text(self, resp_text):

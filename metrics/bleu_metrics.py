@@ -6,16 +6,17 @@ from utils.custom_logging import write_record_log, append_final_score
 
 
 class BleuMetrics(Metrics):
-    def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None,
-                 model_name: str | None = None):
-        # Store instructions for potential later use
+    def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
+        # Store instructions and model_responses for potential later use
         self.instructions = instructions
+        self.model_responses = model_responses if model_responses else []
+        
         overall = self.get_score(candidates, references)
         if dataset_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
             # write_record_log will also write to run.log internally
-            write_record_log(self, references, candidates, scores, dataset_name, model_name,
-                             instructions=self.instructions)
+            write_record_log(self, references, candidates, scores, dataset_name, model_name, 
+                           instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
         return overall

@@ -1,6 +1,3 @@
-import logger_setup
-
-logger_setup.configure()
 import logging
 
 logger = logging.getLogger(__name__)
@@ -37,7 +34,6 @@ class Covost2Postprocessor(Postprocessor):
         Returns:
             dict: Dictionary containing processed data for evaluation
         """
-        logger.info("Processing predictions with Covost2Postprocessor...")
 
         # Process predictions using base class method
         processed_predictions = self.process_predictions(predictions)

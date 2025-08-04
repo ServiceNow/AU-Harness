@@ -255,7 +255,6 @@ class CallhomePreprocessor(Preprocessor):
         Returns:
             Dictionary with processed data or None if processing failed
         """
-        logger.info(f"Processing {cha_path}")
 
         # Step 1: Load audio file
         audio_result = self._load_audio(cha_path, audio_dir)
@@ -344,7 +343,6 @@ class CallhomePreprocessor(Preprocessor):
             )
 
         dataset_path = Path(dataset).resolve()
-        logger.info(f"[CallhomePreprocessor] Resolved dataset path: {dataset_path}")
         transcripts_dir = dataset_path / "transcripts"
         audio_dir = dataset_path / "audio"
         if not transcripts_dir.exists() or not audio_dir.exists():

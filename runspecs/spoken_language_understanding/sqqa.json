@@ -18,7 +18,10 @@
         "subset": "openbookqa",
         "language": "english",
         "preprocessor": "GeneralPreprocessor",
-        "postprocessor": "GeneralPostprocessor"
+        "postprocessor": "GeneralPostprocessor",
+        "audio_column": "audio",
+        "target_column": "reference",
+        "instruction_column": "prompt"
     },
     "sd-qa_usa_audio": {
         "hf_repo": "hlt-lab/voicebench",
@@ -28,7 +31,7 @@
         "modality": "audio",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -41,7 +44,7 @@
         "modality": "audio",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -54,7 +57,7 @@
         "modality": "audio",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -67,7 +70,7 @@
         "modality": "audio",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -80,7 +83,7 @@
         "modality": "audio",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -93,7 +96,7 @@
         "modality": "audio",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -106,7 +109,7 @@
         "modality": "audio",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -119,7 +122,7 @@
         "modality": "audio",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -132,7 +135,7 @@
         "modality": "audio",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -145,7 +148,7 @@
         "modality": "audio",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -158,7 +161,7 @@
         "modality": "audio",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -172,7 +175,7 @@
         "modality": "text",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -185,7 +188,7 @@
         "modality": "text",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -198,7 +201,7 @@
         "modality": "text",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -211,7 +214,7 @@
         "modality": "text",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -224,7 +227,7 @@
         "modality": "text",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -237,7 +240,7 @@
         "modality": "text",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -250,7 +253,7 @@
         "modality": "text",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -263,7 +266,7 @@
         "modality": "text",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -276,7 +279,7 @@
         "modality": "text",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -289,7 +292,7 @@
         "modality": "text",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -302,7 +305,7 @@
         "modality": "text",
         "audio_column": "audio",
         "target_column": "reference",
-        "additional_instruction_column": null,
+        "instruction_column": null,
         "textual_input_column": "prompt",
         "preprocessor": "GeneralPreprocessor",
         "postprocessor": "GeneralPostprocessor"
@@ -313,7 +316,10 @@
         "split": "law",
         "language": "english",
         "preprocessor": "GeneralPreprocessor",
-        "postprocessor": "GeneralPostprocessor"
+        "postprocessor": "GeneralPostprocessor",
+        "audio_column": "audio",
+        "target_column": "reference",
+        "instruction_column": "prompt"
     },
     "mmsu_engineering": {
         "hf_repo": "hlt-lab/voicebench",
@@ -321,7 +327,10 @@
         "split": "engineering",
         "language": "english",
         "preprocessor": "GeneralPreprocessor",
-        "postprocessor": "GeneralPostprocessor"
+        "postprocessor": "GeneralPostprocessor",
+        "audio_column": "audio",
+        "target_column": "reference",
+        "instruction_column": "prompt"
     },
     "mmsu_other": {
         "hf_repo": "hlt-lab/voicebench",
@@ -329,7 +338,10 @@
         "split": "other",
         "language": "english",
         "preprocessor": "GeneralPreprocessor",
-        "postprocessor": "GeneralPostprocessor"
+        "postprocessor": "GeneralPostprocessor",
+        "audio_column": "audio",
+        "target_column": "reference",
+        "instruction_column": "prompt"
     },
     "mmsu_biology": {
         "hf_repo": "hlt-lab/voicebench",
@@ -337,7 +349,10 @@
         "split": "biology",
         "language": "english",
         "preprocessor": "GeneralPreprocessor",
-        "postprocessor": "GeneralPostprocessor"
+        "postprocessor": "GeneralPostprocessor",
+        "audio_column": "audio",
+        "target_column": "reference",
+        "instruction_column": "prompt"
     },
     "mmsu_business": {
         "hf_repo": "hlt-lab/voicebench",
@@ -345,7 +360,10 @@
         "split": "business",
         "language": "en",
         "preprocessor": "GeneralPreprocessor",
-        "postprocessor": "GeneralPostprocessor"
+        "postprocessor": "GeneralPostprocessor",
+        "audio_column": "audio",
+        "target_column": "reference",
+        "instruction_column": "prompt"
     },
     "mmsu_economics": {
         "hf_repo": "hlt-lab/voicebench",
@@ -353,7 +371,10 @@
         "split": "economics",
         "language": "en",
         "preprocessor": "GeneralPreprocessor",
-        "postprocessor": "GeneralPostprocessor"
+        "postprocessor": "GeneralPostprocessor",
+        "audio_column": "audio",
+        "target_column": "reference",
+        "instruction_column": "prompt"
     },
     "mmsu_health": {
         "hf_repo": "hlt-lab/voicebench",
@@ -361,7 +382,10 @@
         "split": "health",
         "language": "en",
         "preprocessor": "GeneralPreprocessor",
-        "postprocessor": "GeneralPostprocessor"
+        "postprocessor": "GeneralPostprocessor",
+        "audio_column": "audio",
+        "target_column": "reference",
+        "instruction_column": "prompt"
     },
     "mmsu_philosophy": {
         "hf_repo": "hlt-lab/voicebench",
@@ -369,7 +393,10 @@
         "split": "philosophy",
         "language": "en",
         "preprocessor": "GeneralPreprocessor",
-        "postprocessor": "GeneralPostprocessor"
+        "postprocessor": "GeneralPostprocessor",
+        "audio_column": "audio",
+        "target_column": "reference",
+        "instruction_column": "prompt"
     },
     "mmsu_psychology": {
         "hf_repo": "hlt-lab/voicebench",
@@ -377,7 +404,10 @@
         "split": "psychology",
         "language": "en",
         "preprocessor": "GeneralPreprocessor",
-        "postprocessor": "GeneralPostprocessor"
+        "postprocessor": "GeneralPostprocessor",
+        "audio_column": "audio",
+        "target_column": "reference",
+        "instruction_column": "prompt"
     },
     "mmsu_history": {
         "hf_repo": "hlt-lab/voicebench",
@@ -385,7 +415,10 @@
         "split": "history",
         "language": "en",
         "preprocessor": "GeneralPreprocessor",
-        "postprocessor": "GeneralPostprocessor"
+        "postprocessor": "GeneralPostprocessor",
+        "audio_column": "audio",
+        "target_column": "reference",
+        "instruction_column": "prompt"
     },
     "mmsu_chemistry": {
         "hf_repo": "hlt-lab/voicebench",
@@ -393,7 +426,10 @@
         "split": "chemistry",
         "language": "en",
         "preprocessor": "GeneralPreprocessor",
-        "postprocessor": "GeneralPostprocessor"
+        "postprocessor": "GeneralPostprocessor",
+        "audio_column": "audio",
+        "target_column": "reference",
+        "instruction_column": "prompt"
     },
     "mmsu_physics": {
         "hf_repo": "hlt-lab/voicebench",
@@ -401,6 +437,9 @@
         "split": "physics",
         "language": "en",
         "preprocessor": "GeneralPreprocessor",
-        "postprocessor": "GeneralPostprocessor"
+        "postprocessor": "GeneralPostprocessor",
+        "audio_column": "audio",
+        "target_column": "reference",
+        "instruction_column": "prompt"
     }
 }

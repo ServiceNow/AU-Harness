@@ -21,23 +21,22 @@ class GeneralPreprocessor(Preprocessor):
             properties: Optional dict of properties, may include 'length_filter' tuple (min_seconds, max_seconds)
                        to filter samples by audio length.
         """
-        logger.info("In [GeneralPreprocessor] Processing dataset...")
 
         # Extract common properties using base class method
         props = self.extract_properties(properties)
         user_prompt_add_ons = props["user_prompt_add_ons"]
         system_prompts = props["system_prompts"]
         length_filter = props["length_filter"]
-        modality = props.get("modality", "audio")
+        modality = props.get("dataset_info", {}).get("modality", "audio")
         audio_column_name = props.get("dataset_info", {}).get("audio_column", None)
         target_column_name = props.get("dataset_info", {}).get("target_column", None)
-        user_instruction_column_name = props.get("dataset_info", {}).get("additional_instruction_column", None)
+        user_instruction_column_name = props.get("dataset_info", {}).get("instruction_column", None)
         user_query_column_name = props.get("dataset_info", {}).get("textual_input_column", None)
+        choices_column_name = props.get("dataset_info", {}).get("choices_column", None)
 
         # Load prompt add-ons and system prompts using base class method
         prompt_add_ons = self.load_yaml_file("prompt_add_ons.yaml")
         system_prompts_mapping = self.load_yaml_file("system_prompts.yaml")
-        instruction = ""
 
         # Get dataset keys and size
         keys = list(dataset.keys())
@@ -50,10 +49,11 @@ class GeneralPreprocessor(Preprocessor):
         indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
 
         for i in tqdm(indices, desc="Processing samples"):
+            instruction = ""
             # Create record by accessing each feature by index
             record = {k: dataset[k][i] for k in keys}
 
-            # Extract audio information
+            # Extract audio information - if not found, extractor will try audio then context
             self.extract_audio_info(record, audio_column_name=audio_column_name)
 
             if modality == "text":
@@ -80,14 +80,22 @@ class GeneralPreprocessor(Preprocessor):
                 raise ValueError("No valid target key found in record")
 
             if user_instruction_column_name and user_instruction_column_name in record:
-                instruction += " " + record.get(user_instruction_column_name, "")
+                instruction = record.get(user_instruction_column_name, "")
             else:
-                inst = record.get("instruction") or record.get("question") or ""
-                instruction += " " + inst
+                instruction = record.get("instruction") or record.get("question") or ""
             # Append any user-specified prompt add-ons
             instruction += " " + " ".join(prompt_add_ons[k] for k in user_prompt_add_ons if k in prompt_add_ons)
+            if choices_column_name and choices_column_name in record:
+                choices = record.get(choices_column_name, [])
+                if isinstance(choices, list):
+                    choices_text = " ".join(choices)
+                else:
+                    choices_text = str(choices)
+                instruction += "\n Choices: " + choices_text
+            if not instruction:
+                logger.warning("Instruction is empty for sample", i)
             record["instruction"] = instruction.strip()
-
+            
             # Process system prompts
             system_prompt_text = "\n\n".join(
                 system_prompts_mapping[k] for k in system_prompts if k in system_prompts_mapping)

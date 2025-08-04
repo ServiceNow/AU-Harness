@@ -15,6 +15,9 @@
     "hf_repo": "AudioLLMs/tedlium3_long_form_test",
     "language": "en",
     "preprocessor": "GeneralPreprocessor",
-    "postprocessor": "GeneralPostprocessor"
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
   }
 }

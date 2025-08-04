@@ -37,11 +37,9 @@ class BigBenchAudioTextOnlyPreprocessor(Preprocessor):
           including the audio array resampled to 16kHz, metadata, and target label.
         """
 
-        logger.info("In [BigBenchAudioTextOnlyPreprocessor] Processing dataset...")
 
         dataset_keys = list(dataset.keys())
         dataset_size = len(dataset.get("id", []))
-        self.log_dataset_info(dataset_keys, dataset_size)
 
         processed_data = []
         dataset_size = len(dataset.get("id", []))

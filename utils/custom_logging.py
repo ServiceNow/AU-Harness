@@ -1,24 +1,19 @@
-"""
-Shared logging utilities.
+"""Central logging setup
 
-Central logging setup and record-level logging for metrics.
+IMPORTANT: Call ``configure()`` ONLY ONCE from evaluate.py.
+DO NOT call this from any other module! All logging will be sent to default.log in the project root.
 
-For central logging setup:
-  Call ``utils.custom_logging.configure(log_file_path)`` once (e.g. from ``evaluate.py``)
-  BEFORE importing other project modules that acquire loggers. If you don't call
-  it, we fall back to ``default.log`` in the project root.
-
-For metrics logging:
-  Use write_record_log, write_to_run_json, and append_final_score functions
-  to manage record-level and final score logging for metrics.
+Other modules should simply use:
+  import logging
+  logger = logging.getLogger(__name__)
 """
 from __future__ import annotations
-
-import json
 import logging
+import csv
 import re
-from itertools import zip_longest
+import json
 from pathlib import Path
+from itertools import zip_longest
 from typing import Optional
 
 # Default log file name for central logging
@@ -52,20 +47,24 @@ def _install_handlers(log_path: Path):
     root_logger.addHandler(sh)
 
 
-def configure(log_file: Optional[str] = None):
-    """Configure root logger. If *log_file* is None, use *_DEFAULT_NAME*."""
+def configure(log_file: str):
+    """Configure root logger. Always uses default.log in the project root."""
     global _configured
     if _configured:
         return
     if log_file:
         path = Path(log_file)
     else:
-        path = Path(__file__).parent.parent / _DEFAULT_NAME
+        path = Path(_DEFAULT_NAME)
     _install_handlers(path)
+    
+    # Disable httpx INFO logs by setting its logger to WARNING level
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    
     _configured = True
 
 
-def write_record_log(self, refs, cands, scores, dataset_name, model_name, explanations=None, instructions=None):
+def write_record_log(self, refs, cands, scores, dataset_name, model_name, explanations=None, instructions=None, model_responses=None):
     """
     Write record-level logs to a file specific to the dataset, metric, and model.
     
@@ -77,6 +76,8 @@ def write_record_log(self, refs, cands, scores, dataset_name, model_name, explan
         dataset_name: Name of the dataset
         model_name: Name of the model
         explanations: Optional list of explanations for each score
+        instructions: Optional list of instructions
+        model_responses: Optional list of ModelResponse objects with detailed info
     """
     if not refs or not scores:
         return
@@ -86,8 +87,8 @@ def write_record_log(self, refs, cands, scores, dataset_name, model_name, explan
 
     log_dir = Path("run_logs")
     log_dir.mkdir(exist_ok=True)
-    log_path = log_dir / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
-
+    log_path = log_dir / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.csv"
+    
     # Use provided explanations or an empty list
     if explanations is None:
         explanations = [""] * len(scores)
@@ -95,16 +96,62 @@ def write_record_log(self, refs, cands, scores, dataset_name, model_name, explan
     # Use provided instructions or an empty list
     if instructions is None:
         instructions = [""] * len(scores)
-
-    with open(log_path, "w", encoding="utf-8") as f:
-        for ref, cand, sc, expl, inst in zip_longest(refs, cands, scores, explanations, instructions, fillvalue=None):
-            entry = {"instruction": inst, "reference": ref, "candidate": cand}
+    
+    # Define headers for the CSV file
+    headers = [
+        "instruction", "reference", "candidate", "score", "explanation",
+        "response_code", "raw_response_type", "wait_time",
+        "error_rate_limit", "error_connection", "error_api", 
+        "error_timeout", "error_server", "error_other",
+        "is_final_score"
+    ]
+    
+    with open(log_path, "w", encoding="utf-8", newline='') as f:
+        writer = csv.writer(f, delimiter=',', quoting=csv.QUOTE_ALL)
+        # Write the header row
+        writer.writerow(headers)
+        
+        for i, (ref, cand, sc, expl, inst) in enumerate(zip_longest(refs, cands, scores, explanations, instructions, fillvalue=None)):
+            # Initialize with empty values
+            row_values = [""] * len(headers)
+            
+            # Map values to their respective header positions
+            header_to_index = {header: index for index, header in enumerate(headers)}
+            
+            # Set basic fields
+            row_values[header_to_index["instruction"]] = inst if inst is not None else ""
+            row_values[header_to_index["reference"]] = ref if ref is not None else ""
+            row_values[header_to_index["candidate"]] = cand if cand is not None else ""
+            row_values[header_to_index["explanation"]] = expl if expl else ""
+            row_values[header_to_index["is_final_score"]] = "False"
+            
+            # Set score if available
             if sc is not None:
-                entry["score"] = sc
-            if expl:
-                entry["explanation"] = expl
-            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
-
+                row_values[header_to_index["score"]] = sc
+            
+            # Add ModelResponse data if available
+            if model_responses and i < len(model_responses) and model_responses[i]:
+                resp = model_responses[i]
+                
+                # Add core ModelResponse fields
+                row_values[header_to_index["response_code"]] = resp.response_code
+                row_values[header_to_index["raw_response_type"]] = type(resp.raw_response).__name__
+                
+                if hasattr(resp, "wait_time") and resp.wait_time is not None:
+                    row_values[header_to_index["wait_time"]] = resp.wait_time
+                
+                # Add error tracker data if available
+                if resp.error_tracker:
+                    row_values[header_to_index["error_rate_limit"]] = resp.error_tracker.rate_limit
+                    row_values[header_to_index["error_connection"]] = resp.error_tracker.connection_error
+                    row_values[header_to_index["error_api"]] = resp.error_tracker.api_error
+                    row_values[header_to_index["error_timeout"]] = resp.error_tracker.request_timeout
+                    row_values[header_to_index["error_server"]] = resp.error_tracker.internal_server
+                    row_values[header_to_index["error_other"]] = resp.error_tracker.other
+            
+            # Write the row
+            writer.writerow(row_values)
+    
     # Write to shared run.log
     write_to_run_json(self, refs, cands, scores, dataset_name, model_name, explanations, instructions)
 
@@ -183,10 +230,49 @@ def append_final_score(self, overall, dataset_name, model_name):
 
     log_dir = Path("run_logs")
     log_dir.mkdir(exist_ok=True)
-    log_path = log_dir / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
-
+    log_path = log_dir / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.csv"
+    
+    # Check if file exists and read headers
+    headers = []
+    if log_path.exists():
+        with open(log_path, "r", encoding="utf-8", newline='') as f:
+            reader = csv.reader(f)
+            for row in reader:
+                headers = row  # First row contains headers
+                break
+    
+    # If no existing file or couldn't read headers, use default headers
+    if not headers:
+        headers = [
+            "instruction", "reference", "candidate", "score", "explanation",
+            "response_code", "raw_response_type", "wait_time",
+            "error_rate_limit", "error_connection", "error_api", 
+            "error_timeout", "error_server", "error_other",
+            "is_final_score"
+        ]
+    
+    # Ensure is_final_score field exists
+    if "is_final_score" not in headers:
+        headers.append("is_final_score")
+    
+    # Create a row for the final score
+    row_values = [""] * len(headers)
+    
+    # Map values to their respective header positions
+    header_to_index = {header: index for index, header in enumerate(headers)}
+    
+    # Set final score fields
+    if "score" in header_to_index:
+        row_values[header_to_index["score"]] = overall
+    if "is_final_score" in header_to_index:
+        row_values[header_to_index["is_final_score"]] = "True"  # String format for CSV consistency
+    
     # Append the final score to the log file
-    with open(log_path, "a", encoding="utf-8") as f:
-        f.write(json.dumps({"final_score": overall}, ensure_ascii=False) + "\n")
-
+    with open(log_path, "a", encoding="utf-8", newline='') as f:
+        writer = csv.writer(f, delimiter=',', quoting=csv.QUOTE_ALL)
+        # If the file is new, write the header
+        if not log_path.exists() or log_path.stat().st_size == 0:
+            writer.writerow(headers)
+        writer.writerow(row_values)
+        
     return log_path

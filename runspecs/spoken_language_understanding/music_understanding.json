@@ -3,6 +3,10 @@
     "hf_repo": "AudioLLMs/mu_chomusic_test",
     "language": "en",
     "preprocessor": "GeneralPreprocessor",
-    "postprocessor": "GeneralPostprocessor"
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction",
+    "choices_column": "choices"
   }
 }

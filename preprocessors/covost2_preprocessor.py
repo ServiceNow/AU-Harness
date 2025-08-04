@@ -19,7 +19,6 @@ class Covost2Preprocessor(Preprocessor):
             properties: Optional dict of properties, may include 'length_filter' tuple (min_seconds, max_seconds)
                        to filter samples by audio length.
         """
-        logger.info("In [Covost2Preprocessor] Processing dataset...")
 
         props = self.extract_properties(properties)
 
