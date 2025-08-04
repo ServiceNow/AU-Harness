@@ -11,8 +11,9 @@ config.yaml
 *.out
 *.csv
 
-#private datasets
-private_datasets
+# callhome local files
+*.cha
+*.wav
 
 # python cache files
 __pycache__/
@@ -20,15 +21,10 @@ __pycache__/
 *.py[cod]
 .DS_Store
 
-# datasets
-private_datasets/
-
-# tests
-#test.py
-client_test.py
-
 # local configs
 .venv/
 .vscode/
 
 data/spider/
+
+CLAUDE.md

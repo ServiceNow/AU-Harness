@@ -9,24 +9,24 @@
     "language": "de",
     "preprocessor": "CallhomePreprocessor",
     "postprocessor": "CallhomePostprocessor",
-    "path": "private_datasets/CallHome_eng"
+    "path": "private_datasets/CallHome_deu"
   },
   "callhome_jpn": {
     "language": "ja",
     "preprocessor": "CallhomePreprocessor",
     "postprocessor": "CallhomePostprocessor",
-    "path": "private_datasets/CallHome_eng"
+    "path": "private_datasets/CallHome_jpn"
   },
   "callhome_spa": {
     "language": "es",
     "preprocessor": "CallhomePreprocessor",
     "postprocessor": "CallhomePostprocessor",
-    "path": "private_datasets/CallHome_eng"
+    "path": "private_datasets/CallHome_spa"
   },
   "callhome_zho": {
     "language": "zh",
     "preprocessor": "CallhomePreprocessor",
     "postprocessor": "CallhomePostprocessor",
-    "path": "private_datasets/CallHome_eng"
+    "path": "private_datasets/CallHome_zho"
   }
 }
