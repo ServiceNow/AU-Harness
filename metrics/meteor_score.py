@@ -37,9 +37,9 @@ class MeteorScore(Metrics):
         super().__init__()
         self.name = "meteor"
         self.scorer = single_meteor_score
-        nltk.download("wordnet")
-        nltk.download('punkt')
-        nltk.download('punkt_tab')
+        nltk.download("wordnet", quiet=True)
+        nltk.download('punkt', quiet=True)
+        nltk.download('punkt_tab', quiet=True)
 
     def compute_record_level_scores(self, candidates: list, references: list) -> dict[str, list | None]:
         # Here we can use self.instructions if needed
