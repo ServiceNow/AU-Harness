@@ -126,10 +126,15 @@ class Model(ABC):
     async def _mark_errors(self, result: ModelResponse, error_tracker: ErrorTracker):
         """Update error tracker."""
         if result.response_code != 200:
-            # No lock needed since this is a per-call error tracker
+            # Update the per-call error tracker
             error_tracker.increment(result.response_code)
             # Make sure the error tracker is attached to the ModelResponse
             result.error_tracker = error_tracker
+            
+            # Also update the global error tracker with proper lock handling
+            async with self.errors_lock:
+                self.errors.increment(result.response_code)
+            
             # Log that we're tracking this error
             logger.info("[_mark_errors] Recorded error %s in error tracker: %s", result.response_code, error_tracker.__dict__)
 
