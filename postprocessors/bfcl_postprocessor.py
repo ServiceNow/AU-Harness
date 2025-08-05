@@ -48,7 +48,7 @@ class BfclPostprocessor(Postprocessor):
             self,
             dataset: list[dict],
             predictions: ModelResponse,
-            metric  # pylint: disable=unused-argument
+            metric
     ) -> tuple[list[tuple[str, str]], dict[str, list[str]], list, list] | dict:
         """
         Process and clean model predictions and prepare target-label pairs.
