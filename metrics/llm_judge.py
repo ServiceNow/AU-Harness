@@ -276,7 +276,8 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):
     _prompt_key: str = "binary_judge_prompt"
 
     def __init__(self, *_, judge_properties: Dict | None = None, **__):
-        super().__init__(judge_properties, *_, **__)
+        super().__init__(judge_properties=judge_properties)
+        
         self.instructions = None
         self.model_responses = None
         self.explanations = None
@@ -320,7 +321,8 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):
     _prompt_key: str = "detailed_judge_prompt"
 
     def __init__(self, *_, judge_properties: Dict | None = None, **__):
-        super().__init__(judge_properties, *_, **__)
+        super().__init__(judge_properties=judge_properties)
+        
         self.instructions = None
         self.model_responses = None
         self.explanations = None
@@ -361,7 +363,8 @@ class CallHomeLLMJudgeMetric(_BaseLLMJudge):
     _prompt_key: str = "callhome_judge_prompt"
 
     def __init__(self, *_, judge_properties: Dict | None = None, **__):
-        super().__init__(judge_properties, *_, **__)
+        super().__init__(judge_properties=judge_properties)
+        
         self.instructions = None
         self.model_responses = None
         self.explanations = None
@@ -421,7 +424,8 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
     _prompt_key: str = "big_bench_audio_judge_prompt"
 
     def __init__(self, *_, judge_properties: Dict | None = None, **__):
-        super().__init__(judge_properties, *_, **__)
+        super().__init__(judge_properties=judge_properties)
+        
         self.instructions = None
         self.model_responses = None
         self.explanations = None

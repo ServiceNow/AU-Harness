@@ -312,7 +312,7 @@ def _validate_dataset_metric_pairs(dataset_metric_pairs):
             found_runspec, _, matching_runspec_file = _find_dataset_in_runspecs(dataset_name, runspec_files)
 
         if not found_runspec or not matching_runspec_file:
-            raise ValueError("Dataset not found or no runspec file determined")
+            raise ValueError(f"Dataset not found or no runspec file determined: {dataset_name}")
 
         # The task type is simply the JSON filename without extension
         task_type = matching_runspec_file.stem

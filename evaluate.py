@@ -608,10 +608,6 @@ def _load_metric(name: str, language: str = "en", judge_settings: dict = None):
         if "wer" in name.lower():
             metric = metric_class(language=language)
         elif "judge" in name.lower():
-            # Extract judge settings or use empty dict if None
-            judge_settings = judge_settings or {}
-
-            # Pass all judge settings as judge_properties
             metric = metric_class(judge_properties=judge_settings)
         else:
             # Default initialization for other metrics
