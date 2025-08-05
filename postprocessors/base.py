@@ -1,3 +1,4 @@
+"""Base postprocessor module for processing model predictions."""
 import logging
 import re
 
@@ -5,6 +6,7 @@ logger = logging.getLogger(__name__)
 
 
 class Postprocessor():
+    """Base class for postprocessing model predictions."""
     REQUIRED_KEYS = {"model_targets", "processed_predictions"}
 
     def validate_output(self, output: dict):
@@ -61,7 +63,7 @@ class Postprocessor():
                     # Only handle ModelResponse objects
                     text = pred.llm_response if pred.llm_response else ""
                     processed.append(self.remove_thinking_content(text))
-            
+
             processed_predictions[model_name] = processed
 
         return processed_predictions

@@ -1,3 +1,9 @@
+"""BFCL preprocessor module for LALMEval framework.
+
+This module provides a preprocessor for the BFCL dataset, designed for
+instruction following evaluation of audio LLMs with function calling capabilities.
+"""
+
 import ast
 import json
 import logging
@@ -45,13 +51,30 @@ class BfclPreprocessor(Preprocessor):
         dataset_keys = list(dataset.keys())
         dataset_size = len(dataset.get("id", []))
         self.log_dataset_info(dataset_keys, dataset_size)
-        SYSTEM_PROMPT = "You are an expert in composing functions. You are given a question and a set of possible functions. Based on the question, you will need to make one or more function/tool calls to achieve the purpose.\nIf none of the functions can be used, point it out. If the given question lacks the parameters required by the function, also point it out.\nYou should only return the function calls in your response.\n\nIf you decide to invoke any of the function(s), you MUST put it in the format of \n\n```json\n[{func_name1:{params_name1=params_value1, params_name2=params_value2...}}, {func_name2:{params_name1=params_value1, params_name2=params_value2, params_name3=params_value3...}}]\n``` \n\nYou SHOULD NOT include any other text in the response. If no relevant function matches then return empty list in json like ```json\n [] \n ```. Make sure an appropriate json is always there in the response. \n\nAt each turn, you should try your best to complete the tasks requested by the user within the current turn. Continue to output functions to call until you have fulfilled the user's request to the best of your ability. Once you have no more functions to call, the system will consider the current turn complete and proceed to the next turn or task.\n\n"
+        system_prompt = """You are an expert in composing functions. You are given a question and a set of
+        possible functions. Based on the question, you will need to make one or more function/tool calls to achieve the purpose.
+        If none of the functions can be used, point it out. If the given question lacks the parameters required by the function, also point it out.
+        You should only return the function calls in your response.
+
+        If you decide to invoke any of the function(s), you MUST put it in the format of
+
+        ```json
+        [{func_name1:{params_name1=params_value1, params_name2=params_value2...}}, {func_name2:{params_name1=params_value1, params_name2=params_value2, params_name3=params_value3...}}]
+        ```
+
+        You SHOULD NOT include any other text in the response. If no relevant function matches then return empty list in json like ```json
+        []
+        ```. Make sure an appropriate json is always there in the response.
+
+        At each turn, you should try your best to complete the tasks requested by the user within the current turn. 
+        Continue to output functions to call until you have fulfilled the user's request to the best of your ability. 
+        Once you have no more functions to call, the system will consider the current turn complete and proceed to the next turn or task.
+        """
         processed_data = []
         dataset_size = len(dataset.get("id", []))
         indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
-        system_prompt = ''
         for i in tqdm(indices, desc="Processing samples"):
-            id = dataset["id"][i]
+            sample_id = dataset["id"][i]
 
             if modality == "text":
                 audio_data = {
@@ -63,10 +86,8 @@ class BfclPreprocessor(Preprocessor):
                 if isinstance(audio_data, list) and len(audio_data) == 1:
                     audio_data = audio_data[0]
                 elif isinstance(audio_data, list) and len(audio_data) > 1:
-                    logger.warning(f"[{id}] Support single audio only right now!")
+                    logger.warning("[%s] Support single audio only right now!", sample_id)
                     continue
-                elif isinstance(audio_data, dict):
-                    audio_data = audio_data
 
             prompt = dataset["question"][i]
             if isinstance(prompt, str):
@@ -75,7 +96,7 @@ class BfclPreprocessor(Preprocessor):
             if len(prompt) == 1:  # For now handle single turn only
                 prompt = prompt[0]
             else:
-                logger.warning(f"[{id}] Support only single turn")
+                logger.warning("[%s] Support only single turn", sample_id)
                 continue
             function = dataset["tools"][i]
             reference = dataset["reference"][i]
@@ -103,7 +124,7 @@ class BfclPreprocessor(Preprocessor):
 
             # Validate audio data structure
             if not isinstance(audio_data, dict):
-                logger.warning(f"[{id}] Invalid audio format. Skipping sample.")
+                logger.warning("[%s] Invalid audio format. Skipping sample.", sample_id)
                 continue
 
             # Convert to NumPy array
@@ -112,7 +133,7 @@ class BfclPreprocessor(Preprocessor):
 
             if modality == "audio":
                 if sr is None:
-                    logger.warning(f"[{id}] Sampling rate missing. Assuming 16kHz.")
+                    logger.warning("[%s] Sampling rate missing. Assuming 16kHz.", sample_id)
                     sr = 16000
 
                 # Use base class method to resample audio
@@ -120,27 +141,23 @@ class BfclPreprocessor(Preprocessor):
 
             # Ensure prompt exists
             if not prompt:
-                logger.warning(f"[{id}] Missing prompt. Skipping sample.")
+                logger.warning("[%s] Missing prompt. Skipping sample.", sample_id)
                 continue
 
             if modality == "text":
                 instruction = prompt
             else:
                 # For audio modality, we can define a generic instruction
-                instruction = f""
+                instruction = ""
 
-            # In prompt mode we get tool calls from llm response,
-            # This doesn't evals the model on tool calling via capability sense,
-            # but still allow to check ability to choose function
+            # In prompt mode we get tool calls from llm response, this doesn't evals the model on tool calling via capability sense, but still allow to check ability to choose function
             if prompt_mode:
-                system_prompt = SYSTEM_PROMPT
-                system_prompt += 'Here is a list of functions in JSON format that you can invoke.\n{functions}\n'.format(
-                    functions=json.dumps(function, indent=4))
+                system_prompt += f'Here is a list of functions in JSON format that you can invoke.\n{json.dumps(function, indent=4)}\n'
                 function = None
 
             # Create structured sample
             sample = {
-                "id": id,
+                "id": sample_id,
                 "array": audio_array,
                 "sampling_rate": sr,
                 "audio_content_in_text": prompt,

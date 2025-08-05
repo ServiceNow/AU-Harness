@@ -1,8 +1,12 @@
+"""
+General postprocessor module for standard prediction processing.
+"""
 import logging
+
+from postprocessors.base import Postprocessor
 
 logger = logging.getLogger(__name__)
 logger.propagate = True
-from postprocessors.base import Postprocessor
 
 
 class _SimpleMeta:  # stand-in for MetricMetadata
@@ -37,7 +41,6 @@ class GeneralPostprocessor(Postprocessor):
 
         # Process predictions (in this case, just pass them through)
         processed_predictions = self.process_predictions(predictions)
-        
         # Extract targets using base class method
         targets = self.extract_targets(dataset)
 

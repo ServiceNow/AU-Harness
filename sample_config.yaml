@@ -58,7 +58,7 @@ temperature_overrides:
 models:
   - info:
       name: "gpt-4o-mini-audio-preview-1" 
-      inference_type: "openai" # mandatory - you can use vllm, openai, (chat completion) or audio transcription endpoint
+      inference_type: "openai" # mandatory - you can use vllm or openai chat completion
       url: "${ENDPOINT_URL}" - # mandatory - endpoint url
       delay: 100
       retry_attempts: 8
@@ -67,10 +67,10 @@ models:
       auth_token: "${AUTH_TOKEN}" 
       api_version: "${API_VERSION}"
       batch_size: 100 # Optional - batch eval size
-      chunk_size: 45 # Optional - max audio length in seconds fed to model
+      chunk_size: 30 # Optional - max audio length in seconds fed to model
   - info:
       name: "gpt-4o-mini-audio-preview-2" 
-      inference_type: "openai" # mandatory - you can use vllm, openai, (chat completion) or audio transcription endpoint
+      inference_type: "openai" # mandatory - you can use vllm or openai chat completion
       url: "${ENDPOINT_URL}" - # mandatory - endpoint url
       delay: 100
       retry_attempts: 8
@@ -79,10 +79,10 @@ models:
       auth_token: "${AUTH_TOKEN}" 
       api_version: "${API_VERSION}"
       batch_size: 100 # Optional - batch eval size
-      chunk_size: 45 # Optional - max audio length in seconds fed to model
+      chunk_size: 30 # Optional - max audio length in seconds fed to model
   - info:
       name: "qwen-2.5-omni" 
-      inference_type: "vllm" # mandatory - you can use vllm, openai, (chat completion) or audio transcription endpoint
+      inference_type: "vllm" # mandatory - you can use vllm or openai chat completion
       url: "${ENDPOINT_URL}" - # mandatory - endpoint url
       delay: 100
       retry_attempts: 8
@@ -90,7 +90,7 @@ models:
       model: "qwen-2.5-omni" # mandatory - only needed for vllm
       auth_token: "${AUTH_TOKEN}" 
       batch_size: 4 # Optional - batch eval size
-      chunk_size: 45 # Optional - max audio length in seconds fed to model
+      chunk_size: 40 # Optional - max audio length in seconds fed to model
 
       # Data sharding - If two models have same "model" attribute, we implement dataset sharding
 

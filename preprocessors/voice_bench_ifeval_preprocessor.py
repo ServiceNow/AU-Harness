@@ -1,3 +1,8 @@
+"""VoiceBench IFEval preprocessor module for LALMEval framework.
+
+This module provides a preprocessor for the VoiceBench IFEval dataset, designed for
+instruction following evaluation of audio LLMs.
+"""
 import logging
 from typing import Dict, List, Optional, Any
 
@@ -65,7 +70,7 @@ class VoiceBenchIfevalPreprocessor(Preprocessor):
             if modality == "audio":
                 # Validate audio data structure
                 if not isinstance(audio_data, dict):
-                    logger.warning(f"[{key}] Invalid audio format. Skipping sample.")
+                    logger.warning("[%s] Invalid audio format. Skipping sample.", key)
                     continue
 
                 # Convert to NumPy array
@@ -73,7 +78,7 @@ class VoiceBenchIfevalPreprocessor(Preprocessor):
                 sr = audio_data.get("sampling_rate")
 
                 if sr is None:
-                    logger.warning(f"[{key}] Sampling rate missing. Assuming 16kHz.")
+                    logger.warning("[%s] Sampling rate missing. Assuming 16kHz.", key)
                     sr = 16000
 
                 # Use base class method to resample audio
@@ -81,14 +86,14 @@ class VoiceBenchIfevalPreprocessor(Preprocessor):
 
             # Ensure prompt exists
             if not prompt:
-                logger.warning(f"[{key}] Missing prompt. Skipping sample.")
+                logger.warning("[%s] Missing prompt. Skipping sample.", key)
                 continue
 
             if modality == "text":
                 instruction = prompt
             else:
                 # For audio modality, we can define a generic instruction
-                instruction = f"Answer the question provided in the audio."
+                instruction = "Answer the question provided in the audio."
 
             # Create structured sample
             sample = {

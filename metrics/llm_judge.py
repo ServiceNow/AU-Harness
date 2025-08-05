@@ -1,15 +1,23 @@
+"""LLM-based judge metrics for evaluation."""
 from __future__ import annotations
-import asyncio, json, yaml, os, re, math
+import asyncio
+import json
+import logging
+import math
+import re
 from pathlib import Path
+from typing import List, Tuple, Optional, Dict
+
+import httpx
+import yaml
 from openai import AsyncAzureOpenAI, AsyncOpenAI, APIConnectionError
 from tqdm import tqdm
-from typing import List, Tuple, Optional, Dict
-import httpx
-import logging
-logger = logging.getLogger(__name__)
+
 from metrics.metrics import Metrics
-from utils.custom_logging import write_record_log, append_final_score
 from postprocessors.base import Postprocessor
+from utils.custom_logging import write_record_log, append_final_score
+
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Helper to load prompt templates shipped with the package
@@ -38,7 +46,7 @@ _DEFAULT_MAX_CONCURRENCY = 5
 class _BaseLLMJudge(Metrics):
     """Common LLM-as-judge class."""
 
-    def __init__(self, judge_properties: Dict | None = None, *_, **__):
+    def __init__(self, *_, judge_properties: Dict | None = None, **__):
         super().__init__()
         # Store the properties dictionary
         self._judge_properties = judge_properties or {}
@@ -46,8 +54,7 @@ class _BaseLLMJudge(Metrics):
         self._max_concurrency = self._judge_properties.get("judge_concurrency") or _DEFAULT_MAX_CONCURRENCY
         self._model = self._judge_properties.get("judge_model") or _DEFAULT_OPENAI_MODEL
         self._judge_type = self._judge_properties.get("judge_type") or "openai"
-        self._request_manager = None # Set in Engine
-        
+        self._request_manager = None  # Set in Engine
         # Initialize the appropriate client based on judge_type
         if self._judge_type == "openai":
             self._client = AsyncAzureOpenAI(
@@ -60,7 +67,7 @@ class _BaseLLMJudge(Metrics):
                 base_url=self._judge_properties.get("judge_api_endpoint"),
                 api_key=self._judge_properties.get("judge_api_key"),
             )
-    
+
     def set_request_manager(self, manager):
         """Set the request manager and register the model type."""
         self._request_manager = manager
@@ -82,22 +89,20 @@ class _BaseLLMJudge(Metrics):
                     # Extract the metric name from self._prompt_key (which is set in subclasses)
                     metric_name = self._prompt_key
                     prompt_key = f"{model_name}_{metric_name}"
-                    
+
                     try:
                         # Load the prompt from judge_prompts.yaml using the constructed key
                         system_prompt = _get_prompt(prompt_key)
                     except KeyError as e:
-                        logger.warning(f"Prompt key '{prompt_key}' not found in judge_prompts.yaml: {e}")
+                        logger.warning("Prompt key '%s' not found in judge_prompts.yaml: %s", prompt_key, e)
                         # Keep using the original system prompt if the constructed key is not found
-                
                 messages = [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt}
                 ]
-                
+
                 # Get temperature from judge_properties or use default 0.1
                 temperature = self._judge_properties.get("judge_temperature", 0.1)
-                
                 resp = await self._client.chat.completions.create(
                     model=self._model,
                     messages=messages,
@@ -109,17 +114,17 @@ class _BaseLLMJudge(Metrics):
                 content = cleaned_content
                 try:
                     return json.loads(content)
-                except Exception:
+                except (json.JSONDecodeError, ValueError):
                     return content
-            except (APIConnectionError, httpx.ConnectError, httpx.HTTPError) as e:
-                logger.warning(f"API connection failed (attempt {attempt + 1}/{max_retries}): {e}")
+            except (APIConnectionError, httpx.ConnectError, httpx.HTTPError) as connection_error:
+                logger.warning("API connection failed (attempt %d/%d): %s", attempt + 1, max_retries, connection_error)
                 await asyncio.sleep(2)  # Wait before retrying
             except Exception as e:
                 error_message = str(e)
                 # Handle content policy violations separately
                 if "content management policy" in error_message and attempt < max_retries - 1:
                     logger.warning(
-                        f"Content filter triggered (attempt {attempt + 1}/{max_retries}). Modifying prompt...")
+                        "Content filter triggered (attempt %d/%d). Modifying prompt...", attempt + 1, max_retries)
 
                     # Apply progressively stronger modifications to avoid content filter
                     if attempt == 0:
@@ -132,11 +137,11 @@ class _BaseLLMJudge(Metrics):
                     # Continue to retry with modified prompts
                     await asyncio.sleep(1)
                     continue
-                else:
-                    # For other unexpected errors, log and potentially break
-                    logger.error(f"Unexpected error in _score_once: {e}")
-                    break
-        logger.error(f"All {max_retries} attempts failed for this sample. Skipping.")
+
+                # For other unexpected errors, log and potentially break
+                logger.error("Unexpected error in _score_once: %s", e)
+                break
+        logger.error("All %d attempts failed for this sample. Skipping.", max_retries)
         return None
 
     async def _judge_all(
@@ -154,7 +159,7 @@ class _BaseLLMJudge(Metrics):
         """
         if self._request_manager is None:
             raise ValueError("Request manager must be set before calling _judge_all")
-        
+
         # Setup for token management
         token_sem = asyncio.Semaphore(0)  # Start with 0 tokens
         pending_samples = list(range(len(candidates)))  # Samples waiting for tokens
@@ -162,39 +167,36 @@ class _BaseLLMJudge(Metrics):
         completed_samples = set()  # Samples that are completed
         results = [None] * len(candidates)
         sys_prompt_template = _get_prompt(self._prompt_key)
-        
+
         # Generate unique evaluator instance ID
         evaluator_id = f"llm_judge_{self._prompt_key}_{id(self)}"
-        
         # Continuously ask for tokens based on pending samples
         async def token_manager():
             request_count = 0
             # Calculate wait times based on dataset size
             dataset_size = len(candidates)
-            
+
             # Calculate a scale factor from 0 to 1 based on dataset size
             scale_factor = min(1.0, max(0.0, math.log10(dataset_size + 10) / 4.0))
-            
+
             # Scale the no-token wait time between 0.5s and 2s
             no_token_wait = scale_factor * 2.0
-            
+
             # Double the wait time when tokens are granted
             token_wait = no_token_wait * 2.0
-            
             # Continue running until all samples have been given tokens
             while len(pending_samples) > 0:
                 request_count += 1
                 # Request as many tokens as needed for pending samples, up to max_concurrency
                 request_amount = min(self._max_concurrency, len(pending_samples))
-                
+
                 granted = await self._request_manager.request_tokens(
                     self._model, evaluator_id, request_amount)
-                
                 if granted > 0:
                     # Process the granted tokens
                     for _ in range(granted):
                         if pending_samples:
-                            sample_idx = pending_samples.pop(0)
+                            pending_samples.pop(0)
                             # Release semaphore permits for each granted token
                             token_sem.release()
                     # Wait based on dataset size when tokens were granted
@@ -204,46 +206,43 @@ class _BaseLLMJudge(Metrics):
                     # Apply a small multiplier for repeated failures, but cap it
                     backoff_multiplier = min(3.0, 1.0 + (request_count / 10))
                     await asyncio.sleep(no_token_wait * backoff_multiplier)
-        
+
         # Start the token management task
         token_task = asyncio.create_task(token_manager())
-        
         # Process each candidate-reference pair with token management
         async def _evaluate_with_token_mgmt(idx, cand, ref):
             # Acquire a token
             await token_sem.acquire()
-            
+
             try:
                 # Use the prompt template as system prompt
                 sys_prompt = sys_prompt_template
                 # Format candidate and reference as user prompt
                 user_prompt = f"candidate: {cand}\nreference: {ref}"
-                
+
                 # Call the scoring function
                 result = await self._score_once(sys_prompt, user_prompt)
-                
+
                 # Move from processing to completed
                 processing_samples.remove(idx)
                 completed_samples.add(idx)
-                
+
                 # Return token to model's pool
                 await self._request_manager.return_tokens(self._model, evaluator_id, 1)
-                
                 return idx, result
-            except Exception as e:
+            except Exception as eval_error:
                 # Make sure to return token on error
-                logger.error(f"[_BaseLLMJudge._evaluate_with_token_mgmt] Error processing sample {idx}: {e}")
-                
+                logger.error("[_BaseLLMJudge._evaluate_with_token_mgmt] Error processing sample %d: %s", idx, eval_error)
+
                 # Move sample from processing to completed
                 processing_samples.remove(idx)
                 completed_samples.add(idx)
-                
+
                 await self._request_manager.return_tokens(self._model, evaluator_id, 1)
                 return idx, None
-        
         # Create tasks for all samples
         tasks = [_evaluate_with_token_mgmt(i, c, r) for i, (c, r) in enumerate(zip(candidates, references))]
-        
+
         # Use tqdm to show progress
         desc = f"{self._prompt_key}"
         if dataset_name and model_name:
@@ -253,14 +252,14 @@ class _BaseLLMJudge(Metrics):
                 idx, result = await coro
                 results[idx] = result
                 progress_bar.update(1)
-        
+
         # Cancel the token_manager task when all samples are processed
         token_task.cancel()
         try:
             await token_task
         except asyncio.CancelledError:
             pass
-        
+
         return results
 
 
@@ -271,9 +270,18 @@ class _BaseLLMJudge(Metrics):
 # Binary (yes/no) judge
 # ---------------------------------------------------------------------------
 
-class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
+class BinaryLLMJudgeMetric(_BaseLLMJudge):
+    """Binary LLM judge metric for yes/no evaluations."""
     name: str = "llm_judge_binary"
     _prompt_key: str = "binary_judge_prompt"
+
+    def __init__(self, *_, judge_properties: Dict | None = None, **__):
+        super().__init__(judge_properties, *_, **__)
+        self.instructions = None
+        self.model_responses = None
+        self.explanations = None
+        self.instructions = None
+        self.model_responses = None
 
     async def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
         """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
@@ -286,13 +294,14 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
             scores = self.record_level_scores.get(self.name, [])
             # write_record_log will also write to run.log internally
             explanations = getattr(self, "explanations", None)
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, 
+            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations,
                            instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
         return overall
 
     async def compute_record_level_scores(self, candidates: list, references: list, dataset_name: str | None = None, model_name: str | None = None):
+        """Compute record-level scores for binary evaluation."""
         # Here we can use self.instructions if needed
         raw_scores = await self._judge_all(candidates, references, dataset_name, model_name)
         # Expect {"score": number, "explanation": str}
@@ -310,6 +319,12 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):
     name: str = "llm_judge_detailed"
     _prompt_key: str = "detailed_judge_prompt"
 
+    def __init__(self, *_, judge_properties: Dict | None = None, **__):
+        super().__init__(judge_properties, *_, **__)
+        self.instructions = None
+        self.model_responses = None
+        self.explanations = None
+
     async def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
         """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
         # Store instructions and model_responses for potential later use
@@ -324,13 +339,14 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):
             scores = self.record_level_scores.get(self.name, [])
             # write_record_log will also write to run.log internally
             explanations = getattr(self, "explanations", None)
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, 
+            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations,
                           instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
         return overall
 
     async def compute_record_level_scores(self, candidates: list, references: list, dataset_name: str | None = None, model_name: str | None = None):
+        """Compute record-level scores for detailed evaluation."""
         # Here we can use self.instructions if needed
         raw_scores = await self._judge_all(candidates, references, dataset_name, model_name)
         # Expect {"score": number, "explanation": str}
@@ -340,8 +356,15 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):
 
 
 class CallHomeLLMJudgeMetric(_BaseLLMJudge):
+    """CallHome-specific LLM judge metric."""
     name: str = "llm_judge_callhome"
     _prompt_key: str = "callhome_judge_prompt"
+
+    def __init__(self, *_, judge_properties: Dict | None = None, **__):
+        super().__init__(judge_properties, *_, **__)
+        self.instructions = None
+        self.model_responses = None
+        self.explanations = None
 
     async def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
         """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
@@ -356,13 +379,14 @@ class CallHomeLLMJudgeMetric(_BaseLLMJudge):
             scores = self.record_level_scores.get(self.name, [])
             # write_record_log will also write to run.log internally
             explanations = getattr(self, "explanations", None)
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, 
+            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations,
                       instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
         return overall
-        
+
     async def compute_record_level_scores(self, candidates: list, references: list, dataset_name: str | None = None, model_name: str | None = None):
+        """Compute record-level scores for CallHome evaluation."""
         # Here we can use self.instructions if needed
         raw_scores = await self._judge_all(candidates, references, dataset_name, model_name)
         # Expect {"score": number, "explanation": str}
@@ -371,11 +395,14 @@ class CallHomeLLMJudgeMetric(_BaseLLMJudge):
         return {self.name: scores}
 
 
-class LLMJudgeMetric(Metrics):  # noqa: D401
+class LLMJudgeMetric(Metrics):
+    """Simple LLM judge metric."""
     name: str = "llm_judge"
 
     def __init__(self) -> None:
+        super().__init__()
         self._model = None
+        self.instructions = None
 
     def __call__(self, ref: str, hyp: str, instructions=None):
         # Store instructions for potential later use
@@ -392,6 +419,12 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
     """
     name: str = "llm_judge_big_bench_audio"
     _prompt_key: str = "big_bench_audio_judge_prompt"
+
+    def __init__(self, *_, judge_properties: Dict | None = None, **__):
+        super().__init__(judge_properties, *_, **__)
+        self.instructions = None
+        self.model_responses = None
+        self.explanations = None
 
     async def __call__(
         self,
@@ -419,7 +452,6 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
         self.instructions = instructions
         self.model_responses = model_responses if model_responses else []
 
-
         scores = await self.compute_record_level_scores(candidates, references, dataset_name, model_name)
         all_scores = scores[self.name]
 
@@ -436,7 +468,7 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
 
         if dataset_name and model_name:
             # write_record_log will also write to run.log internally
-            write_record_log(self, references, candidates, all_scores, dataset_name, model_name, 
+            write_record_log(self, references, candidates, all_scores, dataset_name, model_name,
                        instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)

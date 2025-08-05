@@ -1,3 +1,6 @@
+"""
+Bfcl postprocessor module for processing function call predictions.
+"""
 import ast
 import json
 import logging
@@ -34,18 +37,18 @@ class BfclPostprocessor(Postprocessor):
             try:
                 json_decode = json.loads(json_str)
                 return json_decode
-            except:
+            except (json.JSONDecodeError, ValueError):
                 try:
                     json_decode = ast.literal_eval(json_str)
                     return json_decode
-                except:
+                except (ValueError, SyntaxError):
                     return None
 
     def process(
             self,
             dataset: list[dict],
             predictions: ModelResponse,
-            metric
+            metric  # pylint: disable=unused-argument
     ) -> tuple[list[tuple[str, str]], dict[str, list[str]], list, list] | dict:
         """
         Process and clean model predictions and prepare target-label pairs.
@@ -86,7 +89,8 @@ class BfclPostprocessor(Postprocessor):
 
         output = {
             "instructions": [record.get("instruction", "") for record in dataset],
-            "model_targets": [record["model_target"] for record in dataset if "model_target" in record],
+            "model_targets": [record["model_target"] for record in dataset 
+                              if "model_target" in record],
             "processed_predictions": processed_predictions,
         }
         self.validate_output(output)

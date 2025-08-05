@@ -8,6 +8,7 @@ import dataclasses
 import numpy as np
 import word_levenshtein as levenshtein
 from scipy import optimize
+from tqdm import tqdm
 
 from metrics.metrics import Metrics
 from metrics.word_error_rate_metrics import normalize_text
@@ -93,7 +94,7 @@ def compute_wder(ref_spk_list, hyp_spk_list, ref_words, hyp_words, align, result
             hyp_spk_list_align.append(hyp_spk_list[j])
 
     # Build cost matrix.
-    max_spk = max(max(ref_spk_list_align), max(hyp_spk_list_align))
+    max_spk = max(*ref_spk_list_align, *hyp_spk_list_align)
     cost_matrix = np.zeros((max_spk, max_spk), dtype=int)
     for aligned, original in zip(ref_spk_list_align, hyp_spk_list_align):
         cost_matrix[aligned - 1, original - 1] += 1
@@ -187,7 +188,6 @@ class DiarizationMetrics(Metrics):
         if dataset_name and model_name:
             # WDER & cpWER record scores are stored under 'wder_per_row' and 'cpwer_per_row'
             scores = self.record_level_scores.get("wder_per_row", [])
-            cpwer_scores = self.record_level_scores.get("cpwer_per_row", [])
 
             write_record_log(self, references, candidates, scores, dataset_name, model_name,
                              instructions=self.instructions)
@@ -201,6 +201,8 @@ class DiarizationMetrics(Metrics):
         self.display_name = "Word Diarization Error Rate (WDER) and concatenated minium-permutation WER (cpWER) and Speaker Count MAE (SpkCntMAE)"
         self.description = "The proportion of incorrectly predicted speakers when compared to the reference speakers, on the fine-grained word level"
         self.language = language
+        self.instructions = None
+        self.model_responses = []
 
     def get_score(self, candidates, references, ids=None, lengths=None):
         """Get overall score.
@@ -262,7 +264,6 @@ class DiarizationMetrics(Metrics):
         Returns:
             Scores for each record. The keys should be the column names that will be saved in the record level file.
         """
-        from tqdm import tqdm
 
         cpwer_scores, wder_scores = [], []
         total_wder_sub, total_wder_total = [], []
@@ -297,7 +298,7 @@ class DiarizationMetrics(Metrics):
                 word_level_cand_speakers.extend(cur_word_level_cand_speaker)
                 cleaned_cand_transcripts.append(normalized_cand_transcript)
 
-            if (len(ref_by_lines) > num_min_iterations):
+            if len(ref_by_lines) > num_min_iterations:
                 for j in range(len(ref_by_lines) - num_min_iterations):
                     cur_ref_speaker, cur_word_level_ref_speaker, normalized_ref_transcript = prepare_speaker_info(
                         ref_by_lines[num_min_iterations + j], lang_code)
@@ -315,14 +316,14 @@ class DiarizationMetrics(Metrics):
 
             try:
                 assert len(ref_by_lines) == len(ref_speakers)
-            except:
+            except Exception as exc:
                 raise ValueError(
-                    "The ground truths are not labeled correctly. Reference speakers and reference transcripts are not aligned by turns.")
+                    "The ground truths are not labeled correctly. Reference speakers and reference transcripts are not aligned by turns.") from exc
             try:
                 assert len(cand_by_lines) == len(cand_speakers)
-            except:
+            except Exception as exc:
                 raise ValueError(
-                    "The generated outputs are not formatted correctly. Hypothesis speakers and hypothesis transcripts are not aligned by turns.")
+                    "The generated outputs are not formatted correctly. Hypothesis speakers and hypothesis transcripts are not aligned by turns.") from exc
 
             ##########################################################
             # Flattten the transcripts to the word-level
@@ -340,8 +341,8 @@ class DiarizationMetrics(Metrics):
             try:
                 assert len(flattened_ref_transcripts) == len(numeric_word_level_ref_speakers)
                 assert len(flattened_cand_transcripts) == len(numeric_word_level_cand_speakers)
-            except:
-                raise ValueError("Either reference transcripts or candidate transcripts are not spaced correctly.")
+            except Exception as exc:
+                raise ValueError("Either reference transcripts or candidate transcripts are not spaced correctly.") from exc
             result, align = compute_wer(flattened_cand_transcripts, flattened_ref_transcripts)
 
             result = compute_wder(numeric_word_level_ref_speakers, numeric_word_level_cand_speakers,
