@@ -126,15 +126,10 @@ class Model(ABC):
     async def _mark_errors(self, result: ModelResponse, error_tracker: ErrorTracker):
         """Update error tracker."""
         if result.response_code != 200:
-            # Update the per-call error tracker
+            # No lock needed since this is a per-call error tracker
             error_tracker.increment(result.response_code)
             # Make sure the error tracker is attached to the ModelResponse
             result.error_tracker = error_tracker
-            
-            # Also update the global error tracker with proper lock handling
-            async with self.errors_lock:
-                self.errors.increment(result.response_code)
-            
             # Log that we're tracking this error
             logger.info("[_mark_errors] Recorded error %s in error tracker: %s", result.response_code, error_tracker.__dict__)
 
@@ -182,6 +177,7 @@ class Model(ABC):
                             wait_time=0,
                             error_tracker=call_errors,
                         )
+                        await self._mark_errors(result, call_errors)
                 attempt.retry_state.set_result(result)
                 # Set backoff for next retry based on current result
                 self._set_max_backoff(attempt)
@@ -198,6 +194,7 @@ class Model(ABC):
                 wait_time=0,
                 error_tracker=call_errors,
             )
+            await self._mark_errors(result, call_errors)
         except RetryError:
             logger.error(
                 "[%s] Request failed after %s attempts for input: %s...",
@@ -212,6 +209,7 @@ class Model(ABC):
                 wait_time=0,
                 error_tracker=call_errors,
             )
+            await self._mark_errors(result, call_errors)
         except Exception as e:
             logger.error("Unexpected error in _generate_text_with_retry: %s", e)
             result = ModelResponse(
@@ -223,6 +221,7 @@ class Model(ABC):
                 wait_time=0,
                 error_tracker=call_errors,
             )
+            await self._mark_errors(result, call_errors)
         return result
 
 
