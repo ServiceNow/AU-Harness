@@ -1,0 +1,2278 @@
+{
+  "aishell_1_test": {
+    "hf_repo": "AudioLLMs/aishell_1_zh_test",
+    "language": "zh",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "gigaspeech_test": {
+    "hf_repo": "AudioLLMs/gigaspeech-test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "gigaspeech2_id_test": {
+    "hf_repo": "AudioLLMs/gigaspeech2-test",
+    "subset": "id-test",
+    "language": "id",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "gigaspeech2_th_test": {
+    "hf_repo": "AudioLLMs/gigaspeech2-test",
+    "subset": "th-test",
+    "language": "th",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "gigaspeech2_vi_test": {
+    "hf_repo": "AudioLLMs/gigaspeech2-test",
+    "subset": "vi-test",
+    "language": "vi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "librispeech_test_clean": {
+    "hf_repo": "AudioLLMs/librispeech_test_clean",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "librispeech_test_other": {
+    "hf_repo": "AudioLLMs/librispeech_test_other",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "mnsc_asr_part1_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "ASR-PART1-Test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "mnsc_asr_part2_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "ASR-PART2-Test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "mnsc_asr_part3_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "ASR-PART3-Test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "mnsc_asr_part4_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "ASR-PART4-Test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "mnsc_asr_part5_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "ASR-PART5-Test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "mnsc_asr_part6_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "ASR-PART6-Test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "peoples_speech_test": {
+    "hf_repo": "AudioLLMs/peoples_speech_test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "tedlium3_test": {
+    "hf_repo": "AudioLLMs/tedlium3_test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "ami_sdm": {
+    "hf_repo": "edinburghcstr/ami",
+    "subset": "sdm",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "text"
+  },
+  "ami_ihm": {
+    "hf_repo": "edinburghcstr/ami",
+    "subset": "ihm",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "text"
+  },
+  "spgispeech_test": {
+    "hf_repo": "kensho/spgispeech",
+    "subset": "test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "voxpopuli_en": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "en",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_de": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "de",
+    "language": "de",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_fr": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "fr",
+    "language": "fr",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_es": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "es",
+    "language": "es",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_en_accented": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "en_accented",
+    "language": "en_accented",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true,
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_pl": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "pl",
+    "language": "pl",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_it": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "it",
+    "language": "it",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_ro": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "ro",
+    "language": "ro",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_hu": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "hu",
+    "language": "hu",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_cs": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "cs",
+    "language": "cs",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_nl": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "nl",
+    "language": "nl",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_fi": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "fi",
+    "language": "fi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_hr": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "hr",
+    "language": "hr",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_sk": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "sk",
+    "language": "sk",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_sl": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "sl",
+    "language": "sl",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_et": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "et",
+    "language": "et",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_lt": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "lt",
+    "language": "lt",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "librispeech_multilingual_dutch": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "language": "nl",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "librispeech_multilingual_french": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "subset": "french",
+    "language": "fr",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "librispeech_multilingual_german": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "subset": "german",
+    "language": "de",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "librispeech_multilingual_italian": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "subset": "italian",
+    "language": "it",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "librispeech_multilingual_spanish": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "subset": "spanish",
+    "language": "es",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "librispeech_multilingual_polish": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "subset": "polish",
+    "language": "pl",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "librispeech_multilingual_portuguese": {
+    "hf_repo": "facebook/multilingual_librispeech",
+    "subset": "portuguese",
+    "language": "pt",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor"
+  },
+  "common_voice_15_ab": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ab",
+    "language": "ab",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_af": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "af",
+    "language": "af",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_am": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "am",
+    "language": "am",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ar": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ar",
+    "language": "ar",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_as": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "as",
+    "language": "as",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ast": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ast",
+    "language": "ast",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_az": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "az",
+    "language": "az",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ba": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ba",
+    "language": "ba",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_bas": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "bas",
+    "language": "bas",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_be": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "be",
+    "language": "be",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_bg": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "bg",
+    "language": "bg",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_bn": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "bn",
+    "language": "bn",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_br": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "br",
+    "language": "br",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ca": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ca",
+    "language": "ca",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ckb": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ckb",
+    "language": "ckb",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_cnh": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "cnh",
+    "language": "cnh",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_cs": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "cs",
+    "language": "cs",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_cv": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "cv",
+    "language": "cv",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_cy": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "cy",
+    "language": "cy",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_da": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "da",
+    "language": "da",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_de": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "de",
+    "language": "de",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_dv": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "dv",
+    "language": "dv",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_dyu": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "dyu",
+    "language": "dyu",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_el": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "el",
+    "language": "el",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_en": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "en",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_eo": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "eo",
+    "language": "eo",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_es": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "es",
+    "language": "es",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_et": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "et",
+    "language": "et",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_eu": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "eu",
+    "language": "eu",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_fa": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "fa",
+    "language": "fa",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_fi": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "fi",
+    "language": "fi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_fr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "fr",
+    "language": "fr",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_fy-NL": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "fy-NL",
+    "language": "fy-NL",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ga-IE": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ga-IE",
+    "language": "ga-IE",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_gl": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "gl",
+    "language": "gl",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_gn": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "gn",
+    "language": "gn",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ha": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ha",
+    "language": "ha",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_he": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "he",
+    "language": "he",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_hi": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "hi",
+    "language": "hi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_hsb": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "hsb",
+    "language": "hsb",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_hu": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "hu",
+    "language": "hu",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_hy-AM": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "hy-AM",
+    "language": "hy-AM",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ia": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ia",
+    "language": "ia",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_id": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "id",
+    "language": "id",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ig": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ig",
+    "language": "ig",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_is": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "is",
+    "language": "is",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_it": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "it",
+    "language": "it",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ja": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ja",
+    "language": "ja",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ka": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ka",
+    "language": "ka",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_kab": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "kab",
+    "language": "kab",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_kk": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "kk",
+    "language": "kk",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_kmr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "kmr",
+    "language": "kmr",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ko": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ko",
+    "language": "ko",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ky": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ky",
+    "language": "ky",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_lg": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "lg",
+    "language": "lg",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_lo": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "lo",
+    "language": "lo",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_lt": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "lt",
+    "language": "lt",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_lv": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "lv",
+    "language": "lv",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_mdf": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mdf",
+    "language": "mdf",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_mhr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mhr",
+    "language": "mhr",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_mk": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mk",
+    "language": "mk",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ml": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ml",
+    "language": "ml",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_mn": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mn",
+    "language": "mn",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_mr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mr",
+    "language": "mr",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_mrj": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mrj",
+    "language": "mrj",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_mt": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "mt",
+    "language": "mt",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_myv": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "myv",
+    "language": "myv",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_nan-tw": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "nan-tw",
+    "language": "nan-tw",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ne-NP": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ne-NP",
+    "language": "ne-NP",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_nl": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "nl",
+    "language": "nl",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_nn-NO": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "nn-NO",
+    "language": "nn-NO",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_oc": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "oc",
+    "language": "oc",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_or": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "or",
+    "language": "or",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_pa-IN": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "pa-IN",
+    "language": "pa-IN",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_pl": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "pl",
+    "language": "pl",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ps": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ps",
+    "language": "ps",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_pt": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "pt",
+    "language": "pt",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ro": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ro",
+    "language": "ro",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ru": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ru",
+    "language": "ru",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_rw": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "rw",
+    "language": "rw",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_sah": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sah",
+    "language": "sah",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_sat": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sat",
+    "language": "sat",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_sc": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sc",
+    "language": "sc",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_sk": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sk",
+    "language": "sk",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_skr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "skr",
+    "language": "skr",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_sl": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sl",
+    "language": "sl",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_sq": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sq",
+    "language": "sq",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_sr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sr",
+    "language": "sr",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_sv-SE": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sv-SE",
+    "language": "sv-SE",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_sw": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "sw",
+    "language": "sw",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ta": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ta",
+    "language": "ta",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_th": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "th",
+    "language": "th",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ti": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ti",
+    "language": "ti",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_tig": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "tig",
+    "language": "tig",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_tk": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "tk",
+    "language": "tk",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_tok": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "tok",
+    "language": "tok",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_tr": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "tr",
+    "language": "tr",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_tt": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "tt",
+    "language": "tt",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_tw": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "tw",
+    "language": "tw",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ug": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ug",
+    "language": "ug",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_uk": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "uk",
+    "language": "uk",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_ur": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "ur",
+    "language": "ur",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_uz": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "uz",
+    "language": "uz",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_vi": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "vi",
+    "language": "vi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_vot": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "vot",
+    "language": "vot",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_yue": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "yue",
+    "language": "yue",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_zh-CN": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "zh-CN",
+    "language": "zh",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_zh-HK": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "zh-HK",
+    "language": "zh",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_zh-TW": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "zh-TW",
+    "language": "zh-TW",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "fleurs_af": {
+    "hf_repo": "google/fleurs",
+    "subset": "af_za",
+    "language": "af",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_am": {
+    "hf_repo": "google/fleurs",
+    "subset": "am_et",
+    "language": "am",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ar": {
+    "hf_repo": "google/fleurs",
+    "subset": "ar_eg",
+    "language": "ar",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_hy": {
+    "hf_repo": "google/fleurs",
+    "subset": "hy_am",
+    "language": "hy",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_as": {
+    "hf_repo": "google/fleurs",
+    "subset": "as_in",
+    "language": "as",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ast": {
+    "hf_repo": "google/fleurs",
+    "subset": "ast_es",
+    "language": "ast",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_az": {
+    "hf_repo": "google/fleurs",
+    "subset": "az_az",
+    "language": "az",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_be": {
+    "hf_repo": "google/fleurs",
+    "subset": "be_by",
+    "language": "be",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_bn": {
+    "hf_repo": "google/fleurs",
+    "subset": "bn_in",
+    "language": "bn",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_bs": {
+    "hf_repo": "google/fleurs",
+    "subset": "bs_ba",
+    "language": "bs",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_bg": {
+    "hf_repo": "google/fleurs",
+    "subset": "bg_bg",
+    "language": "bg",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_my": {
+    "hf_repo": "google/fleurs",
+    "subset": "my_mm",
+    "language": "my",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ca": {
+    "hf_repo": "google/fleurs",
+    "subset": "ca_es",
+    "language": "ca",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ceb": {
+    "hf_repo": "google/fleurs",
+    "subset": "ceb_ph",
+    "language": "ceb",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_cmn_hans": {
+    "hf_repo": "google/fleurs",
+    "subset": "cmn_hans_cn",
+    "language": "cmn",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_yue_hant": {
+    "hf_repo": "google/fleurs",
+    "subset": "yue_hant_hk",
+    "language": "yue",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_hr": {
+    "hf_repo": "google/fleurs",
+    "subset": "hr_hr",
+    "language": "hr",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_cs": {
+    "hf_repo": "google/fleurs",
+    "subset": "cs_cz",
+    "language": "cs",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_da": {
+    "hf_repo": "google/fleurs",
+    "subset": "da_dk",
+    "language": "da",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_nl": {
+    "hf_repo": "google/fleurs",
+    "subset": "nl_nl",
+    "language": "nl",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_en": {
+    "hf_repo": "google/fleurs",
+    "subset": "en_us",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_et": {
+    "hf_repo": "google/fleurs",
+    "subset": "et_ee",
+    "language": "et",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_fil": {
+    "hf_repo": "google/fleurs",
+    "subset": "fil_ph",
+    "language": "fil",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_fi": {
+    "hf_repo": "google/fleurs",
+    "subset": "fi_fi",
+    "language": "fi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_fr": {
+    "hf_repo": "google/fleurs",
+    "subset": "fr_fr",
+    "language": "fr",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ff": {
+    "hf_repo": "google/fleurs",
+    "subset": "ff_sn",
+    "language": "ff",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_gl": {
+    "hf_repo": "google/fleurs",
+    "subset": "gl_es",
+    "language": "gl",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_lg": {
+    "hf_repo": "google/fleurs",
+    "subset": "lg_ug",
+    "language": "lg",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ka": {
+    "hf_repo": "google/fleurs",
+    "subset": "ka_ge",
+    "language": "ka",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_de": {
+    "hf_repo": "google/fleurs",
+    "subset": "de_de",
+    "language": "de",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_el": {
+    "hf_repo": "google/fleurs",
+    "subset": "el_gr",
+    "language": "el",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_gu": {
+    "hf_repo": "google/fleurs",
+    "subset": "gu_in",
+    "language": "gu",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ha": {
+    "hf_repo": "google/fleurs",
+    "subset": "ha_ng",
+    "language": "ha",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_he": {
+    "hf_repo": "google/fleurs",
+    "subset": "he_il",
+    "language": "he",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_hi": {
+    "hf_repo": "google/fleurs",
+    "subset": "hi_in",
+    "language": "hi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_hu": {
+    "hf_repo": "google/fleurs",
+    "subset": "hu_hu",
+    "language": "hu",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_is": {
+    "hf_repo": "google/fleurs",
+    "subset": "is_is",
+    "language": "is",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ig": {
+    "hf_repo": "google/fleurs",
+    "subset": "ig_ng",
+    "language": "ig",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_id": {
+    "hf_repo": "google/fleurs",
+    "subset": "id_id",
+    "language": "id",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ga": {
+    "hf_repo": "google/fleurs",
+    "subset": "ga_ie",
+    "language": "ga",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_it": {
+    "hf_repo": "google/fleurs",
+    "subset": "it_it",
+    "language": "it",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ja": {
+    "hf_repo": "google/fleurs",
+    "subset": "ja_jp",
+    "language": "ja",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_jv": {
+    "hf_repo": "google/fleurs",
+    "subset": "jv_id",
+    "language": "jv",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_kea": {
+    "hf_repo": "google/fleurs",
+    "subset": "kea_cv",
+    "language": "kea",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_kam": {
+    "hf_repo": "google/fleurs",
+    "subset": "kam_ke",
+    "language": "kam",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_kn": {
+    "hf_repo": "google/fleurs",
+    "subset": "kn_in",
+    "language": "kn",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_kk": {
+    "hf_repo": "google/fleurs",
+    "subset": "kk_kz",
+    "language": "kk",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_km": {
+    "hf_repo": "google/fleurs",
+    "subset": "km_kh",
+    "language": "km",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ko": {
+    "hf_repo": "google/fleurs",
+    "subset": "ko_kr",
+    "language": "ko",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ky": {
+    "hf_repo": "google/fleurs",
+    "subset": "ky_kg",
+    "language": "ky",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_lo": {
+    "hf_repo": "google/fleurs",
+    "subset": "lo_la",
+    "language": "lo",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_lv": {
+    "hf_repo": "google/fleurs",
+    "subset": "lv_lv",
+    "language": "lv",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ln": {
+    "hf_repo": "google/fleurs",
+    "subset": "ln_cd",
+    "language": "ln",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_lt": {
+    "hf_repo": "google/fleurs",
+    "subset": "lt_lt",
+    "language": "lt",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_luo": {
+    "hf_repo": "google/fleurs",
+    "subset": "luo_ke",
+    "language": "luo",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_lb": {
+    "hf_repo": "google/fleurs",
+    "subset": "lb_lu",
+    "language": "lb",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_mk": {
+    "hf_repo": "google/fleurs",
+    "subset": "mk_mk",
+    "language": "mk",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ms": {
+    "hf_repo": "google/fleurs",
+    "subset": "ms_my",
+    "language": "ms",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ml": {
+    "hf_repo": "google/fleurs",
+    "subset": "ml_in",
+    "language": "ml",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_mt": {
+    "hf_repo": "google/fleurs",
+    "subset": "mt_mt",
+    "language": "mt",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_mi": {
+    "hf_repo": "google/fleurs",
+    "subset": "mi_nz",
+    "language": "mi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_mr": {
+    "hf_repo": "google/fleurs",
+    "subset": "mr_in",
+    "language": "mr",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_mn": {
+    "hf_repo": "google/fleurs",
+    "subset": "mn_mn",
+    "language": "mn",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ne": {
+    "hf_repo": "google/fleurs",
+    "subset": "ne_np",
+    "language": "ne",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_nso": {
+    "hf_repo": "google/fleurs",
+    "subset": "nso_za",
+    "language": "nso",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_nb": {
+    "hf_repo": "google/fleurs",
+    "subset": "nb_no",
+    "language": "nb",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ny": {
+    "hf_repo": "google/fleurs",
+    "subset": "ny_mw",
+    "language": "ny",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_oc": {
+    "hf_repo": "google/fleurs",
+    "subset": "oc_fr",
+    "language": "oc",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_or": {
+    "hf_repo": "google/fleurs",
+    "subset": "or_in",
+    "language": "or",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_om": {
+    "hf_repo": "google/fleurs",
+    "subset": "om_et",
+    "language": "om",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ps": {
+    "hf_repo": "google/fleurs",
+    "subset": "ps_pk",
+    "language": "ps",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_fa": {
+    "hf_repo": "google/fleurs",
+    "subset": "fa_ir",
+    "language": "fa",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_pl": {
+    "hf_repo": "google/fleurs",
+    "subset": "pl_pl",
+    "language": "pl",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_pt": {
+    "hf_repo": "google/fleurs",
+    "subset": "pt_pt",
+    "language": "pt",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_pa": {
+    "hf_repo": "google/fleurs",
+    "subset": "pa_in",
+    "language": "pa",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ro": {
+    "hf_repo": "google/fleurs",
+    "subset": "ro_ro",
+    "language": "ro",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ru": {
+    "hf_repo": "google/fleurs",
+    "subset": "ru_ru",
+    "language": "ru",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_sr": {
+    "hf_repo": "google/fleurs",
+    "subset": "sr_rs",
+    "language": "sr",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_sn": {
+    "hf_repo": "google/fleurs",
+    "subset": "sn_zw",
+    "language": "sn",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_sd": {
+    "hf_repo": "google/fleurs",
+    "subset": "sd_in",
+    "language": "sd",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_sk": {
+    "hf_repo": "google/fleurs",
+    "subset": "sk_sk",
+    "language": "sk",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_sl": {
+    "hf_repo": "google/fleurs",
+    "subset": "sl_si",
+    "language": "sl",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_so": {
+    "hf_repo": "google/fleurs",
+    "subset": "so_so",
+    "language": "so",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ckb": {
+    "hf_repo": "google/fleurs",
+    "subset": "ckb_iq",
+    "language": "ckb",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_es": {
+    "hf_repo": "google/fleurs",
+    "subset": "es_es",
+    "language": "es",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_sw": {
+    "hf_repo": "google/fleurs",
+    "subset": "sw_ke",
+    "language": "sw",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_sv": {
+    "hf_repo": "google/fleurs",
+    "subset": "sv_se",
+    "language": "sv",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_tg": {
+    "hf_repo": "google/fleurs",
+    "subset": "tg_tj",
+    "language": "tg",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ta": {
+    "hf_repo": "google/fleurs",
+    "subset": "ta_in",
+    "language": "ta",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_te": {
+    "hf_repo": "google/fleurs",
+    "subset": "te_in",
+    "language": "te",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_th": {
+    "hf_repo": "google/fleurs",
+    "subset": "th_th",
+    "language": "th",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_tr": {
+    "hf_repo": "google/fleurs",
+    "subset": "tr_tr",
+    "language": "tr",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_uk": {
+    "hf_repo": "google/fleurs",
+    "subset": "uk_ua",
+    "language": "uk",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_umb": {
+    "hf_repo": "google/fleurs",
+    "subset": "umb_ao",
+    "language": "umb",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_ur": {
+    "hf_repo": "google/fleurs",
+    "subset": "ur_pk",
+    "language": "ur",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_uz": {
+    "hf_repo": "google/fleurs",
+    "subset": "uz_uz",
+    "language": "uz",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_vi": {
+    "hf_repo": "google/fleurs",
+    "subset": "vi_vn",
+    "language": "vi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_cy": {
+    "hf_repo": "google/fleurs",
+    "subset": "cy_gb",
+    "language": "cy",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_wo": {
+    "hf_repo": "google/fleurs",
+    "subset": "wo_sn",
+    "language": "wo",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_xh": {
+    "hf_repo": "google/fleurs",
+    "subset": "xh_za",
+    "language": "xh",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_yo": {
+    "hf_repo": "google/fleurs",
+    "subset": "yo_ng",
+    "language": "yo",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  },
+  "fleurs_zu": {
+    "hf_repo": "google/fleurs",
+    "subset": "zu_za",
+    "language": "zu",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "transcription"
+  }
+}

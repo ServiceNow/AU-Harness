@@ -1,0 +1,42 @@
+{
+  "iemocap_gender_recognition": {
+    "hf_repo": "AudioLLMs/iemocap_gender_recognition",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "mnsc_pqa_gr_dialogue_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "PQA-GR-Dialogue-Test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "mnsc_pqa_gr_sentence_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "PQA-GR-Sentence-Test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "voxceleb_gender_test": {
+    "hf_repo": "AudioLLMs/voxceleb_gender_test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  }
+}

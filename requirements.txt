@@ -1,33 +1,52 @@
 # Core numerical & data libraries
-numpy
+numpy==1.26.4
 
 # Data loading
-huggingface_hub
-datasets
+huggingface-hub==0.33.2
+datasets==3.2.0
 
 # Model-/service-side SDKs
-openai
-httpx
-requests
+openai==1.59.9
+httpx==0.28.1
+requests==2.32.3
 
 # Audio I/O
-soundfile   # depends on system libsndfile
+soundfile==0.13.1        # depends on system libsndfile
 
 # Evaluation / metrics
-sacrebleu
-nltk
+sacrebleu==2.5.1
+nltk==3.9.1
+bert-score
 
 # Misc utilities
-PyYAML
-pydantic
-tenacity
-tqdm
+PyYAML==6.0.2
+pydantic==2.10.5
+tenacity==9.1.2
+tqdm==4.67.1
+setuptools==80.9.0
 
-pillow
-logger
-jinja2
-librosa
-jiwer
-num2words
-jaconv
-more_itertools
+pillow==11.1.0
+logger==1.4
+Jinja2==3.1.5
+librosa==0.10.0
+jiwer==4.0.0
+num2words==0.5.14
+jaconv==0.4.0
+more-itertools==10.7.0
+
+scikit-learn==1.7.0      # jiwer, librosa metrics
+scipy==1.15.3            # librosa, scikit-learn
+joblib==1.5.1            # scikit-learn
+soundfile==0.13.1        # librosa dependency, explicitly required
+
+word-levenshtein         # alignment tool for diarization metrics
+
+langdetect==1.0.9
+
+# Required for handling nested event loops
+nest_asyncio==1.6.0
+immutabledict==4.2.1
+
+# Debugging
+debugpy==1.8.0           # VSCode debugging support
+

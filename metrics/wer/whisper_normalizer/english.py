@@ -7,11 +7,14 @@ Same for english.json
 import json
 import os
 import re
-from fractions import Fraction
 from collections.abc import Iterator
+from fractions import Fraction
 from typing import Match
-from .basic import remove_symbols_and_diacritics
+
 from more_itertools import windowed
+
+from .basic import remove_symbols_and_diacritics
+
 
 class EnglishNumberNormalizer:
     """Convert any spelled-out numbers into arabic numbers, while handling:
@@ -133,18 +136,18 @@ class EnglishNumberNormalizer:
             [
                 key
                 for mapping in [
-                    self.zeros,
-                    self.ones,
-                    self.ones_suffixed,
-                    self.tens,
-                    self.tens_suffixed,
-                    self.multipliers,
-                    self.multipliers_suffixed,
-                    self.preceding_prefixers,
-                    self.following_prefixers,
-                    self.suffixers,
-                    self.specials,
-                ]
+                self.zeros,
+                self.ones,
+                self.ones_suffixed,
+                self.tens,
+                self.tens_suffixed,
+                self.multipliers,
+                self.multipliers_suffixed,
+                self.preceding_prefixers,
+                self.following_prefixers,
+                self.suffixers,
+                self.specials,
+            ]
                 for key in mapping
             ]
         )
@@ -495,21 +498,24 @@ class EnglishTextNormalizer:
             r"'s gone\b": " has gone",
             r"'d done\b": " had done",  # "'s done" is ambiguous
             r"'s got\b": " has got",
-            # general contractions
-            r"n't\b": " not",
-            r"'re\b": " are",
-            r"'s\b": " is",
-            r"'d\b": " would",
-            r"'ll\b": " will",
-            r"'t\b": " not",
-            r"'ve\b": " have",
-            r"'m\b": " am",
+            # general contractions - with word capture group to get the base word
+            r"(\w+)n't\b": "\1 not",
+            r"(\w+)'re\b": "\1 are",
+            r"(\w+)'s\b": "\1 is",
+            r"(\w+)'d\b": "\1 would",
+            r"(\w+)'ll\b": "\1 will",
+            r"(\w+)'t\b": "\1 not",
+            r"(\w+)'ve\b": "\1 have",
+            r"(\w+)'m\b": "\1 am",
         }
         self.standardize_numbers = EnglishNumberNormalizer()
         self.standardize_spellings = EnglishSpellingNormalizer()
 
     def __call__(self, s: str):
         s = s.lower()
+
+        # Normalize various unicode apostrophes/backticks to standard ASCII apostrophe
+        s = re.sub(r"[‘’´`‛ʻʼʽʾʿˊˋˈ]", "'", s)
 
         s = re.sub(r"[<\[][^>\]]*[>\]]", "", s)  # remove words between brackets
         s = re.sub(r"\(([^)]+?)\)", "", s)  # remove words between parenthesis

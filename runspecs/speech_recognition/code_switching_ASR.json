@@ -1,0 +1,20 @@
+{
+    "seame_dev_sge": {
+    "hf_repo": "AudioLLMs/seame_dev_sge",
+    "language": "en/zh",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "seame_dev_man": {
+    "hf_repo": "AudioLLMs/seame_dev_man",
+    "language": "en/zh",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  }
+}

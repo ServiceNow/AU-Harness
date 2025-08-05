@@ -1,0 +1,20 @@
+{
+  "alpaca_audio_test": {
+    "hf_repo": "AudioLLMs/alpaca_audio_test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "openhermes_instruction_test": {
+    "hf_repo": "AudioLLMs/openhermes_instruction_test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  }
+}

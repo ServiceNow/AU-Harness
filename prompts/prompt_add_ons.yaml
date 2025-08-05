@@ -1,2 +1,14 @@
 asr_clean_output: |-
-  From the audio, you MUST only output the transcribed text, without any additional formatting or additional text.
+  You have been given an audio clip. From the audio, you MUST only output the transcribed text, without any additional formatting or additional text. Do NOT say "The transcription is..." or something of that nature. Simply output the transcription only.
+try_best: |-
+  Follow these given instructions, based on the audio clip you have just been given. ALWAYS try your best to answer, and give your best educated guess if you are not sure. NEVER give up or refuse to answer.
+audio_expert: |-
+  Keep in mind, you are an expert at listening to and understanding audio, no matter the quality or duration.
+meld_emotion: |-
+  Choose from the following options: Anger, Disgust, Fear, Joy, Neutral, Sadness, Suprise
+meld_sentiment: |-
+  Choose from the following options: positive, negative, neutral
+iemocap_emotion: |-
+  Choose from the following options: anger, happiness, excitement, sadness, frustration, fear, surprise, neutral
+spoofing_detection: |-
+  Choose from the following options: authentic, spoofed

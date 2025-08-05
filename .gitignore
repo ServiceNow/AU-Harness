@@ -1,17 +1,31 @@
-#env
+# env
 lite
+env
+env_py312
 
-#config files
+# config files
 config.yaml
 
-#log files
+# log files
 *.log
+*.csv
 *.out
+*.csv
 
-#private datasets
-private_datasets
+# callhome local files
+*.cha
+*.wav
 
 # python cache files
 __pycache__/
 **/__pycache__/
 *.py[cod]
+.DS_Store
+
+# local configs
+.venv/
+.vscode/
+
+data/spider/
+
+CLAUDE.md

@@ -1,90 +1,82 @@
+import logging
 import re
+import unicodedata
 from collections import defaultdict
 
-from jiwer import (
-    Compose,
-    ReduceToListOfListOfChars,
-    RemovePunctuation,
-    RemoveWhiteSpace,
-    Strip,
-    ToLowerCase,
-    process_words,
-)
+from jiwer import process_words
 from num2words import num2words
+from tqdm import tqdm
 
-import logging
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
 from metrics.base_metric_metadata import MetricMetadata
 from metrics.metrics import Metrics
-from metrics.wer.normalizers import JapaneseTextNormalizer
-from metrics.wer.whisper_normalizer.english import EnglishTextNormalizer
-from metrics.wer.whisper_normalizer.basic import BasicTextNormalizer
-
+from utils.custom_logging import write_record_log, append_final_score
 from utils import constants
-from utils.util import smart_round
-
-NORMALIZERS = {"en": EnglishTextNormalizer(), "ja": JapaneseTextNormalizer()}
-DEFAULT_NORMALIZER = BasicTextNormalizer()
-BASIC_TRANSFORMATIONS = Compose(
-    [
-        ToLowerCase(),
-        RemovePunctuation(),
-        Strip(),
-    ]
-)
-# CER stands for Character Error Rate
-CER_LANGUAGES = {"ja"}
-CER_DEFAULTS = Compose(
-    [
-        RemoveWhiteSpace(),
-        ReduceToListOfListOfChars(),
-    ]
-)
 
 
 def convert_unicode_to_characters(text: str) -> str:
-    """Convert unicode (\u00e9) to characters (é)."""
-    return text.encode("raw_unicode_escape").decode("unicode-escape")
+    """Convert unicode to composed form."""
+    try:
+        return unicodedata.normalize("NFC", text)
+    except Exception as e:
+        # Optionally log the error
+        logger.warning(f"Unicode normalization failed: {e}. Returning original text.")
+        return text
 
 
 def convert_digits_to_words(text: str, language: str):
-    if language is "":
-        return text
     """Convert numbers to words (e.g., "3" to "three")."""
+    if not language:
+        return text
     try:
         return re.sub(r"\d+", lambda m: num2words(int(m.group()), lang=language), text)
     except Exception as e:
         logger.info(f"Failed to convert digits to words for language {language} - continuing...")
+        logger.warning(f"Non-fatal error: {e} - continuing...")
         return text
 
 
-def normalize_text(text: str, language: str) -> str:
+def normalize_text(text: str, language: str = 'en') -> str:
     """Normalize text based on language.
 
     Args:
         text: input text
-        language: language code
+        language: language code (e.g. 'en', 'es')
     """
-    normalizer = NORMALIZERS.get(language, DEFAULT_NORMALIZER)
-    #logger.info(f"[normalize_text] Normalizing text: {text}")
+    # Use language code directly without conversion
+    # Get the appropriate normalizer
+    normalizer = constants.NORMALIZERS.get(language, constants.DEFAULT_NORMALIZER)
+
+    # Process the text
     text = convert_unicode_to_characters(text)
     text = convert_digits_to_words(text, language)
-    return BASIC_TRANSFORMATIONS([normalizer(text)])[0]
+    return constants.BASIC_TRANSFORMATIONS([normalizer(text)])[0]
 
 
 class WERMetrics(Metrics):
-    def __call__(self, candidates, references):
-        logger.info(f"[WERMetrics.__call__] Calculating WER for {len(candidates)} samples.")
-        return self.get_score(candidates, references)
-    """Word Error Rate metric class, used for transcription tasks."""
+    def __call__(self, candidates, references, ids=None, lengths=None, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
+        # Store instructions and model_responses for potential later use
+        self.instructions = instructions
+        self.model_responses = model_responses if model_responses else []
+        
+        overall = self.get_score(candidates, references, ids, lengths)
+        if dataset_name and model_name:
+            # WER record scores are stored under 'wer_per_row'
+            scores = self.record_level_scores.get("wer_per_row", [])
+            # write_record_log will also write to run.log internally
+            write_record_log(self, references, candidates, scores, dataset_name, model_name, 
+                          instructions=self.instructions, model_responses=self.model_responses)
+            # Directly call append_final_score for the overall metric
+            append_final_score(self, overall, dataset_name, model_name)
+        return overall
 
     def __init__(self, language="en"):
         super().__init__()
-        self.name = "WER"
-        self.display_name = "Word Error Rate"
-        self.description = "The proportion of words that are incorrectly predicted, when compared to the reference text. The dataset is considered as one big conversation."
+        self.name = "word_error_rate"
+        self.lower_better = True
+        # Use language code directly without conversion
         self.language = language
+        self.description = "The proportion of words that are incorrectly predicted, when compared to the reference text. The dataset is considered as one big conversation."
 
     def compute_attributes(self, incorrect: list[int | float], total: list[int | float], attributes: list[str]) -> dict:
         """Compute the attributes (e.g., accent, gender) that should be saved in the record level file for analysis."""
@@ -104,30 +96,102 @@ class WERMetrics(Metrics):
                     results[f"wer_{attribute}_{attr}"] = incorrect_per_attr[attr] / total_attr
         return results
 
-    def get_score(self, candidates, references) -> dict:
+    def get_score(self, candidates, references, ids=None, lengths=None):
         """Get overall score.
 
         Args:
             candidates: generated text list
             references: reference text list
+            ids: optional list of conversation IDs (first 4 letters)
+            lengths: optional list of audio sample lengths in seconds
 
         Returns:
-            vary based on implementation, should be a dict
+            Dict with WER metrics by overall, conversation, and length buckets
         """
-        if not self.record_level_scores:
-            self.record_level_scores = self.compute_record_level_scores(candidates, references)
+        scores = self.compute_record_level_scores(candidates, references)
 
-        wer_per_row = self.record_level_scores["wer_per_row"]
-        incorrect = self.record_level_scores["incorrect"]
-        total = self.record_level_scores["total"]
+        # Compute the overall WER
+        incorrect_chars = sum(scores["incorrect"])
+        total_chars = sum(scores["total"])
+        # Overall WER is the sum of incorrect divided by sum of total
+        overall_wer = incorrect_chars / total_chars if total_chars > 0 else 0
+        # Cap at 1.0
+        overall_wer = min(overall_wer, 1.0)
 
-        results = {
-            "wer": sum(incorrect) / sum(total),
-            "average_wer_per_row": smart_round(sum(wer_per_row) / len(wer_per_row)) if len(wer_per_row) else 0.0,
+        # We also track per-sample average for a more balanced view
+        avg_sample_wer = sum(scores["wer_per_row"]) / len(scores["wer_per_row"]) if scores["wer_per_row"] else 0
+        # Cap the WER at 1.0
+        avg_sample_wer = min(avg_sample_wer, 1.0)
+
+        # Initialize the result with both WER metrics
+        result = {
+            "average_sample_wer": avg_sample_wer,
+            "overall_wer": overall_wer
         }
 
-        results.update(self.compute_attributes(incorrect, total, ["accent", "gender"]))
-        return results
+        if ids and len(ids) == len(scores["wer_per_row"]):
+            conversation_wer = {}
+            # Group WERs by conversation ID
+            id_to_wers = defaultdict(list)
+            id_to_incorrect = defaultdict(int)
+            id_to_total = defaultdict(int)
+
+            for i, conv_id in enumerate(ids):
+                if i < len(scores["wer_per_row"]) and i < len(scores["incorrect"]) and i < len(scores["total"]):
+                    id_to_wers[conv_id].append(scores["wer_per_row"][i])
+                    id_to_incorrect[conv_id] += scores["incorrect"][i]
+                    id_to_total[conv_id] += scores["total"][i]
+
+            # Calculate average WER for each conversation ID
+            for conv_id, wers in id_to_wers.items():
+                # Using ratio of sums for conversation WER
+                conv_wer = id_to_incorrect[conv_id] / id_to_total[conv_id] if id_to_total[conv_id] > 0 else 0
+                # Cap at 1.0
+                conv_wer = min(conv_wer, 1.0)
+                conversation_wer[conv_id] = conv_wer
+
+            result["conversation_wer"] = conversation_wer
+
+        # If lengths are provided, calculate WER by length buckets
+        if lengths and len(lengths) == len(scores["wer_per_row"]):
+            # Define length buckets
+            buckets = [(0, 0.5), (0.5, 1), (1, 1.5), (1.5, 2), (2, 3), (3, float('inf'))]
+            bucket_labels = ["0-0.5", "0.5-1", "1-1.5", "1.5-2", "2-3", "3+"]
+            length_wer = {}
+
+            # Group WERs by length bucket
+            bucket_to_incorrect = {label: 0 for label in bucket_labels}
+            bucket_to_total = {label: 0 for label in bucket_labels}
+
+            for i, length in enumerate(lengths):
+                if i < len(scores["wer_per_row"]) and i < len(scores["incorrect"]) and i < len(scores["total"]):
+                    # Find which bucket this length belongs to
+                    bucket_idx = next((j for j, (min_len, max_len) in enumerate(buckets)
+                                       if min_len <= length < max_len), len(buckets) - 1)
+                    bucket_label = bucket_labels[bucket_idx]
+
+                    bucket_to_incorrect[bucket_label] += scores["incorrect"][i]
+                    bucket_to_total[bucket_label] += scores["total"][i]
+
+            # Calculate WER for each length bucket
+            for bucket_label in bucket_labels:
+                if bucket_to_total[bucket_label] > 0:
+                    bucket_wer = bucket_to_incorrect[bucket_label] / bucket_to_total[bucket_label]
+                    # Cap at 1.0
+                    bucket_wer = min(bucket_wer, 1.0)
+                    length_wer[bucket_label] = bucket_wer
+                else:
+                    length_wer[bucket_label] = 0.0
+
+            result["length_wer"] = length_wer
+
+        # Store the scores for later record level reporting
+        # Important to use setdefault which is a no-op if the value already exists
+        # As users can evaluate multiple models and call compute_record_level_scores multiple times
+        self.record_level_scores.setdefault("wer_per_row", scores["wer_per_row"])
+        self.record_level_scores.setdefault("incorrect", scores["incorrect"])
+        self.record_level_scores.setdefault("total", scores["total"])
+        return result
 
     def compute_record_level_scores(self, candidates: list, references: list):
         """Compute the scores that should be saved in the record level file.
@@ -139,17 +203,17 @@ class WERMetrics(Metrics):
         Returns:
             Scores for each record. The keys should be the column names that will be saved in the record level file.
         """
-        from tqdm import tqdm
         incorrect_scores = []
         total_scores = []
         scores = []
         references_clean = []
         candidates_clean = []
 
-        for i, (reference, candidate) in enumerate(tqdm(zip(references, candidates), desc="WER", total=len(references))):
-            lang_code = getattr(self, 'language', 'en')
-            references_clean.append(normalize_text(reference, lang_code))
-            candidates_clean.append(normalize_text(candidate, lang_code))
+        for i, (reference, candidate) in enumerate(
+                tqdm(zip(references, candidates), desc="word_error_rate", total=len(references))):
+            # Use the normalized language code from instance variable
+            references_clean.append(normalize_text(reference, self.language))
+            candidates_clean.append(normalize_text(candidate, self.language))
             if references_clean[-1].strip() == "":
                 logger.warning(
                     f"After normalization, '{reference}' is empty. Considering all words in '{candidate}' as incorrect."
@@ -158,8 +222,8 @@ class WERMetrics(Metrics):
                 total_scores.append(1)
             else:
                 kwargs = (
-                    {kwarg: CER_DEFAULTS for kwarg in ("truth_transform", "hypothesis_transform")}
-                    if lang_code in CER_LANGUAGES
+                    {kwarg: constants.CER_DEFAULTS for kwarg in ("truth_transform", "hypothesis_transform")}
+                    if self.language in constants.CER_LANGUAGES
                     else {}
                 )
                 measures = process_words(references_clean[-1], candidates_clean[-1], **kwargs)
@@ -172,8 +236,10 @@ class WERMetrics(Metrics):
 
                 incorrect_scores.append(substitutions + deletions + insertions)
                 total_scores.append(substitutions + deletions + hits)
-            #logger.info(f"For sample {i}: reference={reference} candidate={candidate}")
-            scores.append(incorrect_scores[-1] / total_scores[-1])
+            wer = incorrect_scores[-1] / total_scores[-1]
+            if wer > 1.0:
+                wer = 1.0
+            scores.append(wer)
 
         results = {
             "wer_per_row": scores,
@@ -190,35 +256,3 @@ class WERMetrics(Metrics):
             results["gender"] = gender
         return results
 
-    def get_reporting_summary_score(self, overall_score: dict[str, float]) -> dict:
-        """Gets the score to display in wandb. If a metric says lower-is-better, highlight with an ↓.
-
-        Args:
-            overall_score: The overall score that was computed for the metric
-        Returns:
-            The dictionary of columns and values to actually present in wandb
-        """
-        overall_score.pop("average_wer_per_row")
-        return overall_score
-
-    def get_metadata(self) -> dict:
-        """Return metadata info."""
-        metadata = {
-            "wer": MetricMetadata(
-                name="wer",
-                display_name=f"{constants.INVERTED_METRIC_INDICATOR} Word Error Rate",
-                description=self.description,
-                higher_is_better=False,
-            )
-        }
-        for attribute in ("accent", "gender"):
-            current_attr = set(self.record_level_scores.get(attribute, []))
-            for attr_value in current_attr:
-                if attr_value is not None:
-                    metadata[f"wer_{attribute}_{attr_value}"] = MetricMetadata(
-                        name=f"wer_{attribute}_{attr_value}",
-                        display_name=f"{constants.INVERTED_METRIC_INDICATOR} Word Error Rate {attribute.title()} ({attr_value})",
-                        description=self.description,
-                        higher_is_better=False,
-                    )
-        return metadata
