@@ -663,18 +663,9 @@ def read_config(cfg_path: str):
         logger.error("[read_config] Config validation error: %s", e)
         raise
 
-    # Convert judge_properties list of one-item dicts to a simple dict
-    judge_properties = {}
-    for item in cfg.get("judge_properties", []):
-        if isinstance(item, dict):
-            judge_properties.update(item)
-
-    # Convert filters list of one-item dicts to a simple dict
-    filters = {}
-    for item in cfg.get("filters", []):
-        if isinstance(item, dict):
-            filters.update(item)
-
+    # Get judge_properties and filters directly as dictionaries
+    judge_properties = cfg.get("judge_properties", {})
+    filters = cfg.get("filters", {})
     temperature_overrides = cfg.get("temperature_overrides", None)
 
     return cfg, judge_properties, filters, temperature_overrides

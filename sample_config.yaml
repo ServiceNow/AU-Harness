@@ -22,22 +22,22 @@ aggregate:
   - ["llm_judge_binary", ["voxceleb_gender_test", "iemocap_gender_recognition"]]
 
 filters:
-  - num_samples: 100 #number of samples to run(remove for all)
-  - user_prompt_add_ons: ["asr_clean_output"] #optional - additional prompting in text instructions for each sample
-  - system_prompts: ["audio_expert", "try_best"]
-  - length_filter: [1.0, 3.0] #optional - filters for only audio samples in this length(seconds) - only supported for general and callhome preprocessors
-  - accented: false #optional - filters for only audio samples in this length(seconds)
-  - language: "en" #optional - filters for only audio samples in this language
+  num_samples: 100 #number of samples to run(remove for all)
+  user_prompt_add_ons: ["asr_clean_output"] #optional - additional prompting in text instructions for each sample
+  system_prompts: ["audio_expert", "try_best"]
+  length_filter: [1.0, 3.0] #optional - filters for only audio samples in this length(seconds) - only supported for general and callhome preprocessors
+  accented: false #optional - filters for only audio samples in this length(seconds)
+  language: "en" #optional - filters for only audio samples in this language
 
 judge_properties:
-  - judge_concurrency: 8 #judge call(optional)
-  - judge_model: "gpt-4o-mini" #optional
-  - judge_type: "openai" # mandatory (vllm or openai)
-  - judge_api_version: "${API_VERSION}" # optional(needed for openai)
-  - judge_api_endpoint: "${ENDPOINT_URL}" # mandatory
-  - judge_api_key: "${AUTH_TOKEN}" # mandatory
-  - judge_temperature: 0.1 # optional
-  - judge_prompt_model_override: "gpt-4o-mini-enhanced" # optional
+  judge_concurrency: 8 #judge call(optional)
+  judge_model: "gpt-4o-mini" #optional
+  judge_type: "openai" # mandatory (vllm or openai)
+  judge_api_version: "${API_VERSION}" # optional(needed for openai)
+  judge_api_endpoint: "${ENDPOINT_URL}" # mandatory
+  judge_api_key: "${AUTH_TOKEN}" # mandatory
+  judge_temperature: 0.1 # optional
+  judge_prompt_model_override: "gpt-4o-mini-enhanced" # optional
 
 logging:
   log_file: "audiobench.log"  # Path to the main log file

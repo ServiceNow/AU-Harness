@@ -9,7 +9,7 @@ from typing import Any, Dict
 
 import yaml
 
-import constants
+from utils import constants
 
 logger = logging.getLogger(__name__)
 
@@ -174,42 +174,17 @@ def validate_config(config_path: str) -> Dict:
                         f"'dataset_metric' item {i+1}, element {j+1} must be a non-empty string"
                     )
 
-        # Check optional sections with simple type validations
-        type_validations = {
-            'num_samples': int,
-            'judge_concurrency': int,
-            'judge_model': str,
-            'accented': bool,
-            'language': str
-        }
-
-        for field, expected_type in type_validations.items():
-            if field in config and not isinstance(config[field], expected_type):
-                raise ValueError(f"'{field}' must be a {expected_type.__name__}")
-
-        # Validate user_prompt_add_ons and system_prompts if present
-        for field in ['user_prompt_add_ons', 'system_prompts']:
-            if field in config:
-                if not isinstance(config[field], list):
-                    raise ValueError(f"'{field}' must be a list")
-
-                for i, item in enumerate(config[field]):
-                    if not isinstance(item, str):
-                        raise ValueError(
-                            f"'{field}' item {i+1} must be a string, not {type(item).__name__}"
-                        )
-
-        # Validate length_filter if present
-        if 'length_filter' in config:
-            if not isinstance(config['length_filter'], list):
-                raise ValueError("'length_filter' must be a list")
-
-            filter_list = config['length_filter']
-            if len(filter_list) != 2:
-                raise ValueError("'length_filter' must have exactly 2 elements")
-
-            if not all(isinstance(value, (int, float)) for value in filter_list):
-                raise ValueError("'length_filter' elements must be numbers")
+        # Validate filters as a dictionary
+        if 'filters' in config:
+            if not isinstance(config['filters'], dict):
+                raise ValueError("'filters' must be a dictionary")
+            _validate_filter_values(config['filters'])
+        
+        # Validate judge_properties as a dictionary
+        if 'judge_properties' in config:
+            if not isinstance(config['judge_properties'], dict):
+                raise ValueError("'judge_properties' must be a dictionary")
+            _validate_judge_properties(config['judge_properties'])
 
         # Delegate validation for complex sections
         _validate_models(config)
@@ -227,6 +202,89 @@ def validate_config(config_path: str) -> Dict:
 
     except yaml.YAMLError as e:
         raise ValueError(f"Invalid YAML format: {str(e)}") from e
+
+
+def _validate_filter_values(filters: Dict) -> None:
+    """Validate the values in the filters dictionary.
+    
+    Args:
+        filters: Dictionary of filter values to validate
+    
+    Raises:
+        ValueError: If any filter value is invalid
+    """
+    # Validate num_samples if present
+    if 'num_samples' in filters and not isinstance(filters['num_samples'], int):
+        raise ValueError("'num_samples' must be an integer")
+    
+    # Validate user_prompt_add_ons if present
+    if 'user_prompt_add_ons' in filters:
+        if not isinstance(filters['user_prompt_add_ons'], list):
+            raise ValueError("'user_prompt_add_ons' must be a list")
+        for i, item in enumerate(filters['user_prompt_add_ons']):
+            if not isinstance(item, str):
+                raise ValueError(f"'user_prompt_add_ons' item {i+1} must be a string")
+    
+    # Validate system_prompts if present
+    if 'system_prompts' in filters:
+        if not isinstance(filters['system_prompts'], list):
+            raise ValueError("'system_prompts' must be a list")
+        for i, item in enumerate(filters['system_prompts']):
+            if not isinstance(item, str):
+                raise ValueError(f"'system_prompts' item {i+1} must be a string")
+    
+    # Validate length_filter if present
+    if 'length_filter' in filters:
+        if not isinstance(filters['length_filter'], list):
+            raise ValueError("'length_filter' must be a list")
+        filter_list = filters['length_filter']
+        if len(filter_list) != 2:
+            raise ValueError("'length_filter' must have exactly 2 elements")
+        if not all(isinstance(value, (int, float)) for value in filter_list):
+            raise ValueError("'length_filter' elements must be numbers")
+    
+    # Validate accented if present
+    if 'accented' in filters and not isinstance(filters['accented'], bool):
+        raise ValueError("'accented' must be a boolean")
+    
+    # Validate language if present
+    if 'language' in filters and not isinstance(filters['language'], str):
+        raise ValueError("'language' must be a string")
+
+
+def _validate_judge_properties(judge_props: Dict) -> None:
+    """Validate the values in the judge_properties dictionary.
+    
+    Args:
+        judge_props: Dictionary of judge properties to validate
+    
+    Raises:
+        ValueError: If any judge property is invalid
+    """
+    # Validate judge_concurrency if present
+    if 'judge_concurrency' in judge_props and not isinstance(judge_props['judge_concurrency'], int):
+        raise ValueError("'judge_concurrency' must be an integer")
+    
+    # Validate judge_model if present
+    if 'judge_model' in judge_props and not isinstance(judge_props['judge_model'], str):
+        raise ValueError("'judge_model' must be a string")
+    
+    # Validate judge_type if present
+    if 'judge_type' in judge_props:
+        if not isinstance(judge_props['judge_type'], str):
+            raise ValueError("'judge_type' must be a string")
+        if judge_props['judge_type'] not in ['vllm', 'openai']:
+            raise ValueError("'judge_type' must be either 'vllm' or 'openai'")
+    
+    # Validate string properties
+    string_props = ['judge_api_version', 'judge_api_endpoint', 'judge_api_key', 'judge_prompt_model_override']
+    for prop in string_props:
+        if prop in judge_props and not isinstance(judge_props[prop], str):
+            raise ValueError(f"'{prop}' must be a string")
+    
+    # Validate judge_temperature if present
+    if 'judge_temperature' in judge_props and not isinstance(judge_props['judge_temperature'], (int, float)):
+        raise ValueError("'judge_temperature' must be a number")
 
 
 def _validate_dataset_metric_pairs(dataset_metric_pairs):
