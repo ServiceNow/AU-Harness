@@ -695,7 +695,7 @@ def expand_dataset_metric_pairs(cfg: dict) -> list[tuple[str, str, dict, str]]:
     # Expand each dataset-metric pair by finding runspecs
     expanded_pairs = []
 
-    for dname, metric_name in dataset_metric_pairs:
+    for dname, metric_name in dataset_metric_pairs:        
         # Step 1: Look for a matching runspec file
         found_runspec, selected_datasets, matching_runspec_file = _find_runspec_by_name(
             dname, runspec_files
@@ -709,7 +709,6 @@ def expand_dataset_metric_pairs(cfg: dict) -> list[tuple[str, str, dict, str]]:
             )
 
             if not found_runspec:
-                logger.info("[expand_dataset_metric_pairs] Dataset not found, skipping: %s", dname)
                 continue
 
         # Extract task_type from the matching runspec file name (stem)
@@ -963,8 +962,6 @@ async def run_all_engines(all_engines):
             # Add model scores to the right metric bucket
             for model_name, scores in model_scores.items():
                 engine_scores[dataset_name][metric_name][model_name] = scores
-    logger.info("[run_all_engines] Evaluation complete. Final results:")
-    logger.info(json.dumps(engine_scores, indent=2))
     return engine_scores
 
 
@@ -1022,3 +1019,5 @@ if __name__ == "__main__":
 
     # Pass the config path to main
     all_scores = main(cfg_path=args.config)
+    logger.info("[main] Evaluation complete. Final results:")
+    logger.info(json.dumps(all_scores, indent=2))

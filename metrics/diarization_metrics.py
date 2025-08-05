@@ -197,7 +197,7 @@ class DiarizationMetrics(Metrics):
 
     def __init__(self, language="en"):
         super().__init__()
-        self.name = "diarization metrics"
+        self.name = "diarization_metrics"
         self.display_name = "Word Diarization Error Rate (WDER) and concatenated minium-permutation WER (cpWER) and Speaker Count MAE (SpkCntMAE)"
         self.description = "The proportion of incorrectly predicted speakers when compared to the reference speakers, on the fine-grained word level"
         self.language = language
