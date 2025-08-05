@@ -4,7 +4,6 @@ import os
 import yaml
 import logging
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
 from pathlib import Path
 import logging
 import json
@@ -75,7 +74,6 @@ def _find_dataset_in_runspecs(dataset_name, runspec_files):
     Returns:
         tuple: (found_runspec, selected_datasets, matching_file)
     """
-    logger.info(f"[find_dataset_in_runspecs] No matching runspec file for '{dataset_name}'. Searching within individual runspec files...")
     
     # Search through all runspec files to find the dataset
     for runspec_file in runspec_files:
@@ -83,7 +81,6 @@ def _find_dataset_in_runspecs(dataset_name, runspec_files):
             runspec_db = json.load(f)
         
         if dataset_name in runspec_db:
-            logger.info(f"[find_dataset_in_runspecs] Found dataset '{dataset_name}' in {runspec_file}")
             # Use only this specific dataset
             return True, {dataset_name: runspec_db[dataset_name]}, runspec_file
     
@@ -232,8 +229,6 @@ def _validate_dataset_metric_pairs(dataset_metric_pairs):
     runspec_files = find_runspec_files()
     if not runspec_files:
         return
-        
-    logger.info(f"[validate_config] Validating dataset-metric pairs against {len(runspec_files)} runspec files")
     
     for dataset_pair in dataset_metric_pairs:
         # Check if this is a valid pair format
