@@ -53,7 +53,7 @@ class BfclPostprocessor(Postprocessor):
         """
         Process and clean model predictions and prepare target-label pairs.
         """
-        logger.info("Processing predictions with VoiceBenchIfevalPostprocessor...")
+        logger.info("Processing predictions with BFCLPostprocessor...")
 
         processed_predictions: dict[str, list[str]] = {}
         for model_name, preds in predictions.items():
