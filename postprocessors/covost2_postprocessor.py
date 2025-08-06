@@ -1,9 +1,8 @@
-from postprocessors.base import Postprocessor
-from utils.custom_logging import configure
 import logging
-configure()
+
 logger = logging.getLogger(__name__)
 logger.propagate = True
+from postprocessors.base import Postprocessor
 
 
 class _SimpleMeta:  # stand-in for MetricMetadata
@@ -47,7 +46,6 @@ class Covost2Postprocessor(Postprocessor):
             output["instructions"] = instructions
 
         self.validate_output(output)
-        print ("Pass validation")
         return output
     
     def process(self, dataset: list[dict], predictions, metric) -> dict:
