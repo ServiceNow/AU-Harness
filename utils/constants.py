@@ -61,9 +61,9 @@ metric_map = {
 
 task_temp_map = {
     # ASR
-    "ASR": 0.1,
-    "code_switching_ASR": 0.1,
-    "long_form_ASR": 0.1,
+    "asr": 0.1,
+    "code_switching_asr": 0.1,
+    "long_form_asr": 0.1,
 
     # Paralinguistics
     "emotion_recognition": 0.2,
