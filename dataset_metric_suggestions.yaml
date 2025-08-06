@@ -14,7 +14,7 @@ dataset_metric:
   - "(dream_tts_mcq_test, word_error_rate)"
   - "(earnings21_test, word_error_rate)"
   - "(earnings22_test, word_error_rate)"
-  - "(gigaspeech_test, word_error_rate)"
+  - "(gigaspeech2_test, word_error_rate)"
   - "(gigaspeech2_id_test, word_error_rate)"
   - "(gigaspeech2_th_test, word_error_rate)"
   - "(gigaspeech2_vi_test, word_error_rate)"
