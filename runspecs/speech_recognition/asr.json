@@ -8,8 +8,8 @@
     "target_column": "answer",
     "instruction_column": "instruction"
   },
-  "gigaspeech_test": {
-    "hf_repo": "AudioLLMs/gigaspeech-test",
+  "gigaspeech2_test": {
+    "hf_repo": "AudioLLMs/gigaspeech2-test",
     "language": "en",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor",
