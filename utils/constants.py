@@ -60,54 +60,54 @@ metric_map = {
 }
 
 task_temp_map = {
+    # ASR
     "ASR": 0.1,
-    "accent_recognition": 0.2,
     "code_switching_ASR": 0.1,
+    "long_form_ASR": 0.1,
+
+    # Paralinguistics
+    "speaker_recognition": 0.2,
+    "accent_recognition": 0.2,
     "emotion_recognition": 0.2,
     "gender_recognition": 0.2,
-    "long_form_ASR": 0.1,
+
+    # Spoken Language Understanding
     "music_understanding": 0.7,
     "scene_QA": 0.4,
     "scene_captioning": 0.7,
-    "speaker_recognition": 0.2,
-    "speech_instuction": 0.7,
-    "spoken_QA": 0.5,
+    "speech_qa": 0.5,
     "spoken_dialogue_summarization": 0.8,
     "translation": 0.2,
-    'bertscore': ('metrics.bertscore', 'BertScore'),
-    'bfcl_match_score': ('metrics.bfcl_metric', 'BFCLMatchScore'),
-    'bleu': ('metrics.bleu_metrics', 'BleuMetrics'),
-    'diarization_metrics': ('metrics.diarization_metrics', 'DiarizationMetrics'),
-    'instruction_following': ('metrics.voice_bench_ifeval_score', 'InstructionFollowingScore'),
-    'llm_judge_big_bench_audio': ('metrics.llm_judge', 'BigBenchAudioLLMJudgeMetric'),
-    'llm_judge_binary': ('metrics.llm_judge', 'BinaryLLMJudgeMetric'),
-    'llm_judge_callhome': ('metrics.llm_judge', 'CallHomeLLMJudgeMetric'),
-    'llm_judge_detailed': ('metrics.llm_judge', 'DetailedLLMJudgeMetric'),
-    'meteor': ('metrics.meteor_score', 'MeteorScore'),
-    'word_error_rate': ('metrics.word_error_rate_metrics', 'WERMetrics'),
-    "sql_score": ("metrics.sql_score", "SqlScore"),
 }
 
 allowed_task_metrics = {
-    'callhome': ['llm_judge_callhome', 'word_error_rate', 'diarization_metrics'],
-    'accent_recognition': ['llm_judge_binary'],
-    'emotion_recognition': ['llm_judge_binary'],
-    'gender_recognition': ['llm_judge_binary'],
+    # ASR
     'speaker_recognition': ['llm_judge_binary'],
     'asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
     'code_switching_asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
     'long_form_asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
+
+    # Paralinguistics
+    'speaker_diarization': ['diarization_metrics'],
+    'accent_recognition': ['llm_judge_binary'],
+    'emotion_recognition': ['llm_judge_binary'],
+    'gender_recognition': ['llm_judge_binary'],
+
+    # Spoken Language Understanding
+    'music_understanding': ['llm_judge_binary'],
+    'scene_understanding': ['llm_judge_binary', 'llm_judge_detailed'],
+    'spoken_dialogue_summarization': ['llm_judge_detailed'],
+    'speech_qa': ['llm_judge_detailed', 'llm_judge_binary'],
+    'sqqa': ['llm_judge_big_bench_audio', 'llm_judge_binary'],
     'translation': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
+    'intent_classification': ['llm_judge_binary'],
+
+    # Spoken Language Reasoning
     'bfcl': ['bfcl_match_score'],
     'ifeval': ['instruction_following'],
     'speech_to_sql': ['sql_score'],
-    'music_understanding': ['llm_judge_binary'],
-    'scene_captioning': ['llm_judge_detailed'],
-    'scene_QA': ['llm_judge_binary', 'llm_judge_detailed'],
-    'speech_instruction': ['llm_judge_detailed'],
-    'spoken_dialogue_summarization': ['llm_judge_detailed'],
-    'spoken_QA': ['llm_judge_detailed', 'llm_judge_binary'],
-    'sqqa': ['llm_judge_big_bench_audio', 'llm_judge_binary'],
+    
+    # Safety and Security
     'safety': ['llm_judge_detailed'],
     'spoofing': ['llm_judge_detailed', 'llm_judge_binary'],
 }

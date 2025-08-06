@@ -25,5 +25,23 @@
     "audio_column": "context",
     "target_column": "answer",
     "instruction_column": "instruction"
+  },
+    "audiocaps_test": {
+    "hf_repo": "AudioLLMs/audiocaps_test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "wavcaps_test": {
+    "hf_repo": "AudioLLMs/wavcaps_test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
   }
 }
