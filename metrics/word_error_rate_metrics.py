@@ -1,3 +1,8 @@
+"""Word Error Rate (WER) metrics implementation.
+
+This module provides WER calculation capabilities with text normalization,
+language-specific handling, and detailed scoring breakdowns.
+"""
 import logging
 import re
 import unicodedata
@@ -7,11 +12,11 @@ from jiwer import process_words
 from num2words import num2words
 from tqdm import tqdm
 
-logger = logging.getLogger(__name__)
-from metrics.base_metric_metadata import MetricMetadata
 from metrics.metrics import Metrics
 from utils.custom_logging import write_record_log, append_final_score
 from utils import constants
+
+logger = logging.getLogger(__name__)
 
 
 def convert_unicode_to_characters(text: str) -> str:
@@ -20,7 +25,7 @@ def convert_unicode_to_characters(text: str) -> str:
         return unicodedata.normalize("NFC", text)
     except Exception as e:
         # Optionally log the error
-        logger.warning(f"Unicode normalization failed: {e}. Returning original text.")
+        logger.warning("Unicode normalization failed: %s. Returning original text.", e)
         return text
 
 
@@ -31,8 +36,8 @@ def convert_digits_to_words(text: str, language: str):
     try:
         return re.sub(r"\d+", lambda m: num2words(int(m.group()), lang=language), text)
     except Exception as e:
-        logger.info(f"Failed to convert digits to words for language {language} - continuing...")
-        logger.warning(f"Non-fatal error: {e} - continuing...")
+        logger.info("Failed to convert digits to words for language %s - continuing...", language)
+        logger.warning("Non-fatal error: %s - continuing...", e)
         return text
 
 
@@ -54,17 +59,22 @@ def normalize_text(text: str, language: str = 'en') -> str:
 
 
 class WERMetrics(Metrics):
+    """Word Error Rate metrics implementation.
+    
+    Computes WER scores with text normalization and language-specific handling.
+    Provides overall, per-conversation, and length-bucketed WER calculations.
+    """
     def __call__(self, candidates, references, ids=None, lengths=None, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
         # Store instructions and model_responses for potential later use
         self.instructions = instructions
         self.model_responses = model_responses if model_responses else []
-        
+
         overall = self.get_score(candidates, references, ids, lengths)
         if dataset_name and model_name:
             # WER record scores are stored under 'wer_per_row'
             scores = self.record_level_scores.get("wer_per_row", [])
             # write_record_log will also write to run.log internally
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, 
+            write_record_log(self, references, candidates, scores, dataset_name, model_name,
                           instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score for the overall metric
             append_final_score(self, overall, dataset_name, model_name)
@@ -77,6 +87,8 @@ class WERMetrics(Metrics):
         # Use language code directly without conversion
         self.language = language
         self.description = "The proportion of words that are incorrectly predicted, when compared to the reference text. The dataset is considered as one big conversation."
+        self.instructions = None
+        self.model_responses = []
 
     def compute_attributes(self, incorrect: list[int | float], total: list[int | float], attributes: list[str]) -> dict:
         """Compute the attributes (e.g., accent, gender) that should be saved in the record level file for analysis."""
@@ -143,7 +155,7 @@ class WERMetrics(Metrics):
                     id_to_total[conv_id] += scores["total"][i]
 
             # Calculate average WER for each conversation ID
-            for conv_id, wers in id_to_wers.items():
+            for conv_id in id_to_wers:
                 # Using ratio of sums for conversation WER
                 conv_wer = id_to_incorrect[conv_id] / id_to_total[conv_id] if id_to_total[conv_id] > 0 else 0
                 # Cap at 1.0
@@ -209,14 +221,14 @@ class WERMetrics(Metrics):
         references_clean = []
         candidates_clean = []
 
-        for i, (reference, candidate) in enumerate(
-                tqdm(zip(references, candidates), desc="word_error_rate", total=len(references))):
+        for reference, candidate in tqdm(zip(references, candidates), desc="word_error_rate", total=len(references)):
             # Use the normalized language code from instance variable
             references_clean.append(normalize_text(reference, self.language))
             candidates_clean.append(normalize_text(candidate, self.language))
             if references_clean[-1].strip() == "":
                 logger.warning(
-                    f"After normalization, '{reference}' is empty. Considering all words in '{candidate}' as incorrect."
+                    "After normalization, '%s' is empty. Considering all words in '%s' as incorrect.",
+                    reference, candidate
                 )
                 incorrect_scores.append(len(candidates_clean[-1].split()))
                 total_scores.append(1)
@@ -237,8 +249,7 @@ class WERMetrics(Metrics):
                 incorrect_scores.append(substitutions + deletions + insertions)
                 total_scores.append(substitutions + deletions + hits)
             wer = incorrect_scores[-1] / total_scores[-1]
-            if wer > 1.0:
-                wer = 1.0
+            wer = min(wer, 1.0)
             scores.append(wer)
 
         results = {
@@ -255,4 +266,3 @@ class WERMetrics(Metrics):
         if any(gender):
             results["gender"] = gender
         return results
-

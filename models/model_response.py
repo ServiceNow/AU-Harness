@@ -1,3 +1,4 @@
+"""Model response classes for wrapping LLM outputs and tracking performance/errors."""
 from typing import Any
 
 from pydantic import BaseModel

@@ -1,8 +1,10 @@
+"""Covost2 postprocessor for processing translation task predictions."""
 import logging
+
+from postprocessors.base import Postprocessor
 
 logger = logging.getLogger(__name__)
 logger.propagate = True
-from postprocessors.base import Postprocessor
 
 
 class _SimpleMeta:  # stand-in for MetricMetadata

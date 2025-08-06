@@ -1,3 +1,9 @@
+"""BigBench Audio preprocessor module for LALMEval framework.
+
+This module provides a preprocessor for the BigBenchAudio dataset, designed for
+Speech Query Question Answering (SQQA) tasks with audio processing capabilities.
+"""
+
 import logging
 from typing import Dict, List, Optional, Any
 
@@ -27,8 +33,10 @@ class BigBenchAudioPreprocessor(Preprocessor):
         Parameters:
         - dataset (Dict[str, List[Any]])
             Expected keys: 'id', 'audio', 'category', 'official_answer', 'transcript'.
-        - num_samples (Optional[int]): Not used. Reserved for future functionality (e.g., truncating dataset).
-        - properties (Optional[Dict[str, Any]]): Not used. Reserved for additional metadata or preprocessing options.
+        - num_samples (Optional[int]): Not used. Reserved for future functionality 
+          (e.g., truncating dataset).
+        - properties (Optional[Dict[str, Any]]): Not used. Reserved for additional 
+          metadata or preprocessing options.
 
         Returns:
         - List[Dict[str, Any]]: A list of dictionaries where each dictionary represents a sample,
@@ -79,7 +87,7 @@ class BigBenchAudioPreprocessor(Preprocessor):
 
             # Ensure official answer exists
             if not dataset["official_answer"][i]:
-                logger.warning(f"[{sample_id}] Missing official answer. Skipping sample.")
+                logger.warning("[%d] Missing official answer. Skipping sample.", i)
                 continue
 
             if modality == "text":

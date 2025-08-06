@@ -1,3 +1,5 @@
+"""Test functions for LALMEval utility modules."""
+
 import base64
 import os
 import re
@@ -32,9 +34,9 @@ def test_encode_audio_array_base64():
         assert isinstance(result, str), "Result should be a string"
 
         # Try to decode the result to verify it's valid base64
-        decoded = base64.b64decode(result)
+        _ = base64.b64decode(result)
         print("✅ encode_audio_array_base64 test passed")
-    except Exception as e:
+    except (ValueError, TypeError, AssertionError) as e:
         print(f"❌ encode_audio_array_base64 test failed: {e}")
 
 
@@ -59,7 +61,7 @@ def test_audio_array_to_wav_file():
         # Clean up the temporary file
         os.remove(result)
         print("✅ audio_array_to_wav_file test passed")
-    except Exception as e:
+    except (OSError, IOError, ValueError) as e:
         print(f"❌ audio_array_to_wav_file test failed: {e}")
 
 
@@ -89,11 +91,15 @@ def test_truncate_values_for_saving():
         }
 
         result3 = truncate_values_for_saving(test_dict)
-        assert result3["normal_text"] == test_dict["normal_text"], "Normal text in dict should not be truncated"
-        assert result3["long_text"] == test_dict["long_text"][
-                                       :TRUNCATION_LENGTH] + TRUNCATION_SUFFIX, "Long text in dict should be truncated"
-        assert result3["nested"]["more_base64"] == test_dict["nested"]["more_base64"][
-                                                   :TRUNCATION_LENGTH] + TRUNCATION_SUFFIX, "Nested long text should be truncated"
+        assert result3["normal_text"] == test_dict["normal_text"], (
+            "Normal text in dict should not be truncated"
+        )
+        assert result3["long_text"] == (
+            test_dict["long_text"][:TRUNCATION_LENGTH] + TRUNCATION_SUFFIX
+        ), "Long text in dict should be truncated"
+        assert result3["nested"]["more_base64"] == (
+            test_dict["nested"]["more_base64"][:TRUNCATION_LENGTH] + TRUNCATION_SUFFIX
+        ), "Nested long text should be truncated"
 
         # Test 4: List with mixed types
         test_list = [
@@ -104,15 +110,24 @@ def test_truncate_values_for_saving():
 
         result4 = truncate_values_for_saving(test_list)
         assert result4[0] == test_list[0], "Normal text in list should not be truncated"
-        assert result4[1] == test_list[1][
-                             :TRUNCATION_LENGTH] + TRUNCATION_SUFFIX, "Long text in list should be truncated"
+        assert result4[1] == (
+            test_list[1][:TRUNCATION_LENGTH] + TRUNCATION_SUFFIX
+        ), "Long text in list should be truncated"
 
         print("✅ truncate_values_for_saving test passed")
-    except Exception as e:
+    except (AssertionError, ValueError, TypeError) as e:
         print(f"❌ truncate_values_for_saving test failed: {e}")
 
 
 def split_inline_speaker_labels(text: str) -> str:
+    """Insert newlines before speaker labels that are not at the start of a line.
+
+    Args:
+        text: Input text that may contain inline speaker labels (A: or B:)
+
+    Returns:
+        Text with speaker labels properly separated by newlines
+    """
     # This will insert a newline before any 'A:' or 'B:' that is not at the start of a line
     return re.sub(r'(?<!^)(?<!\n)\s*([AB]:)', r'\n\1', text)
 
@@ -134,10 +149,12 @@ def test_split_inline_speaker_labels():
 
         for input_text, expected_output in test_cases:
             result = split_inline_speaker_labels(input_text)
-            assert result == expected_output, f"Failed: '{input_text}' → Got '{result}', Expected '{expected_output}'"
+            assert result == expected_output, (
+                f"Failed: '{input_text}' → Got '{result}', Expected '{expected_output}'"
+            )
 
         print("✅ split_inline_speaker_labels test passed")
-    except Exception as e:
+    except (AssertionError, ValueError, TypeError) as e:
         print(f"❌ split_inline_speaker_labels test failed: {e}")
 
 

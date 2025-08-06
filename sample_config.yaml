@@ -22,22 +22,22 @@ aggregate:
   - ["llm_judge_binary", ["voxceleb_gender_test", "iemocap_gender_recognition"]]
 
 filters:
-  - num_samples: 100 #number of samples to run(remove for all)
-  - user_prompt_add_ons: ["asr_clean_output"] #optional - additional prompting in text instructions for each sample
-  - system_prompts: ["audio_expert", "try_best"]
-  - length_filter: [1.0, 3.0] #optional - filters for only audio samples in this length(seconds) - only supported for general and callhome preprocessors
-  - accented: false #optional - filters for only audio samples in this length(seconds)
-  - language: "en" #optional - filters for only audio samples in this language
+  num_samples: 100 #number of samples to run(remove for all)
+  user_prompt_add_ons: ["asr_clean_output"] #optional - additional prompting in text instructions for each sample
+  system_prompts: ["audio_expert", "try_best"]
+  length_filter: [1.0, 3.0] #optional - filters for only audio samples in this length(seconds) - only supported for general and callhome preprocessors
+  accented: false #optional - filters for only audio samples in this length(seconds)
+  language: "en" #optional - filters for only audio samples in this language
 
 judge_properties:
-  - judge_concurrency: 8 #judge call(optional)
-  - judge_model: "gpt-4o-mini" #optional
-  - judge_type: "openai" # mandatory (vllm or openai)
-  - judge_api_version: "${API_VERSION}" # optional(needed for openai)
-  - judge_api_endpoint: "${ENDPOINT_URL}" # mandatory
-  - judge_api_key: "${AUTH_TOKEN}" # mandatory
-  - judge_temperature: 0.1 # optional
-  - judge_prompt_model_override: "gpt-4o-mini-enhanced" # optional
+  judge_concurrency: 8 #judge call(optional)
+  judge_model: "gpt-4o-mini" #optional
+  judge_type: "openai" # mandatory (vllm or openai)
+  judge_api_version: "${API_VERSION}" # optional(needed for openai)
+  judge_api_endpoint: "${ENDPOINT_URL}" # mandatory
+  judge_api_key: "${AUTH_TOKEN}" # mandatory
+  judge_temperature: 0.1 # optional
+  judge_prompt_model_override: "gpt-4o-mini-enhanced" # optional
 
 logging:
   log_file: "audiobench.log"  # Path to the main log file
@@ -58,7 +58,7 @@ temperature_overrides:
 models:
   - info:
       name: "gpt-4o-mini-audio-preview-1" 
-      inference_type: "openai" # mandatory - you can use vllm, openai, (chat completion) or audio transcription endpoint
+      inference_type: "openai" # mandatory - you can use vllm or openai chat completion
       url: "${ENDPOINT_URL}" - # mandatory - endpoint url
       delay: 100
       retry_attempts: 8
@@ -67,10 +67,10 @@ models:
       auth_token: "${AUTH_TOKEN}" 
       api_version: "${API_VERSION}"
       batch_size: 100 # Optional - batch eval size
-      chunk_size: 45 # Optional - max audio length in seconds fed to model
+      chunk_size: 30 # Optional - max audio length in seconds fed to model
   - info:
       name: "gpt-4o-mini-audio-preview-2" 
-      inference_type: "openai" # mandatory - you can use vllm, openai, (chat completion) or audio transcription endpoint
+      inference_type: "openai" # mandatory - you can use vllm or openai chat completion
       url: "${ENDPOINT_URL}" - # mandatory - endpoint url
       delay: 100
       retry_attempts: 8
@@ -79,10 +79,10 @@ models:
       auth_token: "${AUTH_TOKEN}" 
       api_version: "${API_VERSION}"
       batch_size: 100 # Optional - batch eval size
-      chunk_size: 45 # Optional - max audio length in seconds fed to model
+      chunk_size: 30 # Optional - max audio length in seconds fed to model
   - info:
       name: "qwen-2.5-omni" 
-      inference_type: "vllm" # mandatory - you can use vllm, openai, (chat completion) or audio transcription endpoint
+      inference_type: "vllm" # mandatory - you can use vllm or openai chat completion
       url: "${ENDPOINT_URL}" - # mandatory - endpoint url
       delay: 100
       retry_attempts: 8
@@ -90,7 +90,7 @@ models:
       model: "qwen-2.5-omni" # mandatory - only needed for vllm
       auth_token: "${AUTH_TOKEN}" 
       batch_size: 4 # Optional - batch eval size
-      chunk_size: 45 # Optional - max audio length in seconds fed to model
+      chunk_size: 40 # Optional - max audio length in seconds fed to model
 
       # Data sharding - If two models have same "model" attribute, we implement dataset sharding
 

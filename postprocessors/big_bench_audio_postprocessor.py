@@ -1,3 +1,4 @@
+"""BigBenchAudio postprocessor for processing audio task predictions."""
 import logging
 
 from postprocessors.base import Postprocessor
