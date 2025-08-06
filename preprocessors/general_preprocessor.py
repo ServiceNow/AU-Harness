@@ -1,4 +1,12 @@
+"""General preprocessor module for LALMEval framework.
+
+This module provides a general-purpose preprocessor for audio benchmarks
+from AudioLLMs and other HuggingFace datasets, with support for various
+modalities and filtering options.
+"""
+
 import logging
+from typing import List
 
 import numpy as np
 from tqdm import tqdm
@@ -13,13 +21,15 @@ class GeneralPreprocessor(Preprocessor):
 
     # Using the extract_audio_info method from the base class
 
-    def process(self, dataset: dict, num_samples: int = None, properties: dict = None) -> list[dict]:
+    def process(
+        self, dataset: dict, num_samples: int = None, properties: dict = None
+    ) -> List[dict]:
         """Process the dataset and flatten audio/context structure (expects dict-of-lists).
         
         Args:
             dataset: Dictionary containing audio data
-            properties: Optional dict of properties, may include 'length_filter' tuple (min_seconds, max_seconds)
-                       to filter samples by audio length.
+            properties: Optional dict of properties, may include 'length_filter' tuple 
+                       (min_seconds, max_seconds) to filter samples by audio length.
         """
 
         # Extract common properties using base class method
@@ -72,9 +82,10 @@ class GeneralPreprocessor(Preprocessor):
             if target_column_name and target_column_name in record:
                 record["model_target"] = record.get(target_column_name, None)
             else:
-                possible_keys = ["reference", "answer", "text", "transcription", "sentence", "transcript",
-                                 "normalized_text"]
-                record["model_target"] = next((record[k] for k in possible_keys if k in record), None)
+                possible_keys = ["reference", "answer", "text", "transcription", "sentence", 
+                                 "transcript", "normalized_text", "query"]
+                record["model_target"] = next((record[k] for k in possible_keys if k in record), 
+                                              None)
 
             if record["model_target"] is None:
                 raise ValueError("No valid target key found in record")
@@ -83,8 +94,9 @@ class GeneralPreprocessor(Preprocessor):
                 instruction = record.get(user_instruction_column_name, "")
             else:
                 instruction = record.get("instruction") or record.get("question") or ""
-            # Append any user-specified prompt add-ons
-            instruction += " " + " ".join(prompt_add_ons[k] for k in user_prompt_add_ons if k in prompt_add_ons)
+            # Append any user-specified prompt add-ons and choices
+            instruction += " " + " ".join(prompt_add_ons[k] for k in 
+                                          user_prompt_add_ons if k in prompt_add_ons)
             if choices_column_name and choices_column_name in record:
                 choices = record.get(choices_column_name, [])
                 if isinstance(choices, list):
@@ -93,9 +105,9 @@ class GeneralPreprocessor(Preprocessor):
                     choices_text = str(choices)
                 instruction += "\n Choices: " + choices_text
             if not instruction:
-                logger.warning("Instruction is empty for sample", i)
+                logger.warning("Instruction is empty for sample %d, add prompt add-ons for instruction insertion", i)
             record["instruction"] = instruction.strip()
-            
+
             # Process system prompts
             system_prompt_text = "\n\n".join(
                 system_prompts_mapping[k] for k in system_prompts if k in system_prompts_mapping)

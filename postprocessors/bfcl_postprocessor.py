@@ -1,3 +1,6 @@
+"""
+Bfcl postprocessor module for processing function call predictions.
+"""
 import ast
 import json
 import logging
@@ -34,11 +37,11 @@ class BfclPostprocessor(Postprocessor):
             try:
                 json_decode = json.loads(json_str)
                 return json_decode
-            except:
+            except (json.JSONDecodeError, ValueError):
                 try:
                     json_decode = ast.literal_eval(json_str)
                     return json_decode
-                except:
+                except (ValueError, SyntaxError):
                     return None
 
     def process(
@@ -50,7 +53,7 @@ class BfclPostprocessor(Postprocessor):
         """
         Process and clean model predictions and prepare target-label pairs.
         """
-        logger.info("Processing predictions with VoiceBenchIfevalPostprocessor...")
+        logger.info("Processing predictions with BFCLPostprocessor...")
 
         processed_predictions: dict[str, list[str]] = {}
         for model_name, preds in predictions.items():
@@ -86,7 +89,8 @@ class BfclPostprocessor(Postprocessor):
 
         output = {
             "instructions": [record.get("instruction", "") for record in dataset],
-            "model_targets": [record["model_target"] for record in dataset if "model_target" in record],
+            "model_targets": [record["model_target"] for record in dataset 
+                              if "model_target" in record],
             "processed_predictions": processed_predictions,
         }
         self.validate_output(output)

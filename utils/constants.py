@@ -1,11 +1,10 @@
-# Inference server types
-INFERENCE_SERVER_VLLM_CHAT_COMPLETION = 'vllm'
-OPENAI_CHAT_COMPLETION = 'openai'
-INFERENCE_SERVER_VLLM_TRANSCRIPTION = 'vllm_transcription'
-OPENAI_TRANSCRIPTION = 'openai_transcription'
+"""Constants and mappings for LALMEval framework.
 
-# WER/CER metrics constants
-# These imports need to be added since we're moving the constants here
+This module contains configuration constants, mappings between different
+components (metrics, models, tasks), and normalization settings used
+throughout the evaluation framework.
+"""
+
 from jiwer import (
     Compose,
     ReduceToListOfListOfChars,
@@ -19,6 +18,13 @@ from metrics.wer.normalizers import JapaneseTextNormalizer
 from metrics.wer.whisper_normalizer.basic import BasicTextNormalizer
 from metrics.wer.whisper_normalizer.english import EnglishTextNormalizer
 
+# Inference server types
+INFERENCE_SERVER_VLLM_CHAT_COMPLETION = 'vllm'
+OPENAI_CHAT_COMPLETION = 'openai'
+INFERENCE_SERVER_VLLM_TRANSCRIPTION = 'vllm_transcription'
+OPENAI_TRANSCRIPTION = 'openai_transcription'
+
+# WER/CER metrics constants
 # Define WER/CER related constants
 NORMALIZERS = {'en': EnglishTextNormalizer(), 'ja': JapaneseTextNormalizer()}
 DEFAULT_NORMALIZER = BasicTextNormalizer()
@@ -74,18 +80,6 @@ task_temp_map = {
     "spoken_qa": 0.5,
     "spoken_dialogue_summarization": 0.8,
     "translation": 0.2,
-    'bertscore': ('metrics.bertscore', 'BertScore'),
-    'bfcl_match_score': ('metrics.bfcl_metric', 'BFCLMatchScore'),
-    'bleu': ('metrics.bleu_metrics', 'BleuMetrics'),
-    'diarization_metrics': ('metrics.diarization_metrics', 'DiarizationMetrics'),
-    'instruction_following': ('metrics.voice_bench_ifeval_score', 'InstructionFollowingScore'),
-    'llm_judge_big_bench_audio': ('metrics.llm_judge', 'BigBenchAudioLLMJudgeMetric'),
-    'llm_judge_binary': ('metrics.llm_judge', 'BinaryLLMJudgeMetric'),
-    'llm_judge_callhome': ('metrics.llm_judge', 'CallHomeLLMJudgeMetric'),
-    'llm_judge_detailed': ('metrics.llm_judge', 'DetailedLLMJudgeMetric'),
-    'meteor': ('metrics.meteor_score', 'MeteorScore'),
-    'word_error_rate': ('metrics.word_error_rate_metrics', 'WERMetrics'),
-    "sql_score": ("metrics.sql_score", "SqlScore"),
 }
 
 allowed_task_metrics = {
@@ -120,9 +114,9 @@ metric_output = {
     "llm_judge_big_bench_audio": ["llm_judge_big_bench_audio"],
     "meteor": ["meteor"],
     "bfcl_match_score": ["final"],
-    "sql_score": ["sql_score"], # need to find real metric
+    "sql_score": ["sql_score"],  # need to find real metric
     "instruction_following": ["strict_instruction", "loose_instruction", "final"],
-    "diarization_metrics": ["average_sample_wder", "overall_wder", "average_sample_cpwer", "overall_cpwer", "speaker_count_absolute_error"] 
+    "diarization_metrics": ["average_sample_wder", "overall_wder", "average_sample_cpwer", "overall_cpwer", "speaker_count_absolute_error"]
 }
 
 # Dictionary mapping language names to their standard codes

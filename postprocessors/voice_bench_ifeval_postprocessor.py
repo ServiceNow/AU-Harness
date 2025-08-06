@@ -1,3 +1,4 @@
+"""VoiceBench IFEval postprocessor for processing instruction following task predictions."""
 import logging
 
 from postprocessors.base import Postprocessor
@@ -23,7 +24,6 @@ class VoiceBenchIfevalPostprocessor(Postprocessor):
         logger.info("Processing predictions with VoiceBenchIfevalPostprocessor...")
 
         processed_predictions = self.process_predictions(predictions)
-        
         output = {
             "instruction": [record.get("instruction", "") for record in dataset],
             "model_targets": [record["model_target"] for record in dataset if "model_target" in record],

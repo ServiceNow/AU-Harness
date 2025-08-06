@@ -1,10 +1,18 @@
-import logging
-from typing import Dict, List, Optional, Any
-import numpy as np
-import os
+"""Spider preprocessor module for LALMEval framework.
+
+This module provides a preprocessor for the Spider dataset, designed for
+audio2SQL tasks with support for both audio and text modalities.
+"""
+
 import json
-from preprocessors.base import Preprocessor
+import logging
+import os
+from typing import Dict, List, Optional, Any
+
+import numpy as np
 from tqdm import tqdm
+
+from preprocessors.base import Preprocessor
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +33,7 @@ class SpiderPreprocessor(Preprocessor):
     def _load_jsonl(self, file_path: str) -> List[Dict[str, Any]]:
         """
         Load a JSONL file and return a list of dictionaries.
-        
+
         Args:
             file_path: Path to the JSONL file
         Returns:
@@ -79,9 +87,9 @@ class SpiderPreprocessor(Preprocessor):
 
 
     def process(
-        self, 
-        dataset: Dict[str, List[Any]], 
-        num_samples: Optional[int] = None, 
+        self,
+        dataset: Dict[str, List[Any]],
+        num_samples: Optional[int] = None,
         properties: Optional[Dict[str, Any]] = None
     ) -> List[Dict[str, Any]]:
         """
@@ -95,7 +103,7 @@ class SpiderPreprocessor(Preprocessor):
         Returns:
             A list of dictionaries where each dictionary represents a sample
         """
-        
+
 
         # Extract properties using the base class method
         props = self.extract_properties(properties)
@@ -126,7 +134,7 @@ class SpiderPreprocessor(Preprocessor):
 
                 # Validate audio data structure
                 if not isinstance(audio_data, dict):
-                    logger.warning(f"[{key}] Invalid audio format. Skipping sample.")
+                    logger.warning("[%d] Invalid audio format. Skipping sample.", i)
                     continue
 
                 # Convert to NumPy array
@@ -134,15 +142,18 @@ class SpiderPreprocessor(Preprocessor):
                 sr = audio_data.get("sampling_rate")
 
                 if sr is None:
-                    logger.warning(f"[{key}] Sampling rate missing. Assuming 16kHz.")
+                    logger.warning("[%d] Sampling rate missing. Assuming 16kHz.", i)
                     sr = 16000
 
                 # Use base class method to resample audio
                 audio_array, sr = self.resample_audio(audio_array, sr)
 
 
-            prompt = "### Complete sqlite SQL query only and with no explanation, and do not select extra columns that are not explicitly requested in the query. Enclose the SQL query between ```sql and ```\n"
-            
+            prompt = (
+                "### Complete sqlite SQL query only and with no explanation, "
+                "and do not select extra columns that are not explicitly requested "
+                "in the query. Enclose the SQL query between ```sql and ```\n"
+            )
             if modality == "audio":
                 user_text = (
                     prompt

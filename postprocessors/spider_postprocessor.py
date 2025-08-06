@@ -1,3 +1,4 @@
+"""Spider postprocessor for processing SQL generation task predictions."""
 import re
 import logging
 from postprocessors.base import Postprocessor
@@ -32,8 +33,8 @@ class SpiderPostprocessor(Postprocessor):
         pattern = r"```(?:sql)?([\s\S]*?)```"
         try:
             match = re.findall(pattern, sql, re.MULTILINE)[0]
-        except Exception as e:
-            logger.warning(f"Error cleaning generation: {sql}. Error: {str(e)}")
+        except (IndexError, re.error) as e:
+            logger.warning("Error cleaning generation: %s. Error: %s", sql, str(e))
             match = sql
         return match.strip()
 
