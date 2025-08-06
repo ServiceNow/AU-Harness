@@ -9,7 +9,7 @@
     "instruction_column": "instruction"
   },
   "gigaspeech_test": {
-    "hf_repo": "AudioLLMs/gigaspeech-test",
+    "hf_repo": "AudioLLMs/gigaspeech_test",
     "language": "en",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor",
