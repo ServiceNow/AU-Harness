@@ -1,6 +1,7 @@
 # 📏 Metrics Overview
 
-This document provides a summary and detailed explanation of all evaluation metrics used in the framework.
+This document provides a summary and detailed explanation of all evaluation metrics used in the framework. <br />
+For more detailed documentation regarding which metrics can be used for which tasks and task categories, refer to [Runspecs Overview](../runspecs/README.md).
 
 ---
 
@@ -14,13 +15,13 @@ This document provides a summary and detailed explanation of all evaluation metr
 | `bleu` (&uarr;)                    | N-gram overlap score                             | bleu                    |
 | `bertscore` (&uarr;)               | Semantic similarity using BERT embeddings        | bertscore                       |
 | `meteor` (&uarr;)                  | Alignment-based score with synonym handling      | meteor                    |
-| `word_error_rate_metrics` (&darr;) | Measures ASR errors via insertions, deletions    | average_sample_wer, overall_wer                            |
-| `diarization_metrics` (&darr;)     | LLM-Adaptive diarization-relevent metrics    | avg_sample_wder, overall_wder, avg_sample_cpwer, overall_cpwer, avg_speaker_count_absolute_error                           |
+| `word_error_rate_metrics` (&darr;) | Measures ASR errors via insertions, deletions | average_sample_wer <br /> overall_wer |
+| `diarization_metrics` (&darr;) | LLM-Adaptive diarization-relevent metrics | avg_sample_wder <br /> overall_wder <br /> avg_sample_cpwer <br /> overall_cpwer <br /> avg_speaker_count_absolute_error |
 | `bfcl_match_score` (&uarr;)        | Structured logic form comparison                 | bfcl_match_score                          |
 | `sql_score` (&uarr;)               | SQL correctness and execution match              | text2sql_score                                 |
 | `instruction_following` (&uarr;)   | LLM-judged instruction following capability                 | instruction_following              |
 
----
+--- 
 
 ## 📋 Metric Details
 

@@ -6,6 +6,9 @@ This framework supports structured **evaluation runs** across a range of **Task 
 
 Use this documentation to configure and understand supported evaluation targets and their corresponding metrics.
 
+For more detailed documentation regarding individual metrics, refer to [Metrics Overview](../metrics/README.md).
+
+
 ---
 
 ## 🧾 Task Category Descriptions
