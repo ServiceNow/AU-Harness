@@ -287,7 +287,7 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
             explanations = getattr(self, "explanations", None)
             write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, 
                            instructions=self.instructions, model_responses=self.model_responses)
-            append_final_score(self, overall, dataset_name, model_name)
+            append_final_score(self, overall, dataset_name, model_name, self.model_responses)
         return overall
 
     async def compute_record_level_scores(self, candidates: list, references: list, dataset_name: str | None = None, model_name: str | None = None):
@@ -323,7 +323,7 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):
             explanations = getattr(self, "explanations", None)
             write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, 
                           instructions=self.instructions, model_responses=self.model_responses)
-            append_final_score(self, overall, dataset_name, model_name)
+            append_final_score(self, overall, dataset_name, model_name, self.model_responses)
         return overall
 
     async def compute_record_level_scores(self, candidates: list, references: list, dataset_name: str | None = None, model_name: str | None = None):
@@ -353,7 +353,7 @@ class CallHomeLLMJudgeMetric(_BaseLLMJudge):
             explanations = getattr(self, "explanations", None)
             write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, 
                       instructions=self.instructions, model_responses=self.model_responses)
-            append_final_score(self, overall, dataset_name, model_name)
+            append_final_score(self, overall, dataset_name, model_name, self.model_responses)
         return overall
         
     async def compute_record_level_scores(self, candidates: list, references: list, dataset_name: str | None = None, model_name: str | None = None):
@@ -431,7 +431,7 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
         if dataset_name and model_name:
             write_record_log(self, references, candidates, all_scores, dataset_name, model_name, 
                        instructions=self.instructions, model_responses=self.model_responses)
-            append_final_score(self, overall, dataset_name, model_name)
+            append_final_score(self, overall, dataset_name, model_name, self.model_responses)
 
         return overall
 

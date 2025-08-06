@@ -71,9 +71,10 @@ class SqlScore(Metrics):
                 dataset_name=dataset_name, 
                 model_name=model_name, 
                 explanations=None, 
-                instructions=instructions
+                instructions=instructions,
+                model_responses=model_responses
             )
-            append_final_score(self, scores, dataset_name, model_name)
+            append_final_score(self, scores, dataset_name, model_name, model_responses)
         return self._clean_scores(scores)
 
     def _clean_scores(self, scores: dict) -> dict:

@@ -65,7 +65,7 @@ class WERMetrics(Metrics):
             scores = self.record_level_scores.get("wer_per_row", [])
             write_record_log(self, references, candidates, scores, dataset_name, model_name, 
                           instructions=self.instructions, model_responses=self.model_responses)
-            append_final_score(self, overall, dataset_name, model_name)
+            append_final_score(self, overall, dataset_name, model_name, self.model_responses)
         return overall
 
     def __init__(self, language="en"):

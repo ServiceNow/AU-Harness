@@ -53,9 +53,10 @@ class InstructionFollowingScore(Metrics):
                 dataset_name=dataset_name,
                 model_name=model_name,
                 explanations=None,
-                instructions=instructions
+                instructions=instructions,
+                model_responses=model_responses
             )
-            append_final_score(self, results, dataset_name, model_name)
+            append_final_score(self, results, dataset_name, model_name, model_responses)
         return results
 
     def _compute_outputs(

@@ -211,7 +211,7 @@ def write_to_run_json(self, refs, cands, scores, dataset_name, model_name, expla
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 
-def append_final_score(self, overall, dataset_name, model_name):
+def append_final_score(self, overall, dataset_name, model_name, model_responses=None):
     """
     Append the final aggregated score to the metric's log file.
     
@@ -220,6 +220,7 @@ def append_final_score(self, overall, dataset_name, model_name):
         overall: Dict containing overall metrics and scores
         dataset_name: Name of the dataset
         model_name: Name of the model
+        model_responses: Optional list of ModelResponse objects for additional stats
     
     Returns:
         Path to the log file where the final score was appended
@@ -261,11 +262,31 @@ def append_final_score(self, overall, dataset_name, model_name):
     # Map values to their respective header positions
     header_to_index = {header: index for index, header in enumerate(headers)}
     
+    # Calculate additional statistics from model_responses
+    total_samples = 0
+    total_failures = 0
+    avg_wait_time = 0.0
+    
+    if model_responses:
+        total_samples = len(model_responses)
+        failures = sum(1 for resp in model_responses if hasattr(resp, 'llm_response') and not resp.llm_response)
+        total_failures = failures
+        
+        # Calculate average wait time
+        wait_times = [resp.wait_time for resp in model_responses if hasattr(resp, 'wait_time') and resp.wait_time is not None]
+        if wait_times:
+            avg_wait_time = sum(wait_times) / len(wait_times)
+    
     # Set final score fields
     if "score" in header_to_index:
         row_values[header_to_index["score"]] = overall
     if "is_final_score" in header_to_index:
         row_values[header_to_index["is_final_score"]] = "True"  # String format for CSV consistency
+    
+    # Add sample statistics to the row if we have model_responses
+    if model_responses:
+        if "candidate" in header_to_index:
+            row_values[header_to_index["candidate"]] = f"Total samples: {total_samples}, Failures: {total_failures}, Avg wait time: {avg_wait_time:.2f}s"
     
     # Append the final score to the log file
     with open(log_path, "a", encoding="utf-8", newline='') as f:

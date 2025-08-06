@@ -26,7 +26,7 @@ class MeteorScore(Metrics):
         if dataset_name and model_name:
             write_record_log(self, references, candidates, scores, dataset_name, model_name, 
                            instructions=self.instructions, model_responses=self.model_responses)
-            append_final_score(self, overall_score, dataset_name, model_name)
+            append_final_score(self, overall_score, dataset_name, model_name, self.model_responses)
         
         # Return both individual scores and the aggregate score
         return {**self.record_level_scores, **overall_score}
