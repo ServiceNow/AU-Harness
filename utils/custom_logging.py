@@ -269,8 +269,7 @@ def append_final_score(self, overall, dataset_name, model_name, model_responses=
     
     if model_responses:
         total_samples = len(model_responses)
-        failures = sum(1 for resp in model_responses if hasattr(resp, 'llm_response') and not resp.llm_response)
-        total_failures = failures
+        total_failures = sum(1 for resp in model_responses if hasattr(resp, 'llm_response') and not resp.llm_response)
         
         # Calculate average wait time
         wait_times = [resp.wait_time for resp in model_responses if hasattr(resp, 'wait_time') and resp.wait_time is not None]
