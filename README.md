@@ -42,7 +42,7 @@ python -m venv myEnv
 source myEnv/bin/activate
 pip install -r requirements.txt
 ```
-3. Populate your `config.yaml` file based on the example provided in `sample_config.yaml` - the given 'config.yaml' already has the mandatory fields
+3. Populate your `config.yaml` file based on the example provided in `sample_config.yaml` and instructions below - the given 'config.yaml' already has the mandatory fields
 4. Run the end-to-end evaluation:
 ```bash
 bash evaluate.sh
@@ -70,8 +70,10 @@ filters:
   length_filter: [1.0, 30.0] # optional - filters for only audio samples in this length(seconds)
   accented: false # optional - filters for only audio samples in this length(seconds)
   language: "en" # optional - filters for only audio samples in this language - use language code
-  system_prompts: ["audio_expert"] # optional - system prompts for each sample
+  system_prompts: ["audio_expert"] # optional but HIGHLY RECOMMENDED - system prompts for each sample
 ```
+
+**Important Note: It is HIGHLY Recommended to add a system prompt specific to the datasets you are running for the best results. Go to /prompts/system_prompts to choose a prebuilt prompt or create your own prompt, then add it in filters[system_prompts]**
 
 #### Result Aggregation
 ```yaml
@@ -133,7 +135,7 @@ LALMEval supports adding custom datasets through runspec JSON files. These files
 
 #### Creating a Runspec File
 
-Create a JSON file in the `runspecs` directory under the appropriate task category and type. Each dataset should be defined with the following properties:
+Create a JSON file in the `runspecs` directory under the appropriate task category and type. Each dataset should be defined with the following properties, down to the most specific subset:
 
 ```json
 {
