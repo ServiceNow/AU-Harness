@@ -1,16 +1,16 @@
-import json
-import logging
-from abc import abstractmethod, ABC
-import os
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+"""Metrics base class for LALMEval framework.
 
-import pandas as pd
+This module provides the base Metrics class that defines the interface
+for all evaluation metrics in the framework.
+"""
+import logging
 from pydantic import Field
+from utils import util
+from metrics.base_metric_metadata import MetricMetadata
+from abc import abstractmethod, ABC
+
 
 logger = logging.getLogger(__name__)
-from metrics.base_metric_metadata import MetricMetadata
-from utils import util
 
 
 class Metrics(ABC, MetricMetadata):

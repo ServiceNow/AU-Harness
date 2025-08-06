@@ -146,8 +146,6 @@ class Preprocessor():
             processed_size (int, optional): Size of processed dataset
             total_duration (float, optional): Total audio duration in seconds
         """
-        logger.info(f"Dataset keys: {dataset_keys}, total samples: {original_size}")
-
         if processed_size is not None:
             logger.info(f"Processed dataset size: {processed_size}")
 

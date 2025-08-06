@@ -180,7 +180,7 @@ WORD_LIST = ["western", "sentence", "signal", "dump", "spot", "opposite", "botto
              "event", "wear", "juice", "failure", "bug", "context", "mud", "whole", "wrap", "intention", "draft",
              "pressure", "cake", "dark", "explanation", "space", "angle", "word", "efficiency", "management", "habit",
              "star", "chance", "finding", "transportation", "stand", "criticism", "flow", "door", "injury", "insect",
-             "surprise", "apartment"]  # pylint: disable=line-too-long
+             "surprise", "apartment"]
 
 # ISO 639-1 codes to language names.
 LANGUAGE_CODES = immutabledict.immutabledict({

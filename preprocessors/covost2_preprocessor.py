@@ -1,3 +1,9 @@
+"""Covost2 preprocessor module for LALMEval framework.
+
+This module provides a preprocessor for the Covost2 dataset, designed for
+translation tasks with support for both audio and text modalities.
+"""
+
 import logging
 
 from tqdm import tqdm
@@ -34,12 +40,13 @@ class Covost2Preprocessor(Preprocessor):
         for i in tqdm(indices, desc="Processing samples"):
             sample_id = dataset["id"][i]
             translation = dataset["translation"][i]
+            source_sentence = dataset["sentence"][i]
             audio = dataset["audio"][i]
             audio_array = audio["array"]
             sampling_rate = audio["sampling_rate"]
 
             if sampling_rate is None:
-                logger.warning(f"[{sample_id}] Sampling rate missing. Assuming 16kHz.")
+                logger.warning("[%d] Sampling rate missing. Assuming 16kHz.", i)
                 sampling_rate = 16000
 
             # Resample if needed using base class method
@@ -51,8 +58,8 @@ class Covost2Preprocessor(Preprocessor):
                 # Convert language code to full language name using the language_map
                 target_language_name = language_map.get(target_language_code, target_language_code)
                 target_language_name = target_language_name.capitalize()
-            except KeyError:
-                raise ValueError("Target language not found. Please specify target_language in dataset config")
+            except KeyError as exc:
+                raise ValueError("Target language not found. Please specify target_language in dataset config") from exc
 
             instruction = f"Please translate the given speech to {target_language_name}. Return ONLY the translated speech in text format without any other prefix text."
 
@@ -62,6 +69,7 @@ class Covost2Preprocessor(Preprocessor):
                 "array": audio_array,
                 "sampling_rate": sampling_rate,
                 "model_target": translation.strip(),
+                "source_sentence": source_sentence.strip(),
                 "instruction": instruction,
             }
             processed_data.append(sample)

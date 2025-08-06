@@ -1,5 +1,6 @@
-import json
-from pathlib import Path
+"""
+Callhome postprocessor module for processing speaker diarization predictions.
+"""
 import logging
 import re
 
@@ -13,7 +14,15 @@ class CallhomePostprocessor(Postprocessor):
     """Postprocessor class to calculate the model scores for the model predictions."""
 
     def split_inline_speaker_labels(self, text: str) -> str:
-        # This will insert a newline before any 'A:' or 'B:' that is not at the start of a line
+        """
+        Insert newlines before speaker labels that are not at the start of a line.
+        
+        Args:
+            text (str): Input text with speaker labels
+            
+        Returns:
+            str: Text with properly separated speaker labels
+        """
         return re.sub(r'(?<!^)(?<!\n)\s*([AB]:)', r'\n\1', text)
 
     def process_predictions(self, predictions: dict[str, list[str]]) -> dict[str, list[str]]:
@@ -30,11 +39,11 @@ class CallhomePostprocessor(Postprocessor):
         processed_predictions = {}
 
         for model_name, preds in predictions.items():
-            logger.debug(f"Processing predictions for model: {model_name}")
+            logger.debug("Processing predictions for model: %s", model_name)
             # Apply CallhomePostprocessor-specific processing
             processed = [self.split_inline_speaker_labels(pred) for pred in preds]
             processed_predictions[model_name] = processed
-            logger.debug(f"Cleaned {len(processed)} predictions for model: {model_name}")
+            logger.debug("Cleaned %d predictions for model: %s", len(processed), model_name)
 
         return processed_predictions
 
@@ -50,7 +59,8 @@ class CallhomePostprocessor(Postprocessor):
         Returns:
             list: List of extracted and processed targets
         """
-        targets = [self.split_inline_speaker_labels(record.get(target_key, "")) for record in dataset]
+        targets = [self.split_inline_speaker_labels(record.get(target_key, ""))
+                   for record in dataset]
         return targets
 
     def extract_audio_metadata(self, dataset: list[dict]) -> tuple[list, list]:
@@ -80,7 +90,8 @@ class CallhomePostprocessor(Postprocessor):
         
         Args:
             dataset (list[dict]): List of preprocessed input samples
-            predictions (dict): Dictionary mapping model names to lists of predictions
+            predictions (dict): Dictionary mapping model names to lists of
+                predictions
             metric (str, optional): Evaluation metric name
             
         Returns:

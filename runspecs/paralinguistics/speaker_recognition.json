@@ -1,0 +1,12 @@
+{
+    "mmau_mini": {
+    "hf_repo": "AudioLLMs/MMAU-mini",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction",
+    "choices_column": "choices"
+  }
+}
