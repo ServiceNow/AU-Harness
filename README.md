@@ -104,7 +104,7 @@ temperature_overrides:
 models:
   - info:
       name: "gpt-4o-mini-audio-preview" # Mandatory
-      inference_type: "openai"  # openai, vllm, or audio transcription
+      inference_type: "openai"  # openai(openai), vllm(vllm), or audio transcription(transcription)
       url: ${ENDPOINT_URL} # Mandatory
       delay: 100 # Optional
       retry_attempts: 8 # Optional
