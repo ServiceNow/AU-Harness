@@ -61,6 +61,7 @@ class Postprocessor():
                     processed.append("")
                 else:
                     # Only handle ModelResponse objects
+                    logger.info("pred: %s", pred)
                     text = pred.llm_response if pred.llm_response else ""
                     processed.append(self.remove_thinking_content(text))
 
