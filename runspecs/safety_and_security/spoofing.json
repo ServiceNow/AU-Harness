@@ -1,0 +1,12 @@
+{
+    "asvspoof": {
+        "hf_repo": "DynamicSuperb/SpoofDetection_ASVspoof2017",
+        "modality": "audio",
+        "language": "en",
+        "preprocessor": "GeneralPreprocessor",
+        "postprocessor": "GeneralPostprocessor",
+        "audio_column": "audio",
+        "target_column": "label",
+        "instruction_column": "instruction"
+    }
+}

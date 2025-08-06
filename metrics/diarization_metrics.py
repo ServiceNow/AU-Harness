@@ -190,9 +190,8 @@ class DiarizationMetrics(Metrics):
             scores = self.record_level_scores.get("wder_per_row", [])
 
             write_record_log(self, references, candidates, scores, dataset_name, model_name,
-                             instructions=self.instructions)
-            # Directly call append_final_score
-            append_final_score(self, overall, dataset_name, model_name)
+                             instructions=self.instructions, model_responses=self.model_responses)
+            append_final_score(self, overall, dataset_name, model_name, self.model_responses)
         return overall
 
     def __init__(self, language="en"):

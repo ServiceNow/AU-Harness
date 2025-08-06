@@ -36,9 +36,7 @@ class BFCLMatchScore(Metrics):
         results = {"final": sum(record_scores) / len(candidates)}
 
         # Write detailed record-level logs (if dataset_name and model_name provided)
-        if dataset_name and model_name:
-            append_final_score(self, results, dataset_name, model_name)
-
+        if dataset_name and model_name:            
             # Very simple approach: just stringify everything
             serializable_candidates = [str(candidate) for candidate in candidates]
             serializable_refs = [str(ref[0]) for ref in references]
@@ -50,8 +48,12 @@ class BFCLMatchScore(Metrics):
                 dataset_name=dataset_name,
                 model_name=model_name,
                 explanations=None,
-                instructions=instructions
+                instructions=instructions,
+                model_responses=model_responses
             )
+
+            append_final_score(self, results, dataset_name, model_name, model_responses)
+
         return results
 
     def _compute_outputs(

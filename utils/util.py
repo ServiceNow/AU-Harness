@@ -1,17 +1,30 @@
 
-"""Utility functions for LALMEval framework."""
-
+import importlib
 import json
 import logging
 import os
+import statistics
+import yaml
 from pathlib import Path
 from typing import Any, Dict
 
-import yaml
-
-from utils import constants
+from . import constants
+from preprocessors.base import Preprocessor
+from postprocessors.base import Postprocessor
+from utils.custom_logging import configure
 
 logger = logging.getLogger(__name__)
+
+def get_class_from_module(module_prefix, module_name) -> Preprocessor | Postprocessor:
+    try:
+        # Convert class name (CamelCase) to filename (snake)
+        # Get pre or post processor
+        module_filename = ''.join(['_' + c.lower() if c.isupper() else c for c in module_name]).lstrip('_')
+        module = importlib.import_module(f"{module_prefix}.{module_filename}")
+        return getattr(module, module_name)
+    except Exception as e:
+        logger.warning(f"Could not import {module_name} from {module_prefix}: {e}")
+        return None
 
 def find_runspec_files(base_dir="runspecs"):
     """
@@ -452,3 +465,214 @@ def _validate_temperature_overrides(temperature_overrides) -> None:
             if len(override['task'].strip()) == 0:
                 raise ValueError(f"Temperature override {i+1}: 'task' cannot be empty")
 
+def setup_logging(log_file: str):
+    """
+    Set up logging with default.log
+    """
+    
+    # Configure logging using the custom_logging module
+    configure(log_file)
+    
+    # Set root logger level to INFO
+    logging.getLogger().setLevel(logging.INFO)
+    
+    # Set httpx logger to WARNING level to reduce noise
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+
+def read_config(cfg_path: str):
+    """
+    Read configuration file, set up logging, validate config, and process config dictionaries.
+    
+    Args:
+        cfg_path: Path to configuration file
+        
+    Returns:
+        Tuple of (cfg, judge_properties, filters, temperature_overrides)
+    """
+    # Set up logging
+    with open(cfg_path) as f:
+        raw_cfg = yaml.safe_load(f)
+    log_file = raw_cfg.get("logging", {}).get("log_file", "default.log")
+    setup_logging(log_file)
+    
+    # Validate the configuration file
+    try:
+        cfg = validate_config(cfg_path)
+        logger.info(f"[read_config] Config file validation successful")
+    except ValueError as e:
+        logger.error(f"[read_config] Config validation error: {e}")
+        raise
+    
+    # Convert judge_properties list of one-item dicts to a simple dict
+    judge_properties = cfg.get("judge_properties", {})
+    filters = cfg.get("filters", {})
+    temperature_overrides = cfg.get("temperature_overrides", None)
+    
+    return cfg, judge_properties, filters, temperature_overrides
+    
+def expand_dataset_metric_pairs(cfg: dict) -> list[tuple[str, str, dict, str]]:
+    """
+    Expand dataset-metric pairs from config, finding runspecs and expanding them.
+    
+    Args:
+        cfg: Configuration dictionary
+        
+    Returns:
+        List of tuples (dataset_name, metric_name, dataset_info, task_type)
+    """
+    # Load runspec files using the utility function
+    runspec_files = find_runspec_files()
+    
+    # Get dataset-metric pairs from config.yaml
+    dataset_metric_pairs = []
+    for pair in cfg.get("dataset_metric", []):
+        # Validate the pair format - should be a list with two elements
+        if not isinstance(pair, list) or len(pair) != 2:
+            raise ValueError(f"Invalid dataset_metric pair: {pair}. Must be a list with two elements [dataset, metric]")
+        
+        dataset_name, metric_name = pair
+        dataset_metric_pairs.append((dataset_name, metric_name))
+
+    # Expand each dataset-metric pair by finding runspecs
+    expanded_pairs = []
+    
+    for dname, metric_name in dataset_metric_pairs:
+        # Step 1: Look for a matching runspec file
+        found_runspec, selected_datasets, matching_runspec_file = _find_runspec_by_name(dname, runspec_files)
+        
+        # Step 2: If no matching runspec file by name, search within all runspec files for the specific dataset
+        if not found_runspec:
+            found_runspec, selected_datasets, matching_runspec_file = _find_dataset_in_runspecs(dname, runspec_files)
+            
+            if not found_runspec:
+                logger.info(f"[expand_dataset_metric_pairs] Dataset not found, skipping: {dname}")
+                continue
+        
+        # Extract task_type from the matching runspec file name (stem)
+        task_type = matching_runspec_file.stem if matching_runspec_file else None
+        
+        # Process each selected dataset (if whole runspec could be multiple per dname/metric pair)
+        for dataset_name, dataset_info in selected_datasets.items():
+            expanded_pairs.append((dataset_name, metric_name, dataset_info, task_type))
+    
+    return expanded_pairs
+
+def _calculate_aggregates(aggregates, all_scores, models):
+    """
+    Process aggregate metrics by calculating means across multiple datasets for a specific metric.
+    
+    Args:
+        aggregates: List of aggregate configurations from the config file in format [metric_name, [dataset1, dataset2, ...]]
+        all_scores: Dictionary of scores keyed by dataset_metric pairs
+        models: List of model instances used for evaluation
+    """
+    logger.info("[calculate_aggregates] Processing aggregate metrics...")
+
+    aggregate_scores = {}
+    
+    # Get unique model types
+    model_types = set()
+    for model in models:
+        model_type = model.model  # The model type (e.g., "gpt-4o-mini-audio-preview")
+        if model_type:
+            model_types.add(model_type)
+        
+    # Load all runspec files using the utility function
+    runspec_files = find_runspec_files()
+    
+    for agg_item in aggregates:
+        # Skip invalid aggregates
+        if not isinstance(agg_item, (list, tuple)) or len(agg_item) != 2:
+            logger.warning(f"[calculate_aggregates] Invalid aggregate format: {agg_item}")
+            continue
+            
+        metric_name, dataset_specs = agg_item
+        if not isinstance(dataset_specs, list) or not dataset_specs:
+            logger.warning(f"[calculate_aggregates] Invalid dataset specs list in aggregate for metric '{metric_name}'")
+            continue
+        
+        # Step 1: Look up metric keys from constants.py
+        if metric_name not in constants.metric_output:
+            logger.warning(f"[calculate_aggregates] Metric '{metric_name}' not found in metric_output dict")
+            continue
+        
+        metric_keys = constants.metric_output[metric_name]
+        
+        # Step 2: Process each dataset/runspec entry
+        processed_datasets = []  # For actual calculations
+        display_names = []  # For display purposes (runspecs or dataset names)
+        
+        for dataset_spec in dataset_specs:
+            # Check if this is a runspec file name rather than a dataset name
+            found_runspec, runspec_data, _ = _find_runspec_by_name(dataset_spec, runspec_files)
+            
+            # Always add the dataset/runspec name for display
+            display_names.append(dataset_spec)
+            
+            if found_runspec:
+                # Add each dataset from the runspec for calculation
+                processed_datasets.extend(runspec_data.keys())
+            else:
+                # If not a runspec file, treat as a regular dataset name
+                processed_datasets.append(dataset_spec)
+        
+        if not processed_datasets:
+            logger.warning(f"[calculate_aggregates] No valid datasets found for metric '{metric_name}'")
+            continue
+        
+        # Step 3: Calculate aggregates for each model using the metric keys
+        model_agg_scores = {}
+        
+        for model_type in model_types:
+            model_scores = {}
+            
+            # For each metric key, collect values across all datasets
+            for metric_key in metric_keys:
+                values = []
+                dataset_sizes = []
+                
+                # Process each dataset
+                for dataset_name in processed_datasets:
+                    try:
+                        # Check if this dataset and model combination exists
+                        if dataset_name in all_scores and model_type in all_scores[dataset_name]:
+                            # Direct access to metrics from all_scores
+                            metrics_dict = all_scores[dataset_name][model_type]
+                            dataset_size = 1  # Default size if not specified
+                            
+                            # Check if this specific metric exists
+                            if metric_key in metrics_dict:
+                                value = metrics_dict[metric_key]
+                                if isinstance(value, (int, float)):
+                                    values.append(value)
+                                    dataset_sizes.append(dataset_size)
+                        else:
+                            logger.warning(f"[calculate_aggregates] Dataset '{dataset_name}' not found in all_scores")
+                    except KeyError as e:
+                        logger.warning(f"[calculate_aggregates] Error accessing data for {model_type} in {dataset_name}: {str(e)}")
+                
+                # Calculate weighted average for this metric key
+                if values:
+                    if sum(dataset_sizes) > 0:
+                        weighted_avg = sum(v * w for v, w in zip(values, dataset_sizes)) / sum(dataset_sizes)
+                        model_scores[metric_key] = weighted_avg
+                    else:
+                        # Fallback to simple mean if weights are all zero
+                        model_scores[metric_key] = statistics.mean(values)
+            
+            # Add scores for this model
+            if model_scores:
+                model_agg_scores[model_type] = model_scores
+            else:
+                logger.warning(f"[calculate_aggregates] No scores to aggregate for {model_type} in '{metric_name}'")
+        
+        # Add aggregate scores to the results
+        if model_agg_scores:
+            # Create a key with metric name and original runspec/dataset names
+            display_names_str = ", ".join(display_names)
+            aggregate_key = f"{metric_name} - {display_names_str}"
+            aggregate_scores[aggregate_key] = model_agg_scores
+    
+    # Add aggregate scores to all_scores
+    if aggregate_scores:
+        all_scores["aggregates"] = aggregate_scores

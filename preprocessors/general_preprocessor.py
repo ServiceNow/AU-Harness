@@ -82,10 +82,9 @@ class GeneralPreprocessor(Preprocessor):
             if target_column_name and target_column_name in record:
                 record["model_target"] = record.get(target_column_name, None)
             else:
-                possible_keys = ["reference", "answer", "text", "transcription", "sentence", 
-                                 "transcript", "normalized_text", "query"]
-                record["model_target"] = next((record[k] for k in possible_keys if k in record), 
-                                              None)
+                possible_keys = ["reference", "answer", "text", "transcription", "sentence", "transcript",
+                                 "normalized_text", "label"]
+                record["model_target"] = next((record[k] for k in possible_keys if k in record), None)
 
             if record["model_target"] is None:
                 raise ValueError("No valid target key found in record")

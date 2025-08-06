@@ -1,14 +1,4 @@
 {
-  "mmau_mini": {
-    "hf_repo": "AudioLLMs/MMAU-mini",
-    "language": "en",
-    "preprocessor": "GeneralPreprocessor",
-    "postprocessor": "GeneralPostprocessor",
-    "audio_column": "context",
-    "target_column": "answer",
-    "instruction_column": "instruction",
-    "choices_column": "choices"
-  },
   "cn_college_listen_mcq_test": {
     "hf_repo": "AudioLLMs/cn_college_listen_mcq_test",
     "language": "en",
@@ -93,6 +83,24 @@
   },
   "spoken_squad_test": {
     "hf_repo": "AudioLLMs/spoken_squad_test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+    "alpaca_audio_test": {
+    "hf_repo": "AudioLLMs/alpaca_audio_test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "openhermes_instruction_test": {
+    "hf_repo": "AudioLLMs/openhermes_instruction_test",
     "language": "en",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor",

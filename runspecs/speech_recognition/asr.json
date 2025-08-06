@@ -8,8 +8,8 @@
     "target_column": "answer",
     "instruction_column": "instruction"
   },
-  "gigaspeech2_test": {
-    "hf_repo": "AudioLLMs/gigaspeech2-test",
+  "gigaspeech_test": {
+    "hf_repo": "AudioLLMs/gigaspeech_test",
     "language": "en",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor",
@@ -2274,5 +2274,35 @@
     "postprocessor": "GeneralPostprocessor",
     "audio_column": "audio",
     "target_column": "transcription"
+  },
+  "callhome_eng": {
+    "language": "en",
+    "preprocessor": "CallhomePreprocessor",
+    "postprocessor": "CallhomePostprocessor",
+    "path": "private_datasets/CallHome_eng"
+  },
+  "callhome_deu": {
+    "language": "de",
+    "preprocessor": "CallhomePreprocessor",
+    "postprocessor": "CallhomePostprocessor",
+    "path": "private_datasets/CallHome_eng"
+  },
+  "callhome_jpn": {
+    "language": "ja",
+    "preprocessor": "CallhomePreprocessor",
+    "postprocessor": "CallhomePostprocessor",
+    "path": "private_datasets/CallHome_eng"
+  },
+  "callhome_spa": {
+    "language": "es",
+    "preprocessor": "CallhomePreprocessor",
+    "postprocessor": "CallhomePostprocessor",
+    "path": "private_datasets/CallHome_eng"
+  },
+  "callhome_zho": {
+    "language": "zh",
+    "preprocessor": "CallhomePreprocessor",
+    "postprocessor": "CallhomePostprocessor",
+    "path": "private_datasets/CallHome_eng"
   }
 }

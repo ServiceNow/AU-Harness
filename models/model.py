@@ -130,8 +130,6 @@ class Model(ABC):
             error_tracker.increment(result.response_code)
             # Make sure the error tracker is attached to the ModelResponse
             result.error_tracker = error_tracker
-            # Log that we're tracking this error
-            logger.info("[_mark_errors] Recorded error %s in error tracker: %s", result.response_code, error_tracker.__dict__)
 
     async def generate_text_with_retry(
             self, message: dict | str, run_params: dict
@@ -167,7 +165,8 @@ class Model(ABC):
                             result.error_tracker = call_errors
                         await self._mark_errors(result, call_errors)
                     except Exception as e:
-                        logger.error("Exception during text generation: %s", e)
+                        metric_name = run_params.get("metric")
+                        logger.error("Exception during text generation for metric %s: %s", metric_name, e)
                         result = ModelResponse(
                             input_prompt=str(message),
                             llm_response="",
@@ -197,8 +196,8 @@ class Model(ABC):
             await self._mark_errors(result, call_errors)
         except RetryError:
             logger.error(
-                "[%s] Request failed after %s attempts for input: %s...",
-                self.name(), self.retry_attempts, message
+                "[%s] Request failed after %s attempts",
+                self.name(), self.retry_attempts
             )
             result = ModelResponse(
                 input_prompt=message,
