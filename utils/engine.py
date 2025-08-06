@@ -11,7 +11,7 @@ from postprocessors.base import Postprocessor
 from utils.constants import metric_map, metric_output
 from utils.data_utils import _load_dataset
 from utils.metric_utils import _load_metric
-from utils.model_utils import _get_temperature_override
+from utils.model_utils import _get_temperature_override, _get_system_prompt, load_models
 from utils.request_manager import EngineRequestManager
 from utils.util import get_class_from_module
 
@@ -56,6 +56,8 @@ class Engine:
         self.task_type = task_type
         # Store temperature overrides
         self.temperature_overrides = temperature_overrides or []
+        # Store filters for system prompt access
+        self.filters = filters
         
         # Group models by their model attribute for sharding
         self.model_groups = {}
@@ -76,11 +78,18 @@ class Engine:
         if override_temp is not None:
             # Use the override temperature directly
             logger.info(f"[Engine._infer_single_model] Using override temperature {override_temp} for model {model.name()} and task {task_type}")
-            model.temperature = override_temp
-            model.req_resp_hndlr.temperature = override_temp
+            model.set_temp(override_temp)
         else:
             # Use the standard task-based temperature setting
-            model.set_temp(task_type)
+            model.set_temp_task_type(task_type)
+        
+        # Check for system prompt for this specific model and dataset combination
+        system_prompts = self.filters.get('system_prompts', None)
+        system_prompt = _get_system_prompt(model.name(), self.dataset_name, system_prompts)
+        if system_prompt:
+            logger.info(f"[Engine._infer_single_model] Using system prompt for model {model.name()} and dataset {self.dataset_name}: {system_prompt}")
+            model.set_system_prompt(system_prompt)
+        
         # Get model type for request management
         model_type = model.model  # The actual model type (e.g., "gpt-4o-mini-audio-preview")
         # Generate a unique model instance ID
@@ -317,7 +326,7 @@ class Engine:
         logger.info("[Engine.run] Evaluation complete. Returning scores.")
         return scores
 
-def create_engines(dataset_name, dataset_info, task_type, metric_name, filters, models, temperature_overrides, judge_properties, central_request_controller):
+def create_engine(dataset_name, dataset_info, task_type, metric_name, filters, model_configs, temperature_overrides, judge_properties, central_request_controller):
     """
     Process a dataset and run evaluation on it.
     
@@ -327,7 +336,7 @@ def create_engines(dataset_name, dataset_info, task_type, metric_name, filters, 
         task_type: Type of task for temperature settings
         metric_name: Name of the metric to use
         filters: Dictionary containing filter settings
-        models: List of model instances
+        model_configs: List of model configurations
         temperature_overrides: List of temperature override configurations
         judge_properties: Dictionary of judge properties
         central_request_controller: The central request controller instance
@@ -352,6 +361,9 @@ def create_engines(dataset_name, dataset_info, task_type, metric_name, filters, 
             return False
     
     logger.info(f"[_process_dataset] Creating engine for dataset '{dataset_name}' with metric '{metric_name}' ...")
+    
+    # Load models for this engine - each engine gets its own instances
+    models = load_models(model_configs)
     
     # Create engine ID and request manager
     engine_id = f"{dataset_name}_{metric_name}_{int(time.time())}"

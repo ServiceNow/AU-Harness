@@ -70,7 +70,9 @@ filters:
   length_filter: [1.0, 30.0] # optional - filters for only audio samples in this length(seconds)
   accented: false # optional - filters for only audio samples in this length(seconds)
   language: "en" # optional - filters for only audio samples in this language - use language code
-  system_prompts: ["audio_expert"] # optional - system prompts for each sample
+  system_prompts: # Follow the format of ["system_prompt_key", ["model_name", "dataset/runspec/category_name"]]
+    - ["audio_expert", ["gpt-4o-mini-audio-preview", "emotion_recognition"]]
+    - ["summary_expert", ["qwen_2_audio", "spoken_dialogue_summarization"]]
 ```
 
 #### Result Aggregation

@@ -104,6 +104,32 @@ def _find_dataset_in_runspecs(dataset_name, runspec_files):
     logger.warning("[find_dataset_in_runspecs] Dataset '%s' not found in any runspec file", dataset_name)
     return False, {}, None
 
+def _get_task_type_datasets(task_type: str, runspec_files):
+    """
+    Get all datasets that belong to a specific task type (directory name).
+    
+    Args:
+        task_type: Name of the task type directory (e.g., "paralinguistics")
+        runspec_files: List of runspec files to search in
+    
+    Returns:
+        Set of dataset names that belong to this task type
+    """
+    datasets = set()
+    
+    for runspec_file in runspec_files:
+        # Check if this runspec file is in the specified task type directory
+        if runspec_file.parent.name == task_type:
+            try:
+                with open(runspec_file, 'r', encoding='utf-8') as f:
+                    runspec_db = json.load(f)
+                # Add all dataset names from this runspec
+                datasets.update(runspec_db.keys())
+            except Exception as e:
+                continue
+    
+    return datasets
+
 def smart_round(val: float, precision: int = constants.ROUND_DIGITS) -> float:
     """Round off metrics to global precision value.
 
@@ -243,8 +269,21 @@ def _validate_filter_values(filters: Dict) -> None:
         if not isinstance(filters['system_prompts'], list):
             raise ValueError("'system_prompts' must be a list")
         for i, item in enumerate(filters['system_prompts']):
-            if not isinstance(item, str):
-                raise ValueError(f"'system_prompts' item {i+1} must be a string")
+            if not isinstance(item, list) or len(item) != 2:
+                raise ValueError(f"'system_prompts' item {i+1} must be a list with exactly 2 elements")
+            
+            # First element must be a non-empty string (prompt key)
+            if not isinstance(item[0], str) or not item[0].strip():
+                raise ValueError(f"'system_prompts' item {i+1}: first element must be a non-empty string")
+            
+            # Second element must be a list with exactly 2 elements [model_name, dataset_name]
+            if not isinstance(item[1], list) or len(item[1]) != 2:
+                raise ValueError(f"'system_prompts' item {i+1}: second element must be a list with exactly 2 elements")
+            
+            # Both model_name and dataset_name must be non-empty strings
+            for j, element in enumerate(item[1]):
+                if not isinstance(element, str) or not element.strip():
+                    raise ValueError(f"'system_prompts' item {i+1}, criteria {j+1} must be a non-empty string")
     
     # Validate length_filter if present
     if 'length_filter' in filters:
@@ -507,8 +546,10 @@ def read_config(cfg_path: str):
     judge_properties = cfg.get("judge_properties", {})
     filters = cfg.get("filters", {})
     temperature_overrides = cfg.get("temperature_overrides", None)
+    aggregates = cfg.get("aggregate", [])
+
     
-    return cfg, judge_properties, filters, temperature_overrides
+    return cfg, judge_properties, filters, temperature_overrides, aggregates
     
 def expand_dataset_metric_pairs(cfg: dict) -> list[tuple[str, str, dict, str]]:
     """
@@ -557,14 +598,14 @@ def expand_dataset_metric_pairs(cfg: dict) -> list[tuple[str, str, dict, str]]:
     
     return expanded_pairs
 
-def _calculate_aggregates(aggregates, all_scores, models):
+def _calculate_aggregates(aggregates, all_scores, model_configs):
     """
     Process aggregate metrics by calculating means across multiple datasets for a specific metric.
     
     Args:
         aggregates: List of aggregate configurations from the config file in format [metric_name, [dataset1, dataset2, ...]]
         all_scores: Dictionary of scores keyed by dataset_metric pairs
-        models: List of model instances used for evaluation
+        model_configs: List of model configurations used for evaluation
     """
     logger.info("[calculate_aggregates] Processing aggregate metrics...")
 
@@ -572,8 +613,8 @@ def _calculate_aggregates(aggregates, all_scores, models):
     
     # Get unique model types
     model_types = set()
-    for model in models:
-        model_type = model.model  # The model type (e.g., "gpt-4o-mini-audio-preview")
+    for model_config in model_configs:
+        model_type = model_config["info"].get("model")  # The model type (e.g., "gpt-4o-mini-audio-preview")
         if model_type:
             model_types.add(model_type)
         

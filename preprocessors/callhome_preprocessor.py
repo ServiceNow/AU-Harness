@@ -342,7 +342,7 @@ class CallhomePreprocessor(Preprocessor):
         props = self.extract_properties(properties)
         metric = props["metric"]
         user_prompt_add_ons = props["user_prompt_add_ons"]
-        system_prompts = props["system_prompts"]
+        system_prompts = properties.get("system_prompts", []) if properties else []
         length_filter = props["length_filter"]
 
         # Set base instruction depending on metric

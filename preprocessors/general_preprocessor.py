@@ -35,7 +35,6 @@ class GeneralPreprocessor(Preprocessor):
         # Extract common properties using base class method
         props = self.extract_properties(properties)
         user_prompt_add_ons = props["user_prompt_add_ons"]
-        system_prompts = props["system_prompts"]
         length_filter = props["length_filter"]
         modality = props.get("dataset_info", {}).get("modality", "audio")
         audio_column_name = props.get("dataset_info", {}).get("audio_column", None)
@@ -44,9 +43,8 @@ class GeneralPreprocessor(Preprocessor):
         user_query_column_name = props.get("dataset_info", {}).get("textual_input_column", None)
         choices_column_name = props.get("dataset_info", {}).get("choices_column", None)
 
-        # Load prompt add-ons and system prompts using base class method
+        # Load prompt add-ons using base class method
         prompt_add_ons = self.load_yaml_file("prompt_add_ons.yaml")
-        system_prompts_mapping = self.load_yaml_file("system_prompts.yaml")
 
         # Get dataset keys and size
         keys = list(dataset.keys())
@@ -107,11 +105,6 @@ class GeneralPreprocessor(Preprocessor):
                 logger.warning("Instruction is empty for sample %d, add prompt add-ons for instruction insertion", i)
             record["instruction"] = instruction.strip()
 
-            # Process system prompts
-            system_prompt_text = "\n\n".join(
-                system_prompts_mapping[k] for k in system_prompts if k in system_prompts_mapping)
-            if system_prompt_text:
-                record["system_prompt"] = system_prompt_text
 
             record["judge_type"] = properties.get("judge_type", "detailed")
             new_dataset.append(record)

@@ -153,7 +153,6 @@ class BfclPreprocessor(Preprocessor):
                 "array": audio_array,
                 "sampling_rate": sr,
                 "audio_content_in_text": prompt,
-                "system_prompt": system_prompt,
                 "instruction": instruction,
                 "tools": function,
                 "reference": reference,

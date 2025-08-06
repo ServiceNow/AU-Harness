@@ -54,6 +54,8 @@ class Model(ABC):
         self.chunk_size = model_info.get("chunk_size", 30)
         # temperature for LLM requests (default 0.7)
         self.temperature = temperature
+        # system prompt for LLM requests
+        self.system_prompt = None
         # some flow does not work with async client like internal private network
         self.postprocessor_path = model_info.get("postprocessor", [])
         # model_name = model_info.get("model", model_info.get("alias", self.name()))
@@ -75,17 +77,32 @@ class Model(ABC):
         """
         return self._name
 
-    def set_temp(self, task_type: str) -> None:
+    def set_temp(self, temperature: float) -> None:
+        """Set temperature for the model and request handler.
+        
+        Args:
+            temperature: Temperature value to set.
+        """
+        self.temperature = temperature
+        self.req_resp_hndlr.temperature = temperature
+
+    def set_temp_task_type(self, task_type: str) -> None:
         """Set temperature based on task type using task_temp_map.
         
         Args:
             task_type: The type of task being performed.
         """
         if task_type in task_temp_map:
-            self.temperature = task_temp_map[task_type]
-            # Also update the request handler's temperature
-            self.req_resp_hndlr.temperature = self.temperature
-            logging.info("[Model.set_temp] Set temperature to %s for task type %s and model %s", self.temperature, task_type, self.name())
+            self.set_temp(task_temp_map[task_type])
+
+    def set_system_prompt(self, system_prompt: str) -> None:
+        """Set system prompt for the model.
+        
+        Args:
+            system_prompt: System prompt text to set.
+        """
+        logging.info("[Model.set_system_prompt] Set system prompt for model %s: %s", self.name(), system_prompt)
+        self.system_prompt = system_prompt
 
     def _is_retryable_error(self, result: ModelResponse):
         """Check if the error is a rate limit error by checking response code."""
@@ -283,11 +300,10 @@ class Model(ABC):
                     messages = []
 
                     # Add system prompt if available
-                    system_prompt = message.get("system_prompt")
-                    if system_prompt:
+                    if self.system_prompt:
                         messages.append({
                             "role": "system",
-                            "content": system_prompt
+                            "content": self.system_prompt
                         })
 
                     # Handle text-only vs audio+text scenarios
@@ -358,11 +374,10 @@ class Model(ABC):
             messages = []
 
             # Add system prompt if available
-            system_prompt = message.get("system_prompt")
-            if system_prompt:
+            if self.system_prompt:
                 messages.append({
                     "role": "system",
-                    "content": system_prompt
+                    "content": self.system_prompt
                 })
 
             # Handle text-only vs audio+text scenarios
