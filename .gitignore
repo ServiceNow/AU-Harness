@@ -12,7 +12,7 @@ config.yaml
 *.out
 *.csv
 
-#private datasets
+# callhome local files
 *.cha
 *.wav
 
@@ -21,9 +21,6 @@ __pycache__/
 **/__pycache__/
 *.py[cod]
 .DS_Store
-
-# datasets
-private_datasets/
 
 # local configs
 .venv/

@@ -8,7 +8,6 @@ from num2words import num2words
 from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
 from metrics.base_metric_metadata import MetricMetadata
 from metrics.metrics import Metrics
 from utils.custom_logging import write_record_log, append_final_score

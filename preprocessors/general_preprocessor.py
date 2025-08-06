@@ -21,7 +21,6 @@ class GeneralPreprocessor(Preprocessor):
             properties: Optional dict of properties, may include 'length_filter' tuple (min_seconds, max_seconds)
                        to filter samples by audio length.
         """
-        logger.info("In [GeneralPreprocessor] Processing dataset...")
 
         # Extract common properties using base class method
         props = self.extract_properties(properties)
@@ -74,7 +73,7 @@ class GeneralPreprocessor(Preprocessor):
                 record["model_target"] = record.get(target_column_name, None)
             else:
                 possible_keys = ["reference", "answer", "text", "transcription", "sentence", "transcript",
-                                 "normalized_text"]
+                                 "normalized_text", "label"]
                 record["model_target"] = next((record[k] for k in possible_keys if k in record), None)
 
             if record["model_target"] is None:

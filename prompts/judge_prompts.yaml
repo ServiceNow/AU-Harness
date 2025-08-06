@@ -18,6 +18,7 @@ binary_judge_prompt: |-
     "explanation": (string, provide a concise explanation of your rating, comparing the reference answer with the model's response. For example: "The reference answer is [XXX], while the model's answer is [YYY]. I think …")
   }}
   Do not return anything except this JSON object.
+
 detailed_judge_prompt: |-
   [Persona]
   You are an expert evaluator, who specialized in seeing how well a model-generated candidate answer aligns with a reference answer.
@@ -98,3 +99,7 @@ big_bench_audio_judge_prompt: |-
     END CANDIDATE ANSWER TO ASSESS
 
     Reply only with CORRECT or INCORRECT.
+
+Sample-model_binary_judge_prompt: |-
+  This is a sample override prompt for the binary judge prompt 
+  Simple replace the "Sample-model with your model name, and specify the same name in config param 'judge_prompt_model_override'"

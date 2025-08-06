@@ -1,10 +1,10 @@
+import json
+from pathlib import Path
 import logging
 import re
 
 from postprocessors.base import Postprocessor
-from utils.custom_logging import configure
 
-configure()
 logger = logging.getLogger(__name__)
 logger.propagate = True
 
@@ -27,7 +27,6 @@ class CallhomePostprocessor(Postprocessor):
         Returns:
             dict[str, list[str]]: Dictionary with processed predictions
         """
-        logger.info("Processing predictions with CallhomePostprocessor...")
         processed_predictions = {}
 
         for model_name, preds in predictions.items():
@@ -52,7 +51,6 @@ class CallhomePostprocessor(Postprocessor):
             list: List of extracted and processed targets
         """
         targets = [self.split_inline_speaker_labels(record.get(target_key, "")) for record in dataset]
-        logger.info(f"Extracted and processed {len(targets)} targets from dataset")
         return targets
 
     def extract_audio_metadata(self, dataset: list[dict]) -> tuple[list, list]:

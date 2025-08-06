@@ -10,3 +10,5 @@ meld_sentiment: |-
   Choose from the following options: positive, negative, neutral
 iemocap_emotion: |-
   Choose from the following options: anger, happiness, excitement, sadness, frustration, fear, surprise, neutral
+spoofing_detection: |-
+  Choose from the following options: authentic, spoofed
