@@ -29,7 +29,7 @@ class BleuMetrics(Metrics):
             write_record_log(self, references, candidates, scores, dataset_name, model_name,
                            instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score
-            append_final_score(self, overall, dataset_name, model_name)
+            append_final_score(self, overall, dataset_name, model_name, self.model_responses)
         return overall
 
     def __init__(self, max_ngram_order=4):
