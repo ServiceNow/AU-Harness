@@ -63,45 +63,63 @@ metric_map = {
     "meteor": ("metrics.meteor_score", "MeteorScore"),
     'sql_score': ("metrics.sql_score", "SqlScore"),
     "word_error_rate": ("metrics.word_error_rate_metrics", "WERMetrics"),
+    "comet": ("metrics.comet_score", "CometScore"),
+
 }
 
 task_temp_map = {
+    # ASR
     "asr": 0.1,
-    "accent_recognition": 0.2,
     "code_switching_asr": 0.1,
+    "long_form_asr": 0.1,
+
+    # Paralinguistics
     "emotion_recognition": 0.2,
     "gender_recognition": 0.2,
-    "long_form_asr": 0.1,
-    "music_understanding": 0.7,
-    "scene_qa": 0.4,
-    "scene_captioning": 0.7,
+    "accent_recognition": 0.2,
     "speaker_recognition": 0.2,
-    "speech_instuction": 0.7,
-    "spoken_qa": 0.5,
-    "spoken_dialogue_summarization": 0.8,
+
+    # Spoken Language Understanding
+    "speech_qa": 0.5,
+    "sqqa": 0.5,
     "translation": 0.2,
+    "scene_understanding": 0.5,
+    "spoken_dialogue_summarization": 0.8,
+    "music_understanding": 0.7,
+
 }
 
 allowed_task_metrics = {
-    'callhome': ['llm_judge_callhome', 'word_error_rate', 'diarization_metrics'],
-    'accent_recognition': ['llm_judge_binary'],
-    'emotion_recognition': ['llm_judge_binary'],
-    'gender_recognition': ['llm_judge_binary'],
-    'speaker_recognition': ['llm_judge_binary'],
+    # ASR
     'asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
     'code_switching_asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
     'long_form_asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
+
+    # Paralinguistics
+    'emotion_recognition': ['llm_judge_binary'],
+    'gender_recognition': ['llm_judge_binary'],
+    'accent_recognition': ['llm_judge_binary'],
+    'speaker_recognition': ['llm_judge_binary'],
+    'speaker_diarization': ['diarization_metrics'],
+
+
+    # Spoken Language Understanding
+    'speech_qa': ['llm_judge_detailed', 'llm_judge_binary'],
+    'sqqa': ['llm_judge_big_bench_audio', 'llm_judge_binary'],
     'translation': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
+    'scene_understanding': ['llm_judge_binary', 'llm_judge_detailed'],
+    'spoken_dialogue_summarization': ['llm_judge_detailed'],
+    'intent_classification': ['llm_judge_binary'],
+    'music_understanding': ['llm_judge_binary'],
+
+    # Spoken Language Reasoning
     'bfcl': ['bfcl_match_score'],
     'ifeval': ['instruction_following'],
     'speech_to_sql': ['sql_score'],
-    'music_understanding': ['llm_judge_binary'],
-    'scene_captioning': ['llm_judge_detailed'],
-    'scene_qa': ['llm_judge_binary', 'llm_judge_detailed'],
-    'speech_instruction': ['llm_judge_detailed'],
-    'spoken_dialogue_summarization': ['llm_judge_detailed'],
-    'spoken_qa': ['llm_judge_detailed', 'llm_judge_binary'],
-    'sqqa': ['llm_judge_big_bench_audio', 'llm_judge_binary'],
+    
+    # Safety and Security
+    'safety': ['llm_judge_detailed'],
+    'spoofing': ['llm_judge_detailed', 'llm_judge_binary'],
 }
 
 metric_output = {
@@ -116,7 +134,8 @@ metric_output = {
     "bfcl_match_score": ["final"],
     "sql_score": ["sql_score"],  # need to find real metric
     "instruction_following": ["strict_instruction", "loose_instruction", "final"],
-    "diarization_metrics": ["average_sample_wder", "overall_wder", "average_sample_cpwer", "overall_cpwer", "speaker_count_absolute_error"]
+    "diarization_metrics": ["average_sample_wder", "overall_wder", "average_sample_cpwer", "overall_cpwer", "speaker_count_absolute_error"],
+    "comet": ["comet"]
 }
 
 # Dictionary mapping language names to their standard codes

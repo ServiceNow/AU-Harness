@@ -41,20 +41,19 @@ class VoiceBenchIfevalPreprocessor(Preprocessor):
 
         # Extract properties using the base class method
         props = self.extract_properties(properties)
+        # Dataset subset of VoiceBench (i.e. ifeval, advbench)
+        subset_name = props.get("dataset_info",{}).get("subset",'') 
         modality = props.get("dataset_info", {}).get("modality", "audio")
 
         # Get dataset info using base class method
         dataset_keys = list(dataset.keys())
-        dataset_size = len(dataset.get("key", []))
+        dataset_size = len(dataset.get('prompt', []))
         self.log_dataset_info(dataset_keys, dataset_size)
 
         processed_data = []
-        dataset_size = len(dataset.get("key", []))
         indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
 
         for i in tqdm(indices, desc="Processing samples"):
-            key = dataset["key"][i]
-
             if modality == "text":
                 audio_data = {
                     "array": np.array([]),  # Placeholder, not used in text-only evals
@@ -64,8 +63,6 @@ class VoiceBenchIfevalPreprocessor(Preprocessor):
                 audio_data = dataset["audio"][i]
 
             prompt = dataset["prompt"][i]
-            instruction_id_list = dataset["instruction_id_list"][i]
-            kwargs = dataset["kwargs"][i]
 
             if modality == "audio":
                 # Validate audio data structure
@@ -97,15 +94,23 @@ class VoiceBenchIfevalPreprocessor(Preprocessor):
 
             # Create structured sample
             sample = {
-                "id": key,
                 "array": audio_array if modality == "audio" else audio_data["array"],
                 "sampling_rate": sr if modality == "audio" else audio_data["sampling_rate"],
                 "audio_content_in_text": prompt,
                 "instruction": instruction,
-                "instruction_id_list": instruction_id_list,
-                "kwargs": kwargs,
-                "model_target": (instruction_id_list, kwargs, prompt),
+                "model_target": (prompt)
             }
+
+            # Handle additional keys for IFEval (overwrite if needed)
+            if (subset_name == 'ifeval'):
+                key = dataset['key'][i]
+                instruction_id_list = dataset["instruction_id_list"][i]
+                kwargs = dataset["kwargs"][i]
+
+                sample['id'] = key
+                sample['instruction_id_list'] = instruction_id_list
+                sample['kwargs'] = kwargs
+                sample["model_target"] = (instruction_id_list, kwargs, prompt)
 
             processed_data.append(sample)
 
