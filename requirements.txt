@@ -1,7 +1,5 @@
-#Python 3.12
-
 # Core numerical & data libraries
-numpy==1.26.0
+numpy==1.26.4
 
 # Data loading
 huggingface-hub==0.33.2
@@ -44,6 +42,9 @@ soundfile==0.13.1        # librosa dependency, explicitly required
 word-levenshtein         # alignment tool for diarization metrics
 
 langdetect==1.0.9
+
+# Required for handling nested event loops
+nest_asyncio==1.6.0
 immutabledict==4.2.1
 
 # Debugging

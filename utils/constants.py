@@ -108,8 +108,18 @@ allowed_task_metrics = {
     'bfcl': ['bfcl_match_score'],
     'ifeval': ['instruction_following'],
     'speech_to_sql': ['sql_score'],
+<<<<<<< HEAD
     
     # Safety and Security
+=======
+    'music_understanding': ['llm_judge_binary'],
+    'scene_captioning': ['llm_judge_detailed'],
+    'scene_qa': ['llm_judge_binary', 'llm_judge_detailed'],
+    'speech_instruction': ['llm_judge_detailed'],
+    'spoken_dialogue_summarization': ['llm_judge_detailed'],
+    'spoken_qa': ['llm_judge_detailed', 'llm_judge_binary'],
+    'sqqa': ['llm_judge_big_bench_audio', 'llm_judge_binary'],
+>>>>>>> main
     'safety': ['llm_judge_detailed'],
     'spoofing': ['llm_judge_detailed', 'llm_judge_binary'],
 }

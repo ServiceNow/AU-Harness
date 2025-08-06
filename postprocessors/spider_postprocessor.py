@@ -1,9 +1,7 @@
 import re
 import logging
-from utils.custom_logging import configure
 from postprocessors.base import Postprocessor
 
-configure()
 logger = logging.getLogger(__name__)
 logger.propagate = True
 

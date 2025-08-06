@@ -839,7 +839,6 @@ def print_formated_s(row_name: str, element_list: list, element_format: str):
         element_format (str): The format string for each element.
     """
     template = "{:20} " + " ".join([element_format] * len(element_list))
-    logger.info(template.format(row_name, *element_list))
 
 
 def prepare_scores(scores: dict, etype: str, include_turn_acc: bool = True) -> dict:
@@ -983,7 +982,6 @@ def evaluate(
 
     for i, (p, g) in enumerate(zip(plist, glist)):
         if (i + 1) % 10 == 0:
-            logger.info("Evaluating %dth prediction" % (i + 1))
         scores["joint_all"]["count"] += 1
         turn_scores = {"exec": [], "exact": []}
         for idx, pg in enumerate(zip(p, g)):
@@ -1058,9 +1056,6 @@ def evaluate(
                 partial_scores = evaluator.partial_scores
                 if exact_score == 0:
                     turn_scores["exact"].append(0)
-                    logger.info("{} pred: {}".format(hardness, p_str))
-                    logger.info("{} gold: {}".format(hardness, g_str))
-                    logger.info("")
                 else:
                     turn_scores["exact"].append(1)
                 scores[turn_id]["exact"] += exact_score

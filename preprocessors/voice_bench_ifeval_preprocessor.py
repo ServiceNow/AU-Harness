@@ -33,7 +33,6 @@ class VoiceBenchIfevalPreprocessor(Preprocessor):
             A list of dictionaries where each dictionary represents a sample
         """
 
-        logger.info("In [VoiceBenchIfevalPreprocessor] Processing dataset...")
 
         # Extract properties using the base class method
         props = self.extract_properties(properties)

@@ -96,12 +96,10 @@ class SpiderPreprocessor(Preprocessor):
             A list of dictionaries where each dictionary represents a sample
         """
         
-        logger.info("In [SpiderPreprocessor] Processing dataset...")  
 
         # Extract properties using the base class method
         props = self.extract_properties(properties)
         modality = props.get("modality", "audio")
-        logger.info(f"Processing modality: {modality}")
 
         # Get dataset info using base class method
         dataset_keys = list(dataset.keys())

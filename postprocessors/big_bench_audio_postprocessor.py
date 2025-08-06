@@ -1,9 +1,7 @@
 import logging
 
 from postprocessors.base import Postprocessor
-from utils.custom_logging import configure
 
-configure()
 logger = logging.getLogger(__name__)
 logger.propagate = True
 
@@ -35,7 +33,6 @@ class BigBenchAudioPostprocessor(Postprocessor):
         Returns:
             dict: Dictionary containing processed data for evaluation including targets and processed predictions.
         """
-        logger.info("Processing predictions with BigBenchAudioPostprocessor...")
 
         # Process predictions using base class method
         processed_predictions = self.process_predictions(predictions)
@@ -50,7 +47,6 @@ class BigBenchAudioPostprocessor(Postprocessor):
         # Extract instructions using base class method
         instructions = self.extract_instructions(dataset)
 
-        logger.info(f"Extracted {len(targets)} target-reference pairs from dataset.")
 
         # Create standardized output using base class method
         return self.create_output(

@@ -35,7 +35,6 @@ class BigBenchAudioPreprocessor(Preprocessor):
           including the audio array resampled to 16kHz, metadata, and target label.
         """
 
-        logger.info("In [BigBenchAudioPreprocessor] Processing dataset...")
 
         dataset_keys = list(dataset.keys())
         dataset_size = len(dataset.get("id", []))

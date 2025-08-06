@@ -11,9 +11,6 @@ from tenacity import (
     wait_random_exponential,
 )
 
-from utils.custom_logging import configure
-
-configure()
 import logging
 
 logger = logging.getLogger(__name__)

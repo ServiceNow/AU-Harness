@@ -36,8 +36,6 @@ class BfclPreprocessor(Preprocessor):
             A list of dictionaries where each dictionary represents a sample
         """
 
-        logger.info("In [BFCLPreprocessor] Processing dataset...")
-
         # Extract properties using the base class method
         props = self.extract_properties(properties)
         modality = props.get("dataset_info", {}).get("modality", "audio")

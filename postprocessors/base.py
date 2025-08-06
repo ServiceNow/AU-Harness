@@ -49,7 +49,6 @@ class Postprocessor():
         Returns:
             dict[str, list[str]]: Dictionary with processed predictions as strings
         """
-        logger.info("Processing predictions...")
         processed_predictions = {}
 
         for model_name, preds in predictions.items():
@@ -79,7 +78,6 @@ class Postprocessor():
             list: List of extracted targets
         """
         targets = [record[target_key] for record in dataset if target_key in record]
-        logger.info(f"Extracted {len(targets)} targets from dataset")
         return targets
 
     def extract_instructions(self, dataset: list[dict], instruction_key="instruction") -> list:
