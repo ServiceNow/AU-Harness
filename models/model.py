@@ -130,8 +130,6 @@ class Model(ABC):
             error_tracker.increment(result.response_code)
             # Make sure the error tracker is attached to the ModelResponse
             result.error_tracker = error_tracker
-            # Log that we're tracking this error
-            logger.info("[_mark_errors] Recorded error %s in error tracker: %s", result.response_code, error_tracker.__dict__)
 
     async def generate_text_with_retry(
             self, message: dict | str, run_params: dict

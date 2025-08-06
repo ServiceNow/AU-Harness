@@ -494,8 +494,6 @@ def read_config(cfg_path: str):
         raw_cfg = yaml.safe_load(f)
     log_file = raw_cfg.get("logging", {}).get("log_file", "default.log")
     setup_logging(log_file)
-
-    logger.info(f"[read_config] Loading config from {cfg_path}")
     
     # Validate the configuration file
     try:

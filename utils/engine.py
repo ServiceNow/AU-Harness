@@ -251,7 +251,6 @@ class Engine:
         logger.info(f"[Engine.run] Predictions complete for {self.dataset_name}. Calculating scores...")
         scores = {}
         # Pass the metric name to the postprocessor
-        logger.info("raw_predictions: %s", raw_predictions)
         process_result = self.postprocessor.process(dataset=self.dataset, predictions=raw_predictions, metric=self.metric.name)
         # Extract values from the dictionary returned by the postprocessor
         model_targets = process_result["model_targets"]
@@ -401,7 +400,5 @@ async def run_all_engines(all_engines):
                 
             # Add model scores to the right metric bucket
             for model_name, scores in model_scores.items():
-                all_scores[dataset_name][metric_name][model_name] = scores
-    logger.info(f"[run_all_engines] Evaluation complete. Final results:")
-    logger.info(json.dumps(all_scores, indent=2))             
+                all_scores[dataset_name][metric_name][model_name] = scores           
     return all_scores
