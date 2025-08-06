@@ -45,7 +45,6 @@ class InstructionFollowingScore(Metrics):
 
         # Write detailed record-level logs (if dataset_name and model_name provided)
         if dataset_name and model_name:
-            append_final_score(self, results, dataset_name, model_name)
             write_record_log(
                 self,
                 refs=[ref[2] for ref in references],
@@ -56,6 +55,7 @@ class InstructionFollowingScore(Metrics):
                 explanations=None,
                 instructions=instructions
             )
+            append_final_score(self, results, dataset_name, model_name)
         return results
 
     def _compute_outputs(

@@ -284,11 +284,9 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):  # noqa: D401
             overall[self.name] *= 100
         if dataset_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
-            # write_record_log will also write to run.log internally
             explanations = getattr(self, "explanations", None)
             write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, 
                            instructions=self.instructions, model_responses=self.model_responses)
-            # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
         return overall
 
@@ -322,11 +320,9 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):
             overall[self.name] *= 20
         if dataset_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
-            # write_record_log will also write to run.log internally
             explanations = getattr(self, "explanations", None)
             write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, 
                           instructions=self.instructions, model_responses=self.model_responses)
-            # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
         return overall
 
@@ -354,11 +350,9 @@ class CallHomeLLMJudgeMetric(_BaseLLMJudge):
             overall[self.name] *= 10
         if dataset_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
-            # write_record_log will also write to run.log internally
             explanations = getattr(self, "explanations", None)
             write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations, 
                       instructions=self.instructions, model_responses=self.model_responses)
-            # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
         return overall
         
@@ -435,10 +429,8 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
         }
 
         if dataset_name and model_name:
-            # write_record_log will also write to run.log internally
             write_record_log(self, references, candidates, all_scores, dataset_name, model_name, 
                        instructions=self.instructions, model_responses=self.model_responses)
-            # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
 
         return overall

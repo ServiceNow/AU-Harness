@@ -3,7 +3,6 @@ from metrics.metrics import Metrics
 from utils.custom_logging import write_record_log, append_final_score
 from tqdm import tqdm
 from metrics.word_error_rate_metrics import normalize_text
-from utils.custom_logging import write_record_log, append_final_score
 
 
 class BertScore(Metrics):

@@ -191,7 +191,6 @@ class DiarizationMetrics(Metrics):
 
             write_record_log(self, references, candidates, scores, dataset_name, model_name,
                              instructions=self.instructions)
-            # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name)
         return overall
 
