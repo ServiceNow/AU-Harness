@@ -192,7 +192,7 @@ class RequestRespHandler:
                 )
 
         except (httpx.RequestError, httpx.HTTPStatusError, ValueError, OSError) as e:
-            logger.error("Attempt %s: audio_raw_response=%r", self.current_attempt, e)
+            logger.error("Attempt %s", self.current_attempt)
             # First attempt to wrap the error in ModelResponse
             try:
                 # Increment the appropriate counter based on error type

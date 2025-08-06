@@ -182,8 +182,6 @@ class Engine:
         # Prepare all tasks for concurrent execution
         for model_type, models in self.model_groups.items():
             if len(models) > 1:  # Multiple instances of the same model type - need sharding
-                logger.info(
-                    f"[Engine._infer_all] Sharding dataset for {len(models)} instances of model type '{model_type}'")
                 # Divide dataset among model instances
                 shard_size = len(self.dataset) // len(models)
                 
