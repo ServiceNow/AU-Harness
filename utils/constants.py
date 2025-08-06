@@ -66,41 +66,43 @@ task_temp_map = {
     "long_form_ASR": 0.1,
 
     # Paralinguistics
-    "speaker_recognition": 0.2,
-    "accent_recognition": 0.2,
     "emotion_recognition": 0.2,
     "gender_recognition": 0.2,
+    "accent_recognition": 0.2,
+    "speaker_recognition": 0.2,
 
     # Spoken Language Understanding
-    "music_understanding": 0.7,
-    "scene_QA": 0.4,
-    "scene_captioning": 0.7,
     "speech_qa": 0.5,
-    "spoken_dialogue_summarization": 0.8,
+    "sqqa": 0.5,
     "translation": 0.2,
+    "scene_understanding": 0.5,
+    "spoken_dialogue_summarization": 0.8,
+    "music_understanding": 0.7,
+
 }
 
 allowed_task_metrics = {
     # ASR
-    'speaker_recognition': ['llm_judge_binary'],
     'asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
     'code_switching_asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
     'long_form_asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
 
     # Paralinguistics
-    'speaker_diarization': ['diarization_metrics'],
-    'accent_recognition': ['llm_judge_binary'],
     'emotion_recognition': ['llm_judge_binary'],
     'gender_recognition': ['llm_judge_binary'],
+    'accent_recognition': ['llm_judge_binary'],
+    'speaker_recognition': ['llm_judge_binary'],
+    'speaker_diarization': ['diarization_metrics'],
+
 
     # Spoken Language Understanding
-    'music_understanding': ['llm_judge_binary'],
-    'scene_understanding': ['llm_judge_binary', 'llm_judge_detailed'],
-    'spoken_dialogue_summarization': ['llm_judge_detailed'],
     'speech_qa': ['llm_judge_detailed', 'llm_judge_binary'],
     'sqqa': ['llm_judge_big_bench_audio', 'llm_judge_binary'],
     'translation': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
+    'scene_understanding': ['llm_judge_binary', 'llm_judge_detailed'],
+    'spoken_dialogue_summarization': ['llm_judge_detailed'],
     'intent_classification': ['llm_judge_binary'],
+    'music_understanding': ['llm_judge_binary'],
 
     # Spoken Language Reasoning
     'bfcl': ['bfcl_match_score'],
