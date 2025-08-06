@@ -1,10 +1,13 @@
 import logging
 from typing import Dict, List, Optional, Any
+
 import numpy as np
-from preprocessors.base import Preprocessor
 from tqdm import tqdm
 
+from preprocessors.base import Preprocessor
+
 logger = logging.getLogger(__name__)
+
 
 class BigBenchAudioPreprocessor(Preprocessor):
     """
@@ -13,10 +16,10 @@ class BigBenchAudioPreprocessor(Preprocessor):
     """
 
     def process(
-        self, 
-        dataset: Dict[str, List[Any]], 
-        num_samples: Optional[int] = None, 
-        properties: Optional[Dict[str, Any]] = None
+            self,
+            dataset: Dict[str, List[Any]],
+            num_samples: Optional[int] = None,
+            properties: Optional[Dict[str, Any]] = None
     ) -> List[Dict[str, Any]]:
         """
         Process the BigBenchAudio dataset to ensure consistent audio format and structured data.
@@ -31,8 +34,7 @@ class BigBenchAudioPreprocessor(Preprocessor):
         - List[Dict[str, Any]]: A list of dictionaries where each dictionary represents a sample,
           including the audio array resampled to 16kHz, metadata, and target label.
         """
-        
-        logger.info("In [BigBenchAudioPreprocessor] Processing dataset...")
+
 
         # Extract properties using the base class method
         props = self.extract_properties(properties)
@@ -41,12 +43,11 @@ class BigBenchAudioPreprocessor(Preprocessor):
 
         dataset_keys = list(dataset.keys())
         dataset_size = len(dataset.get("id", []))
-        self.log_dataset_info(dataset_keys, dataset_size)
-        
+
         processed_data = []
         dataset_size = len(dataset.get("id", []))
         indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
-        
+
         for i in tqdm(indices, desc="Processing samples"):
             # Create record by accessing each feature by index
             sample_id = dataset["id"][i]
@@ -62,7 +63,7 @@ class BigBenchAudioPreprocessor(Preprocessor):
             if modality == "audio":
                 # Validate audio data structure
                 if not isinstance(audio_data, dict):
-                    logger.warning(f"[{key}] Invalid audio format. Skipping sample.")
+                    logger.warning(f"[{sample_id}] Invalid audio format. Skipping sample.")
                     continue
 
                 # Convert to NumPy array
@@ -70,7 +71,7 @@ class BigBenchAudioPreprocessor(Preprocessor):
                 sr = audio_data.get("sampling_rate")
 
                 if sr is None:
-                    logger.warning(f"[{key}] Sampling rate missing. Assuming 16kHz.")
+                    logger.warning(f"[{sample_id}] Sampling rate missing. Assuming 16kHz.")
                     sr = 16000
 
                 # Use base class method to resample audio

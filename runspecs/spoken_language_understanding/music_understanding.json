@@ -4,8 +4,9 @@
     "language": "en",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor",
-    "tasks": [
-      "Music Understanding"
-    ]
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction",
+    "choices_column": "choices"
   }
 }

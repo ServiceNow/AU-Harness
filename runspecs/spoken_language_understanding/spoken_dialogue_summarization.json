@@ -5,7 +5,10 @@
     "language": "en",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor",
-    "accented": true
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
   },
   "mnsc_sds_part4_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
@@ -13,7 +16,10 @@
     "language": "en",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor",
-    "accented": true
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
   },
   "mnsc_sds_part5_test": {
     "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
@@ -21,6 +27,9 @@
     "language": "en",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor",
-    "accented": true
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
   }
 }

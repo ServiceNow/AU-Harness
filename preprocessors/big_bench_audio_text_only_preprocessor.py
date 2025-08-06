@@ -1,10 +1,13 @@
 import logging
 from typing import Dict, List, Optional, Any
+
 import numpy as np
-from preprocessors.base import Preprocessor
 from tqdm import tqdm
 
+from preprocessors.base import Preprocessor
+
 logger = logging.getLogger(__name__)
+
 
 class BigBenchAudioTextOnlyPreprocessor(Preprocessor):
     """
@@ -15,10 +18,10 @@ class BigBenchAudioTextOnlyPreprocessor(Preprocessor):
     """
 
     def process(
-        self, 
-        dataset: Dict[str, List[Any]], 
-        num_samples: Optional[int] = None, 
-        properties: Optional[Dict[str, Any]] = None
+            self,
+            dataset: Dict[str, List[Any]],
+            num_samples: Optional[int] = None,
+            properties: Optional[Dict[str, Any]] = None
     ) -> List[Dict[str, Any]]:
         """
         Process the BigBenchAudio dataset to ensure consistent audio format and structured data.
@@ -33,21 +36,19 @@ class BigBenchAudioTextOnlyPreprocessor(Preprocessor):
         - List[Dict[str, Any]]: A list of dictionaries where each dictionary represents a sample,
           including the audio array resampled to 16kHz, metadata, and target label.
         """
-        
-        logger.info("In [BigBenchAudioTextOnlyPreprocessor] Processing dataset...")
+
 
         dataset_keys = list(dataset.keys())
         dataset_size = len(dataset.get("id", []))
-        self.log_dataset_info(dataset_keys, dataset_size)
 
         processed_data = []
         dataset_size = len(dataset.get("id", []))
         indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
-        
+
         for i in tqdm(indices, desc="Processing samples"):
             sample_id = dataset["id"][i]
             audio_data = {
-                "array": np.array([]), # Placeholder, not used in text-only evals
+                "array": np.array([]),  # Placeholder, not used in text-only evals
                 "sampling_rate": 16000
             }
             transcript = dataset["transcript"][i]
@@ -68,7 +69,7 @@ class BigBenchAudioTextOnlyPreprocessor(Preprocessor):
                 "category": dataset["category"][i],
                 "transcript": transcript,
                 "array": audio_data["array"],  # Placeholder, not used in text-only evals
-                "sampling_rate": audio_data["sampling_rate"],   # Placeholder, not used in text-only evals
+                "sampling_rate": audio_data["sampling_rate"],  # Placeholder, not used in text-only evals
                 "model_target": dataset["official_answer"][i].strip(),
                 "instruction": transcript,
             }
