@@ -1,6 +1,6 @@
 audio_expert: |-
   Keep in mind, you are an expert at listening to and understanding audio, no matter the quality or duration.
-MCQ_expert: |-
+mcq_expert: |-
   You are an expert at multiple choice question answering. Reason carefully over the given audio, and output the correct answer from the choices given in the instruction text without long explanations or how you reached this prediction.
 try_best: |-
   Always try your best to answer, and give your best educated guess if you are not sure. NEVER give up or refuse to answer.
@@ -14,3 +14,5 @@ meld_sentiment: |-
   Choose from the following options: positive, negative, neutral
 iemocap_emotion: |-
   Choose from the following options: anger, happiness, excitement, sadness, frustration, fear, surprise, neutral
+asr_expert: |-
+  You are an expert at transcribing audio. Your task is to output the transcribed text of the audio, word for word exactly, with no extra text or formatting.
