@@ -1,0 +1,68 @@
+[
+  {
+    "dataset": "mnsc_sds_part3_test",
+    "metric": "llm_judge_detailed",
+    "model": "qwen_2_audio",
+    "score": {
+      "llm_judge_detailed": 44.0
+    },
+    "total_samples": 10,
+    "failures": 0,
+    "avg_wait_time": 4.505444979667663
+  },
+  {
+    "dataset": "mnsc_sds_part5_test",
+    "metric": "llm_judge_detailed",
+    "model": "gpt-4o-mini-audio-preview",
+    "score": {
+      "llm_judge_detailed": 70.0
+    },
+    "total_samples": 10,
+    "failures": 0,
+    "avg_wait_time": 4.966895794868469
+  },
+  {
+    "dataset": "mnsc_sds_part4_test",
+    "metric": "llm_judge_detailed",
+    "model": "qwen_2_audio",
+    "score": {
+      "llm_judge_detailed": 22.0
+    },
+    "total_samples": 10,
+    "failures": 0,
+    "avg_wait_time": 4.651673793792725
+  },
+  {
+    "dataset": "mnsc_sds_part3_test",
+    "metric": "llm_judge_detailed",
+    "model": "gpt-4o-mini-audio-preview",
+    "score": {
+      "llm_judge_detailed": 64.0
+    },
+    "total_samples": 10,
+    "failures": 0,
+    "avg_wait_time": 5.542190742492676
+  },
+  {
+    "dataset": "mnsc_sds_part4_test",
+    "metric": "llm_judge_detailed",
+    "model": "gpt-4o-mini-audio-preview",
+    "score": {
+      "llm_judge_detailed": 54.0
+    },
+    "total_samples": 10,
+    "failures": 0,
+    "avg_wait_time": 5.253118801116943
+  },
+  {
+    "dataset": "mnsc_sds_part5_test",
+    "metric": "llm_judge_detailed",
+    "model": "qwen_2_audio",
+    "score": {
+      "llm_judge_detailed": 42.0
+    },
+    "total_samples": 10,
+    "failures": 0,
+    "avg_wait_time": 4.767632961273193
+  }
+]
