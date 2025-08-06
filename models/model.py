@@ -1,5 +1,12 @@
+"""Model abstraction for Large Audio Language Model evaluation framework.
+
+This module provides the base Model class that orchestrates inference requests
+with retry logic and error handling for different model backends.
+"""
+
 import asyncio
 import copy
+import logging
 from abc import ABC
 
 from tenacity import (
@@ -11,15 +18,14 @@ from tenacity import (
     wait_random_exponential,
 )
 
-import logging
-
-logger = logging.getLogger(__name__)
-logger.propagate = True
 from models.model_response import ErrorTracker, ModelResponse
 from models.request_resp_handler import RequestRespHandler
 from utils import constants
 from utils.constants import task_temp_map
 from utils.multimodal import encode_audio_array_base64, audio_array_to_wav_file
+
+logger = logging.getLogger(__name__)
+logger.propagate = True
 
 
 class Model(ABC):
@@ -62,6 +68,11 @@ class Model(ABC):
         self.errors = ErrorTracker()
 
     def name(self):
+        """Return the model name.
+        
+        Returns:
+            str: The model name.
+        """
         return self._name
 
     def set_temp(self, task_type: str) -> None:
@@ -74,7 +85,7 @@ class Model(ABC):
             self.temperature = task_temp_map[task_type]
             # Also update the request handler's temperature
             self.req_resp_hndlr.temperature = self.temperature
-            logging.info(f"[Model.set_temp] Set temperature to {self.temperature} for task type {task_type} and model {self.name()}")
+            logging.info("[Model.set_temp] Set temperature to %s for task type %s and model %s", self.temperature, task_type, self.name())
 
     def _is_retryable_error(self, result: ModelResponse):
         """Check if the error is a rate limit error by checking response code."""
@@ -88,10 +99,7 @@ class Model(ABC):
 
     def _set_max_backoff(self, attempt):
         """Set exponential backoff for 429 and 1 second for 599 error codes."""
-        if (
-                attempt.retry_state.outcome.result().response_code == 429
-                or attempt.retry_state.outcome.result().response_code == 504
-        ):
+        if attempt.retry_state.outcome.result().response_code in (429, 504):
             attempt.retry_state.retry_object.wait = wait_random_exponential(multiplier=1, max=100)
         elif attempt.retry_state.outcome.result().response_code == 450:
             # 450 error for adjusting max tokens, don't need to wait
@@ -106,11 +114,13 @@ class Model(ABC):
         # Log the URL switch
         if retry_state.attempt_number == 1 and resp_code == 429:
             logger.warning(
-                f"[{self.name()}] Retrying the request with next available URL as it returned {resp_code} code in attempt {retry_state.attempt_number}"
+                "[%s] Retrying the request with next available URL as it returned %s code in attempt %s",
+                self.name(), resp_code, retry_state.attempt_number
             )
         else:
             logger.warning(
-                f"[{self.name()}] Retrying the request in {retry_state.next_action.sleep} seconds as it returned {resp_code} code in attempt {retry_state.attempt_number}"
+                "[%s] Retrying the request in %s seconds as it returned %s code in attempt %s",
+                self.name(), retry_state.next_action.sleep, resp_code, retry_state.attempt_number
             )
 
     async def _mark_errors(self, result: ModelResponse, error_tracker: ErrorTracker):
@@ -120,13 +130,19 @@ class Model(ABC):
             error_tracker.increment(result.response_code)
             # Make sure the error tracker is attached to the ModelResponse
             result.error_tracker = error_tracker
-            # Log that we're tracking this error
-            logger.info(f"[_mark_errors] Recorded error {result.response_code} in error tracker: {error_tracker.__dict__}")
 
-    # pure retry and exception logic
-    async def _generate_text_with_retry(
+    async def generate_text_with_retry(
             self, message: dict | str, run_params: dict
     ) -> ModelResponse:
+        """Generate text with retry logic and error handling.
+        
+        Args:
+            message: Input message for model inference
+            run_params: Runtime parameters for the inference request
+            
+        Returns:
+            ModelResponse: Response object containing generated text and metadata
+        """
         # Create a new error tracker instance for this specific call
         call_errors = ErrorTracker()
         result = None
@@ -149,7 +165,8 @@ class Model(ABC):
                             result.error_tracker = call_errors
                         await self._mark_errors(result, call_errors)
                     except Exception as e:
-                        logger.error(f"Exception during text generation: {e}")
+                        metric_name = run_params.get("metric")
+                        logger.error("Exception during text generation for metric %s: %s", metric_name, e)
                         result = ModelResponse(
                             input_prompt=str(message),
                             llm_response="",
@@ -159,13 +176,14 @@ class Model(ABC):
                             wait_time=0,
                             error_tracker=call_errors,
                         )
+                        await self._mark_errors(result, call_errors)
                 attempt.retry_state.set_result(result)
                 # Set backoff for next retry based on current result
                 self._set_max_backoff(attempt)
                 if not self._is_retryable_error(result):
                     break
         except KeyError as e:
-            logger.error(f"Missing key while building model_inputs on the fly: {e}")
+            logger.error("Missing key while building model_inputs on the fly: %s", e)
             result = ModelResponse(
                 input_prompt=message,
                 llm_response="",
@@ -175,9 +193,11 @@ class Model(ABC):
                 wait_time=0,
                 error_tracker=call_errors,
             )
+            await self._mark_errors(result, call_errors)
         except RetryError:
             logger.error(
-                f"[{self.name()}] Request failed after {self.retry_attempts} attempts for input: {message}..."
+                "[%s] Request failed after %s attempts",
+                self.name(), self.retry_attempts
             )
             result = ModelResponse(
                 input_prompt=message,
@@ -188,8 +208,9 @@ class Model(ABC):
                 wait_time=0,
                 error_tracker=call_errors,
             )
+            await self._mark_errors(result, call_errors)
         except Exception as e:
-            logger.error(f"Unexpected error in _generate_text_with_retry: {e}")
+            logger.error("Unexpected error in _generate_text_with_retry: %s", e)
             result = ModelResponse(
                 input_prompt=message,
                 llm_response="",
@@ -198,7 +219,8 @@ class Model(ABC):
                 performance=None,
                 wait_time=0,
                 error_tracker=call_errors,
-            ) 
+            )
+            await self._mark_errors(result, call_errors)
         return result
 
 
@@ -300,7 +322,7 @@ class Model(ABC):
                 return final_resp
 
             # audio transcription - append values
-            elif self.inference_type in (
+            if self.inference_type in (
                     constants.INFERENCE_SERVER_VLLM_TRANSCRIPTION,
                     constants.OPENAI_TRANSCRIPTION,
             ):
@@ -317,8 +339,7 @@ class Model(ABC):
                 final_resp = responses[-1]
                 final_resp.llm_response = concatenated_text
                 return final_resp
-            else:
-                raise ValueError("Unsupported inference type")
+            raise ValueError("Unsupported inference type")
 
         # --- SINGLE-CHUNK LOGIC ---
         # chat completion
@@ -370,7 +391,7 @@ class Model(ABC):
             return await self.req_resp_hndlr.request_server(message["model_inputs"], tools=tools, error_tracker=error_tracker)
 
         # transcription
-        elif self.inference_type in (
+        if self.inference_type in (
                 constants.INFERENCE_SERVER_VLLM_TRANSCRIPTION,
                 constants.OPENAI_TRANSCRIPTION,
         ):
@@ -378,5 +399,4 @@ class Model(ABC):
             # Pass closed file (file path) to request_server
             resp = await self.req_resp_hndlr.request_server(wav_path, error_tracker)
             return resp
-        else:
-            raise ValueError("Unsupported inference type")
+        raise ValueError("Unsupported inference type")

@@ -1,3 +1,4 @@
+"""Voice bench instruction following evaluation score metrics."""
 from typing import List, Tuple, Dict, Optional, Union
 
 import numpy as np
@@ -8,6 +9,8 @@ from .instruction_following_eval import instructions_registry
 
 
 class InstructionFollowingScore(Metrics):
+    """Evaluates instruction following capabilities in voice benchmarks."""
+
     def __init__(self):
         super().__init__()
         self.name = "instruction_following"
@@ -45,7 +48,6 @@ class InstructionFollowingScore(Metrics):
 
         # Write detailed record-level logs (if dataset_name and model_name provided)
         if dataset_name and model_name:
-            append_final_score(self, results, dataset_name, model_name)
             write_record_log(
                 self,
                 refs=[ref[2] for ref in references],
@@ -54,8 +56,10 @@ class InstructionFollowingScore(Metrics):
                 dataset_name=dataset_name,
                 model_name=model_name,
                 explanations=None,
-                instructions=instructions
+                instructions=instructions,
+                model_responses=model_responses
             )
+            append_final_score(self, results, dataset_name, model_name, model_responses)
         return results
 
     def _compute_outputs(
@@ -65,8 +69,7 @@ class InstructionFollowingScore(Metrics):
             strict: bool = True,
     ) -> List[dict]:
         outputs = []
-        for i in range(len(candidates)):
-            candidate = candidates[i]
+        for i, candidate in enumerate(candidates):
             instruction_id_list, kwargs_list, _ = references[i]
 
             is_following_list = []
@@ -82,11 +85,13 @@ class InstructionFollowingScore(Metrics):
                     instruction.build_description(prompt=candidate)
 
                 if strict:
-                    follows = bool(candidate.strip()) and bool(instruction.check_following(candidate))
+                    follows = (bool(candidate.strip()) and
+                               bool(instruction.check_following(candidate)))
                 else:
                     follows = False
                     for variant in self._generate_loose_variants(candidate):
-                        if bool(variant.strip()) and bool(instruction.check_following(variant)):
+                        if (bool(variant.strip()) and
+                                bool(instruction.check_following(variant))):
                             follows = True
                             break
 
@@ -129,7 +134,8 @@ class InstructionFollowingScore(Metrics):
 
         return {
             "prompt": prompt_correct / prompt_total if prompt_total > 0 else 0.0,
-            "instruction": instruction_correct / instruction_total if instruction_total > 0 else 0.0,
+            "instruction": (instruction_correct / instruction_total 
+                            if instruction_total > 0 else 0.0),
         }
 
     def compute_record_level_scores(
@@ -137,5 +143,6 @@ class InstructionFollowingScore(Metrics):
             candidates: List[str],
             references: List[Tuple[List[str], List[Dict[str, Optional[Union[str, int]]]]]],
     ) -> List[float]:
+        """Compute record-level scores for instruction following."""
         outputs = self._compute_outputs(candidates, references, strict=True)
         return [float(all(out["follow_instruction_list"])) for out in outputs]

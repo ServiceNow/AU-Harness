@@ -1,3 +1,9 @@
+"""Callhome preprocessor module for LALMEval framework.
+
+This module provides a preprocessor for the Callhome dataset, designed for
+speaker diarization tasks with support for both audio and text modalities.
+"""
+
 import logging
 import re
 from pathlib import Path
@@ -12,6 +18,12 @@ logger = logging.getLogger(__name__)
 
 
 class CallhomePreprocessor(Preprocessor):
+    """Preprocessor for Callhome dataset for speaker diarization tasks.
+    
+    This preprocessor handles the Callhome dataset which contains conversational
+    audio with speaker diarization annotations. It supports both turn-based
+    transcription and word error rate evaluation modes.
+    """
     def _load_audio(self, cha_path, audio_dir):
         """
         Load and resample audio file for the given CHA path.
@@ -37,7 +49,9 @@ class CallhomePreprocessor(Preprocessor):
 
         return audio_array, sr, cha_id
 
-    def load_and_build_prompts(self, base_instruction, user_prompt_add_ons=None, system_prompts=None):
+    def load_and_build_prompts(
+        self, base_instruction, user_prompt_add_ons=None, system_prompts=None
+    ):
         """
         Load prompt files and build instruction with prompt add-ons and system prompts.
         
@@ -124,7 +138,7 @@ class CallhomePreprocessor(Preprocessor):
                 text = re.sub(r'(?:[&+\-/]+[.,]*)+', '', text)
                 text = re.sub(r'\s+', ' ', text).strip()
                 # Remove if only punctuation or whitespace remains
-                if not text or not re.search(r'\w', text) or all(c in '.,;:!?-()[]{}"\'\'\s' for c in text):
+                if not text or not re.search(r'\w', text) or all(c in r'.,;:!?-()[]{}"\'\'\s' for c in text):
                     continue
                 cleaned_lines.append((orig_spkr, text, start_ms, end_ms))
 
@@ -154,7 +168,7 @@ class CallhomePreprocessor(Preprocessor):
         samples = []
         filtered_count = 0
 
-        for idx, (orig_spkr, text, start_ms, end_ms) in enumerate(cleaned_lines, 1):
+        for idx, (_, text, start_ms, end_ms) in enumerate(cleaned_lines, 1):
             # Extract audio segment for this line
             start_sample = int(start_ms / 1000 * sr)
             end_sample = int(end_ms / 1000 * sr)
@@ -180,7 +194,6 @@ class CallhomePreprocessor(Preprocessor):
                 "array": audio_segment,
                 "sampling_rate": sr,
                 "instruction": instruction,
-                # No chunk instructions for this case
                 "chunk_instructions": [],
                 "model_target": text,
                 "id": sample_id,
@@ -193,7 +206,8 @@ class CallhomePreprocessor(Preprocessor):
             samples.append(sample_dict)
 
         if filtered_count > 0:
-            logger.info(f"Filtered out {filtered_count} samples that didn't meet length criteria {length_filter}")
+            logger.info("Filtered out %d samples that didn't meet length criteria %s",
+                        filtered_count, length_filter)
         if not samples:
             # All samples were filtered out
             return None
@@ -212,7 +226,7 @@ class CallhomePreprocessor(Preprocessor):
         """
         chunk_lines = {}  # chunk_idx: list of (orig_spkr, text)
         chunk_order = []
-        for orig_spkr, text, start_ms, end_ms in cleaned_lines:
+        for orig_spkr, text, start_ms, _ in cleaned_lines:
             chunk_idx = (start_ms - min_start_ms) // 30000  # relative to min_start_ms
             if chunk_idx not in chunk_lines:
                 chunk_lines[chunk_idx] = []
@@ -317,8 +331,10 @@ class CallhomePreprocessor(Preprocessor):
         """
         Processes a dataset for CallHome speaker diarization.
         Args:
-            dataset: str | Path. Path pointing to the root `CallHome_eng` folder that contains `audio/` and `transcripts/` sub-folders
-            properties: dict, optional. May include 'length_filter' tuple (min_seconds, max_seconds) to filter samples.
+            dataset: str | Path. Path pointing to the root `CallHome_eng` folder 
+                    that contains `audio/` and `transcripts/` sub-folders
+            properties: dict, optional. May include 'length_filter' tuple 
+                       (min_seconds, max_seconds) to filter samples.
         Returns:
             input_data: list of processed dicts
         """
@@ -352,7 +368,8 @@ class CallhomePreprocessor(Preprocessor):
         input_data = []
         cha_files = sorted(transcripts_dir.glob("*.cha"))
         if not cha_files:
-            logger.warning(f"No .cha files found in {transcripts_dir}. Check your dataset path and contents.")
+            logger.warning("No .cha files found in %s. Check your dataset path and contents.",
+                           transcripts_dir)
         if num_samples is not None:
             cha_files = cha_files[:num_samples]
         for cha_path in tqdm(cha_files, desc="Processing CallHome"):
@@ -363,5 +380,5 @@ class CallhomePreprocessor(Preprocessor):
                     input_data.extend(result)  # flatten
                 else:
                     input_data.append(result)
-        logger.info(f"[CallHomePreprocessor] Total samples processed: {len(input_data)}")
+        logger.info("[CallHomePreprocessor] Total samples processed: %d", len(input_data))
         return input_data

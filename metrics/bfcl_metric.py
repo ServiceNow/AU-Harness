@@ -1,11 +1,21 @@
+"""BFCL (Berkeley Function Calling Leaderboard) metric evaluation.
+
+This module implements function calling evaluation metrics that compare
+model-generated function calls against reference implementations.
+"""
 import re
-import json
 from typing import List, Tuple, Dict, Optional, Union
 from metrics.metrics import Metrics
 from utils.custom_logging import write_record_log, append_final_score
 from models.model_response import ModelResponse
 
 class BFCLMatchScore(Metrics):
+    """BFCL function calling match score metric.
+    
+    Evaluates the accuracy of model-generated function calls by comparing
+    tool names, parameters, and required parameter values against reference
+    function calls.
+    """
     def __init__(self):
         super().__init__()
         self.name = "bfcl_match_score"
@@ -26,13 +36,10 @@ class BFCLMatchScore(Metrics):
         results = {"final": sum(record_scores) / len(candidates)}
 
         # Write detailed record-level logs (if dataset_name and model_name provided)
-        if dataset_name and model_name:
-            append_final_score(self, results, dataset_name, model_name)
-            
+        if dataset_name and model_name:            
             # Very simple approach: just stringify everything
             serializable_candidates = [str(candidate) for candidate in candidates]
             serializable_refs = [str(ref[0]) for ref in references]
-            
             write_record_log(
                 self,
                 refs=serializable_refs,
@@ -41,8 +48,12 @@ class BFCLMatchScore(Metrics):
                 dataset_name=dataset_name,
                 model_name=model_name,
                 explanations=None,
-                instructions=instructions
+                instructions=instructions,
+                model_responses=model_responses
             )
+
+            append_final_score(self, results, dataset_name, model_name, model_responses)
+
         return results
 
     def _compute_outputs(
@@ -52,8 +63,7 @@ class BFCLMatchScore(Metrics):
             strict: bool = True,
     ) -> List[dict]:
         outputs = []
-        for i in range(len(candidates)):
-            candidate = candidates[i]
+        for i, candidate in enumerate(candidates):
             reference = references[i]
 
             llm_response = candidate["llm_response"]
@@ -120,5 +130,14 @@ class BFCLMatchScore(Metrics):
             candidates: List[str],
             references: List[Tuple[List[str], List[Dict[str, Optional[Union[str, int]]]]]],
     ) -> List[float]:
+        """Compute record-level scores for function call matching.
+        
+        Args:
+            candidates: List of candidate function calls from the model
+            references: List of reference function calls and required parameters
+            
+        Returns:
+            List of binary scores (1.0 for exact match, 0.0 for mismatch)
+        """
         outputs = self._compute_outputs(candidates, references)
         return [float(all(out["tool_responses_result"])) for out in outputs]

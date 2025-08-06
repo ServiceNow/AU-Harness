@@ -1,3 +1,5 @@
+"""BFCL preprocessor for function calling evaluation."""
+
 import ast
 import json
 import logging
@@ -63,10 +65,8 @@ class BfclPreprocessor(Preprocessor):
                 if isinstance(audio_data, list) and len(audio_data) == 1:
                     audio_data = audio_data[0]
                 elif isinstance(audio_data, list) and len(audio_data) > 1:
-                    logger.warning(f"[{id}] Support single audio only right now!")
+                    logger.warning("[%s] Support single audio only right now!", id)
                     continue
-                elif isinstance(audio_data, dict):
-                    audio_data = audio_data
 
             prompt = dataset["question"][i]
             if isinstance(prompt, str):
@@ -75,7 +75,7 @@ class BfclPreprocessor(Preprocessor):
             if len(prompt) == 1:  # For now handle single turn only
                 prompt = prompt[0]
             else:
-                logger.warning(f"[{id}] Support only single turn")
+                logger.warning("[%s] Support only single turn", id)
                 continue
             function = dataset["tools"][i]
             reference = dataset["reference"][i]
@@ -99,11 +99,29 @@ class BfclPreprocessor(Preprocessor):
                 new_references.append({new_func_name: item[func_name]})
             reference = new_references
 
-            required_fields = [tool['parameters']['required'] for tool in function]
+            #Get required fields by function
+            if prompt_mode:
+                system_prompt = SYSTEM_PROMPT
+                system_prompt += f'Here is a list of functions in JSON format that you can invoke.\n{json.dumps(function, indent=4)}\n'
+                # Store the original function for reference and required fields
+                functions_for_reference = function
+                function = None
+            else:
+                functions_for_reference = function
+                
+            # Create a lookup dictionary for required parameters by function name
+            required_params_dict = {tool['name']: tool['parameters']['required'] 
+                                   for tool in functions_for_reference}
+            
+            # Map required fields to match reference structure
+            required_fields = []
+            for ref_item in reference:
+                ref_func_name = list(ref_item.keys())[0]
+                required_fields.append(required_params_dict.get(ref_func_name, []))
 
             # Validate audio data structure
             if not isinstance(audio_data, dict):
-                logger.warning(f"[{id}] Invalid audio format. Skipping sample.")
+                logger.warning("[%s] Invalid audio format. Skipping sample.", id)
                 continue
 
             # Convert to NumPy array
@@ -112,7 +130,7 @@ class BfclPreprocessor(Preprocessor):
 
             if modality == "audio":
                 if sr is None:
-                    logger.warning(f"[{id}] Sampling rate missing. Assuming 16kHz.")
+                    logger.warning("[%s] Sampling rate missing. Assuming 16kHz.", id)
                     sr = 16000
 
                 # Use base class method to resample audio
@@ -120,7 +138,7 @@ class BfclPreprocessor(Preprocessor):
 
             # Ensure prompt exists
             if not prompt:
-                logger.warning(f"[{id}] Missing prompt. Skipping sample.")
+                logger.warning("[%s] Missing prompt. Skipping sample.", id)
                 continue
 
             if modality == "text":
@@ -128,15 +146,6 @@ class BfclPreprocessor(Preprocessor):
             else:
                 # For audio modality, we can define a generic instruction
                 instruction = f""
-
-            # In prompt mode we get tool calls from llm response,
-            # This doesn't evals the model on tool calling via capability sense,
-            # but still allow to check ability to choose function
-            if prompt_mode:
-                system_prompt = SYSTEM_PROMPT
-                system_prompt += 'Here is a list of functions in JSON format that you can invoke.\n{functions}\n'.format(
-                    functions=json.dumps(function, indent=4))
-                function = None
 
             # Create structured sample
             sample = {

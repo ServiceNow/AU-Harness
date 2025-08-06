@@ -1,3 +1,9 @@
+"""BigBench Audio text-only preprocessor module for LALMEval framework.
+
+This module provides a preprocessor for the BigBenchAudio dataset, designed for
+Speech Query Question Answering (SQQA) tasks in text-only evaluation mode.
+"""
+
 import logging
 from typing import Dict, List, Optional, Any
 
@@ -29,8 +35,10 @@ class BigBenchAudioTextOnlyPreprocessor(Preprocessor):
         Parameters:
         - dataset (Dict[str, List[Any]])
             Expected keys: 'id', 'audio', 'category', 'official_answer', 'transcript'.
-        - num_samples (Optional[int]): Not used. Reserved for future functionality (e.g., truncating dataset).
-        - properties (Optional[Dict[str, Any]]): Not used. Reserved for additional metadata or preprocessing options.
+        - num_samples (Optional[int]): Not used. Reserved for future functionality 
+          (e.g., truncating dataset).
+        - properties (Optional[Dict[str, Any]]): Not used. Reserved for additional 
+          metadata or preprocessing options.
 
         Returns:
         - List[Dict[str, Any]]: A list of dictionaries where each dictionary represents a sample,
@@ -55,12 +63,12 @@ class BigBenchAudioTextOnlyPreprocessor(Preprocessor):
 
             # Ensure transcript exists
             if not transcript:
-                logger.warning(f"[{sample_id}] Missing transcript for text-only evals. Skipping sample.")
+                logger.warning("[%d] Missing transcript for text-only evals. Skipping sample.", i)
                 continue
 
             # Ensure official answer exists
             if not dataset["official_answer"][i]:
-                logger.warning(f"[{sample_id}] Missing official answer. Skipping sample.")
+                logger.warning("[%d] Missing official answer. Skipping sample.", i)
                 continue
 
             # Create structured sample
@@ -69,7 +77,7 @@ class BigBenchAudioTextOnlyPreprocessor(Preprocessor):
                 "category": dataset["category"][i],
                 "transcript": transcript,
                 "array": audio_data["array"],  # Placeholder, not used in text-only evals
-                "sampling_rate": audio_data["sampling_rate"],  # Placeholder, not used in text-only evals
+                "sampling_rate": audio_data["sampling_rate"],  # Placeholder, 
                 "model_target": dataset["official_answer"][i].strip(),
                 "instruction": transcript,
             }

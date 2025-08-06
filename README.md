@@ -65,12 +65,12 @@ dataset_metric:
 #### Sampling and Filtering
 ```yaml
 filters:
-  - num_samples: 300 # optional - number of samples to run(remove for all)
-  - user_prompt_add_ons: ["asr_clean_output"] # optional - additional prompting in text instructions for each sample
-  - length_filter: [1.0, 30.0] # optional - filters for only audio samples in this length(seconds)
-  - accented: false # optional - filters for only audio samples in this length(seconds)
-  - language: "en" # optional - filters for only audio samples in this language - use language code
-  - system_prompts: ["audio_expert"] # optional - system prompts for each sample
+  num_samples: 300 # optional - number of samples to run(remove for all)
+  user_prompt_add_ons: ["asr_clean_output"] # optional - additional prompting in text instructions for each sample
+  length_filter: [1.0, 30.0] # optional - filters for only audio samples in this length(seconds)
+  accented: false # optional - filters for only audio samples in this length(seconds)
+  language: "en" # optional - filters for only audio samples in this language - use language code
+  system_prompts: ["audio_expert"] # optional - system prompts for each sample
 ```
 
 #### Result Aggregation
@@ -117,14 +117,14 @@ models:
 #### Judge Configuration
 ```yaml
 judge_properties:
-  - judge_concurrency: 300 # optional - default is 1
-  - judge_model: "gpt-4o-mini" # mandatory
-  - judge_type: "openai" # mandatory (vllm or openai)
-  - judge_api_version: ${API_VERSION} # optional(needed for openai)
-  - judge_api_endpoint: ${API_ENDPOINT} # mandatory
-  - judge_api_key: ${API_KEY} # mandatory
-  - judge_temperature: 0.1 # optional
-  - judge_prompt_model_override: "Qwen3-32b" # optional
+  judge_concurrency: 300 # optional - default is 1
+  judge_model: "gpt-4o-mini" # mandatory
+  judge_type: "openai" # mandatory (vllm or openai)
+  judge_api_version: ${API_VERSION} # optional(needed for openai)
+  judge_api_endpoint: ${API_ENDPOINT} # mandatory
+  judge_api_key: ${API_KEY} # mandatory
+  judge_temperature: 0.1 # optional
+  judge_prompt_model_override: "Qwen3-32b" # optional
 ```
 
 ### Adding Datasets

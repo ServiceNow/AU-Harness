@@ -1,11 +1,19 @@
-from metrics.metrics import Metrics
-from typing import List, Tuple, Dict, Optional, Union
+"""SQL scoring metrics for text-to-SQL evaluation tasks.
+
+This module provides the SqlScore class for evaluating SQL generation quality
+using execution accuracy and exact set match metrics from the Spider benchmark.
+"""
+
 import os
-import pandas as pd
+from typing import List, Tuple, Dict, Optional, Union
+
 import nltk
-from utils.custom_logging import write_record_log, append_final_score
+import pandas as pd
+
+from metrics.metrics import Metrics
 from metrics.text2sql.evaluation import evaluate
 from models.model_response import ModelResponse
+from utils.custom_logging import write_record_log, append_final_score
 
 # Constants for file paths and data selection
 SPIDER_DATA_DIR = "data/spider/"
@@ -13,6 +21,11 @@ SPIDER_DB_DIR = "data/spider/database"
 
 
 class SqlScore(Metrics):
+    """SQL scoring metrics for text-to-SQL evaluation using Spider benchmark.
+    
+    This class evaluates generated SQL queries against reference queries using
+    execution accuracy and exact set match metrics from the Spider evaluation suite.
+    """
     def __init__(self):
         super().__init__()
         self.name = "text2sql_score"
@@ -63,7 +76,6 @@ class SqlScore(Metrics):
 
         # Write detailed record-level logs (if dataset_name and model_name provided)
         if dataset_name and model_name:
-            append_final_score(self, scores, dataset_name, model_name)
             write_record_log(
                 self, 
                 refs=references, 
@@ -72,9 +84,10 @@ class SqlScore(Metrics):
                 dataset_name=dataset_name, 
                 model_name=model_name, 
                 explanations=None, 
-                instructions=instructions
+                instructions=instructions,
+                model_responses=model_responses
             )
-
+            append_final_score(self, scores, dataset_name, model_name, model_responses)
         return self._clean_scores(scores)
 
     def _clean_scores(self, scores: dict) -> dict:
@@ -100,6 +113,16 @@ class SqlScore(Metrics):
     def get_all_score_df(
         self, ids: List[int], candidates: List[str], references: List[str]
     ) -> pd.DataFrame:
+        """Generate a DataFrame with all scores for the given data.
+        
+        Args:
+            ids: List of sample IDs
+            candidates: List of generated SQL strings
+            references: List of reference SQL strings
+            
+        Returns:
+            pd.DataFrame: DataFrame containing all scores with IDs
+        """
         if not self.record_level_score:
             _ = self.get_score(candidates, references)
         all_scores = self.record_level_score
@@ -129,4 +152,3 @@ class SqlScore(Metrics):
             table=os.path.join(SPIDER_DATA_DIR, "tables.jsonl"),
         )
         return [float(x) for x in scores.get("per_record_ex", [])]
-

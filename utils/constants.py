@@ -1,11 +1,10 @@
-# Inference server types
-INFERENCE_SERVER_VLLM_CHAT_COMPLETION = 'vllm'
-OPENAI_CHAT_COMPLETION = 'openai'
-INFERENCE_SERVER_VLLM_TRANSCRIPTION = 'vllm_transcription'
-OPENAI_TRANSCRIPTION = 'openai_transcription'
+"""Constants and mappings for LALMEval framework.
 
-# WER/CER metrics constants
-# These imports need to be added since we're moving the constants here
+This module contains configuration constants, mappings between different
+components (metrics, models, tasks), and normalization settings used
+throughout the evaluation framework.
+"""
+
 from jiwer import (
     Compose,
     ReduceToListOfListOfChars,
@@ -19,6 +18,13 @@ from metrics.wer.normalizers import JapaneseTextNormalizer
 from metrics.wer.whisper_normalizer.basic import BasicTextNormalizer
 from metrics.wer.whisper_normalizer.english import EnglishTextNormalizer
 
+# Inference server types
+INFERENCE_SERVER_VLLM_CHAT_COMPLETION = 'vllm'
+OPENAI_CHAT_COMPLETION = 'openai'
+INFERENCE_SERVER_VLLM_TRANSCRIPTION = 'vllm_transcription'
+OPENAI_TRANSCRIPTION = 'openai_transcription'
+
+# WER/CER metrics constants
 # Define WER/CER related constants
 NORMALIZERS = {'en': EnglishTextNormalizer(), 'ja': JapaneseTextNormalizer()}
 DEFAULT_NORMALIZER = BasicTextNormalizer()
@@ -57,57 +63,61 @@ metric_map = {
     "meteor": ("metrics.meteor_score", "MeteorScore"),
     'sql_score': ("metrics.sql_score", "SqlScore"),
     "word_error_rate": ("metrics.word_error_rate_metrics", "WERMetrics"),
+    "comet": ("metrics.comet_score", "CometScore"),
+
 }
 
 task_temp_map = {
+    # ASR
     "asr": 0.1,
-    "accent_recognition": 0.2,
     "code_switching_asr": 0.1,
+    "long_form_asr": 0.1,
+
+    # Paralinguistics
     "emotion_recognition": 0.2,
     "gender_recognition": 0.2,
-    "long_form_asr": 0.1,
-    "music_understanding": 0.7,
-    "scene_qa": 0.4,
-    "scene_captioning": 0.7,
+    "accent_recognition": 0.2,
     "speaker_recognition": 0.2,
-    "speech_instuction": 0.7,
-    "spoken_qa": 0.5,
-    "spoken_dialogue_summarization": 0.8,
+
+    # Spoken Language Understanding
+    "speech_qa": 0.5,
+    "sqqa": 0.5,
     "translation": 0.2,
-    'bertscore': ('metrics.bertscore', 'BertScore'),
-    'bfcl_match_score': ('metrics.bfcl_metric', 'BFCLMatchScore'),
-    'bleu': ('metrics.bleu_metrics', 'BleuMetrics'),
-    'diarization_metrics': ('metrics.diarization_metrics', 'DiarizationMetrics'),
-    'instruction_following': ('metrics.voice_bench_ifeval_score', 'InstructionFollowingScore'),
-    'llm_judge_big_bench_audio': ('metrics.llm_judge', 'BigBenchAudioLLMJudgeMetric'),
-    'llm_judge_binary': ('metrics.llm_judge', 'BinaryLLMJudgeMetric'),
-    'llm_judge_callhome': ('metrics.llm_judge', 'CallHomeLLMJudgeMetric'),
-    'llm_judge_detailed': ('metrics.llm_judge', 'DetailedLLMJudgeMetric'),
-    'meteor': ('metrics.meteor_score', 'MeteorScore'),
-    'word_error_rate': ('metrics.word_error_rate_metrics', 'WERMetrics'),
-    "sql_score": ("metrics.sql_score", "SqlScore"),
+    "scene_understanding": 0.5,
+    "spoken_dialogue_summarization": 0.8,
+    "music_understanding": 0.7,
+
 }
 
 allowed_task_metrics = {
-    'callhome': ['llm_judge_callhome', 'word_error_rate', 'diarization_metrics'],
-    'accent_recognition': ['llm_judge_binary'],
-    'emotion_recognition': ['llm_judge_binary'],
-    'gender_recognition': ['llm_judge_binary'],
-    'speaker_recognition': ['llm_judge_binary'],
+    # ASR
     'asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
     'code_switching_asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
     'long_form_asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
+
+    # Paralinguistics
+    'emotion_recognition': ['llm_judge_binary'],
+    'gender_recognition': ['llm_judge_binary'],
+    'accent_recognition': ['llm_judge_binary'],
+    'speaker_recognition': ['llm_judge_binary'],
+    'speaker_diarization': ['diarization_metrics'],
+
+
+    # Spoken Language Understanding
+    'speech_qa': ['llm_judge_detailed', 'llm_judge_binary'],
+    'sqqa': ['llm_judge_big_bench_audio', 'llm_judge_binary'],
     'translation': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
+    'scene_understanding': ['llm_judge_binary', 'llm_judge_detailed'],
+    'spoken_dialogue_summarization': ['llm_judge_detailed'],
+    'intent_classification': ['llm_judge_binary'],
+    'music_understanding': ['llm_judge_binary'],
+
+    # Spoken Language Reasoning
     'bfcl': ['bfcl_match_score'],
     'ifeval': ['instruction_following'],
     'speech_to_sql': ['sql_score'],
-    'music_understanding': ['llm_judge_binary'],
-    'scene_captioning': ['llm_judge_detailed'],
-    'scene_qa': ['llm_judge_binary', 'llm_judge_detailed'],
-    'speech_instruction': ['llm_judge_detailed'],
-    'spoken_dialogue_summarization': ['llm_judge_detailed'],
-    'spoken_qa': ['llm_judge_detailed', 'llm_judge_binary'],
-    'sqqa': ['llm_judge_big_bench_audio', 'llm_judge_binary'],
+    
+    # Safety and Security
     'safety': ['llm_judge_detailed'],
     'spoofing': ['llm_judge_detailed', 'llm_judge_binary'],
 }
@@ -122,9 +132,10 @@ metric_output = {
     "llm_judge_big_bench_audio": ["llm_judge_big_bench_audio"],
     "meteor": ["meteor"],
     "bfcl_match_score": ["final"],
-    "sql_score": ["sql_score"], # need to find real metric
+    "sql_score": ["sql_score"],  # need to find real metric
     "instruction_following": ["strict_instruction", "loose_instruction", "final"],
-    "diarization_metrics": ["average_sample_wder", "overall_wder", "average_sample_cpwer", "overall_cpwer", "speaker_count_absolute_error"] 
+    "diarization_metrics": ["average_sample_wder", "overall_wder", "average_sample_cpwer", "overall_cpwer", "speaker_count_absolute_error"],
+    "comet": ["comet"]
 }
 
 # Dictionary mapping language names to their standard codes

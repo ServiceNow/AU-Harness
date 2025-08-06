@@ -1,4 +1,5 @@
 import base64
+import tempfile
 from copy import deepcopy
 from io import BytesIO
 
@@ -11,25 +12,25 @@ TRUNCATION_LENGTH = 60
 
 # normalize to 16000
 def encode_audio_array_base64(audio_array, sampling_rate):
+    """Encode audio array as base64 after resampling to 16kHz."""
     try:
         if audio_array is None or len(audio_array) == 0:
             return ""
-        else:
-            audio_array = librosa.resample(audio_array, orig_sr=sampling_rate, target_sr=16000)
-            sampling_rate = 16000
+        
+        audio_array = librosa.resample(audio_array, orig_sr=sampling_rate, target_sr=16000)
+        sampling_rate = 16000
 
-            buffer = BytesIO()
-            sf.write(buffer, audio_array, sampling_rate, format='WAV')
-            buffer.seek(0)
-            audio_base64 = base64.b64encode(buffer.read()).decode('utf-8')
-            return audio_base64
-    except Exception as e:
-        raise RuntimeError(f"Failed to encode audio: {e}")
+        buffer = BytesIO()
+        sf.write(buffer, audio_array, sampling_rate, format='WAV')
+        buffer.seek(0)
+        audio_base64 = base64.b64encode(buffer.read()).decode('utf-8')
+        return audio_base64
+    except Exception as exc:
+        raise RuntimeError(f"Failed to encode audio: {exc}") from exc
 
 
 def audio_array_to_wav_file(audio_array, sampling_rate):
     """Resample to 16kHz and write audio_array to a temporary .wav file. Returns file path."""
-    import tempfile
     try:
         audio_array = librosa.resample(audio_array, orig_sr=sampling_rate, target_sr=16000)
         sampling_rate = 16000
@@ -37,8 +38,8 @@ def audio_array_to_wav_file(audio_array, sampling_rate):
             sf.write(tmp_wav, audio_array, sampling_rate, format='WAV')
             wav_path = tmp_wav.name
         return wav_path
-    except Exception as e:
-        raise RuntimeError(f"Failed to write audio to wav file: {e}")
+    except Exception as exc:
+        raise RuntimeError(f"Failed to write audio to wav file: {exc}") from exc
 
 
 def truncate_values_for_saving(formatted_messages: list[dict] | str) -> list[dict] | str:
@@ -68,16 +69,18 @@ def truncate_values_for_saving(formatted_messages: list[dict] | str) -> list[dic
                     obj[:TRUNCATION_LENGTH] + TRUNCATION_SUFFIX
             )  # will only truncate base64 type strings (has 0 whitespace/unicode) with length > 256
 
-        elif isinstance(obj, dict):
+        if isinstance(obj, dict):
             for key, value in obj.items():
                 obj[key] = _truncate_recursive(value)
+            return obj
 
-        elif isinstance(obj, list):
+        if isinstance(obj, list):
             for i, item in enumerate(obj):
                 obj[i] = _truncate_recursive(item)
+            return obj
 
         # Handle bytes objects
-        elif isinstance(obj, bytes) and len(obj) > TRUNCATION_LENGTH + len(TRUNCATION_SUFFIX):
+        if isinstance(obj, bytes) and len(obj) > TRUNCATION_LENGTH + len(TRUNCATION_SUFFIX):
             # Convert to string representation for truncation
             return str(obj)[:TRUNCATION_LENGTH] + TRUNCATION_SUFFIX
 
