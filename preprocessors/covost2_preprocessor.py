@@ -34,6 +34,7 @@ class Covost2Preprocessor(Preprocessor):
         for i in tqdm(indices, desc="Processing samples"):
             sample_id = dataset["id"][i]
             translation = dataset["translation"][i]
+            source_sentence = dataset["sentence"][i]
             audio = dataset["audio"][i]
             audio_array = audio["array"]
             sampling_rate = audio["sampling_rate"]
@@ -62,6 +63,7 @@ class Covost2Preprocessor(Preprocessor):
                 "array": audio_array,
                 "sampling_rate": sampling_rate,
                 "model_target": translation.strip(),
+                "source_sentence": source_sentence.strip(),
                 "instruction": instruction,
             }
             processed_data.append(sample)

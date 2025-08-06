@@ -253,6 +253,8 @@ class Engine:
         instructions = process_result.get("instructions", None)
         ids = process_result.get("ids", [])
         lengths = process_result.get("lengths", [])
+        if (self.metric.name == 'comet'):
+            source_sentences = process_result['source_sentences']
 
         # Determine if this is an LLM-judge metric
         is_llm_judge = isinstance(self.metric, _BaseLLMJudge)
