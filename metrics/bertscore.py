@@ -4,7 +4,7 @@ from bert_score import score
 
 from metrics.metrics import Metrics
 from metrics.word_error_rate_metrics import normalize_text
-
+from utils.custom_logging import write_record_log, append_final_score
 
 class BertScore(Metrics):
     def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
