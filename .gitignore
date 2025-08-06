@@ -12,7 +12,8 @@ config.yaml
 *.csv
 
 #private datasets
-private_datasets
+*.cha
+*.wav
 
 # python cache files
 __pycache__/
@@ -30,3 +31,5 @@ client_test.py
 # local configs
 .venv/
 .vscode/
+
+CLAUDE.md
