@@ -48,6 +48,23 @@ pip install -r requirements.txt
 bash evaluate.sh
 ```
 
+### Analyzing Results
+
+Once your run finishes, you can inspect the outputs in a few ways:
+
+- **Full logs**  
+  View the complete log at  
+  `default.log` (or whatever you set as `log_file`) in the project root.
+
+- **Per-record details**  
+  `/run_logs/{dataset}_{metric}_{model}.csv`
+
+- **All record-level entries for the entire run**  
+  `/run_logs/{run.json}`
+
+- **Final aggregated scores**  
+  `/run_logs/final_scores.json`
+
 To deploy your own models, look at /models/inference_boilerplate/ for more instructions.
 
 ### Configuration Options
