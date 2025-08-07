@@ -28,5 +28,6 @@ __pycache__/
 .vscode/
 
 data/spider/
+test/
 
 CLAUDE.md
