@@ -11,6 +11,7 @@ config.yaml
 *.csv
 *.out
 *.csv
+final_scores.json
 
 # callhome local files
 *.cha
