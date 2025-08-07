@@ -112,6 +112,9 @@ class VoiceBenchIfevalPreprocessor(Preprocessor):
                 sample['kwargs'] = kwargs
                 sample["model_target"] = (instruction_id_list, kwargs, prompt)
 
+            elif (subset_name == 'advbench'):
+                sample["model_target"] = ""
+
             processed_data.append(sample)
 
         self.log_dataset_info(dataset_keys, dataset_size, len(processed_data))
