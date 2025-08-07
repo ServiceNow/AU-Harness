@@ -31,7 +31,7 @@ class Engine:
         split = dataset_info.get("split", None)
         
         self.dataset, _ = _load_dataset(
-            repo, filters=filters, metric=metric_name, split=split, dataset_info=dataset_info
+            repo, filters=filters, metric=metric_name, split=split, dataset_info=dataset_info, dataset_name=dataset_name
         )
         
         # Load metric using the existing _load_metric function

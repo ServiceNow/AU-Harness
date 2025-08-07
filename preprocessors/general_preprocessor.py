@@ -35,6 +35,7 @@ class GeneralPreprocessor(Preprocessor):
         # Extract common properties using base class method
         props = self.extract_properties(properties)
         user_prompt_add_ons = props["user_prompt_add_ons"]
+        dataset_name = props["dataset_name"]
         length_filter = props["length_filter"]
         modality = props.get("dataset_info", {}).get("modality", "audio")
         audio_column_name = props.get("dataset_info", {}).get("audio_column", None)
@@ -43,8 +44,8 @@ class GeneralPreprocessor(Preprocessor):
         user_query_column_name = props.get("dataset_info", {}).get("textual_input_column", None)
         choices_column_name = props.get("dataset_info", {}).get("choices_column", None)
 
-        # Load prompt add-ons using base class method
-        prompt_add_ons = self.load_yaml_file("prompt_add_ons.yaml")
+        # Get matching prompt add-ons for this dataset
+        matching_prompts = self.get_prompt_add_ons(user_prompt_add_ons, dataset_name) if dataset_name else []
 
         # Get dataset keys and size
         keys = list(dataset.keys())
@@ -92,8 +93,8 @@ class GeneralPreprocessor(Preprocessor):
             else:
                 instruction = record.get("instruction") or record.get("question") or ""
             # Append any user-specified prompt add-ons and choices
-            instruction += " " + " ".join(prompt_add_ons[k] for k in 
-                                          user_prompt_add_ons if k in prompt_add_ons)
+            if matching_prompts:
+                instruction += " " + " ".join(matching_prompts)
             if choices_column_name and choices_column_name in record:
                 choices = record.get(choices_column_name, [])
                 if isinstance(choices, list):

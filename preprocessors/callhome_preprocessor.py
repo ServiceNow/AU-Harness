@@ -50,34 +50,31 @@ class CallhomePreprocessor(Preprocessor):
         return audio_array, sr, cha_id
 
     def load_and_build_prompts(
-        self, base_instruction, user_prompt_add_ons=None, system_prompts=None
+        self, base_instruction, matching_prompts=None, system_prompts=None
     ):
         """
         Load prompt files and build instruction with prompt add-ons and system prompts.
         
         Args:
             base_instruction: Base instruction text
-            user_prompt_add_ons: List of prompt add-ons to use
-            system_prompts: List of system prompts to use
+            matching_prompts: List of prompt add-on texts to use
+            system_prompts: List of system prompt keys to use
             
         Returns:
             Tuple of (instruction, system_prompt_text)
         """
-        if user_prompt_add_ons is None:
-            user_prompt_add_ons = []
+        if matching_prompts is None:
+            matching_prompts = []
         if system_prompts is None:
             system_prompts = []
 
-        # Load YAML files using the base class method
-        prompt_add_ons = self.load_yaml_file("prompt_add_ons.yaml")
+        # Load system prompts YAML file using the base class method
         system_prompts_mapping = self.load_yaml_file("system_prompts.yaml")
 
         # Build instruction with prompt add-ons
         instruction = base_instruction
-        for k in user_prompt_add_ons:
-            add_on = prompt_add_ons.get(k)
-            if add_on:
-                instruction = f"{instruction} {add_on}"
+        for prompt_text in matching_prompts:
+            instruction = f"{instruction} {prompt_text}"
 
         # Process system prompts
         system_prompt_text = ""
@@ -148,7 +145,7 @@ class CallhomePreprocessor(Preprocessor):
         return cleaned_lines, min_start_ms, max_end_ms
 
     def _process_word_error_rate_metric(self, cleaned_lines, audio_array, sr, cha_id, base_instruction,
-                                        user_prompt_add_ons, system_prompts, length_filter):
+                                        matching_prompts, system_prompts, length_filter):
         """
         Process data specifically for word error rate metric.
         
@@ -187,7 +184,7 @@ class CallhomePreprocessor(Preprocessor):
             sample_id = f"{cha_id}_{idx}"
 
             instruction, system_prompt_text = self.load_and_build_prompts(
-                base_instruction, user_prompt_add_ons, system_prompts
+                base_instruction, matching_prompts, system_prompts
             )
 
             sample_dict = {
@@ -253,7 +250,7 @@ class CallhomePreprocessor(Preprocessor):
         return transcript_lines, chunk_instructions
 
     def _process_one(self, cha_path, audio_dir, base_instruction, metric=None, length_filter=None,
-                     user_prompt_add_ons=None, system_prompts=None):
+                     matching_prompts=None, system_prompts=None):
         """
         Process one conversation file.
         
@@ -286,7 +283,7 @@ class CallhomePreprocessor(Preprocessor):
         if metric and metric.lower() == "word_error_rate":
             return self._process_word_error_rate_metric(
                 cleaned_lines, audio_array, sr, cha_id, base_instruction,
-                user_prompt_add_ons, system_prompts, length_filter
+                matching_prompts, system_prompts, length_filter
             )
 
         # Step 4: Process chunking
@@ -309,7 +306,7 @@ class CallhomePreprocessor(Preprocessor):
 
         # Step 6: Load and build prompts in one step
         instruction, system_prompt_text = self.load_and_build_prompts(
-            base_instruction, user_prompt_add_ons, system_prompts
+            base_instruction, matching_prompts, system_prompts
         )
 
         result = {
@@ -342,8 +339,12 @@ class CallhomePreprocessor(Preprocessor):
         props = self.extract_properties(properties)
         metric = props["metric"]
         user_prompt_add_ons = props["user_prompt_add_ons"]
+        dataset_name = props["dataset_name"]
         system_prompts = properties.get("system_prompts", []) if properties else []
         length_filter = props["length_filter"]
+        
+        # Get matching prompt add-ons for this dataset
+        matching_prompts = self.get_prompt_add_ons(user_prompt_add_ons, dataset_name) if dataset_name else []
 
         # Set base instruction depending on metric
         if metric and metric.lower() == "word_error_rate":
@@ -374,7 +375,7 @@ class CallhomePreprocessor(Preprocessor):
             cha_files = cha_files[:num_samples]
         for cha_path in tqdm(cha_files, desc="Processing CallHome"):
             result = self._process_one(cha_path, audio_dir, base_instruction, metric, length_filter,
-                                       user_prompt_add_ons, system_prompts)
+                                       matching_prompts, system_prompts)
             if result is not None:
                 if metric and metric.lower() == "word_error_rate" and isinstance(result, list):
                     input_data.extend(result)  # flatten

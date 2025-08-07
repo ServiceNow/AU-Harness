@@ -66,11 +66,13 @@ dataset_metric:
 ```yaml
 filters:
   num_samples: 300 # optional - number of samples to run(remove for all)
-  user_prompt_add_ons: ["asr_clean_output"] # optional - additional prompting in text instructions for each sample
   length_filter: [1.0, 30.0] # optional - filters for only audio samples in this length(seconds)
   accented: false # optional - filters for only audio samples in this length(seconds)
   language: "en" # optional - filters for only audio samples in this language - use language code
-  system_prompts: # Follow the format of ["system_prompt_key", ["model_name", "dataset/runspec/category_name"]]
+  user_prompt_add_ons: # Only for datasets processed by GeneralPreprocessor or CallhomePreprocessor - follow the format of ["user_prompt_add_on key", ["dataset1", "dataset2"...]]
+    - ["asr_clean_output", ["callhome_eng", "librispeech_test_clean"]]
+    - ["audio_expert", ["accent_recognition"]]
+  system_prompts: # Follow the format of ["system_prompt_key", ["model_name", "dataset/runspec/category_1", "dataset/runspec/category2"...]]
     - ["audio_expert", ["gpt-4o-mini-audio-preview", "emotion_recognition"]]
     - ["summary_expert", ["qwen_2_audio", "spoken_dialogue_summarization"]]
 ```
@@ -112,6 +114,28 @@ models:
       model: "gpt-4o-mini-audio-preview" # Mandatory
       auth_token: ${AUTH_TOKEN} # Mandatory
       api_version: ${API_VERSION} # Mandatory
+      batch_size: 350 # Mandatory
+      chunk_size: 30  # Optional - Max audio length in seconds
+  - info:
+      name: "qwen_2.5_omni" # Mandatory
+      inference_type: "vllm"  # openai, vllm, or audio transcription
+      url: ${ENDPOINT_URL} # Mandatory
+      delay: 100 # Optional
+      retry_attempts: 8 # Optional
+      timeout: 30 # Optional
+      model: "qwen_2.5_omni" # Mandatory
+      auth_token: ${AUTH_TOKEN} # Mandatory
+      batch_size: 150 # Mandatory
+      chunk_size: 30  # Optional - Max audio length in seconds
+  - info:
+      name: "whisper_large_v3"
+      inference_type: "transcription"
+      url: ${ENDPOINT_URL} # Mandatory
+      delay: 100 # Optional
+      retry_attempts: 8 # Optional
+      timeout: 30 # Optional
+      model: "whisper_large_v3" # Mandatory
+      auth_token: ${AUTH_TOKEN} # Mandatory
       batch_size: 200 # Mandatory
       chunk_size: 30  # Optional - Max audio length in seconds
 ```
@@ -205,7 +229,7 @@ document.querySelectorAll('a[href*="?f=save"]').forEach((link, i) => {
 
 Paste these wav files into the audio folder of the specific language path in private_datasets
 
-Run the specific dataset or all datasets across word_error_rate(utterance by utterance), llm_judge_binary(holistic view of 30 second turn by turn transcription), or speaker diarization
+Run the specific dataset or all datasets across word_error_rate(utterance by utterance), llm_judge_binary (holistic view of 30 second turn by turn transcription), or speaker diarization
 
 ```yaml
 dataset_metric:

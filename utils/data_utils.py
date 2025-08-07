@@ -19,7 +19,7 @@ def _load_callhome_dataset(repo, preprocessor_name, num_samples, properties):
     dataset_size = len(dataset) if dataset else 0
     return dataset, dataset_size
 
-def _load_dataset(repo=None, filters=None, metric=None, split=None, dataset_info=None):
+def _load_dataset(repo=None, filters=None, metric=None, split=None, dataset_info=None, dataset_name=None):
     """Load and preprocess a dataset from a local or remote path."""
     # Unwrap filters object
     filters = filters or {}
@@ -42,6 +42,8 @@ def _load_dataset(repo=None, filters=None, metric=None, split=None, dataset_info
         properties["length_filter"] = tuple(length_filter)  # Convert list to tuple
     if dataset_info:
         properties["dataset_info"] = dataset_info
+    if dataset_name:
+        properties["dataset_name"] = dataset_name
 
     # Special handling for local CallHome dataset
     if preprocessor_name.startswith("Callhome"):
