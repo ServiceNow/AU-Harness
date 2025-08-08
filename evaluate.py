@@ -34,9 +34,9 @@ def main(cfg_path='config.yaml'):
 
     # 4. Create engines for each expanded dataset-metric pair
     all_engines = []
-    for pair in expanded_pairs:
+    for dataset_task_info in expanded_pairs:
         engine, dataset_name = create_engines(
-            pair=pair,
+            dataset_task_info=dataset_task_info,
             cfg=cfg,
             models=models,
             central_request_controller=central_request_controller

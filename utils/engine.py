@@ -317,12 +317,12 @@ class Engine:
         logger.info("[Engine.run] Evaluation complete. Returning scores.")
         return scores
 
-def create_engines(pair, models, cfg, central_request_controller):
+def create_engines(dataset_task_info, models, cfg, central_request_controller):
     """
     Process a dataset and run evaluation on it.
     
     Args:
-        pair: Tuple of (dataset_name, metric_name, dataset_info, task_type)
+        dataset_task_info: Tuple of (dataset_name, metric_name, dataset_info, task_type)
         models: List of model instances
         cfg: Configuration dictionary
         central_request_controller: The central request controller instance
@@ -330,7 +330,7 @@ def create_engines(pair, models, cfg, central_request_controller):
     Returns:
         tuple: (Engine instance, dataset_name)
     """
-    dataset_name, metric_name, dataset_info, task_type = pair
+    dataset_name, metric_name, dataset_info, task_type = dataset_task_info
 
     # Get needed settings from cfg
     filters = cfg.get("filters", {})
