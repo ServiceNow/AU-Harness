@@ -58,7 +58,7 @@ temperature_overrides:
 models:
   - info:
       name: "gpt-4o-mini-audio-preview-1" 
-      inference_type: "openai" # mandatory - you can use vllm or openai chat completion
+      inference_type: "openai" # mandatory - you can use vllm(vllm), openai(openai), (chat completion) or audio transcription endpoint(transcription)
       url: "${ENDPOINT_URL}" - # mandatory - endpoint url
       delay: 100
       retry_attempts: 8
@@ -70,7 +70,7 @@ models:
       chunk_size: 30 # Optional - max audio length in seconds fed to model
   - info:
       name: "gpt-4o-mini-audio-preview-2" 
-      inference_type: "openai" # mandatory - you can use vllm or openai chat completion
+      inference_type: "openai" # mandatory - you can use vllm(vllm), openai(openai), (chat completion) or audio transcription endpoint(transcription)
       url: "${ENDPOINT_URL}" - # mandatory - endpoint url
       delay: 100
       retry_attempts: 8
@@ -82,7 +82,7 @@ models:
       chunk_size: 30 # Optional - max audio length in seconds fed to model
   - info:
       name: "qwen-2.5-omni" 
-      inference_type: "vllm" # mandatory - you can use vllm or openai chat completion
+      inference_type: "vllm" # mandatory - you can use vllm(vllm), openai(openai), (chat completion) or audio transcription endpoint(transcription)
       url: "${ENDPOINT_URL}" - # mandatory - endpoint url
       delay: 100
       retry_attempts: 8

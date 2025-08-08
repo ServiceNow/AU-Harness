@@ -121,7 +121,7 @@ temperature_overrides:
 models:
   - info:
       name: "gpt-4o-mini-audio-preview" # Mandatory
-      inference_type: "openai"  # openai, vllm, or audio transcription
+      inference_type: "openai"  # openai(openai), vllm(vllm), or audio transcription(transcription)
       url: ${ENDPOINT_URL} # Mandatory
       delay: 100 # Optional
       retry_attempts: 8 # Optional
@@ -132,6 +132,14 @@ models:
       batch_size: 200 # Mandatory
       chunk_size: 30  # Optional - Max audio length in seconds
 ```
+
+##### Inference Types
+
+| Client           | Inference Type                       |
+|------------------|--------------------------------------|
+| "openai"         | AsyncAzureOpenAI (Chat Completions)  |
+| "vllm"           | AsyncOpenAI (Chat Completions)       |
+| "transcription"  | AsyncOpenAI (Transcriptions)         |
 
 #### Judge Configuration
 ```yaml
