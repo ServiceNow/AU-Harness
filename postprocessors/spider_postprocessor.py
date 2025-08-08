@@ -49,6 +49,8 @@ class SpiderPostprocessor(Postprocessor):
         """
         logger.info("Processing predictions with SpiderPostprocessor...")
 
+        predictions = self.process_predictions(predictions)
+
         processed_predictions: dict[str, list[str]] = {}
         for model_name, preds in predictions.items():
             processed = [self.remove_thinking_content(pred) for pred in preds]
