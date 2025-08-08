@@ -21,7 +21,7 @@ For more detailed documentation regarding which metrics can be used for which ta
 | `meteor` (&uarr;)                  | Alignment-based score with synonym handling      | meteor                    |
 | `bfcl_match_score` (&uarr;)        | Structured logic form comparison                 | bfcl_match_score                          |
 | `sql_score` (&uarr;)               | SQL correctness and execution match              | text2sql_score                                 |
-| `instruction_following` (&uarr;)   | LLM-judged instruction following capability                 | strict-i <br /> overall_wder              |
+| `instruction_following` (&uarr;)   | LLM-judged instruction following capability                 | final              |
 
 --- 
 
@@ -134,6 +134,6 @@ For more detailed documentation regarding which metrics can be used for which ta
 
 ### `instruction_following`
 - **Type**: Instruction following evaluation metric
-- **Description**: Measuring the instruction following capabilities of LALMs. 
+- **Description**: Measure the instruction following capabilities of LALMs by averaging accuracy across (1) strict-prompt, (2) strict-instruction, (3)loose-prompt and (4) loose-instruction. 
 - **Scoring**: Score between `0` and `1`, higher is better.
 - **Used In**: Audio Instruction Following (`ifeval`)
