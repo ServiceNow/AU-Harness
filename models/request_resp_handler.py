@@ -204,10 +204,11 @@ class RequestRespHandler:
                     prediction = await self.client.audio.transcriptions.create(
                         model=model_name, file=audio_file
                     )
+                user_prompt = str(msg_body)
                 raw_response: str = self._extract_response_data(prediction)
                 llm_response: str = raw_response['text'] or " "
 
-                return self._create_model_response(str(msg_body), llm_response, raw_response, start_time)
+            return self._create_model_response(user_prompt, llm_response, raw_response, start_time)
 
         except (httpx.RequestError, httpx.HTTPStatusError, ValueError, OSError) as e:
             logger.error("Attempt %s", self.current_attempt)
