@@ -197,7 +197,6 @@ class RequestRespHandler:
                         if user_prompt:
                             break
 
-                return self._create_model_response(user_prompt, llm_response, raw_response, start_time)
             elif self.inference_type == constants.TRANSCRIPTION:
                 # msg_body is a file path, need to open it as file object
                 with open(msg_body, "rb") as audio_file:
