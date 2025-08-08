@@ -325,25 +325,27 @@ class Engine:
         logger.info("[Engine.run] Evaluation complete. Returning scores.")
         return scores
 
-def create_engines(dataset_name, dataset_info, task_type, metric_name, filters, models, temperature_overrides, judge_properties, central_request_controller):
+def create_engines(dataset_task_info, models, cfg, central_request_controller):
     """
     Process a dataset and run evaluation on it.
     
     Args:
-        dataset_name: Name of the dataset to process
-        dataset_info: Dictionary containing dataset information
-        task_type: Type of task for temperature settings
-        metric_name: Name of the metric to use
-        filters: Dictionary containing filter settings
+        dataset_task_info: Tuple of (dataset_name, metric_name, dataset_info, task_type)
         models: List of model instances
-        temperature_overrides: List of temperature override configurations
-        judge_properties: Dictionary of judge properties
+        cfg: Configuration dictionary
         central_request_controller: The central request controller instance
         
     Returns:
         tuple: (Engine instance, dataset_name)
     """
-    # Get needed settings directly from filters
+    dataset_name, metric_name, dataset_info, task_type = dataset_task_info
+
+    # Get needed settings from cfg
+    filters = cfg.get("filters", {})
+    temperature_overrides = cfg.get("temperature_overrides", None)
+    judge_properties = cfg.get("judge_properties", {})
+
+    # Get needed settings from filters
     accented_filter = filters.get("accented", None)
     language_filter = filters.get("language", None)
     
