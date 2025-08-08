@@ -28,7 +28,7 @@ class RequestRespHandler:
         self.current_attempt: int = 1
         # Remove Bearer if present for vllm/openai
         if self.inference_type in [
-            constants.OPENAI_TRANSCRIPTION,
+            constants.TRANSCRIPTION,
             constants.OPENAI_CHAT_COMPLETION,
             constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION,
         ] and self.auth.startswith("Bearer "):
@@ -71,6 +71,13 @@ class RequestRespHandler:
                             properties[key]["items"]["properties"], mapping
                         )
         return properties
+
+    def _extract_response_data(self, prediction) -> str:
+        """Extract response data from prediction object."""
+        response_data = prediction.model_dump()
+        return response_data
+
+   
 
     def convert_to_tool(self, functions):
         """Convert functions to OpenAI tool format."""
@@ -133,7 +140,7 @@ class RequestRespHandler:
                     http_client=httpx.AsyncClient(verify=verify_ssl),
                 )
             )
-        elif self.inference_type == constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION:
+        elif self.inference_type == constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION or self.inference_type == constants.TRANSCRIPTION:
             # vLLM endpoints (OpenAI-compatible, no api_version)
             self.client = (
                 AsyncOpenAI(
@@ -161,35 +168,44 @@ class RequestRespHandler:
         # Re-create a fresh client for this request to avoid closed-loop issues
         self.set_client(verify_ssl=True, timeout=self.timeout)
         try:
-            # openai chat completions, vllm chat completions
-            prediction = await self.client.chat.completions.create(
-                model=model_name, messages=msg_body, tools=tools, temperature=self.temperature
-            )
-            response_data = prediction.model_dump()
-            raw_response: str = response_data
-            llm_response: str = response_data['choices'][0]['message']['content'] or " "
-            response_code: int = 200
-            elapsed_time: float = time.time() - start_time
+            if self.inference_type == constants.OPENAI_CHAT_COMPLETION or self.inference_type == constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION:
+                # openai chat completions, vllm chat completions
+                prediction = await self.client.chat.completions.create(
+                    model=model_name, messages=msg_body, tools=tools, temperature=self.temperature
+                )
+                raw_response: str = self._extract_response_data(prediction)
+                llm_response: str = raw_response['choices'][0]['message']['content'] or " "
 
-            # Find the user message to extract input prompt
-            user_prompt = ""
-            for message in msg_body:
-                if message["role"] == "user" and "content" in message and isinstance(message["content"], list):
-                    for content_item in message["content"]:
-                        if content_item.get("type") == "text":
-                            user_prompt = content_item.get("text", "")
+                # Find the user message to extract input prompt
+                user_prompt = ""
+                for message in msg_body:
+                    if message["role"] == "user" and "content" in message and isinstance(message["content"], list):
+                        for content_item in message["content"]:
+                            if content_item.get("type") == "text":
+                                user_prompt = content_item.get("text", "")
+                                break
+                        if user_prompt:
                             break
-                    if user_prompt:
-                        break
 
+            elif self.inference_type == constants.TRANSCRIPTION:
+                # msg_body is a file path, need to open it as file object
+                with open(msg_body, "rb") as audio_file:
+                    prediction = await self.client.audio.transcriptions.create(
+                        model=model_name, file=audio_file
+                    )
+                user_prompt = str(msg_body)
+                raw_response: str = self._extract_response_data(prediction)
+                llm_response: str = raw_response['text'] or " "
+
+            elapsed_time = time.time() - start_time
             return ModelResponse(
                 input_prompt=user_prompt,
                 llm_response=llm_response if llm_response else " ",
                 raw_response=raw_response,
-                response_code=response_code,
+                response_code=200,
                 performance=None,
                 wait_time=elapsed_time,
-                )
+            )
 
         except (httpx.RequestError, httpx.HTTPStatusError, ValueError, OSError) as e:
             logger.error("Attempt %s", self.current_attempt)
