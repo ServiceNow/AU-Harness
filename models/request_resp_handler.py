@@ -77,17 +77,7 @@ class RequestRespHandler:
         response_data = prediction.model_dump()
         return response_data
 
-    def _create_model_response(self, input_prompt: str, llm_response: str, raw_response: str, start_time: float) -> ModelResponse:
-        """Create a ModelResponse object with common fields."""
-        elapsed_time = time.time() - start_time
-        return ModelResponse(
-            input_prompt=input_prompt,
-            llm_response=llm_response if llm_response else " ",
-            raw_response=raw_response,
-            response_code=200,
-            performance=None,
-            wait_time=elapsed_time,
-        )
+   
 
     def convert_to_tool(self, functions):
         """Convert functions to OpenAI tool format."""
@@ -207,7 +197,15 @@ class RequestRespHandler:
                 raw_response: str = self._extract_response_data(prediction)
                 llm_response: str = raw_response['text'] or " "
 
-            return self._create_model_response(user_prompt, llm_response, raw_response, start_time)
+            elapsed_time = time.time() - start_time
+            return ModelResponse(
+                input_prompt=user_prompt,
+                llm_response=llm_response if llm_response else " ",
+                raw_response=raw_response,
+                response_code=200,
+                performance=None,
+                wait_time=elapsed_time,
+            )
 
         except (httpx.RequestError, httpx.HTTPStatusError, ValueError, OSError) as e:
             logger.error("Attempt %s", self.current_attempt)
