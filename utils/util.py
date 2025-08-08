@@ -503,12 +503,7 @@ def read_config(cfg_path: str):
         logger.error(f"[read_config] Config validation error: {e}")
         raise
     
-    # Convert judge_properties list of one-item dicts to a simple dict
-    judge_properties = cfg.get("judge_properties", {})
-    filters = cfg.get("filters", {})
-    temperature_overrides = cfg.get("temperature_overrides", None)
-    
-    return cfg, judge_properties, filters, temperature_overrides
+    return cfg
     
 def expand_dataset_metric_pairs(cfg: dict) -> list[tuple[str, str, dict, str]]:
     """

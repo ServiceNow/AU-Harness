@@ -25,25 +25,20 @@ def main(cfg_path='config.yaml'):
         Dictionary containing evaluation scores
     """
     # 1. Read config and process configuration dictionaries
-    cfg, judge_properties, filters, temperature_overrides = read_config(cfg_path)
+    cfg = read_config(cfg_path)
     # 2. Load models and initialize central request controller
-    models, central_request_controller = load_models(cfg.get("models", []), judge_properties)
+    models, central_request_controller = load_models(cfg.get("models", []), cfg.get("judge_properties", {}))
 
     # 3. Expand dataset-metric pairs using runspecs
     expanded_pairs = expand_dataset_metric_pairs(cfg)
 
     # 4. Create engines for each expanded dataset-metric pair
     all_engines = []
-    for dataset_name, metric_name, dataset_info, task_type in expanded_pairs:
+    for pair in expanded_pairs:
         engine, dataset_name = create_engines(
-            dataset_name=dataset_name,
-            dataset_info=dataset_info,
-            task_type=task_type,
-            metric_name=metric_name,
-            filters=filters,
+            pair=pair,
+            cfg=cfg,
             models=models,
-            temperature_overrides=temperature_overrides,
-            judge_properties=judge_properties,
             central_request_controller=central_request_controller
         )
         all_engines.append((engine, dataset_name))
