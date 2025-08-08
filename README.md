@@ -90,7 +90,7 @@ filters:
   system_prompts: ["audio_expert"] # optional but HIGHLY RECOMMENDED - system prompts for each sample
 ```
 
-**Important Note: It is HIGHLY Recommended to add a system prompt specific to the datasets you are running for the best results. Go to /prompts/system_prompts to choose a prebuilt prompt or create your own prompt, then add it in filters[system_prompts]**
+**Important Note: It is HIGHLY Recommended to add a system prompt/user prompt add on specific to the datasets you are running for the best results. Go to /prompts/system_prompts or /prompts/user_prompt_add_ons to choose a prebuilt prompt or create your own prompt, then add it in filters attribute**
 
 #### Result Aggregation
 ```yaml
@@ -120,7 +120,7 @@ temperature_overrides:
 ```yaml
 models:
   - info:
-      name: "gpt-4o-mini-audio-preview" # Mandatory
+      name: "gpt-4o-mini-audio-preview-1" # Mandatory - must be unique
       inference_type: "openai"  # openai(openai), vllm(vllm), or audio transcription(transcription)
       url: ${ENDPOINT_URL} # Mandatory
       delay: 100 # Optional
@@ -131,7 +131,43 @@ models:
       api_version: ${API_VERSION} # Mandatory
       batch_size: 200 # Mandatory
       chunk_size: 30  # Optional - Max audio length in seconds
+  - info:
+      name: "gpt-4o-mini-audio-preview-2" # Mandatory - must be unqiue
+      inference_type: "openai"  # openai, vllm, or audio transcription
+      url: ${ENDPOINT_URL} # Mandatory
+      delay: 100 # Optional
+      retry_attempts: 8 # Optional
+      timeout: 30 # Optional
+      model: "gpt-4o-mini-audio-preview" # Mandatory
+      auth_token: ${AUTH_TOKEN} # Mandatory
+      api_version: ${API_VERSION} # Mandatory
+      batch_size: 300 # Mandatory
+      chunk_size: 30  # Optional - Max audio length in seconds
+  - info:
+      name: "qwen-2.5-omni" 
+      inference_type: "vllm" # mandatory - you can use vllm(vllm), openai(openai), (chat completion) or audio transcription endpoint(transcription)
+      url: "${ENDPOINT_URL}" - # mandatory - endpoint url
+      delay: 100
+      retry_attempts: 8
+      timeout: 30
+      model: "qwen-2.5-omni" # mandatory - only needed for vllm
+      auth_token: "${AUTH_TOKEN}" 
+      batch_size: 200 # Optional - batch eval size
+      chunk_size: 40 # Optional - max audio length in seconds fed to model
+  - info:
+      name: "whisper-large-3" 
+      inference_type: "transcription" # mandatory - you can use vllm(vllm), openai(openai), (chat completion) or audio transcription endpoint(transcription)
+      url: "${ENDPOINT_URL}" - # mandatory - endpoint url
+      delay: 100
+      retry_attempts: 8
+      timeout: 30
+      model: "whisper-large-3" # mandatory - only needed for vllm
+      auth_token: "${AUTH_TOKEN}" 
+      batch_size: 100 # Optional - batch eval size
+      chunk_size: 30 # Optional - max audio length in seconds fed to model
 ```
+
+**Note: Batch-size proportional dataset sharding is implemented when multiple endpoints of the same model are provided. Be sure to have unique 'name' attributes for each unique endpoint, as shown above**
 
 ##### Inference Types
 

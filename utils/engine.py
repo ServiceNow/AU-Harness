@@ -81,8 +81,8 @@ class Engine:
         else:
             # Use the standard task-based temperature setting
             model.set_temp(task_type)
-        # Get model type for request management
-        model_type = model.model  # The actual model type (e.g., "gpt-4o-mini-audio-preview")
+        # Get model name for request management
+        model_name = model.name()  # The actual model name (e.g., "model_1")
         # Generate a unique model instance ID
         model_instance_id = f"{model.name()}_{id(model)}"
         
@@ -116,7 +116,7 @@ class Engine:
                 
                 if request_amount > 0:
                     granted = await self.request_manager.request_tokens(
-                        model_type, model_instance_id, request_amount)
+                        model_name, model_instance_id, request_amount)
                     
                     if granted > 0:
                         # Remove samples from pending list based on granted tokens
@@ -151,14 +151,14 @@ class Engine:
                 completed_samples.add(idx)
                 
                 # Return token to model's pool
-                await self.request_manager.return_tokens(model_type, model_instance_id, 1)
+                await self.request_manager.return_tokens(model_name, model_instance_id, 1)
                                 
                 return idx, result
             except Exception as e:
                 # Make sure to return token on error
                 logger.error(f"[Engine._infer_single_model] Error processing sample {idx} in {self.dataset_name}: {e}")
                 completed_samples.add(idx)
-                await self.request_manager.return_tokens(model_type, model_instance_id, 1)
+                await self.request_manager.return_tokens(model_name, model_instance_id, 1)
                 return idx, ""
         
         # Create tasks paired with their original index
@@ -182,22 +182,30 @@ class Engine:
         # Prepare all tasks for concurrent execution
         for model_type, models in self.model_groups.items():
             if len(models) > 1:  # Multiple instances of the same model type - need sharding
-                # Divide dataset among model instances
-                shard_size = len(self.dataset) // len(models)
+                # Calculate proportional sharding based on batch sizes
+                total_batch_capacity = sum(model.batch_size for model in models)
+                dataset_size = len(self.dataset)
                 
                 # Track the mapping of original indices to shard indices for recombination
                 index_mappings = {}
                 sharded_tasks = {}
                 
                 # Distribute samples and create tasks
+                current_idx = 0
                 for i, model in enumerate(models):
-                    start_idx = i * shard_size
-                    # Last model gets any remaining samples
-                    end_idx = (i + 1) * shard_size if i < len(models) - 1 else len(self.dataset)
-                    shard = self.dataset[start_idx:end_idx]
+                    # Calculate proportional shard size based on batch size
+                    if i < len(models) - 1:
+                        shard_size = int(dataset_size * model.batch_size / total_batch_capacity)
+                        end_idx = current_idx + shard_size
+                    else:
+                        # Last model gets any remaining samples
+                        end_idx = dataset_size
+                    
+                    shard = self.dataset[current_idx:end_idx]
 
                     # Keep track of original indices
-                    index_mappings[model.name()] = list(range(start_idx, end_idx))
+                    index_mappings[model.name()] = list(range(current_idx, end_idx))
+                    current_idx = end_idx
                     
                     task = asyncio.create_task(self._infer_single_model(model, shard))
                     sharded_tasks[model.name()] = task

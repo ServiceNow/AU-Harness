@@ -69,11 +69,11 @@ class _BaseLLMJudge(Metrics):
             )
 
     def set_request_manager(self, manager):
-        """Set the request manager and register the model type."""
+        """Set the request manager and register the model."""
         self._request_manager = manager
         if self._request_manager is not None:
             # Register the model type directly with the central controller
-            self._request_manager.central_controller.register_model_type(
+            self._request_manager.central_controller.register_model(
                 self._model, self._max_concurrency
             )
 

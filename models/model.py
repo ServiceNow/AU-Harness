@@ -85,7 +85,6 @@ class Model(ABC):
             self.temperature = task_temp_map[task_type]
             # Also update the request handler's temperature
             self.req_resp_hndlr.temperature = self.temperature
-            logging.info("[Model.set_temp] Set temperature to %s for task type %s and model %s", self.temperature, task_type, self.name())
 
     def _is_retryable_error(self, result: ModelResponse):
         """Check if the error is a rate limit error by checking response code."""
