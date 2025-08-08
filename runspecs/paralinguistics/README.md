@@ -48,4 +48,4 @@ Run the specific dataset or all datasets across word_error_rate(utterance by utt
 ```yaml
 dataset_metric:
   - ["callhome_eng", "word_error_rate"]
-  - ["callhome, "speaker_diarization"] #etc.
+  - ["callhome_spa, "speaker_diarization"] #etc.

@@ -116,6 +116,14 @@ models:
       chunk_size: 30  # Optional - Max audio length in seconds
 ```
 
+##### Inference Types
+
+| Client           | Inference Type                       |
+|------------------|--------------------------------------|
+| "openai"         | AsyncAzureOpenAI (Chat Completions)  |
+| "vllm"           | AsyncOpenAI (Chat Completions)       |
+| "transcription"  | AsyncOpenAI (Transcriptions)         |
+
 #### Judge Configuration
 ```yaml
 judge_properties:

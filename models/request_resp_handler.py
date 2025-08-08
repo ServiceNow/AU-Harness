@@ -72,6 +72,18 @@ class RequestRespHandler:
                         )
         return properties
 
+    def _create_model_response(self, input_prompt: str, llm_response: str, raw_response: str, start_time: float) -> ModelResponse:
+        """Create a ModelResponse object with common fields."""
+        elapsed_time = time.time() - start_time
+        return ModelResponse(
+            input_prompt=input_prompt,
+            llm_response=llm_response if llm_response else " ",
+            raw_response=raw_response,
+            response_code=200,
+            performance=None,
+            wait_time=elapsed_time,
+        )
+
     def convert_to_tool(self, functions):
         """Convert functions to OpenAI tool format."""
         mapping = {
@@ -169,8 +181,6 @@ class RequestRespHandler:
                 response_data = prediction.model_dump()
                 raw_response: str = response_data
                 llm_response: str = response_data['choices'][0]['message']['content'] or " "
-                response_code: int = 200
-                elapsed_time: float = time.time() - start_time
 
                 # Find the user message to extract input prompt
                 user_prompt = ""
@@ -183,36 +193,18 @@ class RequestRespHandler:
                         if user_prompt:
                             break
 
-                return ModelResponse(
-                    input_prompt=user_prompt,
-                    llm_response=llm_response if llm_response else " ",
-                    raw_response=raw_response,
-                    response_code=response_code,
-                    performance=None,
-                    wait_time=elapsed_time,
-                    )
+                return self._create_model_response(user_prompt, llm_response, raw_response, start_time)
             elif self.inference_type == constants.TRANSCRIPTION:
                 # msg_body is a file path, need to open it as file object
                 with open(msg_body, "rb") as audio_file:
                     prediction = await self.client.audio.transcriptions.create(
                         model=model_name, file=audio_file
                     )
-                response_data_json = prediction.model_dump_json()
                 response_data = prediction.model_dump()
-                
-                raw_response: str = response_data_json
+                raw_response: str = response_data
                 llm_response: str = response_data['text'] or " "
-                response_code: int = 200
-                elapsed_time: float = time.time() - start_time
 
-                return ModelResponse(
-                    input_prompt=str(msg_body),
-                    llm_response=llm_response if llm_response else " ",
-                    raw_response=raw_response,
-                    response_code=response_code,
-                    performance=None,
-                    wait_time=elapsed_time,
-                )
+                return self._create_model_response(str(msg_body), llm_response, raw_response, start_time)
 
         except (httpx.RequestError, httpx.HTTPStatusError, ValueError, OSError) as e:
             logger.error("Attempt %s", self.current_attempt)
