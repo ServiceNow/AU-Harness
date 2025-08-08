@@ -72,6 +72,11 @@ class RequestRespHandler:
                         )
         return properties
 
+    def _extract_response_data(self, prediction) -> str:
+        """Extract response data from prediction object."""
+        response_data = prediction.model_dump()
+        return response_data
+
     def _create_model_response(self, input_prompt: str, llm_response: str, raw_response: str, start_time: float) -> ModelResponse:
         """Create a ModelResponse object with common fields."""
         elapsed_time = time.time() - start_time
@@ -178,9 +183,8 @@ class RequestRespHandler:
                 prediction = await self.client.chat.completions.create(
                     model=model_name, messages=msg_body, tools=tools, temperature=self.temperature
                 )
-                response_data = prediction.model_dump()
-                raw_response: str = response_data
-                llm_response: str = response_data['choices'][0]['message']['content'] or " "
+                raw_response: str = self._extract_response_data(prediction)
+                llm_response: str = raw_response['choices'][0]['message']['content'] or " "
 
                 # Find the user message to extract input prompt
                 user_prompt = ""
@@ -200,9 +204,8 @@ class RequestRespHandler:
                     prediction = await self.client.audio.transcriptions.create(
                         model=model_name, file=audio_file
                     )
-                response_data = prediction.model_dump()
-                raw_response: str = response_data
-                llm_response: str = response_data['text'] or " "
+                raw_response: str = self._extract_response_data(prediction)
+                llm_response: str = raw_response['text'] or " "
 
                 return self._create_model_response(str(msg_body), llm_response, raw_response, start_time)
 
