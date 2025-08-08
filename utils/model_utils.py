@@ -63,15 +63,14 @@ def load_models(cfg_list: list[dict], judge_properties: dict = None) -> tuple[li
     # Register all models with the controller
     for cfg in cfg_list:
         model_name = cfg["info"].get("name")
-        model_type = cfg["info"].get("model")
         batch_size = cfg["info"].get("batch_size", 1)
         
         model_obj = Model(cfg["info"])
         models.append(model_obj)
         
-        # Register model type with the controller
-        if model_type:
-            central_request_controller.register_model_type(model_type, batch_size)
+        # Register model name with the controller
+        if model_name:
+            central_request_controller.register_model(model_name, batch_size)
     
     # Register judge model if available
     if judge_properties:
@@ -79,7 +78,7 @@ def load_models(cfg_list: list[dict], judge_properties: dict = None) -> tuple[li
         judge_concurrency = judge_properties.get("judge_concurrency", 1)
         
         if judge_model:
-            central_request_controller.register_model_type(judge_model, judge_concurrency)
+            central_request_controller.register_model(judge_model, judge_concurrency)
     
     if not models:
         logger.error("[_load_models] No valid models found in configuration.")

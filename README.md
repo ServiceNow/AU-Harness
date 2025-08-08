@@ -120,7 +120,7 @@ temperature_overrides:
 ```yaml
 models:
   - info:
-      name: "gpt-4o-mini-audio-preview" # Mandatory
+      name: "gpt-4o-mini-audio-preview-1" # Mandatory - must be unique
       inference_type: "openai"  # openai, vllm, or audio transcription
       url: ${ENDPOINT_URL} # Mandatory
       delay: 100 # Optional
@@ -130,6 +130,18 @@ models:
       auth_token: ${AUTH_TOKEN} # Mandatory
       api_version: ${API_VERSION} # Mandatory
       batch_size: 200 # Mandatory
+      chunk_size: 30  # Optional - Max audio length in seconds
+  - info:
+      name: "gpt-4o-mini-audio-preview-2" # Mandatory - must be unqiue
+      inference_type: "openai"  # openai, vllm, or audio transcription
+      url: ${ENDPOINT_URL} # Mandatory
+      delay: 100 # Optional
+      retry_attempts: 8 # Optional
+      timeout: 30 # Optional
+      model: "gpt-4o-mini-audio-preview" # Mandatory
+      auth_token: ${AUTH_TOKEN} # Mandatory
+      api_version: ${API_VERSION} # Mandatory
+      batch_size: 300 # Mandatory
       chunk_size: 30  # Optional - Max audio length in seconds
 ```
 

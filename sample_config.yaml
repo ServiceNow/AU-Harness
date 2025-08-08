@@ -57,7 +57,7 @@ temperature_overrides:
 
 models:
   - info:
-      name: "gpt-4o-mini-audio-preview-1" 
+      name: "gpt-4o-mini-audio-preview-1" # mandatory - must be unique
       inference_type: "openai" # mandatory - you can use vllm or openai chat completion
       url: "${ENDPOINT_URL}" - # mandatory - endpoint url
       delay: 100
@@ -69,7 +69,7 @@ models:
       batch_size: 100 # Optional - batch eval size
       chunk_size: 30 # Optional - max audio length in seconds fed to model
   - info:
-      name: "gpt-4o-mini-audio-preview-2" 
+      name: "gpt-4o-mini-audio-preview-2" # mandatory - must be unique
       inference_type: "openai" # mandatory - you can use vllm or openai chat completion
       url: "${ENDPOINT_URL}" - # mandatory - endpoint url
       delay: 100

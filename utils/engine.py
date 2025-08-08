@@ -81,8 +81,8 @@ class Engine:
         else:
             # Use the standard task-based temperature setting
             model.set_temp(task_type)
-        # Get model type for request management
-        model_type = model.model  # The actual model type (e.g., "gpt-4o-mini-audio-preview")
+        # Get model name for request management
+        model_name = model.name()  # The actual model name (e.g., "model_1")
         # Generate a unique model instance ID
         model_instance_id = f"{model.name()}_{id(model)}"
         
@@ -116,7 +116,7 @@ class Engine:
                 
                 if request_amount > 0:
                     granted = await self.request_manager.request_tokens(
-                        model_type, model_instance_id, request_amount)
+                        model_name, model_instance_id, request_amount)
                     
                     if granted > 0:
                         # Remove samples from pending list based on granted tokens
@@ -151,14 +151,14 @@ class Engine:
                 completed_samples.add(idx)
                 
                 # Return token to model's pool
-                await self.request_manager.return_tokens(model_type, model_instance_id, 1)
+                await self.request_manager.return_tokens(model_name, model_instance_id, 1)
                                 
                 return idx, result
             except Exception as e:
                 # Make sure to return token on error
                 logger.error(f"[Engine._infer_single_model] Error processing sample {idx} in {self.dataset_name}: {e}")
                 completed_samples.add(idx)
-                await self.request_manager.return_tokens(model_type, model_instance_id, 1)
+                await self.request_manager.return_tokens(model_name, model_instance_id, 1)
                 return idx, ""
         
         # Create tasks paired with their original index
