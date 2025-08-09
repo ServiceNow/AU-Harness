@@ -58,7 +58,6 @@ class Engine:
         self.temperature_overrides = temperature_overrides or []
         # Store filters for system prompt access
         self.filters = filters
-        
         # Group models by their model attribute for sharding
         self.model_groups = {}
         for model in models:
@@ -74,10 +73,10 @@ class Engine:
         task_type = self.task_type
         
         # Check for temperature override for this specific model and task combination
-        override_temp = _get_temperature_override(model.name(), task_type, self.temperature_overrides)
+        override_temp = _get_temperature_override(model.model, task_type, self.temperature_overrides)
+
         if override_temp is not None:
             # Use the override temperature directly
-            logger.info(f"[Engine._infer_single_model] Using override temperature {override_temp} for model {model.name()} and task {task_type}")
             model.set_temp(override_temp)
         else:
             # Use the standard task-based temperature setting
@@ -85,13 +84,12 @@ class Engine:
         
         # Check for system prompt for this specific model and dataset combination
         system_prompts = self.filters.get('system_prompts', None)
-        system_prompt = _get_system_prompt(model.name(), self.dataset_name, system_prompts)
+        system_prompt = _get_system_prompt(model.model, self.dataset_name, system_prompts)
         if system_prompt:
-            logger.info(f"[Engine._infer_single_model] Using system prompt for model {model.name()} and dataset {self.dataset_name}: {system_prompt}")
             model.set_system_prompt(system_prompt)
         
         # Get model type for request management
-        model_type = model.model  # The actual model type (e.g., "gpt-4o-mini-audio-preview")
+        model_name = model.name()  # The actual model name (e.g., "gpt-4o-mini-audio-preview-1")
         # Generate a unique model instance ID
         model_instance_id = f"{model.name()}_{id(model)}"
         
@@ -125,7 +123,7 @@ class Engine:
                 
                 if request_amount > 0:
                     granted = await self.request_manager.request_tokens(
-                        model_type, model_instance_id, request_amount)
+                        model_name, model_instance_id, request_amount)
                     
                     if granted > 0:
                         # Remove samples from pending list based on granted tokens
@@ -160,14 +158,14 @@ class Engine:
                 completed_samples.add(idx)
                 
                 # Return token to model's pool
-                await self.request_manager.return_tokens(model_type, model_instance_id, 1)
+                await self.request_manager.return_tokens(model_name, model_instance_id, 1)
                                 
                 return idx, result
             except Exception as e:
                 # Make sure to return token on error
                 logger.error(f"[Engine._infer_single_model] Error processing sample {idx} in {self.dataset_name}: {e}")
                 completed_samples.add(idx)
-                await self.request_manager.return_tokens(model_type, model_instance_id, 1)
+                await self.request_manager.return_tokens(model_name, model_instance_id, 1)
                 return idx, ""
         
         # Create tasks paired with their original index
@@ -191,22 +189,30 @@ class Engine:
         # Prepare all tasks for concurrent execution
         for model_type, models in self.model_groups.items():
             if len(models) > 1:  # Multiple instances of the same model type - need sharding
-                # Divide dataset among model instances
-                shard_size = len(self.dataset) // len(models)
+                # Calculate proportional sharding based on batch sizes
+                total_batch_capacity = sum(model.batch_size for model in models)
+                dataset_size = len(self.dataset)
                 
                 # Track the mapping of original indices to shard indices for recombination
                 index_mappings = {}
                 sharded_tasks = {}
                 
                 # Distribute samples and create tasks
+                current_idx = 0
                 for i, model in enumerate(models):
-                    start_idx = i * shard_size
-                    # Last model gets any remaining samples
-                    end_idx = (i + 1) * shard_size if i < len(models) - 1 else len(self.dataset)
-                    shard = self.dataset[start_idx:end_idx]
+                    # Calculate proportional shard size based on batch size
+                    if i < len(models) - 1:
+                        shard_size = int(dataset_size * model.batch_size / total_batch_capacity)
+                        end_idx = current_idx + shard_size
+                    else:
+                        # Last model gets any remaining samples
+                        end_idx = dataset_size
+                    
+                    shard = self.dataset[current_idx:end_idx]
 
                     # Keep track of original indices
-                    index_mappings[model.name()] = list(range(start_idx, end_idx))
+                    index_mappings[model.name()] = list(range(current_idx, end_idx))
+                    current_idx = end_idx
                     
                     task = asyncio.create_task(self._infer_single_model(model, shard))
                     sharded_tasks[model.name()] = task
@@ -326,25 +332,28 @@ class Engine:
         logger.info("[Engine.run] Evaluation complete. Returning scores.")
         return scores
 
-def create_engine(dataset_name, dataset_info, task_type, metric_name, filters, model_configs, temperature_overrides, judge_properties, central_request_controller):
+def create_engine(dataset_task_info, cfg, central_request_controller):
     """
     Process a dataset and run evaluation on it.
     
     Args:
-        dataset_name: Name of the dataset to process
-        dataset_info: Dictionary containing dataset information
-        task_type: Type of task for temperature settings
-        metric_name: Name of the metric to use
-        filters: Dictionary containing filter settings
-        model_configs: List of model configurations
-        temperature_overrides: List of temperature override configurations
-        judge_properties: Dictionary of judge properties
+        dataset_task_info: Tuple of (dataset_name, metric_name, dataset_info, task_type)
+        models: List of model instances
+        cfg: Configuration dictionary
         central_request_controller: The central request controller instance
         
     Returns:
         tuple: (Engine instance, dataset_name)
     """
-    # Get needed settings directly from filters
+    dataset_name, metric_name, dataset_info, task_type = dataset_task_info
+
+    # Get needed settings from cfg
+    filters = cfg.get("filters", {})
+    temperature_overrides = cfg.get("temperature_overrides", None)
+    judge_properties = cfg.get("judge_properties", {})
+    model_configs = cfg.get("models", [])
+
+    # Get needed settings from filters
     accented_filter = filters.get("accented", None)
     language_filter = filters.get("language", None)
     

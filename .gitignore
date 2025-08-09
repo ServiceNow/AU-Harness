@@ -11,6 +11,7 @@ config.yaml
 *.csv
 *.out
 *.csv
+final_scores.json
 
 # callhome local files
 *.cha
@@ -27,5 +28,6 @@ __pycache__/
 .vscode/
 
 data/spider/
+test/
 
 CLAUDE.md

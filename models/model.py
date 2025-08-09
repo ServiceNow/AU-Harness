@@ -265,7 +265,6 @@ class Model(ABC):
         instruction = message.get("instruction")
 
         tools = copy.deepcopy(message.get('tools', None))
-
         # If metric is judge types, only use first chunk (30s) regardless of length
         judge_metrics = {"llm_judge_binary", "llm_judge_detailed"}
         if metric_name in judge_metrics:
@@ -339,8 +338,7 @@ class Model(ABC):
 
             # audio transcription - append values
             if self.inference_type in (
-                    constants.INFERENCE_SERVER_VLLM_TRANSCRIPTION,
-                    constants.OPENAI_TRANSCRIPTION,
+                    constants.TRANSCRIPTION,
             ):
                 for i in range(num_chunks):
                     start = i * max_samples
@@ -348,7 +346,7 @@ class Model(ABC):
                     chunk_array = audio_array[start:end]
                     wav_path = audio_array_to_wav_file(chunk_array, sampling_rate)
                     # Pass closed file (file path) to request_server
-                    resp = await self.req_resp_hndlr.request_server(wav_path, error_tracker)
+                    resp = await self.req_resp_hndlr.request_server(wav_path, tools=None, error_tracker=error_tracker)
                     concatenated_text += resp.llm_response or ""
                     responses.append(resp)
                 # ---------- Merge chunk responses ------------------
@@ -407,11 +405,10 @@ class Model(ABC):
 
         # transcription
         if self.inference_type in (
-                constants.INFERENCE_SERVER_VLLM_TRANSCRIPTION,
-                constants.OPENAI_TRANSCRIPTION,
+                constants.TRANSCRIPTION,
         ):
             wav_path = audio_array_to_wav_file(audio_array, sampling_rate)
             # Pass closed file (file path) to request_server
-            resp = await self.req_resp_hndlr.request_server(wav_path, error_tracker)
+            resp = await self.req_resp_hndlr.request_server(wav_path, tools=None, error_tracker=error_tracker)
             return resp
         raise ValueError("Unsupported inference type")

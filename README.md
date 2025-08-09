@@ -2,6 +2,8 @@
 
 *Your ultimate audio evaluation framework*
 
+**Insert Images Here**
+
 </div>
 
 ## Overview
@@ -42,11 +44,28 @@ python -m venv myEnv
 source myEnv/bin/activate
 pip install -r requirements.txt
 ```
-3. Populate your `config.yaml` file based on the example provided in `sample_config.yaml` - the given 'config.yaml' already has the mandatory fields
+3. Populate your `config.yaml` file based on the example provided in `sample_config.yaml` and instructions below - the given 'config.yaml' already has the mandatory fields
 4. Run the end-to-end evaluation:
 ```bash
 bash evaluate.sh
 ```
+
+### Analyzing Results
+
+Once your run finishes, you can inspect the outputs in a few ways:
+
+- **Full logs**  
+  View the complete log at  
+  `default.log` (or whatever you set as `log_file`) in the project root.
+
+- **Per-record details**  
+  `/run_logs/{dataset}_{metric}_{model}.csv`
+
+- **All record-level entries for the entire run**  
+  `/run_logs/{run.json}`
+
+- **Final aggregated scores**  
+  `/run_logs/final_scores.json`
 
 To deploy your own models, look at /models/inference_boilerplate/ for more instructions.
 
@@ -77,6 +96,8 @@ filters:
     - ["summary_expert", ["qwen_2_audio", "spoken_dialogue_summarization"]]
 ```
 
+**Important Note: It is HIGHLY Recommended to add a system prompt/user prompt add on specific to the datasets you are running for the best results. Go to /prompts/system_prompts or /prompts/user_prompt_add_ons to choose a prebuilt prompt or create your own prompt, then add it in filters attribute**
+
 #### Result Aggregation
 ```yaml
 # Optional - allows for custom score aggregation at the end
@@ -90,9 +111,9 @@ aggregate:
 ```yaml
 temperature_overrides:
   # Model and task override
-  - model: "gpt-4o-mini-audio-preview"
-    task: "emotion_recognition"
-    temperature: 0.5
+  - model: "gpt-4o-mini-audio-preview" # model.model
+    task: "emotion_recognition" # task_type
+    temperature: 0.5 # temp
   # Model only override
   - model: "gpt-4o-mini-audio-preview"
     temperature: 0.7
@@ -105,8 +126,8 @@ temperature_overrides:
 ```yaml
 models:
   - info:
-      name: "gpt-4o-mini-audio-preview" # Mandatory
-      inference_type: "openai"  # openai, vllm, or audio transcription
+      name: "gpt-4o-mini-audio-preview-1" # Mandatory - must be unique
+      inference_type: "openai"  # openai(openai), vllm(vllm), or audio transcription(transcription)
       url: ${ENDPOINT_URL} # Mandatory
       delay: 100 # Optional
       retry_attempts: 8 # Optional
@@ -138,7 +159,29 @@ models:
       auth_token: ${AUTH_TOKEN} # Mandatory
       batch_size: 200 # Mandatory
       chunk_size: 30  # Optional - Max audio length in seconds
+  - info:
+      name: "gpt-4o-mini-audio-preview-2" # Mandatory - must be unqiue
+      inference_type: "openai"  # openai, vllm, or audio transcription
+      url: ${ENDPOINT_URL} # Mandatory
+      delay: 100 # Optional
+      retry_attempts: 8 # Optional
+      timeout: 30 # Optional
+      model: "gpt-4o-mini-audio-preview" # Mandatory
+      auth_token: ${AUTH_TOKEN} # Mandatory
+      api_version: ${API_VERSION} # Mandatory
+      batch_size: 300 # Mandatory
+      chunk_size: 30  # Optional - Max audio length in seconds
 ```
+
+**Note: Batch-size proportional dataset sharding is implemented when multiple endpoints of the same model are provided. Be sure to have unique 'name' attributes for each unique endpoint, as shown above**
+
+##### Inference Types
+
+| Client           | Inference Type                       |
+|------------------|--------------------------------------|
+| "openai"         | AsyncAzureOpenAI (Chat Completions)  |
+| "vllm"           | AsyncOpenAI (Chat Completions)       |
+| "transcription"  | AsyncOpenAI (Transcriptions)         |
 
 #### Judge Configuration
 ```yaml
@@ -159,7 +202,7 @@ LALMEval supports adding custom datasets through runspec JSON files. These files
 
 #### Creating a Runspec File
 
-Create a JSON file in the `runspecs` directory under the appropriate task category and type. Each dataset should be defined with the following properties:
+Create a JSON file in the `runspecs` directory under the appropriate task category and type. Each dataset should be defined with the following properties, down to the most specific subset:
 
 ```json
 {

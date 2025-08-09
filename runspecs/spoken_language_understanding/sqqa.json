@@ -10,7 +10,7 @@
         "hf_repo": "fixie-ai/big_bench_audio",
         "subset": "default",
         "language": "english",
-        "preprocessor": "BigBenchAudioTextOnlyPreprocessor",
+        "preprocessor": "BigBenchAudioPreprocessor",
         "postprocessor": "BigBenchAudioPostprocessor"
     },
     "openbookqa": {

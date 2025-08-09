@@ -174,6 +174,11 @@ class RunLogState:
     """Class to manage run log state."""
     reset = False
 
+# Flag to track if final_scores.json has been reset for this session
+class FinalScoresState:
+    """Class to manage final scores state."""
+    reset = False
+
 
 def write_to_run_json(
     self, refs, cands, scores, dataset_name, model_name,
@@ -230,7 +235,7 @@ def write_to_run_json(
 
 def append_final_score(self, overall, dataset_name, model_name, model_responses=None):
     """
-    Append the final aggregated score to the metric's log file.
+    Append the final aggregated score to final_scores.json in run_logs directory.
 
     Args:
         self: The metric object instance with a 'name' attribute
@@ -240,44 +245,11 @@ def append_final_score(self, overall, dataset_name, model_name, model_responses=
         model_responses: Optional list of ModelResponse objects for additional stats
     
     Returns:
-        Path to the log file where the final score was appended
+        Path to the JSON file where the final score was appended
     """
-
-    def _slug(s):
-        return re.sub(r"[^A-Za-z0-9_]+", "_", s)
-
     log_dir = Path("run_logs")
     log_dir.mkdir(exist_ok=True)
-    log_path = log_dir / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.csv"
-
-    # Check if file exists and read headers
-    headers = []
-    if log_path.exists():
-        with open(log_path, "r", encoding="utf-8", newline='') as f:
-            reader = csv.reader(f)
-            for row in reader:
-                headers = row  # First row contains headers
-                break
-
-    # If no existing file or couldn't read headers, use default headers
-    if not headers:
-        headers = [
-            "instruction", "reference", "candidate", "score", "explanation",
-            "response_code", "raw_response_type", "wait_time",
-            "error_rate_limit", "error_connection", "error_api",
-            "error_timeout", "error_server", "error_other",
-            "is_final_score"
-        ]
-
-    # Ensure is_final_score field exists
-    if "is_final_score" not in headers:
-        headers.append("is_final_score")
-
-    # Create a row for the final score
-    row_values = [""] * len(headers)
-
-    # Map values to their respective header positions
-    header_to_index = {header: index for index, header in enumerate(headers)}
+    json_path = log_dir / "final_scores.json"
     
     # Calculate additional statistics from model_responses
     total_samples = 0
@@ -292,24 +264,39 @@ def append_final_score(self, overall, dataset_name, model_name, model_responses=
         wait_times = [resp.wait_time for resp in model_responses if hasattr(resp, 'wait_time') and resp.wait_time is not None]
         if wait_times:
             avg_wait_time = sum(wait_times) / len(wait_times)
-    
-    # Set final score fields
-    if "score" in header_to_index:
-        row_values[header_to_index["score"]] = overall
-    if "is_final_score" in header_to_index:
-        row_values[header_to_index["is_final_score"]] = "True"  # String format for CSV consistency
-    
-    # Add sample statistics to the row if we have model_responses
-    if model_responses:
-        if "candidate" in header_to_index:
-            row_values[header_to_index["candidate"]] = f"Total samples: {total_samples}, Failures: {total_failures}, Avg wait time: {avg_wait_time:.2f}s"
-    
-    # Append the final score to the log file
-    with open(log_path, "a", encoding="utf-8", newline='') as f:
-        writer = csv.writer(f, delimiter=',', quoting=csv.QUOTE_ALL)
-        # If the file is new, write the header
-        if not log_path.exists() or log_path.stat().st_size == 0:
-            writer.writerow(headers)
-        writer.writerow(row_values)
 
-    return log_path
+    # Create the score entry
+    score_entry = {
+        "dataset": dataset_name,
+        "metric": self.name,
+        "model": model_name,
+        "score": overall,
+        "total_samples": total_samples,
+        "failures": total_failures,
+        "avg_wait_time": avg_wait_time
+    }
+
+    # Load existing data or create new array
+    existing_data = []
+    
+    # Only reset on the first call of a new run
+    if not FinalScoresState.reset:
+        FinalScoresState.reset = True
+        existing_data = []  # Start fresh for new run
+    else:
+        # Load existing data for subsequent calls
+        if json_path.exists():
+            with open(json_path, "r", encoding="utf-8") as f:
+                try:
+                    existing_data = json.load(f)
+                except (json.JSONDecodeError, ValueError):
+                    existing_data = []
+
+    # Add new entry to the data
+    existing_data.append(score_entry)
+
+    # Write the complete JSON array
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(existing_data, f, ensure_ascii=False, indent=2)
+
+    return json_path

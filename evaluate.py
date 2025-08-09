@@ -25,25 +25,19 @@ def main(cfg_path='config.yaml'):
         Dictionary containing evaluation scores
     """
     # 1. Read config and process configuration dictionaries
-    cfg, judge_properties, filters, temperature_overrides, aggregates = read_config(cfg_path)
-    # 2. Initialize central request controller
-    central_request_controller, model_configs = register_models_with_controller(cfg.get("models", []), judge_properties)
+    cfg = read_config(cfg_path)
+    # 2. Load models and initialize central request controller
+    central_request_controller, model_configs = register_models_with_controller(cfg.get("models", []), cfg.get("judge_properties", {}))
 
     # 3. Expand dataset-metric pairs using runspecs
     expanded_pairs = expand_dataset_metric_pairs(cfg)
 
     # 4. Create engines for each expanded dataset-metric pair
     all_engines = []
-    for dataset_name, metric_name, dataset_info, task_type in expanded_pairs:
+    for dataset_task_info in expanded_pairs:
         engine, dataset_name = create_engine(
-            dataset_name=dataset_name,
-            dataset_info=dataset_info,
-            task_type=task_type,
-            metric_name=metric_name,
-            filters=filters,
-            model_configs=model_configs,
-            temperature_overrides=temperature_overrides,
-            judge_properties=judge_properties,
+            dataset_task_info=dataset_task_info,
+            cfg=cfg,
             central_request_controller=central_request_controller
         )
         all_engines.append((engine, dataset_name))
@@ -52,6 +46,7 @@ def main(cfg_path='config.yaml'):
     scores = asyncio.run(run_all_engines(all_engines))
 
     # 6. Log final results and process aggregates
+    aggregates = cfg.get("aggregate", [])
     if aggregates:
         _calculate_aggregates(aggregates, scores, model_configs)
 

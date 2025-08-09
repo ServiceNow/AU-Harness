@@ -9,7 +9,7 @@
     "instruction_column": "instruction"
   },
   "gigaspeech_test": {
-    "hf_repo": "AudioLLMs/gigaspeech-test",
+    "hf_repo": "AudioLLMs/gigaspeech_test",
     "language": "en",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor",
@@ -1069,6 +1069,33 @@
     "audio_column": "audio",
     "target_column": "sentence"
   },
+  "common_voice_15_quy": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "quy",
+    "language": "quy",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_rm-sursilv": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "rm-sursilv",
+    "language": "rm-sursilv",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_rm-vallader": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "rm-vallader",
+    "language": "rm-vallader",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
   "common_voice_15_ro": {
     "hf_repo": "mozilla-foundation/common_voice_15_0",
     "subset": "ro",
@@ -1321,10 +1348,28 @@
     "audio_column": "audio",
     "target_column": "sentence"
   },
+  "common_voice_15_yo": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "yo",
+    "language": "yo",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
   "common_voice_15_yue": {
     "hf_repo": "mozilla-foundation/common_voice_15_0",
     "subset": "yue",
     "language": "yue",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "sentence"
+  },
+  "common_voice_15_zgh": {
+    "hf_repo": "mozilla-foundation/common_voice_15_0",
+    "subset": "zgh",
+    "language": "zgh",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor",
     "audio_column": "audio",
@@ -1989,7 +2034,7 @@
   },
   "fleurs_ps": {
     "hf_repo": "google/fleurs",
-    "subset": "ps_pk",
+    "subset": "ps_af",
     "language": "ps",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor",
@@ -2016,7 +2061,7 @@
   },
   "fleurs_pt": {
     "hf_repo": "google/fleurs",
-    "subset": "pt_pt",
+    "subset": "pt_br",
     "language": "pt",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor",
@@ -2115,7 +2160,7 @@
   },
   "fleurs_es": {
     "hf_repo": "google/fleurs",
-    "subset": "es_es",
+    "subset": "es_419",
     "language": "es",
     "preprocessor": "GeneralPreprocessor",
     "postprocessor": "GeneralPostprocessor",

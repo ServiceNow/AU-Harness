@@ -21,8 +21,7 @@ from metrics.wer.whisper_normalizer.english import EnglishTextNormalizer
 # Inference server types
 INFERENCE_SERVER_VLLM_CHAT_COMPLETION = 'vllm'
 OPENAI_CHAT_COMPLETION = 'openai'
-INFERENCE_SERVER_VLLM_TRANSCRIPTION = 'vllm_transcription'
-OPENAI_TRANSCRIPTION = 'openai_transcription'
+TRANSCRIPTION = 'transcription'
 
 # WER/CER metrics constants
 # Define WER/CER related constants
@@ -241,6 +240,9 @@ language_map = {
     'pl': 'polish',
     'ps': 'pashto',
     'pt': 'portuguese',
+    'quy': 'ayacucho quechua',
+    'rm-sursilv': 'romansh-sursilv',
+    'rm-vallader':'romansh-vallader',
     'ro': 'romanian',
     'ru': 'russian',
     'rw': 'kinyarwanda',
@@ -280,6 +282,7 @@ language_map = {
     'xh': 'xhosa',
     'yo': 'yoruba',
     'yue': 'cantonese chinese',
+    'zgh': 'standard moroccan tamazight',
     'zh': 'chinese',
     'zh-CN': 'chinese',
     'zu': 'zulu',

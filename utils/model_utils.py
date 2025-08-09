@@ -6,11 +6,11 @@ from utils.request_manager import CentralRequestController
 logger = logging.getLogger(__name__)
 
 
-def _get_temperature_override(model_name: str, task_type: str, temperature_overrides: list[dict]) -> float | None:
+def _get_temperature_override(model: str, task_type: str, temperature_overrides: list[dict]) -> float | None:
     """Check if there's a temperature override for this model and task combination.
     
     Args:
-        model_name: The name of the model
+        model: The model
         task_type: The type of task being performed
         temperature_overrides: List of override dictionaries from config.yaml
         
@@ -29,13 +29,12 @@ def _get_temperature_override(model_name: str, task_type: str, temperature_overr
         # Check if this override applies to our model/task
         override_model = override.get("model")
         override_task = override.get("task")
-        
         # Case 1: Model+Task specific override
-        if override_model == model_name and override_task == task_type:
+        if override_model == model and override_task == task_type:
             return float(temp)
             
         # Case 2: Model-only override
-        if override_model == model_name and not override_task:
+        if override_model == model and not override_task:
             return float(temp)
             
         # Case 3: Task-only override
@@ -44,11 +43,11 @@ def _get_temperature_override(model_name: str, task_type: str, temperature_overr
     
     return None
 
-def _get_system_prompt(model_name: str, dataset_name: str, system_prompts: list) -> str | None:
+def _get_system_prompt(model: str, dataset_name: str, system_prompts: list) -> str | None:
     """Get system prompt for this model and dataset combination.
     
     Args:
-        model_name: The name of the model
+        model: The model
         dataset_name: The name of the dataset
         system_prompts: List of system prompt configurations from filters
         
@@ -76,7 +75,7 @@ def _get_system_prompt(model_name: str, dataset_name: str, system_prompts: list)
         criteria_model, criteria_dataset = match_criteria
         
         # Check if this prompt applies to our model first
-        if criteria_model != model_name:
+        if criteria_model != model:
             continue
         
         # Now check dataset - need to flatten runspecs like temperature override does
@@ -120,12 +119,12 @@ def register_models_with_controller(cfg_list: list[dict], judge_properties: dict
     
     # Register all models with the controller
     for cfg in cfg_list:
-        model_type = cfg["info"].get("model")
+        model_name = cfg["info"].get("name")
         batch_size = cfg["info"].get("batch_size", 1)
         
         # Register model type with the controller
-        if model_type:
-            central_request_controller.register_model_type(model_type, batch_size)
+        if model_name:
+            central_request_controller.register_model(model_name, batch_size)
     
     # Register judge model if available
     if judge_properties:
@@ -133,7 +132,7 @@ def register_models_with_controller(cfg_list: list[dict], judge_properties: dict
         judge_concurrency = judge_properties.get("judge_concurrency", 1)
         
         if judge_model:
-            central_request_controller.register_model_type(judge_model, judge_concurrency)
+            central_request_controller.register_model(judge_model, judge_concurrency)
     
     return central_request_controller, cfg_list
 
