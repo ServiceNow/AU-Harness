@@ -2,6 +2,8 @@
 
 *Your ultimate audio evaluation framework*
 
+**Insert Images Here**
+
 </div>
 
 ## Overview
@@ -83,11 +85,15 @@ dataset_metric:
 ```yaml
 filters:
   num_samples: 300 # optional - number of samples to run(remove for all)
-  user_prompt_add_ons: ["asr_clean_output"] # optional - additional prompting in text instructions for each sample
   length_filter: [1.0, 30.0] # optional - filters for only audio samples in this length(seconds)
   accented: false # optional - filters for only audio samples in this length(seconds)
   language: "en" # optional - filters for only audio samples in this language - use language code
-  system_prompts: ["audio_expert"] # optional but HIGHLY RECOMMENDED - system prompts for each sample
+  user_prompt_add_ons: # Only for datasets processed by GeneralPreprocessor or CallhomePreprocessor - follow the format of ["user_prompt_add_on key", ["dataset1", "dataset2"...]]
+    - ["asr_clean_output", ["callhome_eng", "librispeech_test_clean"]]
+    - ["audio_expert", ["accent_recognition"]]
+  system_prompts: # Follow the format of ["system_prompt_key", ["model_name", "dataset/runspec/category_1", "dataset/runspec/category2"...]]
+    - ["audio_expert", ["gpt-4o-mini-audio-preview", "emotion_recognition"]]
+    - ["summary_expert", ["qwen_2_audio", "spoken_dialogue_summarization"]]
 ```
 
 **Important Note: It is HIGHLY Recommended to add a system prompt/user prompt add on specific to the datasets you are running for the best results. Go to /prompts/system_prompts or /prompts/user_prompt_add_ons to choose a prebuilt prompt or create your own prompt, then add it in filters attribute**
@@ -105,9 +111,9 @@ aggregate:
 ```yaml
 temperature_overrides:
   # Model and task override
-  - model: "gpt-4o-mini-audio-preview"
-    task: "emotion_recognition"
-    temperature: 0.5
+  - model: "gpt-4o-mini-audio-preview" # model.model
+    task: "emotion_recognition" # task_type
+    temperature: 0.5 # temp
   # Model only override
   - model: "gpt-4o-mini-audio-preview"
     temperature: 0.7
@@ -129,6 +135,28 @@ models:
       model: "gpt-4o-mini-audio-preview" # Mandatory
       auth_token: ${AUTH_TOKEN} # Mandatory
       api_version: ${API_VERSION} # Mandatory
+      batch_size: 350 # Mandatory
+      chunk_size: 30  # Optional - Max audio length in seconds
+  - info:
+      name: "qwen_2.5_omni" # Mandatory
+      inference_type: "vllm"  # openai, vllm, or audio transcription
+      url: ${ENDPOINT_URL} # Mandatory
+      delay: 100 # Optional
+      retry_attempts: 8 # Optional
+      timeout: 30 # Optional
+      model: "qwen_2.5_omni" # Mandatory
+      auth_token: ${AUTH_TOKEN} # Mandatory
+      batch_size: 150 # Mandatory
+      chunk_size: 30  # Optional - Max audio length in seconds
+  - info:
+      name: "whisper_large_v3"
+      inference_type: "transcription"
+      url: ${ENDPOINT_URL} # Mandatory
+      delay: 100 # Optional
+      retry_attempts: 8 # Optional
+      timeout: 30 # Optional
+      model: "whisper_large_v3" # Mandatory
+      auth_token: ${AUTH_TOKEN} # Mandatory
       batch_size: 200 # Mandatory
       chunk_size: 30  # Optional - Max audio length in seconds
   - info:
@@ -143,28 +171,6 @@ models:
       api_version: ${API_VERSION} # Mandatory
       batch_size: 300 # Mandatory
       chunk_size: 30  # Optional - Max audio length in seconds
-  - info:
-      name: "qwen-2.5-omni" 
-      inference_type: "vllm" # mandatory - you can use vllm(vllm), openai(openai), (chat completion) or audio transcription endpoint(transcription)
-      url: "${ENDPOINT_URL}" - # mandatory - endpoint url
-      delay: 100
-      retry_attempts: 8
-      timeout: 30
-      model: "qwen-2.5-omni" # mandatory - only needed for vllm
-      auth_token: "${AUTH_TOKEN}" 
-      batch_size: 200 # Optional - batch eval size
-      chunk_size: 40 # Optional - max audio length in seconds fed to model
-  - info:
-      name: "whisper-large-3" 
-      inference_type: "transcription" # mandatory - you can use vllm(vllm), openai(openai), (chat completion) or audio transcription endpoint(transcription)
-      url: "${ENDPOINT_URL}" - # mandatory - endpoint url
-      delay: 100
-      retry_attempts: 8
-      timeout: 30
-      model: "whisper-large-3" # mandatory - only needed for vllm
-      auth_token: "${AUTH_TOKEN}" 
-      batch_size: 100 # Optional - batch eval size
-      chunk_size: 30 # Optional - max audio length in seconds fed to model
 ```
 
 **Note: Batch-size proportional dataset sharding is implemented when multiple endpoints of the same model are provided. Be sure to have unique 'name' attributes for each unique endpoint, as shown above**
@@ -266,7 +272,7 @@ document.querySelectorAll('a[href*="?f=save"]').forEach((link, i) => {
 
 Paste these wav files into the audio folder of the specific language path in private_datasets
 
-Run the specific dataset or all datasets across word_error_rate(utterance by utterance), llm_judge_binary(holistic view of 30 second turn by turn transcription), or speaker diarization
+Run the specific dataset or all datasets across word_error_rate(utterance by utterance), llm_judge_binary (holistic view of 30 second turn by turn transcription), or speaker diarization
 
 ```yaml
 dataset_metric:

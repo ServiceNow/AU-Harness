@@ -309,6 +309,45 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):
         return {self.name: scores}
 
 
+class RedTeamingJudgeMetric(_BaseLLMJudge):
+    """Binary LLM judge metric for yes/no evaluations."""
+    name: str = "llm_judge_redteaming"
+    _prompt_key: str = "redteaming_judge_prompt"
+
+    def __init__(self, *_, judge_properties: Dict | None = None, **__):
+        super().__init__(judge_properties=judge_properties)
+        
+        self.instructions = None
+        self.model_responses = None
+        self.explanations = None
+        self.instructions = None
+        self.model_responses = None
+
+    async def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
+        """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
+        self.instructions = instructions
+        self.model_responses = model_responses if model_responses else []
+        overall = await super().get_score(candidates, references, dataset_name, model_name)
+        if self.name in overall:
+            overall[self.name] *= 100
+        if dataset_name and model_name:
+            scores = self.record_level_scores.get(self.name, [])
+            explanations = getattr(self, "explanations", None)
+            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations,
+                           instructions=self.instructions, model_responses=self.model_responses)
+            append_final_score(self, overall, dataset_name, model_name, self.model_responses)
+        return overall
+
+    async def compute_record_level_scores(self, candidates: list, references: list, dataset_name: str | None = None, model_name: str | None = None):
+        """Compute record-level scores for binary evaluation."""
+        # Here we can use self.instructions if needed
+        raw_scores = await self._judge_all(candidates, references, dataset_name, model_name)
+        # Expect {"score": number, "explanation": str}
+        scores = [float(r.get("score", 0)) if isinstance(r, dict) else 0.0 for r in raw_scores]
+        self.explanations = [r.get("explanation", "") if isinstance(r, dict) else "" for r in raw_scores]
+        return {self.name: scores}
+
+
 class DetailedLLMJudgeMetric(_BaseLLMJudge):
     """Detailed LLM judge metric.
     On a scale of 0 to 5, how well does the candidate text match the reference text?

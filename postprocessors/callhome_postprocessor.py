@@ -41,7 +41,7 @@ class CallhomePostprocessor(Postprocessor):
         for model_name, preds in predictions.items():
             logger.debug("Processing predictions for model: %s", model_name)
             # Apply CallhomePostprocessor-specific processing
-            processed = [self.split_inline_speaker_labels(pred) for pred in preds]
+            processed = [self.split_inline_speaker_labels(pred.llm_response) for pred in preds]
             processed_predictions[model_name] = processed
             logger.debug("Cleaned %d predictions for model: %s", len(processed), model_name)
 

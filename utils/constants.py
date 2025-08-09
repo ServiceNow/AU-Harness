@@ -59,6 +59,7 @@ metric_map = {
     "llm_judge_binary": ("metrics.llm_judge", "BinaryLLMJudgeMetric"),
     "llm_judge_callhome": ("metrics.llm_judge", "CallHomeLLMJudgeMetric"),
     "llm_judge_detailed": ("metrics.llm_judge", "DetailedLLMJudgeMetric"),
+    "llm_judge_redteaming": ("metrics.llm_judge", "RedTeamingJudgeMetric"),
     "meteor": ("metrics.meteor_score", "MeteorScore"),
     'sql_score': ("metrics.sql_score", "SqlScore"),
     "word_error_rate": ("metrics.word_error_rate_metrics", "WERMetrics"),
@@ -117,7 +118,7 @@ allowed_task_metrics = {
     'speech_to_sql': ['sql_score'],
     
     # Safety and Security
-    'safety': ['llm_judge_detailed'],
+    'safety': ['llm_judge_redteaming'],
     'spoofing': ['llm_judge_detailed', 'llm_judge_binary'],
 }
 
@@ -128,6 +129,7 @@ metric_output = {
     "bleu": ["BLEU"],
     "llm_judge_callhome": ["llm_judge_callhome"],
     "llm_judge_binary": ["llm_judge_binary"],
+    "llm_judge_redteaming": ["llm_judge_redteaming"],
     "llm_judge_big_bench_audio": ["llm_judge_big_bench_audio"],
     "meteor": ["meteor"],
     "bfcl_match_score": ["final"],

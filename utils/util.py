@@ -7,15 +7,12 @@ import statistics
 import yaml
 from pathlib import Path
 from typing import Any, Dict
-
 from . import constants
-from preprocessors.base import Preprocessor
-from postprocessors.base import Postprocessor
 from utils.custom_logging import configure
 
 logger = logging.getLogger(__name__)
 
-def get_class_from_module(module_prefix, module_name) -> Preprocessor | Postprocessor:
+def get_class_from_module(module_prefix, module_name):
     try:
         # Convert class name (CamelCase) to filename (snake)
         # Get pre or post processor
@@ -101,8 +98,33 @@ def _find_dataset_in_runspecs(dataset_name, runspec_files):
             # Use only this specific dataset
             return True, {dataset_name: runspec_db[dataset_name]}, runspec_file
 
-    logger.warning("[find_dataset_in_runspecs] Dataset '%s' not found in any runspec file", dataset_name)
     return False, {}, None
+
+def _get_task_type_datasets(task_type: str, runspec_files):
+    """
+    Get all datasets that belong to a specific task type (directory name).
+    
+    Args:
+        task_type: Name of the task type directory (e.g., "paralinguistics")
+        runspec_files: List of runspec files to search in
+    
+    Returns:
+        Set of dataset names that belong to this task type
+    """
+    datasets = set()
+    
+    for runspec_file in runspec_files:
+        # Check if this runspec file is in the specified task type directory
+        if runspec_file.parent.name == task_type:
+            try:
+                with open(runspec_file, 'r', encoding='utf-8') as f:
+                    runspec_db = json.load(f)
+                # Add all dataset names from this runspec
+                datasets.update(runspec_db.keys())
+            except Exception as e:
+                continue
+    
+    return datasets
 
 def smart_round(val: float, precision: int = constants.ROUND_DIGITS) -> float:
     """Round off metrics to global precision value.
@@ -235,16 +257,42 @@ def _validate_filter_values(filters: Dict) -> None:
         if not isinstance(filters['user_prompt_add_ons'], list):
             raise ValueError("'user_prompt_add_ons' must be a list")
         for i, item in enumerate(filters['user_prompt_add_ons']):
-            if not isinstance(item, str):
-                raise ValueError(f"'user_prompt_add_ons' item {i+1} must be a string")
+            if not isinstance(item, list) or len(item) != 2:
+                raise ValueError(f"'user_prompt_add_ons' item {i+1} must be a list with exactly 2 elements [key, [datasets]]")
+            
+            # First element must be a non-empty string (prompt key)
+            if not isinstance(item[0], str) or not item[0].strip():
+                raise ValueError(f"'user_prompt_add_ons' item {i+1}: first element must be a non-empty string")
+            
+            # Second element must be a list of dataset/runspec/category names
+            if not isinstance(item[1], list):
+                raise ValueError(f"'user_prompt_add_ons' item {i+1}: second element must be a list of dataset/runspec/category names")
+            
+            # Each dataset/runspec/category name must be a non-empty string
+            for j, dataset_name in enumerate(item[1]):
+                if not isinstance(dataset_name, str) or not dataset_name.strip():
+                    raise ValueError(f"'user_prompt_add_ons' item {i+1}, dataset {j+1} must be a non-empty string")
     
     # Validate system_prompts if present
     if 'system_prompts' in filters:
         if not isinstance(filters['system_prompts'], list):
             raise ValueError("'system_prompts' must be a list")
         for i, item in enumerate(filters['system_prompts']):
-            if not isinstance(item, str):
-                raise ValueError(f"'system_prompts' item {i+1} must be a string")
+            if not isinstance(item, list) or len(item) != 2:
+                raise ValueError(f"'system_prompts' item {i+1} must be a list with exactly 2 elements")
+            
+            # First element must be a non-empty string (prompt key)
+            if not isinstance(item[0], str) or not item[0].strip():
+                raise ValueError(f"'system_prompts' item {i+1}: first element must be a non-empty string")
+            
+            # Second element must be a list with exactly 2 elements [model_name, dataset_name]
+            if not isinstance(item[1], list) or len(item[1]) != 2:
+                raise ValueError(f"'system_prompts' item {i+1}: second element must be a list with exactly 2 elements")
+            
+            # Both model_name and dataset_name must be non-empty strings
+            for j, element in enumerate(item[1]):
+                if not isinstance(element, str) or not element.strip():
+                    raise ValueError(f"'system_prompts' item {i+1}, criteria {j+1} must be a non-empty string")
     
     # Validate length_filter if present
     if 'length_filter' in filters:
@@ -325,7 +373,13 @@ def _validate_dataset_metric_pairs(dataset_metric_pairs):
             found_runspec, _, matching_runspec_file = _find_dataset_in_runspecs(dataset_name, runspec_files)
 
         if not found_runspec or not matching_runspec_file:
-            raise ValueError(f"Dataset not found or no runspec file determined: {dataset_name}")
+            # Check if it's a category (directory name) before raising error
+            category_datasets = _get_task_type_datasets(dataset_name, runspec_files)
+            if not category_datasets:
+                raise ValueError(f"Dataset not found or no runspec file determined: {dataset_name}")
+            # For categories, we need to validate each dataset individually
+            # Skip validation here since expand_dataset_metric_pairs will handle the expansion
+            continue
 
         # The task type is simply the JSON filename without extension
         task_type = matching_runspec_file.stem
@@ -333,8 +387,14 @@ def _validate_dataset_metric_pairs(dataset_metric_pairs):
         # Check if the metric is allowed for this task type
         valid_metric = False
 
+        # Special handling for callhome datasets - allow specific metrics regardless of task type
+        if dataset_name.startswith('callhome'):
+            callhome_allowed_metrics = ['word_error_rate', 'diarization_metrics', 'llm_judge_detailed']
+            if metric_name in callhome_allowed_metrics:
+                valid_metric = True
+
         # Check if the task_type exists in allowed_task_metrics
-        if task_type in constants.allowed_task_metrics:
+        if not valid_metric and task_type in constants.allowed_task_metrics:
             allowed_metrics = constants.allowed_task_metrics[task_type]
 
             if metric_name in allowed_metrics:
@@ -342,10 +402,13 @@ def _validate_dataset_metric_pairs(dataset_metric_pairs):
 
         if not valid_metric:
             # If the task_type doesn't exist in allowed_task_metrics or metric is not allowed
-            allowed_metrics = constants.allowed_task_metrics.get(task_type, [])
+            if dataset_name.startswith('callhome'):
+                allowed_metrics = ['word_error_rate', 'diarization_metrics', 'llm_judge_detailed']
+            else:
+                allowed_metrics = constants.allowed_task_metrics.get(task_type, [])
             raise ValueError(
                 f"Invalid metric '{metric_name}' for dataset '{dataset_name}' with task type '{task_type}'. "
-                f"Allowed metrics for this task type: {sorted(allowed_metrics)}"
+                f"Allowed metrics for this dataset: {sorted(allowed_metrics)}"
             )
 
 def _validate_models(config: Dict) -> None:
@@ -539,9 +602,22 @@ def expand_dataset_metric_pairs(cfg: dict) -> list[tuple[str, str, dict, str]]:
         if not found_runspec:
             found_runspec, selected_datasets, matching_runspec_file = _find_dataset_in_runspecs(dname, runspec_files)
             
+            # Step 3: If still not found, check if it's a category (directory name)
             if not found_runspec:
-                logger.info(f"[expand_dataset_metric_pairs] Dataset not found, skipping: {dname}")
-                continue
+                category_datasets = _get_task_type_datasets(dname, runspec_files)
+                if category_datasets:
+                    # Process all datasets in this category
+                    for dataset_name in category_datasets:
+                        # Find the specific dataset info and runspec file
+                        _, dataset_dict, dataset_runspec_file = _find_dataset_in_runspecs(dataset_name, runspec_files)
+                        if dataset_dict and dataset_runspec_file:
+                            task_type = dataset_runspec_file.stem
+                            for ds_name, ds_info in dataset_dict.items():
+                                expanded_pairs.append((ds_name, metric_name, ds_info, task_type))
+                    continue
+                else:
+                    logger.info(f"[expand_dataset_metric_pairs] Dataset/runspec/category not found, skipping: {dname}")
+                    continue
         
         # Extract task_type from the matching runspec file name (stem)
         task_type = matching_runspec_file.stem if matching_runspec_file else None
@@ -552,14 +628,14 @@ def expand_dataset_metric_pairs(cfg: dict) -> list[tuple[str, str, dict, str]]:
     
     return expanded_pairs
 
-def _calculate_aggregates(aggregates, all_scores, models):
+def _calculate_aggregates(aggregates, all_scores, model_configs):
     """
     Process aggregate metrics by calculating means across multiple datasets for a specific metric.
     
     Args:
         aggregates: List of aggregate configurations from the config file in format [metric_name, [dataset1, dataset2, ...]]
         all_scores: Dictionary of scores keyed by dataset_metric pairs
-        models: List of model instances used for evaluation
+        model_configs: List of model configurations used for evaluation
     """
     logger.info("[calculate_aggregates] Processing aggregate metrics...")
 
@@ -567,8 +643,8 @@ def _calculate_aggregates(aggregates, all_scores, models):
     
     # Get unique model types
     model_types = set()
-    for model in models:
-        model_type = model.model  # The model type (e.g., "gpt-4o-mini-audio-preview")
+    for model_config in model_configs:
+        model_type = model_config["info"].get("model")  # The model type (e.g., "gpt-4o-mini-audio-preview")
         if model_type:
             model_types.add(model_type)
         

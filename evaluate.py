@@ -5,8 +5,8 @@ import json
 # Apply nest_asyncio to allow nested event loops in Azure OpenAI client calls
 import nest_asyncio
 
-from utils.engine import create_engines, run_all_engines
-from utils.model_utils import load_models
+from utils.engine import create_engine, run_all_engines
+from utils.model_utils import register_models_with_controller
 from utils.util import read_config, expand_dataset_metric_pairs, _calculate_aggregates
 
 nest_asyncio.apply()
@@ -27,7 +27,7 @@ def main(cfg_path='config.yaml'):
     # 1. Read config and process configuration dictionaries
     cfg = read_config(cfg_path)
     # 2. Load models and initialize central request controller
-    models, central_request_controller = load_models(cfg.get("models", []), cfg.get("judge_properties", {}))
+    central_request_controller, model_configs = register_models_with_controller(cfg.get("models", []), cfg.get("judge_properties", {}))
 
     # 3. Expand dataset-metric pairs using runspecs
     expanded_pairs = expand_dataset_metric_pairs(cfg)
@@ -35,10 +35,9 @@ def main(cfg_path='config.yaml'):
     # 4. Create engines for each expanded dataset-metric pair
     all_engines = []
     for dataset_task_info in expanded_pairs:
-        engine, dataset_name = create_engines(
+        engine, dataset_name = create_engine(
             dataset_task_info=dataset_task_info,
             cfg=cfg,
-            models=models,
             central_request_controller=central_request_controller
         )
         all_engines.append((engine, dataset_name))
@@ -49,7 +48,7 @@ def main(cfg_path='config.yaml'):
     # 6. Log final results and process aggregates
     aggregates = cfg.get("aggregate", [])
     if aggregates:
-        _calculate_aggregates(aggregates, scores, models)
+        _calculate_aggregates(aggregates, scores, model_configs)
 
     return scores
 
