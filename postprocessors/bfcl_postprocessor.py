@@ -37,11 +37,11 @@ class BfclPostprocessor(Postprocessor):
             try:
                 json_decode = json.loads(json_str)
                 return json_decode
-            except (json.JSONDecodeError, ValueError):
+            except:
                 try:
                     json_decode = ast.literal_eval(json_str)
                     return json_decode
-                except (ValueError, SyntaxError):
+                except:
                     return None
 
     def process(
@@ -53,7 +53,7 @@ class BfclPostprocessor(Postprocessor):
         """
         Process and clean model predictions and prepare target-label pairs.
         """
-        logger.info("Processing predictions with BFCLPostprocessor...")
+        logger.info("Processing predictions with Bfcl Postprocessor...")
 
         processed_predictions: dict[str, list[str]] = {}
         for model_name, preds in predictions.items():
@@ -89,8 +89,7 @@ class BfclPostprocessor(Postprocessor):
 
         output = {
             "instructions": [record.get("instruction", "") for record in dataset],
-            "model_targets": [record["model_target"] for record in dataset 
-                              if "model_target" in record],
+            "model_targets": [record["model_target"] for record in dataset if "model_target" in record],
             "processed_predictions": processed_predictions,
         }
         self.validate_output(output)

@@ -64,6 +64,7 @@ metric_map = {
     'sql_score': ("metrics.sql_score", "SqlScore"),
     "word_error_rate": ("metrics.word_error_rate_metrics", "WERMetrics"),
     "comet": ("metrics.comet_score", "CometScore"),
+    "mt_bench_llm_judge": ("metrics.llm_judge", "MtbenchLLMJudgeMetric"),
 
 }
 
@@ -120,9 +121,11 @@ allowed_task_metrics = {
     # Safety and Security
     'safety': ['llm_judge_redteaming'],
     'spoofing': ['llm_judge_detailed', 'llm_judge_binary'],
+    'mtbench': ['mt_bench_llm_judge'],
 }
 
 metric_output = {
+    "mt_bench_llm_judge": ["mt_bench_llm_judge"],
     "llm_judge_detailed": ["llm_judge_detailed"],
     "word_error_rate": ["average_sample_wer", "overall_wer"],
     "bertscore": ["bertscore"],

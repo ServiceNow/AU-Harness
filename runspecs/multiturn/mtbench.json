@@ -1,0 +1,24 @@
+{
+    "mtbench_audio": {
+        "hf_repo": "ServiceNow-AI/mt-bench_audio",
+        "modality": "audio",
+        "language": "en",
+        "audio_column": "audio",
+        "target_column": "reference",
+        "textual_input_column": "turns",
+        "id_column": "question_id",
+        "preprocessor": "MultiturnPreprocessor",
+        "postprocessor": "MultiturnPostprocessor"
+    },
+  "mtbench_text": {
+        "hf_repo": "ServiceNow-AI/mt-bench_audio",
+        "modality": "text",
+        "language": "en",
+        "audio_column": "audio",
+        "target_column": "reference",
+        "textual_input_column": "turns",
+        "id_column": "question_id",
+        "preprocessor": "MultiturnPreprocessor",
+        "postprocessor": "MultiturnPostprocessor"
+    }
+}

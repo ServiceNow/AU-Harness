@@ -71,7 +71,7 @@ class Model(ABC):
 
     def name(self):
         """Return the model name.
-        
+
         Returns:
             str: The model name.
         """
@@ -79,7 +79,7 @@ class Model(ABC):
 
     def set_temp(self, temperature: float) -> None:
         """Set temperature for the model and request handler.
-        
+
         Args:
             temperature: Temperature value to set.
         """
@@ -97,7 +97,7 @@ class Model(ABC):
 
     def set_system_prompt(self, system_prompt: str) -> None:
         """Set system prompt for the model.
-        
+
         Args:
             system_prompt: System prompt text to set.
         """
@@ -152,11 +152,11 @@ class Model(ABC):
             self, message: dict | str, run_params: dict
     ) -> ModelResponse:
         """Generate text with retry logic and error handling.
-        
+
         Args:
             message: Input message for model inference
             run_params: Runtime parameters for the inference request
-            
+
         Returns:
             ModelResponse: Response object containing generated text and metadata
         """
@@ -241,10 +241,6 @@ class Model(ABC):
         return result
 
 
-
-
-
-
     async def _generate_text(self, message: dict, run_params: dict, error_tracker: ErrorTracker = None) -> ModelResponse:
         """
         Implements model query by building message header and body with the help of Request Response Handler.
@@ -263,12 +259,16 @@ class Model(ABC):
         max_samples: int = int(chunk_seconds * sampling_rate) if sampling_rate else 0
         total_samples: int = len(audio_array) if audio_array is not None else 0
         instruction = message.get("instruction")
+        is_multiturn = message.get("is_multiturn", False)
 
         tools = copy.deepcopy(message.get('tools', None))
         # If metric is judge types, only use first chunk (30s) regardless of length
         judge_metrics = {"llm_judge_binary", "llm_judge_detailed"}
         if metric_name in judge_metrics:
             total_samples = max_samples  # force single chunk
+
+        if is_multiturn:
+            return await self._handle_multi_turn(message, run_params, error_tracker, max_samples)
 
         # --- CHUNKING LOGIC FIRST ---
         if total_samples > max_samples:
@@ -412,3 +412,153 @@ class Model(ABC):
             resp = await self.req_resp_hndlr.request_server(wav_path, tools=None, error_tracker=error_tracker)
             return resp
         raise ValueError("Unsupported inference type")
+
+    async def _handle_multi_turn(self, message: dict, run_params: dict, error_tracker: ErrorTracker, max_samples: int,
+                                 max_samples_override: int = None) -> ModelResponse:
+        """
+        Handles multi-turn conversations where instruction and/or audio_array are lists.
+        Each turn gets processed sequentially, building up conversation history.
+        Records all turn responses for evaluation.
+        """
+        instructions = message.get("instruction")
+        audio_arrays = message.get("array", None)
+        sampling_rate = message.get("sampling_rate", 0)
+        tools = copy.deepcopy(message.get('tools', None))
+
+        # Normalize inputs to lists
+        if not isinstance(instructions, list):
+            instructions = [instructions] if instructions else []
+        if not isinstance(audio_arrays, list):
+            audio_arrays = [audio_arrays] if audio_arrays else []
+
+        # Ensure we have matching lengths or handle mismatches
+        max_turns = max(len(instructions), len(audio_arrays))
+
+        # Pad shorter list with None/empty values
+        while len(instructions) < max_turns:
+            instructions.append("")  # Use empty string instead of None
+        while len(audio_arrays) < max_turns:
+            audio_arrays.append(None)
+
+        # Only support chat completion for multi-turn
+        if self.inference_type not in (
+                constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION,
+                constants.OPENAI_CHAT_COMPLETION,
+        ):
+            raise ValueError("Multi-turn conversations only supported for chat completion inference types")
+
+        # Initialize conversation with system prompt
+        messages = []
+        system_prompt = message.get("system_prompt")
+        if system_prompt:
+            messages.append({
+                "role": "system",
+                "content": system_prompt
+            })
+
+        # Store all turn responses for evaluation
+        turn_responses = []
+        all_responses_text = []
+
+        # Process each turn
+        for turn_idx in range(max_turns):
+            current_instruction = instructions[turn_idx]
+            current_audio = audio_arrays[turn_idx]
+
+            # Handle flexible input combinations
+            has_text = current_instruction and current_instruction.strip()  # Non-empty text
+            has_audio = current_audio is not None and len(current_audio) > 0
+
+            # Skip turns with absolutely no content
+            if not has_text and not has_audio:
+                continue
+
+            # Process audio for this turn if present
+            encoded_audio = ""
+            if has_audio:
+                # Apply chunking/sampling limits
+                effective_max_samples = max_samples_override if max_samples_override else max_samples
+
+                if len(current_audio) > effective_max_samples:
+                    # For multi-turn, we'll use first chunk only to keep conversation manageable
+                    current_audio = current_audio[:effective_max_samples]
+
+                encoded_audio = encode_audio_array_base64(current_audio, sampling_rate)
+
+            # Build user message for this turn
+            user_content = []
+
+            # Add text content (can be empty string as placeholder)
+            if has_text:
+                user_content.append({"type": "text", "text": current_instruction})
+            elif has_audio and not has_text:
+                # Audio-only turn - add minimal text prompt if needed
+                user_content.append({"type": "text", "text": "Please respond to the audio."})
+
+            # Add audio content if present
+            if encoded_audio:
+                user_content.append({
+                    "type": "input_audio",
+                    "input_audio": {
+                        "data": encoded_audio,
+                        "format": "wav",
+                    },
+                })
+
+            # Add user message (should always have content at this point)
+            messages.append({
+                "role": "user",
+                "content": user_content
+            })
+
+            # Get response for this turn
+            temp_message = message.copy()
+            temp_message["model_inputs"] = messages
+
+            response = await self.req_resp_hndlr.request_server(
+                temp_message["model_inputs"],
+                tools=tools,
+                error_tracker=error_tracker
+            )
+
+            # Store this turn's response for evaluation
+            turn_responses.append(response)
+            all_responses_text.append(response.llm_response or "")
+
+            # Add assistant response to conversation history for next turn
+            if response.llm_response:
+                messages.append({
+                    "role": "assistant",
+                    "content": response.llm_response
+                })
+
+        # Create final response with all turn data for evaluation
+        if turn_responses:
+            # Extract user inputs from conversation history for input_prompt
+            user_inputs = []
+            for msg in messages:
+                if msg.get("role") == "user":
+                    user_inputs.append(msg.get("content"))
+
+            # Create final ModelResponse with multi-turn data structure
+            final_response = ModelResponse(
+                input_prompt=user_inputs,  # List of user input contents from all turns
+                llm_response="",  # Empty string as requested
+                raw_response=[resp.raw_response for resp in turn_responses],  # List of all raw responses
+                response_code=turn_responses[-1].response_code,  # Use last response code
+                performance=turn_responses[-1].performance,  # Use last performance metrics
+                wait_time=sum(resp.wait_time or 0 for resp in turn_responses),  # Sum of all wait times
+                error_tracker=turn_responses[-1].error_tracker  # Use last error tracker
+            )
+
+            return final_response
+        else:
+            return ModelResponse(
+                input_prompt=[],
+                llm_response="",
+                raw_response=[],
+                response_code=500,
+                performance=None,
+                wait_time=0,
+                error_tracker=error_tracker
+            )

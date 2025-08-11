@@ -363,8 +363,12 @@ dataset_metric:
   - ["bfcl_v3_irrelevance_text_with_prompt", "bfcl_match_score"]
   - ["bfcl_v3_irrelevance_audio", "bfcl_match_score"]
   - ["bfcl_v3_irrelevance_audio_with_prompt", "bfcl_match_score"]
-  
+
   # Safey and Security
   - ["advbench", "detailed_judge_prompt"]
   - ["asvspoof", "detailed_judge_prompt"]
   - ["asvspoof", "llm_judge_binary"]
+
+  # MultiTurn
+  - ["mtbench_text", "mt_bench_llm_judge"]
+  - ["mtbench_audio", "mt_bench_llm_judge" ]
