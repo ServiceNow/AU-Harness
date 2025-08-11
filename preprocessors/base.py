@@ -59,7 +59,7 @@ class Preprocessor():
         extracted = {
             "metric": properties.get("metric", None),
             "user_prompt_add_ons": properties.get("user_prompt_add_ons", []),
-            "length_filter": properties.get("length_filter", (0.01,30)),  # Optional (min_seconds, max_seconds) tuple
+            "length_filter": properties.get("length_filter", (0.0, 30.0)),  # Optional (min_seconds, max_seconds) tuple
             "dataset_info": properties.get("dataset_info", {}),
             "judge_type": properties.get("judge_type", ""),
             "dataset_name": properties.get("dataset_name", None)
