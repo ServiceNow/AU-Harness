@@ -21,7 +21,7 @@ from tenacity import (
 from models.model_response import ErrorTracker, ModelResponse
 from models.request_resp_handler import RequestRespHandler
 from utils import constants
-from utils.constants import task_temp_map
+from utils.constants import task_temp_map, mtbench_temp_map
 from utils.multimodal import encode_audio_array_base64, audio_array_to_wav_file
 
 logger = logging.getLogger(__name__)
@@ -424,6 +424,11 @@ class Model(ABC):
         audio_arrays = message.get("array", None)
         sampling_rate = message.get("sampling_rate", 0)
         tools = copy.deepcopy(message.get('tools', None))
+
+        # get category for mtbench and set temperature based on mtbench_temp_map
+        category = message.get("category", None)
+        if category is not None and category in mtbench_temp_map.keys():
+            self.req_resp_hndlr.temperature = mtbench_temp_map[category]
 
         # Normalize inputs to lists
         if not isinstance(instructions, list):
