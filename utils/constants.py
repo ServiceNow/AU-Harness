@@ -75,8 +75,8 @@ task_temp_map = {
     "long_form_asr": 0.1,
 
     # Paralinguistics
-    "emotion_recognition": 0.2,
-    "gender_recognition": 0.2,
+    "emotion_recognition": 0.0001,
+    "gender_recognition": 0.0001,
     "accent_recognition": 0.2,
     "speaker_recognition": 0.2,
 
@@ -87,6 +87,9 @@ task_temp_map = {
     "scene_understanding": 0.5,
     "spoken_dialogue_summarization": 0.8,
     "music_understanding": 0.7,
+
+    'spoofing': 0.0001,
+    'safety': 0.5,
 
 }
 

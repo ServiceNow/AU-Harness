@@ -73,7 +73,9 @@ class WERMetrics(Metrics):
         if dataset_name and model_name:
             # WER record scores are stored under 'wer_per_row'
             scores = self.record_level_scores.get("wer_per_row", [])
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, 
+            cleaned_references = [normalize_text(r) for r in references]
+            cleaned_candidates = [normalize_text(c) for c in candidates]
+            write_record_log(self, cleaned_references, cleaned_candidates, scores, dataset_name, model_name, 
                           instructions=self.instructions, model_responses=self.model_responses)
             append_final_score(self, overall, dataset_name, model_name, self.model_responses)
         return overall
