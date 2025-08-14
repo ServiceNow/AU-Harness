@@ -94,7 +94,9 @@ class GeneralPreprocessor(Preprocessor):
                 instruction = record.get("instruction") or record.get("question") or ""
             # Append any user-specified prompt add-ons and choices
             if matching_prompts:
-                instruction += " " + " ".join(matching_prompts)
+                #instruction += " " + " ".join(matching_prompts)
+                instruction = " ".join(matching_prompts) + " " + instruction
+                #instruciton = " ".join(matching_prompts)
             if choices_column_name and choices_column_name in record:
                 choices = record.get(choices_column_name, [])
                 if isinstance(choices, list):
