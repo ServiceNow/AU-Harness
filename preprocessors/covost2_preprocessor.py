@@ -60,9 +60,21 @@ class Covost2Preprocessor(Preprocessor):
                 target_language_name = target_language_name.capitalize()
             except KeyError as exc:
                 raise ValueError("Target language not found. Please specify target_language in dataset config") from exc
+            
 
-            instruction = f"Please translate the given speech to {target_language_name}. Return ONLY the translated speech in text format without any other prefix text."
+            # Get the target language from dataset_info
+            try:
+                source_language_code = props["dataset_info"].get("source_language")
+                # Convert language code to full language name using the language_map
+                source_language_name = language_map.get(source_language_code, source_language_code)
+                source_language_name = source_language_code.capitalize()
+            except KeyError as exc:
+                raise ValueError("Source language not found. Please specify source_language in dataset config") from exc
+            
+            #instruction = f"Please translate the given speech to {target_language_name}. Return ONLY the translated speech in text format without any other prefix text such as the given speech is.Be brief. Do not provide explanations."
+            instruction = f"Please translate the given speech from {source_language_name} to {target_language_name}. Return ONLY the translated text without any other prefix text such as the given speech is. Be brief. Do not provide explanations."
 
+            #instruction = f"Please translate the given speech to {target_language_name}. Be brief. Do not provide explanations."
             # Create structured sample
             sample = {
                 "id": sample_id,
