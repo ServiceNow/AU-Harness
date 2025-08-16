@@ -1,0 +1,156 @@
+{
+    "voxpopuli_en": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "en",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_de": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "de",
+    "language": "de",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_fr": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "fr",
+    "language": "fr",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_es": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "es",
+    "language": "es",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_en_accented": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "en_accented",
+    "language": "en_accented",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true,
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_pl": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "pl",
+    "language": "pl",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_it": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "it",
+    "language": "it",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_ro": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "ro",
+    "language": "ro",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_hu": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "hu",
+    "language": "hu",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_cs": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "cs",
+    "language": "cs",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_nl": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "nl",
+    "language": "nl",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_fi": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "fi",
+    "language": "fi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_hr": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "hr",
+    "language": "hr",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_sk": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "sk",
+    "language": "sk",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_sl": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "sl",
+    "language": "sl",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_et": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "et",
+    "language": "et",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  },
+  "voxpopuli_lt": {
+    "hf_repo": "facebook/voxpopuli",
+    "subset": "lt",
+    "language": "lt",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "audio",
+    "target_column": "normalized_text"
+  }
+}

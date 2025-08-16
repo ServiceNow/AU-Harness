@@ -1,0 +1,68 @@
+{
+    "mnsc_asr_part1_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "ASR-PART1-Test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "mnsc_asr_part2_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "ASR-PART2-Test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "mnsc_asr_part3_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "ASR-PART3-Test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "mnsc_asr_part4_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "ASR-PART4-Test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "mnsc_asr_part5_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "ASR-PART5-Test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "mnsc_asr_part6_test": {
+    "hf_repo": "AudioLLMs/Multitask-National-Speech-Corpus-v1-extend",
+    "subset": "ASR-PART6-Test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "accented": true,
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  }
+}
