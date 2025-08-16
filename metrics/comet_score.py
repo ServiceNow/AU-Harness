@@ -14,20 +14,30 @@ from comet import download_model, load_from_checkpoint
 class CometScore(Metrics):
     def __call__(self, candidates, references, source_sentences, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses = None):
         self.instructions = instructions
-        overall = self.compute_record_level_scores(candidates, references, source_sentences)
+
+        # Get individual scores
+        self.record_level_scores = self.compute_record_level_scores(candidates, references)
+        
+        # Calculate the mean score directly to avoid async issues
+        scores = self.record_level_scores.get(self.name, [])
+        valid_scores = [score for score in scores if score is not None]
+        mean_score = sum(valid_scores) / len(valid_scores) if valid_scores else 0.0
+        overall_score = {self.name: mean_score}
+
         if dataset_name and model_name:
-            scores = overall.get(self.name, [])
             # write_record_log will also write to run.log internally
             write_record_log(self, references, candidates, scores, dataset_name, model_name, instructions=self.instructions)
             # Directly call append_final_score
-            append_final_score(self, overall, dataset_name, model_name)
-        return overall
+            append_final_score(self, overall_score, dataset_name, model_name)
+        return overall_score
 
     def __init__(self, batch_size = 1, num_gpus = 0):
         super().__init__()
         self.name = "comet"
         model_path = download_model("wmt20-comet-da")
         self.scorer = load_from_checkpoint(model_path)
+        self.record_level_scores = None
+
         self.batch_size = batch_size
         self.num_gpus = num_gpus
 

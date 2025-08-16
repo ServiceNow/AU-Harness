@@ -21,10 +21,13 @@ class BleuMetrics(Metrics):
         # Store instructions and model_responses for potential later use
         self.instructions = instructions
         self.model_responses = model_responses if model_responses else []
-
+        # Use corpusBLEU for overall score
         overall = self.get_score(candidates, references)
+        #print ("Overall", overall)
         if dataset_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
+            # Use sentenceBLEU for record-level scores
+            scores = self.compute_record_level_scores(candidates, references) 
             # write_record_log will also write to run.log internally
             write_record_log(self, references, candidates, scores, dataset_name, model_name,
                            instructions=self.instructions, model_responses=self.model_responses)
@@ -54,8 +57,8 @@ class BleuMetrics(Metrics):
         # === Consistent normalization with WER processing ===
         norm_references = [normalize_text(r) for r in references]
         norm_candidates = [normalize_text(c) for c in candidates]
-        for i in range (len(norm_references)):
-            print ("Ref:%s \t Candidate:%s"%(norm_references[i], norm_candidates[i]))
+        #for i in range (len(norm_references)):
+        #    print ("Ref:%s \t Candidate:%s"%(norm_references[i], norm_candidates[i]))
         bs = self.scorer.corpus_score(norm_candidates, [norm_references])
         return {self.name: bs.score}
 
