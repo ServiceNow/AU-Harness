@@ -1,11 +1,13 @@
-asr_clean_output: |-
-  You have been given an audio clip. From the audio, you MUST only output the transcribed text, without any additional formatting or additional text. Do NOT say "The transcription is..." or something of that nature. Simply output the transcription only.
+asr: |-
+  Please transcribe the given speech. Return ONLY the transcribed speech in text format. Do not add any prefix text like 'The transcribed speech is:' to the beginning of the transcript.
+translation: |-
+ Translate to the target language. Be brief. Do not provide extra explanations.
+
 try_best: |-
   Follow these given instructions, based on the audio clip you have just been given. ALWAYS try your best to answer, and give your best educated guess if you are not sure. NEVER give up or refuse to answer.
-audio_expert: |-
-  Keep in mind, you are an expert at listening to and understanding audio, no matter the quality or duration.
+
 meld_emotion: |-
-  Choose from the following options: Anger, Disgust, Fear, Joy, Neutral, Sadness, Suprise
+  Choose from the following options: anger, disgust, fear, joy, neutral, sadness, suprise
 meld_sentiment: |-
   Choose from the following options: positive, negative, neutral
 iemocap_emotion: |-
@@ -22,34 +24,14 @@ diarization: |-
   There are multiple speakers in the provided audio clip. Please transcribe the audio with user information. Follow the format as below: A:\nB:\nA:\n
 spoof: |-
   Please listen to the following audio clip and analyze the speaker's voice characteristics, such as pitch, tone, timbre, and speech patterns. Choose from the following options: authentic, spoofed. Be brief. Do not provide explanations.
-libriclean: |-
-  Please transcribe the given speech. Return ONLY the transcribed speech in text format. Do not add any prefix text like 'The transcribed speech is:' to the beginning of the transcript.
-libri: |-
-  You have been given an audio clip. From the audio, you MUST only output the transcribed text, without any additional formatting or additional text. Do NOT say "The transcription is..." or something of that nature. Simply output the transcription only.
-librifinal: |-
-  Please transcribe the given speech. Return ONLY the transcribed speech in text format. Do not add any prefix text like 'The transcribed speech is:' to the beginning of the transcript.
-translation: |-
- Translate to the target language. Be brief. Do not provide extra explanations.
 
 #---- Old System Prompt -----------#
-audio_expert: |-
-  Keep in mind, you are an expert at listening to and understanding audio, no matter the quality or duration.
-asr_expert: |-
-  You are an expert at exact, word-level audio-to-text transcription. Your sole task is to provide the exact, literal transcription of the audio. DO NOT include any introductory phrases, explanations, or additional text whatsoever. Output ONLY the literal transcribed text.
-translation_expert: |-
-  You are an expert at translating audio from a source language to text in a target language. Your task is to accurately translate the given audio into the target language, providing only the translated text without any additional formatting or commentary.
 mcq_expert: |-
   You are an expert at multiple choice question answering. Reason carefully over the given audio, and output the correct answer from the choices given in the instruction text without long explanations or how you reached this prediction.
-try_best: |-
-  Always try your best to answer, and give your best educated guess if you are not sure. NEVER give up or refuse to answer.
 accent_expert: |-
   You are an expert at accent recognition. Identify the accent and speaker region based on the given audio.
 emotion_expert: |-
   You are an expert at audio-based emotion and sentiment recognition. Output what you think the emotion/sentiment is, without long explanations or how you reached this prediction.
-meld_emotion: |-
-  Choose from the following options: anger, disgust, fear, joy, neutral, sadness, suprise
-meld_sentiment: |-
-  Choose from the following options: positive, negative, neutral
 iemocap_emotion: |-
   <instruction>:
   Based on the given audio, identify which one the following options the best descibes the emotional state of the speaker in the audio: anger, happiness, excitement, sadness, frustration, fear, surprise, neutral. Be careful to differentiate between similar emotional states. Be brief.

@@ -1,0 +1,32 @@
+
+dataset_metric: #list of dataset-metric pairs, each as a two-item list of strings ["dataset_name", "metric_name"] - you must only run one dataset with one metric(no repeat datasets)
+  # Speech recognition datasets
+  - ["librispeech_test_clean", "word_error_rate"]
+
+filters:
+  num_samples: 100 # number of samples to run(remove for all)
+  user_prompt_add_ons: # Only for datasets processed by GeneralPreprocessor or CallhomePreprocessor
+    - ["asr_clean_output", ["librispeech_test_clean", "librispeech_test_other"]] # optional - additional prompting in text instructions for each sample
+
+logging:
+  log_file: "asr.log"  # Path to the main log file
+
+#override the requester temperature values by task or model
+temperature_overrides:
+  # task only override
+  - task: "ASR"
+    temperature: 0.5
+
+models:
+  - info:
+      name: "gpt-4o-mini-audio-preview-1" # mandatory - must be unique
+      inference_type: "openai" # mandatory - you can use vllm(vllm), openai(openai), (chat completion) or audio transcription endpoint(transcription)
+      url: "${ENDPOINT_URL}" - # mandatory - endpoint url
+      delay: 100
+      retry_attempts: 8
+      timeout: 30
+      model: "gpt-4o-mini-audio-preview" # mandatory - only needed for vllm
+      auth_token: "${AUTH_TOKEN}" 
+      api_version: "${API_VERSION}"
+      batch_size: 300 # Optional - batch eval size
+      chunk_size: 30 # Optional - max audio length in seconds fed to model
