@@ -312,15 +312,29 @@ class Engine:
             else:
                 # For regular metrics, just run them directly (no token management needed)
                 if ids and lengths:
-                    result = await asyncio.to_thread(
-                        metric, outs, model_targets, ids, lengths,
-                        instructions=instructions, dataset_name=self.dataset_name, model_name=model_name, model_responses=model_responses
-                    )
+                    if (self.metric.name == 'comet'):
+                        source_sentences = process_result["source_sentences"]
+                        result = await asyncio.to_thread(
+                            metric, outs, model_targets, ids, lengths,
+                            instructions=instructions, dataset_name=self.dataset_name, model_name=model_name, model_responses=model_responses
+                        )
+                    else:
+                        result = await asyncio.to_thread(
+                            metric, outs, model_targets, source_sentences, ids, lengths,
+                            instructions=instructions, dataset_name=self.dataset_name, model_name=model_name, model_responses=model_responses
+                        )
                 else:
-                    result = await asyncio.to_thread(
-                        metric, outs, model_targets,
-                        instructions=instructions, dataset_name=self.dataset_name, model_name=model_name, model_responses=model_responses
-                    )
+                    if (self.metric.name == 'comet'):
+                        source_sentences = process_result["source_sentences"]
+                        result = await asyncio.to_thread(
+                            metric, outs, model_targets, source_sentences,
+                            instructions=instructions, dataset_name=self.dataset_name, model_name=model_name, model_responses=model_responses
+                        )
+                    else:
+                        result = await asyncio.to_thread(
+                            metric, outs, model_targets,
+                            instructions=instructions, dataset_name=self.dataset_name, model_name=model_name, model_responses=model_responses
+                        )
                 return model_name, result
 
         # Run all model scoring concurrently

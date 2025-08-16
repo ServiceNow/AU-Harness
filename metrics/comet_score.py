@@ -16,7 +16,10 @@ class CometScore(Metrics):
         self.instructions = instructions
 
         # Get individual scores
-        self.record_level_scores = self.compute_record_level_scores(candidates, references)
+        normalized_candidates = [normalize_text(c) for c in candidates]
+        normalized_references = [normalize_text(r) for r in references]
+        normalized_source_sentences = [normalize_text(s) for s in source_sentences]
+        self.record_level_scores = self.compute_record_level_scores(normalized_candidates, normalized_references, normalized_source_sentences)
         
         # Calculate the mean score directly to avoid async issues
         scores = self.record_level_scores.get(self.name, [])
@@ -26,7 +29,7 @@ class CometScore(Metrics):
 
         if dataset_name and model_name:
             # write_record_log will also write to run.log internally
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, instructions=self.instructions)
+            write_record_log(self, normalized_references, normalized_candidates, scores, dataset_name, model_name, instructions=self.instructions)
             # Directly call append_final_score
             append_final_score(self, overall_score, dataset_name, model_name)
         return overall_score
@@ -34,7 +37,7 @@ class CometScore(Metrics):
     def __init__(self, batch_size = 1, num_gpus = 0):
         super().__init__()
         self.name = "comet"
-        model_path = download_model("wmt20-comet-da")
+        model_path = download_model("Unbabel/wmt22-comet-da") # range is [0,1]
         self.scorer = load_from_checkpoint(model_path)
         self.record_level_scores = None
 

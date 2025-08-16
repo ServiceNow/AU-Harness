@@ -45,7 +45,7 @@ class BertScore(Metrics):
         self.model_responses = model_responses if model_responses else []
 
         # Get individual scores
-        self.record_level_scores = self.compute_record_level_scores(candidates, references)
+        self.record_level_scores, normalized_candidates, normalized_references = self.compute_record_level_scores(candidates, references)
 
         # Calculate the mean score directly to avoid async issues
         scores = self.record_level_scores.get(self.name, [])
@@ -55,7 +55,7 @@ class BertScore(Metrics):
 
         if dataset_name and model_name:
             # write_record_log will also write to run.log internally
-            write_record_log(self, references, candidates, scores, dataset_name, model_name,
+            write_record_log(self, normalized_references, normalized_candidates, scores, dataset_name, model_name,
                            instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score with the aggregate score
             append_final_score(self, overall_score, dataset_name, model_name)
@@ -75,6 +75,7 @@ class BertScore(Metrics):
         """
 
         score_list = []
+        normalized_references, normalized_candidates = [], []
         for i in tqdm(range(len(candidates)), desc="BERTSCORE"):
             # === Consistent normalization with WER processing ===
             reference, candidate = references[i], candidates[i]
@@ -85,4 +86,6 @@ class BertScore(Metrics):
                                    model_type='bert-base-multilingual-cased')
             f1_score = f1.numpy().tolist()
             score_list.extend(f1_score)
-        return {self.name: score_list}
+            normalized_references.append(norm_reference)
+            normalized_candidates.append(norm_candidate)
+        return {self.name: score_list}, normalized_candidates, normalized_references

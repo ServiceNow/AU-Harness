@@ -25,7 +25,7 @@ class MeteorScore(Metrics):
         self.model_responses = model_responses if model_responses else []
 
         # Get individual scores
-        self.record_level_scores = self.compute_record_level_scores(candidates, references)
+        self.record_level_scores, normalized_candidates, normalized_references = self.compute_record_level_scores(candidates, references)
 
         # Calculate the mean score directly to avoid async issues
         scores = self.record_level_scores.get(self.name, [])
@@ -34,7 +34,7 @@ class MeteorScore(Metrics):
         overall_score = {self.name: mean_score}
 
         if dataset_name and model_name:
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, 
+            write_record_log(self, normalized_references, normalized_candidates, scores, dataset_name, model_name, 
                            instructions=self.instructions, model_responses=self.model_responses)
             append_final_score(self, overall_score, dataset_name, model_name, self.model_responses)
         
@@ -64,6 +64,7 @@ class MeteorScore(Metrics):
             Scores for each record. The keys should be the column names that will be saved in the record level file.
         """
         score_list = []
+        normalized_candidates, normalized_references = [], []
         for i in tqdm(range(len(candidates)), desc="METEOR"):
             # default preprocess is str.lower()
             # default stemmer is PorterStemmer()
@@ -78,5 +79,7 @@ class MeteorScore(Metrics):
             score = self.scorer(norm_reference.split(), norm_candidate.split())
             score = util.smart_round(score)
             score_list.append(score)
+            normalized_candidates.append(norm_candidate)
+            normalized_references.append(norm_reference)
 
-        return {self.name: score_list}
+        return {self.name: score_list}, normalized_candidates, normalized_references

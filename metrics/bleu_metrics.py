@@ -27,9 +27,9 @@ class BleuMetrics(Metrics):
         if dataset_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
             # Use sentenceBLEU for record-level scores
-            scores = self.compute_record_level_scores(candidates, references) 
+            scores, normalized_candidates, normalized_references = self.compute_record_level_scores(candidates, references) 
             # write_record_log will also write to run.log internally
-            write_record_log(self, references, candidates, scores, dataset_name, model_name,
+            write_record_log(self, normalized_references, normalized_candidates, scores, dataset_name, model_name,
                            instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score
             append_final_score(self, overall, dataset_name, model_name, self.model_responses)
@@ -77,6 +77,7 @@ class BleuMetrics(Metrics):
             Scores for each record. The keys should be the column names that will be saved in the record level file.
         """
         scores = []
+        normalized_candidates, normalized_references = [], []
         self.scorer = BLEU(effective_order=True, max_ngram_order=self.max_ngram_order)
         for c, r in tqdm(zip(candidates, references), desc="BLEU", total=len(candidates)):
             # === Consistent normalization with WER processing ===
@@ -84,4 +85,6 @@ class BleuMetrics(Metrics):
             norm_candidate = normalize_text(c)
             score = self.scorer.sentence_score(norm_candidate, [norm_reference])
             scores.append(score)
-        return {self.name: scores}
+            normalized_candidates.append(norm_candidate)
+            normalized_references.append(norm_reference)
+        return {self.name: scores}, normalized_candidates, normalized_references

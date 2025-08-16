@@ -107,7 +107,7 @@ allowed_task_metrics = {
     # Spoken Language Understanding
     'speech_qa': ['llm_judge_detailed', 'llm_judge_binary'],
     'sqqa': ['llm_judge_big_bench_audio', 'llm_judge_binary'],
-    'translation': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
+    'translation': ['word_error_rate', 'meteor', 'bleu', 'bertscore', 'comet'],
     'scene_understanding': ['llm_judge_binary', 'llm_judge_detailed'],
     'spoken_dialogue_summarization': ['llm_judge_detailed'],
     'intent_classification': ['llm_judge_binary'],
