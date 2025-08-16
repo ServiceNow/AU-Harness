@@ -23,7 +23,7 @@ diarization: |-
 spoof: |-
   Please listen to the following audio clip and analyze the speaker's voice characteristics, such as pitch, tone, timbre, and speech patterns. Choose from the following options: authentic, spoofed. Be brief. Do not provide explanations.
 libriclean: |-
-  Transcribe the audio clip into text. Be brief. Do not provide explanations.
+  Please transcribe the given speech. Return ONLY the transcribed speech in text format. Do not add any prefix text like 'The transcribed speech is:' to the beginning of the transcript.
 libri: |-
   You have been given an audio clip. From the audio, you MUST only output the transcribed text, without any additional formatting or additional text. Do NOT say "The transcription is..." or something of that nature. Simply output the transcription only.
 librifinal: |-
@@ -59,3 +59,4 @@ iemocap_gender: |-
   You are an expert at identifying the gender(male or female) of a speaker based on a given audio clip.
 summary_expert: |-
   You are an expert at understanding the content and concisely summarizing the content of a given audio clip.
+  
