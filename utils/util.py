@@ -23,6 +23,12 @@ def get_class_from_module(module_prefix, module_name):
         logger.warning(f"Could not import {module_name} from {module_prefix}: {e}")
         return None
 
+def recursive_scan_dir(runspecs_dir):
+    category_dirs = [d for d in runspecs_dir.iterdir() if d.is_dir()]
+    for dirname in category_dirs:
+        category_dirs.extend(recursive_scan_dir(dirname))
+    return category_dirs
+
 def find_runspec_files(base_dir="runspecs"):
     """
     Find all runspec JSON files in the base directory and its subdirectories.
@@ -38,8 +44,8 @@ def find_runspec_files(base_dir="runspecs"):
         logger.warning("[find_runspec_files] Runspecs directory not found: %s", runspecs_dir)
         return []
 
-    # Get all category directories in the runspecs directory
-    category_dirs = [d for d in runspecs_dir.iterdir() if d.is_dir()]
+    # Get all category directories in the runspecs directory recursively (i.e. multiple depth-levels)
+    category_dirs = recursive_scan_dir(runspecs_dir)
 
     # Get list of all runspec files in all category directories plus root
     runspec_files = list(runspecs_dir.glob("*.json"))

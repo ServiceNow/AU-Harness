@@ -1,0 +1,41 @@
+{
+    "gigaspeech_test": {
+    "hf_repo": "AudioLLMs/gigaspeech_test",
+    "language": "en",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "gigaspeech2_id_test": {
+    "hf_repo": "AudioLLMs/gigaspeech2-test",
+    "subset": "id-test",
+    "language": "id",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "gigaspeech2_th_test": {
+    "hf_repo": "AudioLLMs/gigaspeech2-test",
+    "subset": "th-test",
+    "language": "th",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  },
+  "gigaspeech2_vi_test": {
+    "hf_repo": "AudioLLMs/gigaspeech2-test",
+    "subset": "vi-test",
+    "language": "vi",
+    "preprocessor": "GeneralPreprocessor",
+    "postprocessor": "GeneralPostprocessor",
+    "audio_column": "context",
+    "target_column": "answer",
+    "instruction_column": "instruction"
+  }
+}
