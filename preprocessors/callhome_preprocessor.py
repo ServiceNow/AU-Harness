@@ -74,7 +74,7 @@ class CallhomePreprocessor(Preprocessor):
         # Build instruction with prompt add-ons
         instruction = base_instruction
         for prompt_text in matching_prompts:
-            instruction = f"{instruction} {prompt_text}"
+            instruction = f"{prompt_text} {instruction}"
 
         # Process system prompts
         system_prompt_text = ""
