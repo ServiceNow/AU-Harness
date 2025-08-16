@@ -57,8 +57,6 @@ class BleuMetrics(Metrics):
         # === Consistent normalization with WER processing ===
         norm_references = [normalize_text(r) for r in references]
         norm_candidates = [normalize_text(c) for c in candidates]
-        #for i in range (len(norm_references)):
-        #    print ("Ref:%s \t Candidate:%s"%(norm_references[i], norm_candidates[i]))
         bs = self.scorer.corpus_score(norm_candidates, [norm_references])
         return {self.name: bs.score}
 

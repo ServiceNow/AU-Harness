@@ -37,7 +37,7 @@ class CometScore(Metrics):
     def __init__(self, batch_size = 1, num_gpus = 0):
         super().__init__()
         self.name = "comet"
-        model_path = download_model("Unbabel/wmt22-comet-da") # range is [0,1]
+        model_path = download_model("Unbabel/wmt22-comet-da") # range is guaranteed within [0,1]
         self.scorer = load_from_checkpoint(model_path)
         self.record_level_scores = None
 
