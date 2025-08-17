@@ -131,7 +131,7 @@ metric_output = {
     "llm_judge_detailed": ["llm_judge_detailed"],
     "word_error_rate": ["average_sample_wer", "overall_wer"],
     "bertscore": ["bertscore"],
-    "bleu": ["bleu"],
+    "bleu": ["BLEU"],
     "llm_judge_callhome": ["llm_judge_callhome"],
     "llm_judge_binary": ["llm_judge_binary"],
     "llm_judge_redteaming": ["llm_judge_redteaming"],
