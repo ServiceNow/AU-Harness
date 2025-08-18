@@ -23,7 +23,6 @@ class BleuMetrics(Metrics):
         self.model_responses = model_responses if model_responses else []
         # Use corpusBLEU for overall score
         overall = self.get_score(candidates, references)
-        #print ("Overall", overall)
         if dataset_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
             # Use sentenceBLEU for record-level scores
