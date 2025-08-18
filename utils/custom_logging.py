@@ -90,9 +90,7 @@ def write_record_log(
 
     log_dir = Path("run_logs")
     log_dir.mkdir(exist_ok=True)
-    log_subdir = log_dir / f"{_slug(dataset_name)}"
-    log_subdir.mkdir(exist_ok=True)
-    log_path = log_subdir / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.csv"
+    log_path = log_dir / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.csv"
 
     # Use provided explanations or an empty list
     if explanations is None:
