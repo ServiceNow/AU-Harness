@@ -40,6 +40,7 @@ class BfclPreprocessor(Preprocessor):
 
         # Extract properties using the base class method
         props = self.extract_properties(properties)
+        length_filter = props["length_filter"]
         modality = props.get("dataset_info", {}).get("modality", "audio")
         prompt_mode = props.get("dataset_info", {}).get("with_prompt", False)
 
@@ -62,10 +63,12 @@ class BfclPreprocessor(Preprocessor):
                 }
             else:
                 audio_data = dataset["audio"][i]
+                if isinstance(audio_data, dict):
+                    audio_data = audio_data
                 if isinstance(audio_data, list) and len(audio_data) == 1:
                     audio_data = audio_data[0]
                 elif isinstance(audio_data, list) and len(audio_data) > 1:
-                    logger.warning("[%s] Support single audio only right now!", id)
+                    logger.warning("[%s] Support single audio only/single turn right now!", id)
                     continue
 
             prompt = dataset["question"][i]
@@ -108,11 +111,11 @@ class BfclPreprocessor(Preprocessor):
                 function = None
             else:
                 functions_for_reference = function
-                
+
             # Create a lookup dictionary for required parameters by function name
-            required_params_dict = {tool['name']: tool['parameters']['required'] 
+            required_params_dict = {tool['name']: tool['parameters']['required']
                                    for tool in functions_for_reference}
-            
+
             # Map required fields to match reference structure
             required_fields = []
             for ref_item in reference:
@@ -135,6 +138,14 @@ class BfclPreprocessor(Preprocessor):
 
                 # Use base class method to resample audio
                 audio_array, sr = self.resample_audio(audio_array, sr)
+
+            if modality == "audio" and not self.check_audio_length(audio_array, sr, length_filter):
+                logger.warning(
+                    f"Audio in item {id} filtered because of length "
+                    f"Supported: {length_filter[0]}–{length_filter[1]} sec."
+                )
+                continue
+
 
             # Ensure prompt exists
             if not prompt:
