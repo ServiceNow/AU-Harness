@@ -74,8 +74,8 @@ task_temp_map = {
     "long_form_asr": 0.1,
 
     # Paralinguistics
-    "emotion_recognition": 0.0001,
-    "gender_recognition": 0.0001,
+    "emotion_recognition": 0.2,
+    "gender_recognition": 0.2,
     "accent_recognition": 0.2,
     "speaker_recognition": 0.2,
 
@@ -86,9 +86,6 @@ task_temp_map = {
     "scene_understanding": 0.5,
     "spoken_dialogue_summarization": 0.8,
     "music_understanding": 0.7,
-
-    'spoofing': 0.0001,
-    'safety': 0.5,
 
 }
 
@@ -129,7 +126,7 @@ metric_output = {
     "llm_judge_detailed": ["llm_judge_detailed"],
     "word_error_rate": ["average_sample_wer", "overall_wer"],
     "bertscore": ["bertscore"],
-    "bleu": ["bleu"],
+    "bleu": ["BLEU"],
     "llm_judge_callhome": ["llm_judge_callhome"],
     "llm_judge_binary": ["llm_judge_binary"],
     "llm_judge_redteaming": ["llm_judge_redteaming"],

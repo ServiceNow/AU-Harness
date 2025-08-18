@@ -18,8 +18,7 @@ meld_sentiment: |-
   Choose from the following options: positive, negative, neutral
 iemocap_emotion: |-
   <instruction>:
-  Based on the given audio, identify which one the following options the best descibes the emotional state of the speaker in the audio: anger, happiness, excitement, sadness, frustration, fear, surprise, neutral. Be careful to differentiate between similar emotional states. Be brief.
-  <response_format>:
+  Based on the given audio, identify which one the following options the best descibes the emotional state of the speaker in the audio: anger, happiness, excitement, sadness, frustration, fear, surprise, neutral. Be careful to differentiate between similar emotional states. Be brief.  <response_format>:
   You ALWAYS respond in full sentences, saying the "speaker's tone sounds {chosen_state}", "Based on the speaker's speech, the speaker sounds {chosen_state}", etc. 
 iemocap_gender: |-
   You are an expert at identifying the gender(male or female) of a speaker based on a given audio clip.
