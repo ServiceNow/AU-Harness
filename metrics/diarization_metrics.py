@@ -86,6 +86,9 @@ def compute_wer(
 
     result.wer_total = result.wer_correct + result.wer_sub + result.wer_delete
     assert result.wer_total == len(ref_words)
+
+    # If levenshtein alignment results in larger indexes for the given text, ignore this sample
+    # and this example will not contribute to the diarization metric calculation. 
     if (max_ref_in_align >= len(ref_text_list) or max_hyp_in_align >= len(hyp_text_list)):
         return None
     else:
@@ -316,12 +319,10 @@ class DiarizationMetrics(Metrics):
                 ref_speakers.append(cur_ref_speaker)
                 word_level_ref_speakers.extend(cur_word_level_ref_speaker)
                 flattened_ref_transcripts.extend(normalized_word_level_ref_transcript)
-                #cleaned_ref_transcripts.append(normalized_ref_transcript)
 
                 cand_speakers.append(cur_cand_speaker)
                 word_level_cand_speakers.extend(cur_word_level_cand_speaker)
                 flattened_cand_transcripts.extend(normalized_word_level_cand_transcript)
-                #cleaned_cand_transcripts.append(normalized_cand_transcript)
 
             if len(ref_by_lines) > num_min_iterations:
                 for j in range(len(ref_by_lines) - num_min_iterations):
@@ -329,7 +330,6 @@ class DiarizationMetrics(Metrics):
                         ref_by_lines[num_min_iterations + j], lang_code)
                     ref_speakers.append(cur_ref_speaker)
                     word_level_ref_speakers.extend(cur_word_level_ref_speaker)
-                    #cleaned_ref_transcripts.append(normalized_ref_transcript)
                     flattened_ref_transcripts.extend(normalized_word_level_ref_transcript)
 
             else:
@@ -338,7 +338,6 @@ class DiarizationMetrics(Metrics):
                         cand_by_lines[num_min_iterations + j], lang_code)
                     cand_speakers.append(cur_ref_speaker)
                     word_level_cand_speakers.extend(cur_word_level_cand_speaker)
-                    #cleaned_cand_transcripts.append(normalized_cand_transcript)
                     flattened_cand_transcripts.extend(normalized_word_level_cand_transcript)
 
             try:
@@ -356,9 +355,7 @@ class DiarizationMetrics(Metrics):
             # Convert speakers (A,B,C) to speaker-ids (1,2,3)
             # Ensuring the alignment between word-level transcripts and word-level speaker-ids
             ####################################################################################
-            # flattened_ref_transcripts = [x for s in cleaned_ref_transcripts for x in s.split(' ')]
-            # flattened_cand_transcripts = [x for s in cleaned_cand_transcripts for x in s.split(' ')]
-
+           
             all_possible_speakers = list(set(word_level_ref_speakers).union(set(word_level_cand_speakers)))
 
             # spkr count needs to start from 1 to n for wder metrics to work
@@ -371,6 +368,7 @@ class DiarizationMetrics(Metrics):
             except Exception as exc:
                 raise ValueError("Either reference transcripts or candidate transcripts are not spaced correctly.") from exc
             
+            # Return None if there exists a misalignment between levenstein alignment and the provided transcripts.
             output_wer = compute_wer(flattened_cand_transcripts, flattened_ref_transcripts)
             if (output_wer != None):
                 result, align = output_wer[0], output_wer[1]
@@ -391,8 +389,6 @@ class DiarizationMetrics(Metrics):
                     total_cpwer_insert.append(result.cpwer_insert)
                     total_cpwer_total.append(result.cpwer_total)
                     total_spkcnterr.append(abs(result.speaker_count_error))
-            else:
-                print ("SKIP")
 
         results = {
             'cpwer_per_row': cpwer_scores,
