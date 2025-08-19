@@ -96,7 +96,9 @@ filters:
     - ["summary_expert", ["qwen_2_audio", "spoken_dialogue_summarization"]]
 ```
 
-**Important Note: It is HIGHLY Recommended to add a system prompt/user prompt add on specific to the datasets you are running for the best results. Go to /prompts/system_prompts or /prompts/user_prompt_add_ons to choose a prebuilt prompt or create your own prompt, then add it in filters attribute**
+**Important Note:** It is HIGHLY Recommended to add a "system_prompt" or "user_prompt_add_on" specific to the datasets you are running for the best results
+ 
+Go to [prompts/system_prompts](prompts/system_prompts) or [prompts/user_prompt_add_ons](prompts/user_prompt_add_ons) to choose a prebuilt prompt or create your own prompt, then add it in filters attribute
 
 #### Result Aggregation
 ```yaml
@@ -173,7 +175,7 @@ models:
       chunk_size: 30  # Optional - Max audio length in seconds
 ```
 
-**Note: Batch-size proportional dataset sharding is implemented when multiple endpoints of the same model are provided. Be sure to have unique 'name' attributes for each unique endpoint, as shown above**
+**Note**: Batch-size proportional dataset sharding is implemented when multiple endpoints of the same model are provided. Be sure to have unique 'name' attributes for each unique endpoint, as shown above
 
 ##### Inference Types
 
@@ -276,14 +278,14 @@ Run the specific dataset or all datasets across word_error_rate(utterance by utt
 
 ```yaml
 dataset_metric:
-  - ["callhome_eng", "word_error_rate"] # OR
-  - ["callhome, "speaker_diarization"]
+  - ["callhome_eng", "word_error_rate"]
+  - ["callhome_spa, "speaker_diarization"] 
 ```
 ## Kit Structure
 
 ### General Evaluation Flow
 
-![LALMEval Architecture](EvaluationStructure.png)
+![LALMEval Architecture](assets/images/Architecture-Diagram.png)
 
 The evaluation flow in LALMEval follows a highly concurrent architecture:
 
@@ -316,7 +318,8 @@ runspecs/
 ├── speech_recognition/             
 ├── paralinguistics/                
 ├── spoken_language_reasoning/      
-└── callhome/                       
+├── multiturn/                       
+└── safety_and_security/             
 ```
 
 Each task category directory contains JSON files that define specific tasks or datasets within that category. For example:
