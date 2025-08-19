@@ -1,0 +1,22 @@
+dataset_metric: #list of dataset-metric pairs, each as a two-item list of strings ["dataset_name", "metric_name"] - you must only run one dataset with one metric(no repeat datasets)
+  # All datasets within Speech Recognition task category
+  - ["speech_recognition", "word_error_rate"]
+
+filters:
+  num_samples: 5 # number of samples to run(remove for all)
+  user_prompt_add_ons: # Only for datasets processed by GeneralPreprocessor or CallhomePreprocessor
+    - ["asr", ["speech_recognition"]] # optional - additional prompting in text instructions for each sample
+
+models:
+  - info:
+      name: "gpt-4o-mini-audio-preview-1" # mandatory - must be unique
+      inference_type: "openai" # mandatory - you can use vllm(vllm), openai(openai), (chat completion) or audio transcription endpoint(transcription)
+      url: "${ENDPOINT_URL}"   # mandatory - endpoint url
+      delay: 100
+      retry_attempts: 8
+      timeout: 30
+      model: "gpt-4o-mini-audio-preview" # mandatory - only needed for vllm
+      auth_token: "${AUTH_TOKEN}" 
+      api_version: "${API_VERSION}"
+      batch_size: 300 # Optional - batch eval size
+      chunk_size: 30 # Optional - max audio length in seconds fed to model

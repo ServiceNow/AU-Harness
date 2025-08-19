@@ -9,6 +9,13 @@ Sample config for Speech Recognition task is provided in [sample_asr_config.yaml
 Suggested dataset-metric pairs are provided in [asr_suggestions.yaml](./asr_suggestions.yaml).
 ```yaml
 dataset_metric:
+  # All datasets within **SPEECH RECOGNITION** task category (including: asr + code_switching_asr + long_form_asr)
+  - ['speech_recognition', 'word_error_rate']
+  
+  # All datasets within **long_form_asr** sub-task category
+  - ['long_form_asr', 'word_error_rate']
+
+  # Individual dataset
   - ["librispeech_test_clean", "word_error_rate"]
 
 filters:
