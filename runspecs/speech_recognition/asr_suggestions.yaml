@@ -1,5 +1,7 @@
 dataset_metric:
 # asr/general_asr
+  - ['general_asr', 'word_error_rate']
+  # Individual datasets
   - ["aishell_1_test", "word_error_rate"]
   - ["dream_tts_mcq_test", "word_error_rate"]
   - ["peoples_speech_test", "word_error_rate"]
@@ -8,12 +10,16 @@ dataset_metric:
   - ["tedlium3_test", "word_error_rate"]
 
 # asr/gigaspeech
+  - ['gigaspeech', 'word_error_rate']
+    # Individual datasets
   - ["gigaspeech_test", "word_error_rate"]
   - ["gigaspeech2_id_test", "word_error_rate"]
   - ["gigaspeech2_th_test", "word_error_rate"]
   - ["gigaspeech2_vi_test", "word_error_rate"]
 
 # asr/mls
+  - ['mls', 'word_error_rate']
+    # Individual datasets
   - ["librispeech_multilingual_dutch", "word_error_rate"]
   - ["librispeech_multilingual_french", "word_error_rate"]
   - ["librispeech_multilingual_german", "word_error_rate"]
@@ -24,6 +30,8 @@ dataset_metric:
 
 
 # asr/mnsc
+  - ['mnsc', 'word_error_rate']
+    # Individual datasets
   - ["mnsc_asr_part1_test", "word_error_rate"]
   - ["mnsc_asr_part2_test", "word_error_rate"]
   - ["mnsc_asr_part3_test", "word_error_rate"]
@@ -32,6 +40,8 @@ dataset_metric:
   - ["mnsc_asr_part6_test", "word_error_rate"]
 
 # asr/ callhome_asr
+  - ['callhome_asr', 'word_error_rate']
+    # Individual datasets
   - ["callhome_eng", "word_error_rate"]
   - ["callhome_jpn", "word_error_rate"]
   - ["callhome_deu", "word_error_rate"]
@@ -41,6 +51,8 @@ dataset_metric:
 # asr/ voxpopuli
 
 # asr/common_voice
+  - ['common_voice', 'word_error_rate']
+    # Individual datasets
   - ["common_voice_15_en", "word_error_rate"]
   - ["common_voice_15_ab", "word_error_rate"]
   - ["common_voice_15_af", "word_error_rate"]
@@ -159,6 +171,8 @@ dataset_metric:
   - ["common_voice_15_zh-TW", "word_error_rate"]
 
 # asr/fleurs
+  - ['fleurs', 'word_error_rate']
+    # Individual datasets
   - ["fleurs_af", "word_error_rate"]
   - ["fleurs_am", "word_error_rate"]
   - ["fleurs_ar", "word_error_rate"]
@@ -263,10 +277,14 @@ dataset_metric:
   - ["fleurs_zu", "word_error_rate"]
   
 # code_switching_asr
+  - ['code_switching_asr', 'word_error_rate']
+    # Individual datasets
   - ["seame_dev_sge", "word_error_rate"]
   - ["seame_dev_man", "word_error_rate"]
 
 # long_form_asr
+  - ['long_form_asr', 'word_error_rate']
+    # Individual datasets
   - ["earnings21_test", "word_error_rate"]
   - ["earnings22_test", "word_error_rate"]
   - ["tedlium3_long_form_test", "word_error_rate"]
