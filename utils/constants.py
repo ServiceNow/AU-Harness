@@ -107,11 +107,9 @@ mtbench_temp_map = {
 
 allowed_task_metrics = {
     # ASR
-    'general_asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
+    'asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
     'code_switching_asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
     'long_form_asr': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
-    'mls': ['word_error_rate', 'meteor', 'bleu', 'bertscore'],
-
 
     # Paralinguistics
     'emotion_recognition': ['llm_judge_binary'],
