@@ -981,7 +981,6 @@ def evaluate(
             }
 
     for i, (p, g) in enumerate(zip(plist, glist)):
-        if (i + 1) % 10 == 0:
         scores["joint_all"]["count"] += 1
         turn_scores = {"exec": [], "exact": []}
         for idx, pg in enumerate(zip(p, g)):
