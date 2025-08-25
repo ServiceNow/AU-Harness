@@ -2,6 +2,7 @@
     "big_bench_audio": {
         "hf_repo": "fixie-ai/big_bench_audio",
         "subset": "default",
+        "modality": "audio",
         "language": "english",
         "preprocessor": "BigBenchAudioPreprocessor",
         "postprocessor": "BigBenchAudioPostprocessor"
@@ -10,6 +11,7 @@
         "hf_repo": "fixie-ai/big_bench_audio",
         "subset": "default",
         "language": "english",
+        "modality": "text",
         "preprocessor": "BigBenchAudioPreprocessor",
         "postprocessor": "BigBenchAudioPostprocessor"
     },
