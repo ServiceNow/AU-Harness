@@ -29,11 +29,7 @@ class BfclPostprocessor(Postprocessor):
             s = re.sub(r'([{,])\s*([a-zA-Z_][\w\.]*)\s*:', r'\1"\2":', s)
             return s
 
-        pattern = r"```json(.*?)```"
-        match = re.search(pattern, message, re.DOTALL)
-        if match:
-            # Remove leading/trailing whitespace and parse JSON
-            json_str = fix_json_like_string(match.group(1).strip())
+        def decode_json(json_str):
             try:
                 json_decode = json.loads(json_str)
                 return json_decode
@@ -43,6 +39,16 @@ class BfclPostprocessor(Postprocessor):
                     return json_decode
                 except:
                     return None
+        decoded_json = decode_json(message)
+        if decoded_json is not None:
+            return decoded_json
+        else:
+            pattern = r"```json(.*?)```"
+            match = re.search(pattern, message, re.DOTALL)
+            if match:
+                # Remove leading/trailing whitespace and parse JSON
+                json_str = fix_json_like_string(match.group(1).strip())
+                return decode_json(json_str)
 
     def process(
             self,
