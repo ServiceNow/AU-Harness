@@ -28,7 +28,7 @@ class SqlScore(Metrics):
     """
     def __init__(self):
         super().__init__()
-        self.name = "text2sql_score"
+        self.name = "sql_score"
         self.metric_ex = "Execution Accuracy"
         self.metric_em = "Exact Set Match"
         self.processed_text = "Post Processed Text"
