@@ -1,16 +1,41 @@
 <div align="center" style="margin-bottom: 1em;">
 
-*Your ultimate audio evaluation framework*
+**The Ultimate Audio Multimodal LLM Evaluation Toolkit** 
+*Comprehensive • Fast • Reproducible*
 
-**Insert Images Here**
+<img src="assets/images/ver-1-bg.png" alt="LALMEval Brand Logo" width="200">
+
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Version](https://img.shields.io/badge/version-0.1.0-orange.svg)](https://github.com/ServiceNow/LALMEval)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/ServiceNow/LALMEval/pulls)
+
+**🎯 50+ Datasets • 🚀 420+ Subsets • 📊 9 Metrics • 🔊 18 Audio Tasks**
 
 </div>
 
-## Overview
+## 📋 Overview
 
 LALMEval is a powerful open-source framework for evaluating audio-based language models. Built for researchers and developers, LALMEval provides a comprehensive suite of tools to benchmark and compare the performance of various audio processing models across a wide range of tasks.
 
-## Why LALMEval?
+## 🚀 Quick Start
+
+Get up and running in under a minute:
+
+```bash
+# Clone and install
+git clone https://github.com/ServiceNow/LALMEval.git
+cd LALMEval
+pip install -r requirements.txt
+
+# Run your first evaluation
+cp sample_config.yaml config.yaml
+bash evaluate.sh
+```
+
+Results will be generated in `logs/` with detailed metrics and analysis.
+
+## ❓ Why LALMEval?
 
 1. 🚀 **Blazing Fast**:
    - Any amount of models are run against any amount of datasets and metrics, each with their own separate Engines, allowing for parallelization of the entire evaluation pipeline
@@ -31,7 +56,7 @@ LALMEval is a powerful open-source framework for evaluating audio-based language
    - Over 50 unique datasets, with 420+ unique subsets
    - 9 different metrics for broader evaluation coverage
 
-## Usage
+## 💻 Usage
 
 LALMEval requires setting up a configuration file (`config.yaml`) to define your evaluation parameters. This file controls which models, datasets, and metrics are used in your evaluation.
 
@@ -281,7 +306,7 @@ dataset_metric:
   - ["callhome_eng", "word_error_rate"]
   - ["callhome_spa, "speaker_diarization"] 
 ```
-## Kit Structure
+## 🏗️ Architecture
 
 ### General Evaluation Flow
 
@@ -333,6 +358,20 @@ When configuring evaluations in `config.yaml`, you can reference:
 
 This flexible structure allows for targeted or broad evaluations depending on your needs.
 
-## License
+## 📝 Citation
+
+If you use LALMEval in your research, please cite our work:
+
+```bibtex
+@software{lalmeval2025,
+  title = {LALMEval: A Comprehensive Audio Multimodal LLM Evaluation Toolkit},
+  author = {ServiceNow},
+  year = {2025},
+  url = {https://github.com/ServiceNow/LALMEval},
+  version = {0.1.0}
+}
+```
+
+## 📄 License
 
 LALMEval is licensed under the Apache 2.0 License.
