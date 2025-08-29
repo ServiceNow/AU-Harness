@@ -125,13 +125,9 @@ class WERMetrics(Metrics):
         total_chars = sum(scores["total"])
         # Overall WER is the sum of incorrect divided by sum of total
         overall_wer = incorrect_chars / total_chars if total_chars > 0 else 0
-        # Cap at 1.0
-        overall_wer = min(overall_wer, 1.0)
 
         # We also track per-sample average for a more balanced view
         avg_sample_wer = sum(scores["wer_per_row"]) / len(scores["wer_per_row"]) if scores["wer_per_row"] else 0
-        # Cap the WER at 1.0
-        avg_sample_wer = min(avg_sample_wer, 1.0)
 
         # Initialize the result with both WER metrics
         result = {
@@ -247,7 +243,6 @@ class WERMetrics(Metrics):
                 incorrect_scores.append(substitutions + deletions + insertions)
                 total_scores.append(substitutions + deletions + hits)
             wer = incorrect_scores[-1] / total_scores[-1]
-            wer = min(wer, 1.0)
             scores.append(wer)
 
         results = {
