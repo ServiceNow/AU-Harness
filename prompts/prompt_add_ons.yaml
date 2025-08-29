@@ -1,28 +1,14 @@
-asr: |-
-  Please transcribe the given speech. Return ONLY the transcribed speech in text format. Do not add any prefix text like 'The transcribed speech is:' to the beginning of the transcript.
-translation: |-
- Translate to the target language. Be brief. Do not provide extra explanations.
+asr_clean_output: |-
+  You have been given an audio clip. From the audio, you MUST only output the transcribed text, without any additional formatting or additional text. Do NOT say "The transcription is..." or something of that nature. Simply output the transcription only.
+try_best: |-
+  Follow these given instructions, based on the audio clip you have just been given. ALWAYS try your best to answer, and give your best educated guess if you are not sure. NEVER give up or refuse to answer.
+audio_expert: |-
+  Keep in mind, you are an expert at listening to and understanding audio, no matter the quality or duration.
 meld_emotion: |-
-  Choose from the following options: anger, disgust, fear, joy, neutral, sadness, suprise
+  Choose from the following options: Anger, Disgust, Fear, Joy, Neutral, Sadness, Suprise
 meld_sentiment: |-
   Choose from the following options: positive, negative, neutral
 iemocap_emotion: |-
-  You must select exactly one from the following options as the final answer: anger, happiness, excitement, sadness, frustration, fear, surprise, neutral.
-iemocap_gender: |-
-  Please listen to the following audio clip and analyze the speaker's voice characteristics, such as pitch, tone, timbre, and speech patterns. Based on these acoustic features, what is the most likely perceived gender of the speaker? Be brief. Do not provide explanations.
-voxceleb_accent: |-
-  Please listen to the following audio clip and analyze the speaker's voice characteristics, such as pitch, tone, timbre, and speech patterns. Based on these acoustic features, what is the most likely accent of the speaker? Be brief. Do not provide explanations.
-diarization: |-
-  There are multiple speakers in the provided audio clip. Please transcribe the audio with user information. Follow the format as below: A:\nB:\nA:\n
-spoof: |-
-  Please listen to the following audio clip and analyze the speaker's voice characteristics, such as pitch, tone, timbre, and speech patterns. Choose from the following options: authentic, spoofed. Be brief. Do not provide explanations.
-
-#---- Old System Prompt -----------#
-mcq_expert: |-
-  You are an expert at multiple choice question answering. Reason carefully over the given audio, and output the correct answer from the choices given in the instruction text without long explanations or how you reached this prediction.
-summary_expert: |-
-  You are an expert at understanding the content and concisely summarizing the content of a given audio clip.
-
-try_best: |-
-  Follow these given instructions, based on the audio clip you have just been given. ALWAYS try your best to answer, and give your best educated guess if you are not sure. NEVER give up or refuse to answer.
-
+  Choose from the following options: anger, happiness, excitement, sadness, frustration, fear, surprise, neutral
+spoofing_detection: |-
+  Choose from the following options: authentic, spoofed
