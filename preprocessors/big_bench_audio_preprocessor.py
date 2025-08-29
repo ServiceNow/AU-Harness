@@ -46,7 +46,8 @@ class BigBenchAudioPreprocessor(Preprocessor):
 
         # Extract properties using the base class method
         props = self.extract_properties(properties)
-        modality = props.get("modality", "audio")
+        dataset_info = props.get("dataset_info")
+        modality = dataset_info.get("modality", 'audio')
         logger.info(f"Processing modality: {modality}")
 
         dataset_keys = list(dataset.keys())

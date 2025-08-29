@@ -64,7 +64,10 @@ def compute_wer(
     ref_words = ref_normalized.split(' ')
 
     # Get the alignment.
+    # Issue with the alignment: Sometimes, the align has indexes more than in the original ref/hyp text
+    # We will filter out those examples for now.
     _, align = levenshtein.levenshtein_with_edits(ref_normalized, hyp_normalized)
+    max_ref_in_align, max_hyp_in_align = 0, 0
 
     # Apply the alignment on ref speakers.
     for i, j in align:
@@ -77,10 +80,20 @@ def compute_wer(
                 result.wer_correct += 1
             else:
                 result.wer_sub += 1
+    
+        max_ref_in_align = max(max_ref_in_align, i)
+        max_hyp_in_align = max(max_hyp_in_align, j)
 
     result.wer_total = result.wer_correct + result.wer_sub + result.wer_delete
     assert result.wer_total == len(ref_words)
-    return result, align
+
+    # If levenshtein alignment results in larger indexes for the given text, ignore this sample
+    # and this example will not contribute to the diarization metric calculation. 
+    if (max_ref_in_align >= len(ref_text_list) or max_hyp_in_align >= len(hyp_text_list)):
+        return None
+    else:
+        return result, align
+
 
 
 def compute_wder(ref_spk_list, hyp_spk_list, ref_words, hyp_words, align, result):
@@ -92,6 +105,9 @@ def compute_wder(ref_spk_list, hyp_spk_list, ref_words, hyp_words, align, result
         if i != -1 and j != -1:
             ref_spk_list_align.append(ref_spk_list[i])
             hyp_spk_list_align.append(hyp_spk_list[j])
+
+    if( not hyp_spk_list_align or not ref_spk_list_align):
+        return None
 
     # Build cost matrix.
     max_spk = max(*ref_spk_list_align, *hyp_spk_list_align)
@@ -122,11 +138,16 @@ def compute_wder(ref_spk_list, hyp_spk_list, ref_words, hyp_words, align, result
             ]
             if not hyp_words_for_spk:
                 continue
-            spk_pair_metrics[(i, j)], _ = compute_wer(
+
+            output_wer = compute_wer(
                 hyp_text_list=hyp_words_for_spk,
                 ref_text_list=ref_words_for_spk,
             )
-            cost_matrix[i - 1, j - 1] = spk_pair_metrics[(i, j)].wer_correct
+            if (output_wer == None):
+                continue
+            else:
+                spk_pair_metrics[(i, j)] = output_wer[0]
+                cost_matrix[i - 1, j - 1] = spk_pair_metrics[(i, j)].wer_correct
 
     # Solve alignment.
     row_index, col_index = optimize.linear_sum_assignment(
@@ -160,13 +181,18 @@ def prepare_speaker_info(input_info, lang_code):
         Returns:
             speaker: speaker ID information 
             word_level_speaker: sequence of speaker labels aligned with words in utterances
-            cleaned_transcript: Transcript after normalization process (similar to WER processing)
+            cleaned_transcript: Transcript after normalization process (similar to WER processing) on the token-level
     """
     split_input_info = input_info.split(':')
     speaker = split_input_info[0].strip()  # [A: hello world]
     cleaned_transcript = normalize_text(' '.join(split_input_info[1:]).strip(), lang_code)
-    word_level_speaker = [speaker] * len(cleaned_transcript.split(' '))
-    return speaker, word_level_speaker, cleaned_transcript
+    word_level_cleaned_transcript = cleaned_transcript.strip().split(' ')
+    word_level_speaker = [speaker] * len(word_level_cleaned_transcript)
+    try:
+        assert len(word_level_speaker) == len(word_level_cleaned_transcript)
+    except:
+        raise ("A mistake has been made when preparing speaker information")
+    return speaker, word_level_speaker, word_level_cleaned_transcript
 
 
 class DiarizationMetrics(Metrics):
@@ -282,36 +308,37 @@ class DiarizationMetrics(Metrics):
             ref_speakers, cand_speakers = [], []
             cleaned_ref_transcripts, cleaned_cand_transcripts = [], []
             word_level_ref_speakers, word_level_cand_speakers = [], []
+            flattened_ref_transcripts, flattened_cand_transcripts = [], []
 
             for i in range(num_min_iterations):
-                cur_ref_speaker, cur_word_level_ref_speaker, normalized_ref_transcript = prepare_speaker_info(
+                cur_ref_speaker, cur_word_level_ref_speaker, normalized_word_level_ref_transcript = prepare_speaker_info(
                     ref_by_lines[i], lang_code)
-                cur_cand_speaker, cur_word_level_cand_speaker, normalized_cand_transcript = prepare_speaker_info(
+                cur_cand_speaker, cur_word_level_cand_speaker, normalized_word_level_cand_transcript = prepare_speaker_info(
                     cand_by_lines[i], lang_code)
 
                 ref_speakers.append(cur_ref_speaker)
                 word_level_ref_speakers.extend(cur_word_level_ref_speaker)
-                cleaned_ref_transcripts.append(normalized_ref_transcript)
+                flattened_ref_transcripts.extend(normalized_word_level_ref_transcript)
 
                 cand_speakers.append(cur_cand_speaker)
                 word_level_cand_speakers.extend(cur_word_level_cand_speaker)
-                cleaned_cand_transcripts.append(normalized_cand_transcript)
+                flattened_cand_transcripts.extend(normalized_word_level_cand_transcript)
 
             if len(ref_by_lines) > num_min_iterations:
                 for j in range(len(ref_by_lines) - num_min_iterations):
-                    cur_ref_speaker, cur_word_level_ref_speaker, normalized_ref_transcript = prepare_speaker_info(
+                    cur_ref_speaker, cur_word_level_ref_speaker, normalized_word_level_ref_transcript = prepare_speaker_info(
                         ref_by_lines[num_min_iterations + j], lang_code)
                     ref_speakers.append(cur_ref_speaker)
                     word_level_ref_speakers.extend(cur_word_level_ref_speaker)
-                    cleaned_ref_transcripts.append(normalized_ref_transcript)
+                    flattened_ref_transcripts.extend(normalized_word_level_ref_transcript)
 
             else:
                 for j in range(len(cand_by_lines) - num_min_iterations):
-                    cur_cand_speaker, cur_word_level_cand_speaker, normalized_cand_transcript = prepare_speaker_info(
+                    cur_cand_speaker, cur_word_level_cand_speaker, normalized_word_level_cand_transcript = prepare_speaker_info(
                         cand_by_lines[num_min_iterations + j], lang_code)
                     cand_speakers.append(cur_ref_speaker)
                     word_level_cand_speakers.extend(cur_word_level_cand_speaker)
-                    cleaned_cand_transcripts.append(normalized_cand_transcript)
+                    flattened_cand_transcripts.extend(normalized_word_level_cand_transcript)
 
             try:
                 assert len(ref_by_lines) == len(ref_speakers)
@@ -324,13 +351,11 @@ class DiarizationMetrics(Metrics):
                 raise ValueError(
                     "The generated outputs are not formatted correctly. Hypothesis speakers and hypothesis transcripts are not aligned by turns.") from exc
 
-            ##########################################################
-            # Flattten the transcripts to the word-level
-            # Aligning with word-level speaker-ids
-            ##########################################################
-            flattened_ref_transcripts = [x for s in cleaned_ref_transcripts for x in s.split(' ')]
-            flattened_cand_transcripts = [x for s in cleaned_cand_transcripts for x in s.split(' ')]
-
+            ####################################################################################
+            # Convert speakers (A,B,C) to speaker-ids (1,2,3)
+            # Ensuring the alignment between word-level transcripts and word-level speaker-ids
+            ####################################################################################
+           
             all_possible_speakers = list(set(word_level_ref_speakers).union(set(word_level_cand_speakers)))
 
             # spkr count needs to start from 1 to n for wder metrics to work
@@ -342,23 +367,28 @@ class DiarizationMetrics(Metrics):
                 assert len(flattened_cand_transcripts) == len(numeric_word_level_cand_speakers)
             except Exception as exc:
                 raise ValueError("Either reference transcripts or candidate transcripts are not spaced correctly.") from exc
-            result, align = compute_wer(flattened_cand_transcripts, flattened_ref_transcripts)
+            
+            # Return None if there exists a misalignment between levenstein alignment and the provided transcripts.
+            output_wer = compute_wer(flattened_cand_transcripts, flattened_ref_transcripts)
+            if (output_wer != None):
+                result, align = output_wer[0], output_wer[1]
 
-            result = compute_wder(numeric_word_level_ref_speakers, numeric_word_level_cand_speakers,
-                                  flattened_ref_transcripts, flattened_cand_transcripts, align, result)
-            per_row_wder = result.wder_sub / (result.wder_total + 1e-12)
-            per_row_cpwer = (result.cpwer_sub + result.cpwer_insert) / (result.cpwer_total)
+                result = compute_wder(numeric_word_level_ref_speakers, numeric_word_level_cand_speakers,
+                                    flattened_ref_transcripts, flattened_cand_transcripts, align, result)
+                if (result != None):
+                    per_row_wder = result.wder_sub / (result.wder_total + 1e-12)
+                    per_row_cpwer = (result.cpwer_sub + result.cpwer_insert) / (result.cpwer_total)
 
-            cpwer_scores.append(per_row_cpwer)
-            wder_scores.append(per_row_wder)
+                    cpwer_scores.append(per_row_cpwer)
+                    wder_scores.append(per_row_wder)
 
-            total_wder_sub.append(result.wder_sub)
-            total_wder_total.append(result.wder_total)
+                    total_wder_sub.append(result.wder_sub)
+                    total_wder_total.append(result.wder_total)
 
-            total_cpwer_sub.append(result.cpwer_sub)
-            total_cpwer_insert.append(result.cpwer_insert)
-            total_cpwer_total.append(result.cpwer_total)
-            total_spkcnterr.append(abs(result.speaker_count_error))
+                    total_cpwer_sub.append(result.cpwer_sub)
+                    total_cpwer_insert.append(result.cpwer_insert)
+                    total_cpwer_total.append(result.cpwer_total)
+                    total_spkcnterr.append(abs(result.speaker_count_error))
 
         results = {
             'cpwer_per_row': cpwer_scores,
