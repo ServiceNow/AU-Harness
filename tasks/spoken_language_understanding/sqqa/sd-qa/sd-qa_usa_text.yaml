@@ -1,0 +1,4 @@
+task_name: sd-qa_usa_text
+extends: ["./base.yaml#"]
+split: usa
+modality: text

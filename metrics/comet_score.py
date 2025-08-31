@@ -12,7 +12,7 @@ from comet import download_model, load_from_checkpoint
 
 
 class CometScore(Metrics):
-    def __call__(self, candidates, references, source_sentences, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses = None):
+    def __call__(self, candidates, references, source_sentences, instructions=None, *, task_name: str | None = None, model_name: str | None = None, model_responses = None):
         self.instructions = instructions
 
         # Get individual scores
@@ -27,11 +27,11 @@ class CometScore(Metrics):
         mean_score = sum(valid_scores) / len(valid_scores) if valid_scores else 0.0
         overall_score = {self.name: mean_score}
 
-        if dataset_name and model_name:
+        if task_name and model_name:
             # write_record_log will also write to run.log internally
-            write_record_log(self, normalized_references, normalized_candidates, scores, dataset_name, model_name, instructions=self.instructions)
+            write_record_log(self, normalized_references, normalized_candidates, scores, task_name, model_name, instructions=self.instructions)
             # Directly call append_final_score
-            append_final_score(self, overall_score, dataset_name, model_name)
+            append_final_score(self, overall_score, task_name, model_name)
         return overall_score
 
     def __init__(self, batch_size = 1, num_gpus = 0):

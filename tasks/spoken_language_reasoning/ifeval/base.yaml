@@ -1,0 +1,18 @@
+# Base configuration for VoiceBench IFEval tasks
+dataset_path: hlt-lab/voicebench
+subset: ifeval
+language: en
+split: test
+preprocessor: VoiceBenchPreprocessor
+postprocessor: VoiceBenchPostprocessor
+audio_column: audio
+instruction_column: prompt
+long_audio_processing_logic: truncate
+
+generation_kwargs:
+  temperature: 0.2
+  do_sample: false
+  max_gen_tokens: 64
+
+metrics:
+  - metric: instruction_following

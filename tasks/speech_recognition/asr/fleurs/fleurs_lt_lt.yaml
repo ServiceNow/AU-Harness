@@ -1,0 +1,4 @@
+task_name: fleurs_lt_lt
+extends: ["./base.yaml#"]
+subset: lt_lt
+language: lt

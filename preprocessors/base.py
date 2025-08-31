@@ -3,23 +3,32 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional
 import yaml
 from scipy.signal import resample
-from utils.util import _find_runspec_by_name, _get_task_type_datasets, find_runspec_files
 
 logger = logging.getLogger(__name__)
 
 
 class Preprocessor():
-    def process(self, dataset: Dict[str, List[Any]], num_samples: Optional[int] = None,
-                properties: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+    """Base preprocessor class for handling audio and text data processing.
+    
+    This class provides common utilities for preprocessing datasets including audio resampling,
+    length filtering, property extraction, and prompt management. It serves as a foundation
+    for task-specific preprocessors which should override the `process` method.
+    
+    The preprocessor handles standardization of audio formats, dataset information logging,
+    and management of task-specific prompt add-ons.
+    """
+
+    def process(self, dataset: Dict[str, List[Any]], task_config: Dict[str, Any], 
+                run_config: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Base implementation of the process method to be overridden by subclasses.
         
         Args:
-            dataset: Dictionary containing data
-            num_samples: Number of samples to extract from the dataset
-            properties: Optional dict of properties for preprocessing configuration
+            dataset: The task dataset to pre-process
+            task_config: Dictionary containing task configuration parameters
+            run_config: Dictionary containing run configuration parameters
             
         Returns:
-            List of dictionaries where each dictionary represents a processed sample
+            List of dictionaries where each dictionary represents a pre-processed sample
         """
         raise NotImplementedError
 
@@ -41,31 +50,6 @@ class Preprocessor():
         except FileNotFoundError:
             logger.warning(f"File not found at {yaml_path}. Returning empty dictionary.")
             return {}
-
-    def extract_properties(self, properties=None):
-        """
-        Extract common properties from the properties dictionary with default values.
-        
-        Args:
-            properties (dict, optional): Dictionary containing properties for preprocessing.
-                                         Defaults to None (empty dict).
-                                         
-        Returns:
-            dict: Dictionary containing extracted properties with defaults applied.
-        """
-        if properties is None:
-            properties = {}
-
-        extracted = {
-            "metric": properties.get("metric", None),
-            "user_prompt_add_ons": properties.get("user_prompt_add_ons", []),
-            "length_filter": properties.get("length_filter", (0.0, 30.0)),  # Optional (min_seconds, max_seconds) tuple
-            "dataset_info": properties.get("dataset_info", {}),
-            "judge_type": properties.get("judge_type", ""),
-            "dataset_name": properties.get("dataset_name", None)
-        }
-
-        return extracted
 
     def extract_audio_info(self, record, audio_column_name=None):
         """
@@ -150,68 +134,3 @@ class Preprocessor():
 
         if total_duration is not None:
             logger.info(f"Dataset is {total_duration / 3600:.2f} hours long")
-
-    def get_prompt_add_ons(self, user_prompt_add_ons, dataset_name):
-        """
-        Get prompt add-ons that match the current dataset being processed.
-        
-        Args:
-            user_prompt_add_ons (list): List of [key, [model/dataset/category]] pairs from config
-            dataset_name (str): Name of the dataset currently being processed
-            
-        Returns:
-            list: List of prompt add-on texts that match the current dataset
-        """
-        
-        # Load prompt add-ons dictionary
-        prompt_add_ons = self.load_yaml_file("prompt_add_ons.yaml")
-        
-        matching_prompts = []
-        runspec_files = find_runspec_files()
-        
-        for add_on_config in user_prompt_add_ons:
-            if len(add_on_config) >= 2:
-                prompt_key = add_on_config[0]
-                target_specs = add_on_config[1]
-                
-                # Flatten the target specs to individual datasets
-                if isinstance(target_specs, list):
-                    for spec in target_specs:
-                        if self._matches_dataset(spec, dataset_name, runspec_files):
-                            if prompt_key in prompt_add_ons:
-                                matching_prompts.append(prompt_add_ons[prompt_key])
-                            break
-                elif self._matches_dataset(target_specs, dataset_name, runspec_files):
-                    if prompt_key in prompt_add_ons:
-                        matching_prompts.append(prompt_add_ons[prompt_key])
-        
-        return matching_prompts
-
-    def _matches_dataset(self, spec, dataset_name, runspec_files):
-        """
-        Check if a spec (which could be a dataset, runspec, or category) matches the current dataset.
-        
-        Args:
-            spec (str): The specification to check (dataset/runspec/category name)
-            dataset_name (str): Name of the dataset being processed
-            runspec_files (list): List of runspec files
-            
-        Returns:
-            bool: True if spec matches the dataset
-        """
-        
-        # Direct dataset name match
-        if spec == dataset_name:
-            return True
-        
-        # Check if spec is a runspec name that contains the dataset
-        found_runspec, runspec_data, _ = _find_runspec_by_name(spec, runspec_files)
-        if found_runspec and dataset_name in runspec_data:
-            return True
-        
-        # Check if spec is a category (directory name) that contains the dataset
-        category_datasets = _get_task_type_datasets(spec, runspec_files)
-        if dataset_name in category_datasets:
-            return True
-        
-        return False

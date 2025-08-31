@@ -65,7 +65,7 @@ def configure(log_file: str):
 
 
 def write_record_log(
-    self, refs, cands, scores, dataset_name, model_name,
+    self, refs, cands, scores, task_name, model_name,
     explanations=None, instructions=None, model_responses=None
 ):
     """
@@ -76,7 +76,7 @@ def write_record_log(
         refs: List of reference texts
         cands: List of candidate texts
         scores: List of scores
-        dataset_name: Name of the dataset
+        task_name: Name of the dataset
         model_name: Name of the model
         explanations: Optional list of explanations for each score
         instructions: Optional list of instructions
@@ -90,9 +90,10 @@ def write_record_log(
 
     log_dir = Path("run_logs")
     log_dir.mkdir(exist_ok=True)
-    log_subdir = log_dir / f"{_slug(dataset_name)}"
+
+    log_subdir = log_dir / f"{_slug(task_name)}"
     log_subdir.mkdir(exist_ok=True)
-    log_path = log_subdir / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.csv"
+    log_path = log_subdir / f"{_slug(task_name)}_{_slug(self.name)}_{_slug(model_name)}.csv"
 
     # Use provided explanations or an empty list
     if explanations is None:
@@ -165,7 +166,7 @@ def write_record_log(
 
     # Write to shared run.log
     write_to_run_json(
-        self, refs, cands, scores, dataset_name, model_name, explanations, instructions
+        self, refs, cands, scores, task_name, model_name, explanations, instructions
     )
 
     return log_path
@@ -183,7 +184,7 @@ class FinalScoresState:
 
 
 def write_to_run_json(
-    self, refs, cands, scores, dataset_name, model_name,
+    self, refs, cands, scores, task_name, model_name,
     explanations=None, instructions=None
 ):
     """
@@ -195,7 +196,7 @@ def write_to_run_json(
         refs: List of reference texts
         cands: List of candidate texts
         scores: List of scores
-        dataset_name: Name of the dataset
+        task_name: Name of the dataset
         model_name: Name of the model
         explanations: Optional list of explanations for each score
     """
@@ -221,7 +222,7 @@ def write_to_run_json(
             refs, cands, scores, explanations, instructions, fillvalue=None
         ):
             entry = {
-                "dataset": dataset_name,
+                "dataset": task_name,
                 "metric": self.name,
                 "model": model_name,
                 "instruction": inst,
@@ -235,14 +236,14 @@ def write_to_run_json(
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 
-def append_final_score(self, overall, dataset_name, model_name, model_responses=None):
+def append_final_score(self, overall, task_name, model_name, model_responses=None):
     """
     Append the final aggregated score to final_scores.json in run_logs directory.
 
     Args:
         self: The metric object instance with a 'name' attribute
         overall: Dict containing overall metrics and scores
-        dataset_name: Name of the dataset
+        task_name: Name of the dataset
         model_name: Name of the model
         model_responses: Optional list of ModelResponse objects for additional stats
     
@@ -269,7 +270,7 @@ def append_final_score(self, overall, dataset_name, model_name, model_responses=
 
     # Create the score entry
     score_entry = {
-        "dataset": dataset_name,
+        "dataset": task_name,
         "metric": self.name,
         "model": model_name,
         "score": overall,

@@ -1,0 +1,4 @@
+task_name: fleurs_bg_bg
+extends: ["./base.yaml#"]
+subset: bg_bg
+language: bg

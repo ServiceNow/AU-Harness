@@ -1,0 +1,4 @@
+task_name: common_voice_15_fi
+extends: ["./base.yaml#"]
+subset: fi
+language: fi

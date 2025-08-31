@@ -1,0 +1,4 @@
+task_name: common_voice_15_hsb
+extends: ["./base.yaml#"]
+subset: hsb
+language: hsb

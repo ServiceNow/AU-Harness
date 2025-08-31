@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, Dict
 from . import constants
 from utils.custom_logging import configure
+from utils.task_utils import _validate_task_metric_pairs, get_groups, get_tasks 
 
 logger = logging.getLogger(__name__)
 
@@ -22,109 +23,6 @@ def get_class_from_module(module_prefix, module_name):
     except Exception as e:
         logger.warning(f"Could not import {module_name} from {module_prefix}: {e}")
         return None
-
-def find_runspec_files(base_dir="runspecs"):
-    """
-    Find all runspec JSON files in the base directory and its subdirectories.
-
-    Args:
-        base_dir: Base directory to search in, defaults to "runspecs"
-
-    Returns:
-        List of Path objects pointing to runspec JSON files
-    """
-    runspecs_dir = Path(base_dir)
-    if not runspecs_dir.exists():
-        logger.warning("[find_runspec_files] Runspecs directory not found: %s", runspecs_dir)
-        return []
-
-    # Get all category directories in the runspecs directory
-    category_dirs = [d for d in runspecs_dir.iterdir() if d.is_dir()]
-
-    # Get list of all runspec files in all category directories plus root
-    runspec_files = list(runspecs_dir.glob("*.json"))
-    for category_dir in category_dirs:
-        category_json_files = list(category_dir.glob("*.json"))
-        runspec_files.extend(category_json_files)
-
-    if not runspec_files:
-        logger.warning("[find_runspec_files] No runspec files found in %s", runspecs_dir)
-
-    return runspec_files
-
-def _find_runspec_by_name(dataset_name, runspec_files):
-    """
-    Find a runspec file by exact name match.
-
-    Args:
-        dataset_name: Name of the dataset to find
-        runspec_files: List of runspec files to search in
-
-    Returns:
-        tuple: (found_runspec, selected_datasets, matching_file)
-    """
-    for runspec_file in runspec_files:
-        runspec_name = runspec_file.stem
-
-        # Check if dataset name exactly matches the runspec file name
-        if dataset_name == runspec_name:
-            # Load the runspec file
-            with open(runspec_file, 'r', encoding='utf-8') as f:
-                runspec_db = json.load(f)
-
-            # Use all datasets in this runspec
-            return True, runspec_db, runspec_file
-
-    return False, {}, None
-
-def _find_dataset_in_runspecs(dataset_name, runspec_files):
-    """
-    Search for a dataset within all runspec files.
-
-    Args:
-        dataset_name: Name of the dataset to find
-        runspec_files: List of runspec files to search in
-
-    Returns:
-        tuple: (found_runspec, selected_datasets, matching_file)
-    """
-
-    # Search through all runspec files to find the dataset
-    for runspec_file in runspec_files:
-        with open(runspec_file, 'r', encoding='utf-8') as f:
-            runspec_db = json.load(f)
-
-        if dataset_name in runspec_db:
-            # Use only this specific dataset
-            return True, {dataset_name: runspec_db[dataset_name]}, runspec_file
-
-    return False, {}, None
-
-def _get_task_type_datasets(task_type: str, runspec_files):
-    """
-    Get all datasets that belong to a specific task type (directory name).
-    
-    Args:
-        task_type: Name of the task type directory (e.g., "paralinguistics")
-        runspec_files: List of runspec files to search in
-    
-    Returns:
-        Set of dataset names that belong to this task type
-    """
-    datasets = set()
-    
-    for runspec_file in runspec_files:
-        # Check if this runspec file is in the specified task type directory
-        if runspec_file.parent.name == task_type:
-            try:
-                with open(runspec_file, 'r', encoding='utf-8') as f:
-                    runspec_db = json.load(f)
-                # Add all dataset names from this runspec
-                datasets.update(runspec_db.keys())
-            except Exception as e:
-                continue
-    
-    return datasets
 
 def smart_round(val: float, precision: int = constants.ROUND_DIGITS) -> float:
     """Round off metrics to global precision value.
@@ -169,71 +67,77 @@ def get_context_indices_for_filter(key: str, value: Any, contexts: list[dict]) -
     indices = [_ for _, c in enumerate(contexts) if c[key] == value]
     return indices
 
-def validate_config(config_path: str) -> Dict:
-    """Validate configuration file against expected structure and types."""
-    if not os.path.exists(config_path):
-        raise ValueError(f"Config file does not exist: {config_path}")
+def validate_config(config: dict, task_configs: dict[Path, list[dict]]) -> Dict:
+    """
+    Validate configuration file against expected structure and types.
 
+    Args:
+        config: Configuration dictionary
+        task_configs: List of task configs
+    """
     try:
-        # Load and validate YAML file
-        with open(config_path, 'r', encoding='utf-8') as file:
-            config = yaml.safe_load(file)
-
-        if config is None:
-            raise ValueError(f"Config file is empty: {config_path}")
-
-        # Check required sections
-        if 'dataset_metric' not in config:
-            raise ValueError("'dataset_metric' is required")
-
-        if not isinstance(config['dataset_metric'], list):
-            raise ValueError("'dataset_metric' must be a list")
-
-        # Validate dataset_metric structure
-        dataset_metric = config['dataset_metric']
-        if len(dataset_metric) == 0:
-            raise ValueError("'dataset_metric' must have at least one element")
-
-        for i, item in enumerate(dataset_metric):
-            if not isinstance(item, list):
-                raise ValueError(
-                    f"'dataset_metric' item {i+1} must be a list, not {type(item).__name__}"
-                )
-
-            if len(item) == 0:
-                raise ValueError(f"'dataset_metric' item {i+1} must not be an empty list")
-
-            for j, element in enumerate(item):
-                if not isinstance(element, str) or not element.strip():
-                    raise ValueError(
-                        f"'dataset_metric' item {i+1}, element {j+1} must be a non-empty string"
-                    )
+        logger.info("---------Start validation---------")
 
         # Validate filters as a dictionary
+        logger.info("---------Validating filters---------")
         if 'filters' in config:
             if not isinstance(config['filters'], dict):
                 raise ValueError("'filters' must be a dictionary")
             _validate_filter_values(config['filters'])
         
         # Validate judge_properties as a dictionary
+        logger.info("---------Validating judge properties---------")
         if 'judge_properties' in config:
             if not isinstance(config['judge_properties'], dict):
                 raise ValueError("'judge_properties' must be a dictionary")
             _validate_judge_properties(config['judge_properties'])
 
         # Delegate validation for complex sections
+        logger.info("---------Validating models---------")
         _validate_models(config)
 
+        logger.info("---------Validating aggregate---------")
         if 'aggregate' in config:
             _validate_aggregate(config['aggregate'])
 
-        if 'temperature_overrides' in config:
+        logger.info("---------Validating temperature overrides---------")
+        if 'temperature_overrides' in config:   
             _validate_temperature_overrides(config['temperature_overrides'])
 
-        # Validate dataset-metric pairs against allowed task metrics
-        _validate_dataset_metric_pairs(config.get('dataset_metric', []))
+        logger.info("---------Validating prompt overrides---------")
+        if 'prompt_overrides' in config:
+            infer_models = [x['name'] for x in config['models']]
+            _validate_prompt_overrides(config['prompt_overrides'], task_configs, infer_models)
 
-        return config
+        logger.info("---------Validating task-metric---------")
+        if 'task_metric' not in config:
+            raise ValueError("'task_metric' is required")
+
+        if not isinstance(config['task_metric'], list):
+            raise ValueError("'task_metric' must be a list")
+
+        task_metric = config['task_metric']
+        if len(task_metric) == 0:
+            raise ValueError("'task_metric' must have at least one element")
+
+        for i, item in enumerate(task_metric):
+            if not isinstance(item, list):
+                raise ValueError(
+                    f"'task_metric' item {i+1} must be a list, not {type(item).__name__}"
+                )
+
+            if len(item) == 0:
+                raise ValueError(f"'task_metric' item {i+1} must not be an empty list")
+
+            for j, element in enumerate(item):
+                if not isinstance(element, str) or not element.strip():
+                    raise ValueError(
+                        f"'task_metric' item {i+1}, element {j+1} must be a non-empty string"
+                    )
+        _validate_task_metric_pairs(config.get('task_metric', []), task_configs)
+
+        logger.info("---------Configuration validated successfully---------")
+        return
 
     except yaml.YAMLError as e:
         raise ValueError(f"Invalid YAML format: {str(e)}") from e
@@ -251,48 +155,6 @@ def _validate_filter_values(filters: Dict) -> None:
     # Validate num_samples if present
     if 'num_samples' in filters and not isinstance(filters['num_samples'], int):
         raise ValueError("'num_samples' must be an integer")
-    
-    # Validate user_prompt_add_ons if present
-    if 'user_prompt_add_ons' in filters:
-        if not isinstance(filters['user_prompt_add_ons'], list):
-            raise ValueError("'user_prompt_add_ons' must be a list")
-        for i, item in enumerate(filters['user_prompt_add_ons']):
-            if not isinstance(item, list) or len(item) != 2:
-                raise ValueError(f"'user_prompt_add_ons' item {i+1} must be a list with exactly 2 elements [key, [datasets]]")
-            
-            # First element must be a non-empty string (prompt key)
-            if not isinstance(item[0], str) or not item[0].strip():
-                raise ValueError(f"'user_prompt_add_ons' item {i+1}: first element must be a non-empty string")
-            
-            # Second element must be a list of dataset/runspec/category names
-            if not isinstance(item[1], list):
-                raise ValueError(f"'user_prompt_add_ons' item {i+1}: second element must be a list of dataset/runspec/category names")
-            
-            # Each dataset/runspec/category name must be a non-empty string
-            for j, dataset_name in enumerate(item[1]):
-                if not isinstance(dataset_name, str) or not dataset_name.strip():
-                    raise ValueError(f"'user_prompt_add_ons' item {i+1}, dataset {j+1} must be a non-empty string")
-    
-    # Validate system_prompts if present
-    if 'system_prompts' in filters:
-        if not isinstance(filters['system_prompts'], list):
-            raise ValueError("'system_prompts' must be a list")
-        for i, item in enumerate(filters['system_prompts']):
-            if not isinstance(item, list) or len(item) != 2:
-                raise ValueError(f"'system_prompts' item {i+1} must be a list with exactly 2 elements")
-            
-            # First element must be a non-empty string (prompt key)
-            if not isinstance(item[0], str) or not item[0].strip():
-                raise ValueError(f"'system_prompts' item {i+1}: first element must be a non-empty string")
-            
-            # Second element must be a list with exactly 2 elements [model_name, dataset_name]
-            if not isinstance(item[1], list) or len(item[1]) != 2:
-                raise ValueError(f"'system_prompts' item {i+1}: second element must be a list with exactly 2 elements")
-            
-            # Both model_name and dataset_name must be non-empty strings
-            for j, element in enumerate(item[1]):
-                if not isinstance(element, str) or not element.strip():
-                    raise ValueError(f"'system_prompts' item {i+1}, criteria {j+1} must be a non-empty string")
     
     # Validate length_filter if present
     if 'length_filter' in filters:
@@ -347,70 +209,6 @@ def _validate_judge_properties(judge_props: Dict) -> None:
     if 'judge_temperature' in judge_props and not isinstance(judge_props['judge_temperature'], (int, float)):
         raise ValueError("'judge_temperature' must be a number")
 
-
-def _validate_dataset_metric_pairs(dataset_metric_pairs):
-    """
-    Validate that each dataset's associated metric is allowed for its task type.
-
-    Args:
-        dataset_metric_pairs: List of [dataset_name, metric_name] pairs from the config
-    """
-    # Find all runspec files using the helper function
-    runspec_files = find_runspec_files()
-    if not runspec_files:
-        return
-
-    for dataset_pair in dataset_metric_pairs:
-        # Check if this is a valid pair format
-        if not isinstance(dataset_pair, list) or len(dataset_pair) != 2:
-            raise ValueError(f"Invalid dataset_metric pair format: {dataset_pair}")
-
-        dataset_name, metric_name = dataset_pair
-
-        found_runspec, _, matching_runspec_file = _find_runspec_by_name(dataset_name, runspec_files)
-
-        if not found_runspec:
-            found_runspec, _, matching_runspec_file = _find_dataset_in_runspecs(dataset_name, runspec_files)
-
-        if not found_runspec or not matching_runspec_file:
-            # Check if it's a category (directory name) before raising error
-            category_datasets = _get_task_type_datasets(dataset_name, runspec_files)
-            if not category_datasets:
-                raise ValueError(f"Dataset not found or no runspec file determined: {dataset_name}")
-            # For categories, we need to validate each dataset individually
-            # Skip validation here since expand_dataset_metric_pairs will handle the expansion
-            continue
-
-        # The task type is simply the JSON filename without extension
-        task_type = matching_runspec_file.stem
-
-        # Check if the metric is allowed for this task type
-        valid_metric = False
-
-        # Special handling for callhome datasets - allow specific metrics regardless of task type
-        if dataset_name.startswith('callhome'):
-            callhome_allowed_metrics = ['word_error_rate', 'diarization_metrics', 'llm_judge_detailed']
-            if metric_name in callhome_allowed_metrics:
-                valid_metric = True
-
-        # Check if the task_type exists in allowed_task_metrics
-        if not valid_metric and task_type in constants.allowed_task_metrics:
-            allowed_metrics = constants.allowed_task_metrics[task_type]
-
-            if metric_name in allowed_metrics:
-                valid_metric = True
-
-        if not valid_metric:
-            # If the task_type doesn't exist in allowed_task_metrics or metric is not allowed
-            if dataset_name.startswith('callhome'):
-                allowed_metrics = ['word_error_rate', 'diarization_metrics', 'llm_judge_detailed']
-            else:
-                allowed_metrics = constants.allowed_task_metrics.get(task_type, [])
-            raise ValueError(
-                f"Invalid metric '{metric_name}' for dataset '{dataset_name}' with task type '{task_type}'. "
-                f"Allowed metrics for this dataset: {sorted(allowed_metrics)}"
-            )
-
 def _validate_models(config: Dict) -> None:
     """Validate the models section of the configuration.
 
@@ -436,11 +234,10 @@ def _validate_models(config: Dict) -> None:
     if 'models' not in config or not isinstance(config['models'], list):
         raise ValueError("'models' section is required and must be a list")
     for i, model_entry in enumerate(config['models'], start=1):
-        if not isinstance(model_entry, dict) or 'info' not in model_entry:
-            raise ValueError(f"Model entry {i} must have an 'info' object")
-        info = model_entry['info']
-        validate_required_fields(info, i)
-        validate_optional_fields(info, i)
+        if not isinstance(model_entry, dict):
+            raise ValueError(f"Model entry {i} must be a dictionary")
+        validate_required_fields(model_entry, i)
+        validate_optional_fields(model_entry, i)
 
 
 def _validate_aggregate(aggregate_section) -> None:
@@ -528,6 +325,78 @@ def _validate_temperature_overrides(temperature_overrides) -> None:
             if len(override['task'].strip()) == 0:
                 raise ValueError(f"Temperature override {i+1}: 'task' cannot be empty")
 
+def _validate_prompt_overrides(prompt_overrides, task_configs, inference_models) -> None:
+    """
+    Validate the prompt_overrides section of the configuration.
+
+    Structure of the prompt overrides should looking like this -
+
+    prompt_overrides:
+      user_prompt:
+        - task: "task_name"
+          model: "model_name" (optional)
+          prompt: "prompt_text"
+      system_prompt:
+        - model: "model_name"
+          task: "task_name" (optional)
+          prompt: "prompt_text"
+    
+    Args:
+        prompt_overrides: The prompt_overrides section to validate
+        task_configs: All the task configs
+        inference_models: All the inference models in the run config
+    """
+    if not isinstance(prompt_overrides, dict):
+        raise ValueError("'prompt_overrides' must be a dictionary")
+    
+    # "user_prompt" and "system_prompt" are the only allowed keys
+    if not all(key in ["user_prompt", "system_prompt"] for key in prompt_overrides.keys()):
+        raise ValueError("'prompt_overrides' keys must be either 'user_prompt' or 'system_prompt'")
+
+    # Get all groups of tasks. These are generally folders
+    groups = get_groups(task_configs)
+
+    # Get all tasks. These are generally YAML files
+    tasks = get_tasks(task_configs)
+
+    # Validate each override
+    for key, value in prompt_overrides.items():
+        if not isinstance(value, list):
+            raise ValueError(f"'{key}' in 'prompt_overrides' must be a list")
+        
+        for i, override in enumerate(value):
+            # Validate that each override is a dictionary
+            if not isinstance(override, dict):
+                raise ValueError(f"Override {i} in '{key}' must be a dictionary")
+            
+            # Prompt is a mandatory field
+            if "prompt" not in override:
+                raise ValueError(f"Override {i} in '{key}' must have a 'prompt' key")
+            
+            # Task is a mandatory field for user_prompt. This can be a task name or a task group name
+            if ("task" not in override) and (key is "user_prompt"):
+                raise ValueError(f"Override {i} in '{key}' must have a 'task' key")
+            
+            # Model is a mandatory field for system_prompt.
+            if ("model" not in override) and (key is "system_prompt"):
+                raise ValueError(f"Override {i} in '{key}' must have a 'model' key")
+            
+            # Make sure only expected keys are present
+            for override_key in override.keys():
+                if override_key not in ["prompt", "task", "model"]:
+                    raise ValueError(f"Invalid key '{override_key}' in override {i} of '{key}'. Only 'prompt', 'task', and 'model' are allowed")
+            
+            # Make sure that the task is valid
+            if "task" in override.keys():
+                if (override['task'] not in groups.keys()) and (override['task'] not in tasks.keys()):
+                    raise ValueError(f"Invalid task name: {override['task']}")
+            
+            # Make sure the model name if present is valid
+            if "model" in override.keys():
+                if override['model'] not in inference_models:
+                    raise ValueError(f"Model override of {override['model']} is not presented in the list of models specified in the config")
+    return
+
 def setup_logging(log_file: str):
     """
     Set up logging with default.log
@@ -544,7 +413,7 @@ def setup_logging(log_file: str):
 
 def read_config(cfg_path: str):
     """
-    Read configuration file, set up logging, validate config, and process config dictionaries.
+    Read configuration file and set up logging.
     
     Args:
         cfg_path: Path to configuration file
@@ -553,89 +422,22 @@ def read_config(cfg_path: str):
         Tuple of (cfg, judge_properties, filters, temperature_overrides)
     """
     # Set up logging
-    with open(cfg_path) as f:
+    with open(cfg_path, encoding='utf-8') as f:
         raw_cfg = yaml.safe_load(f)
     log_file = raw_cfg.get("logging", {}).get("log_file", "default.log")
     setup_logging(log_file)
     
-    # Validate the configuration file
-    try:
-        cfg = validate_config(cfg_path)
-        logger.info(f"[read_config] Config file validation successful")
-    except ValueError as e:
-        logger.error(f"[read_config] Config validation error: {e}")
-        raise
+    return raw_cfg
     
-    return cfg
-    
-def expand_dataset_metric_pairs(cfg: dict) -> list[tuple[str, str, dict, str]]:
+def calculate_aggregates(aggregates, all_scores, model_configs, task_configs):
     """
-    Expand dataset-metric pairs from config, finding runspecs and expanding them.
+    Process aggregate metrics by calculating means across multiple tasks for a specific metric.
     
     Args:
-        cfg: Configuration dictionary
-        
-    Returns:
-        List of tuples (dataset_name, metric_name, dataset_info, task_type)
-    """
-    # Load runspec files using the utility function
-    runspec_files = find_runspec_files()
-    
-    # Get dataset-metric pairs from config.yaml
-    dataset_metric_pairs = []
-    for pair in cfg.get("dataset_metric", []):
-        # Validate the pair format - should be a list with two elements
-        if not isinstance(pair, list) or len(pair) != 2:
-            raise ValueError(f"Invalid dataset_metric pair: {pair}. Must be a list with two elements [dataset, metric]")
-        
-        dataset_name, metric_name = pair
-        dataset_metric_pairs.append((dataset_name, metric_name))
-
-    # Expand each dataset-metric pair by finding runspecs
-    expanded_pairs = []
-    
-    for dname, metric_name in dataset_metric_pairs:
-        # Step 1: Look for a matching runspec file
-        found_runspec, selected_datasets, matching_runspec_file = _find_runspec_by_name(dname, runspec_files)
-        
-        # Step 2: If no matching runspec file by name, search within all runspec files for the specific dataset
-        if not found_runspec:
-            found_runspec, selected_datasets, matching_runspec_file = _find_dataset_in_runspecs(dname, runspec_files)
-            
-            # Step 3: If still not found, check if it's a category (directory name)
-            if not found_runspec:
-                category_datasets = _get_task_type_datasets(dname, runspec_files)
-                if category_datasets:
-                    # Process all datasets in this category
-                    for dataset_name in category_datasets:
-                        # Find the specific dataset info and runspec file
-                        _, dataset_dict, dataset_runspec_file = _find_dataset_in_runspecs(dataset_name, runspec_files)
-                        if dataset_dict and dataset_runspec_file:
-                            task_type = dataset_runspec_file.stem
-                            for ds_name, ds_info in dataset_dict.items():
-                                expanded_pairs.append((ds_name, metric_name, ds_info, task_type))
-                    continue
-                else:
-                    logger.info(f"[expand_dataset_metric_pairs] Dataset/runspec/category not found, skipping: {dname}")
-                    continue
-        
-        # Extract task_type from the matching runspec file name (stem)
-        task_type = matching_runspec_file.stem if matching_runspec_file else None
-        
-        # Process each selected dataset (if whole runspec could be multiple per dname/metric pair)
-        for dataset_name, dataset_info in selected_datasets.items():
-            expanded_pairs.append((dataset_name, metric_name, dataset_info, task_type))
-    
-    return expanded_pairs
-
-def _calculate_aggregates(aggregates, all_scores, model_configs):
-    """
-    Process aggregate metrics by calculating means across multiple datasets for a specific metric.
-    
-    Args:
-        aggregates: List of aggregate configurations from the config file in format [metric_name, [dataset1, dataset2, ...]]
-        all_scores: Dictionary of scores keyed by dataset_metric pairs
+        aggregates: List of aggregate configurations from the config file in format [metric_name, [task1, task2, ...]]
+        all_scores: Dictionary of scores keyed by task_metric pairs
         model_configs: List of model configurations used for evaluation
+        task_configs: List of task configs
     """
     logger.info("[calculate_aggregates] Processing aggregate metrics...")
 
@@ -644,22 +446,25 @@ def _calculate_aggregates(aggregates, all_scores, model_configs):
     # Get unique model types
     model_types = set()
     for model_config in model_configs:
-        model_type = model_config["info"].get("model")  # The model type (e.g., "gpt-4o-mini-audio-preview")
+        model_type = model_config.get("model")  # The model type (e.g., "gpt-4o-mini-audio-preview")
         if model_type:
             model_types.add(model_type)
         
-    # Load all runspec files using the utility function
-    runspec_files = find_runspec_files()
-    
+    # Get all groups of tasks. These are generally folders
+    groups = get_groups(task_configs)
+
+    # Get all tasks. These are generally YAML files
+    tasks = get_tasks(task_configs)
+
     for agg_item in aggregates:
         # Skip invalid aggregates
         if not isinstance(agg_item, (list, tuple)) or len(agg_item) != 2:
             logger.warning(f"[calculate_aggregates] Invalid aggregate format: {agg_item}")
             continue
             
-        metric_name, dataset_specs = agg_item
-        if not isinstance(dataset_specs, list) or not dataset_specs:
-            logger.warning(f"[calculate_aggregates] Invalid dataset specs list in aggregate for metric '{metric_name}'")
+        metric_name, tasks = agg_item
+        if not isinstance(tasks, list) or not tasks:
+            logger.warning(f"[calculate_aggregates] Invalid tasks list in aggregate for metric '{metric_name}'")
             continue
         
         # Step 1: Look up metric keys from constants.py
@@ -669,26 +474,20 @@ def _calculate_aggregates(aggregates, all_scores, model_configs):
         
         metric_keys = constants.metric_output[metric_name]
         
-        # Step 2: Process each dataset/runspec entry
-        processed_datasets = []  # For actual calculations
-        display_names = []  # For display purposes (runspecs or dataset names)
-        
-        for dataset_spec in dataset_specs:
-            # Check if this is a runspec file name rather than a dataset name
-            found_runspec, runspec_data, _ = _find_runspec_by_name(dataset_spec, runspec_files)
-            
-            # Always add the dataset/runspec name for display
-            display_names.append(dataset_spec)
-            
-            if found_runspec:
-                # Add each dataset from the runspec for calculation
-                processed_datasets.extend(runspec_data.keys())
+        # Step 2: Process each task
+        processed_tasks = []  # For actual calculations
+
+        for task in tasks:
+            if task in groups.keys():
+                # Add all the tasks belonging to the group
+                processed_tasks.extend([x['task_name'] for x in task_configs[groups[task]]])
+            elif task in tasks.keys():
+                processed_tasks.append(task)
             else:
-                # If not a runspec file, treat as a regular dataset name
-                processed_datasets.append(dataset_spec)
-        
-        if not processed_datasets:
-            logger.warning(f"[calculate_aggregates] No valid datasets found for metric '{metric_name}'")
+                raise ValueError(f"Invalid task name: {task}")
+
+        if not processed_tasks:
+            logger.warning(f"[calculate_aggregates] No valid tasks found for metric '{metric_name}'")
             continue
         
         # Step 3: Calculate aggregates for each model using the metric keys
@@ -703,12 +502,12 @@ def _calculate_aggregates(aggregates, all_scores, model_configs):
                 dataset_sizes = []
                 
                 # Process each dataset
-                for dataset_name in processed_datasets:
+                for task_name in processed_tasks:
                     try:
                         # Check if this dataset and model combination exists
-                        if dataset_name in all_scores and model_type in all_scores[dataset_name]:
+                        if task_name in all_scores and model_type in all_scores[task_name]:
                             # Direct access to metrics from all_scores
-                            metrics_dict = all_scores[dataset_name][model_type]
+                            metrics_dict = all_scores[task_name][model_type]
                             dataset_size = 1  # Default size if not specified
                             
                             # Check if this specific metric exists
@@ -718,9 +517,9 @@ def _calculate_aggregates(aggregates, all_scores, model_configs):
                                     values.append(value)
                                     dataset_sizes.append(dataset_size)
                         else:
-                            logger.warning(f"[calculate_aggregates] Dataset '{dataset_name}' not found in all_scores")
+                            logger.warning(f"[calculate_aggregates] Task '{task_name}' not found in all_scores")
                     except KeyError as e:
-                        logger.warning(f"[calculate_aggregates] Error accessing data for {model_type} in {dataset_name}: {str(e)}")
+                        logger.warning(f"[calculate_aggregates] Error accessing data for {model_type} in {task_name}: {str(e)}")
                 
                 # Calculate weighted average for this metric key
                 if values:
@@ -739,11 +538,100 @@ def _calculate_aggregates(aggregates, all_scores, model_configs):
         
         # Add aggregate scores to the results
         if model_agg_scores:
-            # Create a key with metric name and original runspec/dataset names
-            display_names_str = ", ".join(display_names)
+            # Create a key with metric name and original task names
+            display_names_str = ", ".join(processed_tasks)
             aggregate_key = f"{metric_name} - {display_names_str}"
             aggregate_scores[aggregate_key] = model_agg_scores
     
     # Add aggregate scores to all_scores
     if aggregate_scores:
         all_scores["aggregates"] = aggregate_scores
+
+def get_prompt_override(model: str, task_ancestry: list, prompt_overrides: dict, prompt_type_key: str) -> str | None:
+    """Common helper function to get prompt overrides for a model and task combination.
+    
+    Args:
+        model: The model
+        task_ancestry: The ancestry path of the task (base_dir, intermediate dirs, task_name)
+        prompt_overrides: Prompt override config from run config
+        prompt_type_key: The key to look for in prompt_overrides ("system_prompts" or "user_prompts")
+        
+    Returns:
+        Prompt if found, None otherwise
+    """
+    if not prompt_overrides or prompt_type_key not in prompt_overrides.keys():
+        return None
+
+    # Get the task name (last element in ancestry)
+    task_name = task_ancestry[-1] if task_ancestry else None
+    
+    # Store best match score and prompt for hierarchical matching
+    best_match_score = -1
+    best_match_prompt = None
+    
+    for override in prompt_overrides[prompt_type_key]:
+        prompt_override = override.get("prompt", None)
+        if not prompt_override:
+            continue
+        
+        # Check if this override applies to our model/task
+        override_model = override.get("model", None)
+        override_task = override.get("task", None)
+
+        # Skip if model doesn't match and override has model constraint
+        if override_model and override_model != model:
+            continue
+
+        # Calculate match score for hierarchical task matching
+        match_score = 0
+        
+        # Case 1: Exact task name match (highest priority)
+        if override_task == task_name:
+            match_score = 100  # Highest priority
+        
+        # Case 2: Match with any folder in the ancestry path (medium priority)
+        elif override_task and override_task in task_ancestry:
+            # Find where in the hierarchy this folder/task appears
+            # Items deeper in the hierarchy (closer to task) get higher scores
+            position = task_ancestry.index(override_task)
+            depth_score = position + 1  # Add 1 to avoid zero scores
+            match_score = 10 + depth_score * 5  # Base of 10 plus position bonus
+        
+        # Case 3: No task constraint but model matches
+        elif override_model == model and not override_task:
+            match_score = 5  # Lower priority than task-specific overrides
+        
+        # Update best match if we found a better one
+        if match_score > best_match_score:
+            best_match_score = match_score
+            best_match_prompt = prompt_override
+    
+    return best_match_prompt if best_match_prompt else None
+
+
+def get_system_prompt_override(model: str, task_ancestry: list, prompt_overrides: dict) -> str | None:
+    """Get system prompt override for this model and task combination.
+    
+    Args:
+        model: The model
+        task_ancestry: The ancestry path of the task (base_dir, intermediate dirs, task_name)
+        prompt_overrides: Prompt override config from run config
+        
+    Returns:
+        System prompt if found, None otherwise
+    """
+    return get_prompt_override(model, task_ancestry, prompt_overrides, "system_prompts")
+
+
+def get_instruction_prompt_override(model: str, task_ancestry: list, prompt_overrides: dict) -> str | None:
+    """Get instruction prompt override for this model and task combination.
+    
+    Args:
+        model: The model
+        task_ancestry: The ancestry path of the task (base_dir, intermediate dirs, task_name)
+        prompt_overrides: Prompt override config from run config
+        
+    Returns:
+        Instruction prompt if found, None otherwise
+    """
+    return get_prompt_override(model, task_ancestry, prompt_overrides, "user_prompts")

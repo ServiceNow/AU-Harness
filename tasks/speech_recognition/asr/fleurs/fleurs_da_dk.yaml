@@ -1,0 +1,4 @@
+task_name: fleurs_da_dk
+extends: ["./base.yaml#"]
+subset: da_dk
+language: da

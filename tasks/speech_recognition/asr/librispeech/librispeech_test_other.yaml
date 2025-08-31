@@ -1,0 +1,3 @@
+task_name: librispeech_test_other
+extends: ["./base.yaml#"]
+dataset_path: AudioLLMs/librispeech_test_other

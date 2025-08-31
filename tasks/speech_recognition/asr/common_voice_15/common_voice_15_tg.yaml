@@ -1,0 +1,4 @@
+task_name: common_voice_15_tg
+extends: ["./base.yaml#"]
+subset: tg
+language: tg

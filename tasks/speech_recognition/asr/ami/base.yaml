@@ -1,0 +1,6 @@
+# Defaults for all AMI datasets
+extends: ["../base.yaml#"]
+dataset_path: edinburghcstr/ami
+language: en
+audio_column: audio
+target_column: text

@@ -17,6 +17,7 @@ from tenacity import (
     wait_random,
     wait_random_exponential,
 )
+from jinja2 import Template
 
 from models.model_response import ErrorTracker, ModelResponse
 from models.request_resp_handler import RequestRespHandler
@@ -56,6 +57,8 @@ class Model(ABC):
         self.temperature = temperature
         # system prompt for LLM requests
         self.system_prompt = None
+        # User prompt override
+        self.user_prompt_override = None
         # some flow does not work with async client like internal private network
         self.postprocessor_path = model_info.get("postprocessor", [])
         # model_name = model_info.get("model", model_info.get("alias", self.name()))
@@ -103,6 +106,24 @@ class Model(ABC):
         """
         logging.info("[Model.set_system_prompt] Set system prompt for model %s: %s", self.name(), system_prompt)
         self.system_prompt = system_prompt
+    
+    def set_or_override_instruction(self, instruction: str) -> None:
+        """ Set or override the instruction coming from the preprocessed dataset
+
+        Args:
+            instruction: The insttruction content.
+        """
+        logging.info("[Model.set_or_override_instruction] Set or override instruction for model %s: %s", self.name(), instruction)
+        self.user_prompt_override = instruction
+    
+    def set_long_audio_processing_logic(self, long_audio_processing_logic: str) -> None:
+        """When audio longer than model's max supported length, how to whether to truncate or chunk the audio.
+
+        Args:
+            long_audio_processing_logic: Long audio processing type to set. Either chunk or truncate.
+        """
+        logging.info("[Model.set_long_audio_processing] Set long audio processing for model %s: %s", self.name(), long_audio_processing_logic)
+        self.long_audio_processing_logic = long_audio_processing_logic
 
     def _is_retryable_error(self, result: ModelResponse):
         """Check if the error is a rate limit error by checking response code."""
@@ -182,8 +203,7 @@ class Model(ABC):
                             result.error_tracker = call_errors
                         await self._mark_errors(result, call_errors)
                     except Exception as e:
-                        metric_name = run_params.get("metric")
-                        logger.error("Exception during text generation for metric %s: %s", metric_name, e)
+                        logger.error("Exception during text generation: %s", e)
                         result = ModelResponse(
                             input_prompt=str(message),
                             llm_response="",
@@ -255,16 +275,22 @@ class Model(ABC):
         audio_array = message.get("array", None)
         sampling_rate = message.get("sampling_rate", 0)
         chunk_seconds: int = int(run_params.get("chunk_size", 30))  # default to 30s
-        metric_name: str | None = run_params.get("metric")
         max_samples: int = int(chunk_seconds * sampling_rate) if sampling_rate else 0
         total_samples: int = len(audio_array) if audio_array is not None else 0
         instruction = message.get("instruction")
         is_multiturn = message.get("is_multiturn", False)
 
+        # If an override for the user prompt was specified in the run config, replace the instruction from the dataset with this
+        if self.user_prompt_override:
+            instruction = self.user_prompt_override
+        
+        # Reender the user prompt/instruction template
+        instruction = Template(instruction).render(message)
+
         tools = copy.deepcopy(message.get('tools', None))
-        # If metric is judge types, only use first chunk (30s) regardless of length
-        judge_metrics = {"llm_judge_binary", "llm_judge_detailed"}
-        if metric_name in judge_metrics:
+
+        # For tasks that are not ASR, translation, diarization, we want to truncate the audio to model's max supported length
+        if self.long_audio_processing_logic == "truncate":
             total_samples = max_samples  # force single chunk
 
         if is_multiturn:

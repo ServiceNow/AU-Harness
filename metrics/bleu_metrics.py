@@ -18,27 +18,27 @@ class BleuMetrics(Metrics):
     Computes BLEU scores for text generation evaluation using n-gram precision
     measures to assess translation quality and text similarity.
     """
-    def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
+    def __call__(self, candidates, references, instructions=None, *, task_name: str | None = None, model_name: str | None = None, model_responses=None):
         # Store instructions and model_responses for potential later use
         self.instructions = instructions
         tokenizer='13a' # default tokenizer
-        if (dataset_name and 'covost2' in dataset_name):
-            language_name = dataset_name.split('_')[-1]
+        if (task_name and 'covost2' in task_name):
+            language_name = task_name.split('_')[-1]
             if ('zh' in language_name):
                 tokenizer = 'zh'
-        
+    
         self.model_responses = model_responses if model_responses else []
         # Use corpusBLEU for overall score
         overall = self.get_score(candidates, references, tokenizer)
-        if dataset_name and model_name:
+        if task_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
             # Use sentenceBLEU for record-level scores
             scores, normalized_candidates, normalized_references = self.compute_record_level_scores(candidates, references, tokenizer) 
             # write_record_log will also write to run.log internally
-            write_record_log(self, normalized_references, normalized_candidates, scores, dataset_name, model_name,
+            write_record_log(self, normalized_references, normalized_candidates, scores, task_name, model_name,
                            instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score
-            append_final_score(self, overall, dataset_name, model_name, self.model_responses)
+            append_final_score(self, overall, task_name, model_name, self.model_responses)
         return overall
 
     def __init__(self):

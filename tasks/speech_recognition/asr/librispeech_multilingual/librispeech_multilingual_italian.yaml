@@ -1,0 +1,4 @@
+task_name: librispeech_multilingual_italian
+extends: ["./base.yaml#"]
+subset: italian
+language: it

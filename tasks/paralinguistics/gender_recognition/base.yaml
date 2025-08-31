@@ -1,0 +1,19 @@
+# Base configuration for gender recognition tasks
+language: en
+split: test
+preprocessor: GeneralPreprocessor
+postprocessor: GeneralPostprocessor
+audio_column: context
+target_column: answer
+instruction_column: instruction
+user_prompt: |
+  Please listen to the following audio clip and analyze the speaker's voice characteristics, such as pitch, tone, timbre, and speech patterns. Based on these acoustic features, what is the most likely perceived gender of the speaker? Be brief. Do not provide explanations.
+long_audio_processing_logic: truncate
+
+generation_kwargs:
+  temperature: 0.0001
+  do_sample: false
+  max_gen_tokens: 64
+
+metrics:
+  - metric: llm_judge_binary

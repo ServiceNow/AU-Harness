@@ -1,0 +1,4 @@
+task_name: fleurs_kk_kz
+extends: ["./base.yaml#"]
+subset: kk_kz
+language: kk

@@ -1,0 +1,4 @@
+task_name: fleurs_xh_za
+extends: ["./base.yaml#"]
+subset: xh_za
+language: xh

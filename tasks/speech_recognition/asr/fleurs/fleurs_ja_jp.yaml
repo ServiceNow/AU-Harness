@@ -1,0 +1,4 @@
+task_name: fleurs_ja_jp
+extends: ["./base.yaml#"]
+subset: ja_jp
+language: ja

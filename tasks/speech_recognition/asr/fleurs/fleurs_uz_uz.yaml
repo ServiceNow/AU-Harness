@@ -1,0 +1,4 @@
+task_name: fleurs_uz_uz
+extends: ["./base.yaml#"]
+subset: uz_uz
+language: uz

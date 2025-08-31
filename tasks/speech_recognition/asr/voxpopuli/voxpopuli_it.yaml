@@ -1,0 +1,4 @@
+task_name: voxpopuli_it
+extends: ["./base.yaml#"]
+subset: it
+language: it

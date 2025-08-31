@@ -1,0 +1,3 @@
+task_name: mnsc_sqa_part4_test
+extends: ["./base.yaml#"]
+subset: SQA-PART4-Test

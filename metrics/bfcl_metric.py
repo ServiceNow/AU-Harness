@@ -30,20 +30,23 @@ class BFCLMatchScore(Metrics):
         self.name = "bfcl_match_score"
 
     def __call__(
-        self,
-        candidates: List[dict],
-        references: List[Tuple[List[str], List[Dict[str, Optional[Union[str, int]]]]]],
-        *,
-        instructions: Optional[List[str]] = None,
-        dataset_name: Optional[str] = None,
-        model_name: Optional[str] = None,
-        model_responses: Optional[List[ModelResponse]] = None,
+            self,
+            candidates: List[dict],
+            references: List[Tuple[List[str], List[Dict[str, Optional[Union[str, int]]]]]],
+            *,
+            instructions: Optional[List[str]] = None,
+            task_name: Optional[str] = None,
+            model_name: Optional[str] = None,
+            model_responses: Optional[List[ModelResponse]] = None,
     ) -> dict[str, dict[str, float] | float]:
-
+        # Compute record-level scores for strict outputs (binary: all instructions followed or not)
         record_scores = self.compute_record_level_scores(candidates, references)
+        # Average final score over all components
         results = {"final": sum(record_scores) / len(candidates) if candidates else 0.0}
 
-        if dataset_name and model_name:
+        # Write detailed record-level logs (if task_name and model_name provided)
+        if task_name and model_name:            
+            # Very simple approach: just stringify everything
             serializable_candidates = [str(candidate) for candidate in candidates]
             serializable_refs = [str(ref[0]) for ref in references]
             write_record_log(
@@ -51,13 +54,14 @@ class BFCLMatchScore(Metrics):
                 refs=serializable_refs,
                 cands=serializable_candidates,
                 scores=record_scores,
-                dataset_name=dataset_name,
+                task_name=task_name,
                 model_name=model_name,
                 explanations=None,
                 instructions=instructions,
                 model_responses=model_responses,
             )
-            append_final_score(self, results, dataset_name, model_name, model_responses)
+
+            append_final_score(self, results, task_name, model_name, model_responses)
 
         return results
 

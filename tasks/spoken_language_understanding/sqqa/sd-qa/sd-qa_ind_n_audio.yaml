@@ -1,0 +1,4 @@
+task_name: sd-qa_ind_n_audio
+extends: ["./base.yaml#"]
+split: ind_n
+modality: audio

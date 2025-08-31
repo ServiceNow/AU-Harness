@@ -1,0 +1,4 @@
+task_name: librispeech_multilingual_spanish
+extends: ["./base.yaml#"]
+subset: spanish
+language: es

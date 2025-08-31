@@ -1,0 +1,4 @@
+task_name: librispeech_multilingual_portuguese
+extends: ["./base.yaml#"]
+subset: portuguese
+language: pt

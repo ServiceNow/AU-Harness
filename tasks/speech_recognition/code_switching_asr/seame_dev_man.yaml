@@ -1,0 +1,4 @@
+task_name: seame_dev_man
+extends: ["./base.yaml#"] 
+dataset_path: AudioLLMs/seame_dev_man
+language: en/zh

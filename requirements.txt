@@ -43,6 +43,7 @@ soundfile==0.13.1        # librosa dependency, explicitly required
 word-levenshtein         # alignment tool for diarization metrics
 
 langdetect==1.0.9
+ruamel.yaml==0.18.15
 
 # Required for handling nested event loops
 nest_asyncio==1.6.0

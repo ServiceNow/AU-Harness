@@ -1,0 +1,4 @@
+task_name: fleurs_en_us
+extends: ["./base.yaml#"]
+subset: en_us
+language: en

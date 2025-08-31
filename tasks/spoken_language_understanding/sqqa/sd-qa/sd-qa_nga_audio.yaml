@@ -1,0 +1,4 @@
+task_name: sd-qa_nga_audio
+extends: ["./base.yaml#"]
+split: nga
+modality: audio

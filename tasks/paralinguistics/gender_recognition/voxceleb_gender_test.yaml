@@ -1,0 +1,3 @@
+task_name: voxceleb_gender_test
+extends: ["./base.yaml#"]
+dataset_path: AudioLLMs/voxceleb_gender_test

@@ -1,0 +1,5 @@
+task_name: meld_emotion_test
+extends: ["./base.yaml#"]
+dataset_path: AudioLLMs/meld_emotion_test
+user_prompt: |
+  "Choose from the following options: anger, disgust, fear, joy, neutral, sadness, suprise"

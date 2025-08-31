@@ -1,0 +1,18 @@
+# Base configuration for Big Bench Audio tasks
+dataset_path: fixie-ai/big_bench_audio
+subset: default
+split: train
+language: en
+preprocessor: BigBenchAudioPreprocessor
+postprocessor: BigBenchAudioPostprocessor
+target_column: official_answer
+instruction_column: transcript
+long_audio_processing_logic: truncate
+
+generation_kwargs:
+  temperature: 0.5
+  do_sample: false
+  max_gen_tokens: 64
+
+metrics:
+  - metric: llm_judge_big_bench_audio

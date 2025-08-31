@@ -1,0 +1,4 @@
+task_name: fleurs_fa_ir
+extends: ["./base.yaml#"]
+subset: fa_ir
+language: fa

@@ -1,0 +1,19 @@
+task_name: mmau_mini
+dataset_path: AudioLLMs/MMAU-mini
+language: en
+split: test
+preprocessor: GeneralPreprocessor
+postprocessor: GeneralPostprocessor
+audio_column: context
+target_column: answer
+instruction_column: instruction
+choices_column: choices
+long_audio_processing_logic: truncate
+
+generation_kwargs:
+  temperature: 0.2
+  do_sample: false
+  max_gen_tokens: 64
+
+metrics:
+  - metric: llm_judge_binary

@@ -1,0 +1,4 @@
+task_name: fleurs_kea_cv
+extends: ["./base.yaml#"]
+subset: kea_cv
+language: kea

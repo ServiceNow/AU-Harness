@@ -1,0 +1,19 @@
+task_name: mu_chomusic_test
+dataset_path: AudioLLMs/mu_chomusic_test
+language: en
+split: test
+preprocessor: GeneralPreprocessor
+postprocessor: GeneralPostprocessor
+audio_column: context
+target_column: answer
+instruction_column: instruction
+choices_column: choices
+long_audio_processing_logic: truncate
+
+generation_kwargs:
+  temperature: 0.7
+  do_sample: false
+  max_gen_tokens: 64
+
+metrics:
+  - metric: llm_judge_binary

@@ -10,16 +10,61 @@ def _load_callhome_dataset(repo, preprocessor_name, num_samples, properties):
     """Load and process a CallHome dataset using the specified preprocessor."""
     repo = Path(repo).resolve()
     # Dynamically load the preprocessor
-    PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
-    if PreprocessorClass is None:
+    preprocessor_class = get_class_from_module('preprocessors', preprocessor_name)
+    if preprocessor_class is None:
         error_msg = f"Could not load preprocessor {preprocessor_name}"
         logger.error(error_msg)
         raise ValueError(error_msg)
-    dataset = PreprocessorClass().process(repo, num_samples=num_samples, properties=properties)
+    dataset = preprocessor_class().process(repo, num_samples=num_samples, properties=properties)
     dataset_size = len(dataset) if dataset else 0
     return dataset, dataset_size
 
-def _load_dataset(repo=None, filters=None, metric=None, split=None, dataset_info=None, dataset_name=None):
+def load_dataset_with_args(dataset_path: str, split: str, subset: str, num_samples: int, task_name: str):
+    """ Load the dataset
+    
+    Args:
+        dataset_path: Path to dataset
+        split: Split to load
+        subset: Subset to load
+        num_samples: Number of samples to load
+        task_name: Name of the task
+    
+    Returns:
+        dataset: Dataset loaded and transformed
+        dataset_size: Size of the dataset
+    """
+    if dataset_path is None:
+        raise ValueError(f'Dataset path is missing for task {task_name}')
+    
+    if split is None:
+        raise ValueError(f'Dataset split is missing for task {task_name}')
+
+    token=os.getenv("HF_TOKEN")
+
+    # Load dataset
+    try: 
+        dataset_load_args = {"path": dataset_path, "split": split, "trust_remote_code": True}
+        if subset:
+            dataset_load_args["name"] = subset
+        if token:
+            dataset_load_args["token"] = token
+        dataset = load_dataset(**dataset_load_args)
+    except Exception as e:
+        raise ValueError(e)
+
+    if dataset is None:
+        raise ValueError(f"Dataset with path {dataset_path}, split {split} and subset {subset} not found")
+
+    if num_samples is not None:
+        if len(dataset) > num_samples:
+            dataset = dataset[:num_samples]
+        else:
+            logger.warning("Number of samples requested is greater than the number of samples in the dataset. Using all samples.")
+    
+    return dataset
+
+
+def _load_dataset2(repo=None, filters=None, metric=None, split=None, task_config=None, task_name=None):
     """Load and preprocess a dataset from a local or remote path."""
     # Unwrap filters object
     filters = filters or {}
@@ -29,8 +74,8 @@ def _load_dataset(repo=None, filters=None, metric=None, split=None, dataset_info
     length_filter = filters.get("length_filter", None)
     
     # Extract parameters from dataset_info
-    preprocessor_name = dataset_info.get("preprocessor", "GeneralPreprocessor") if dataset_info else "GeneralPreprocessor"
-    subset = dataset_info.get("subset", None) if dataset_info else None
+    preprocessor_name = task_config.get("preprocessor", "GeneralPreprocessor") if task_config else "GeneralPreprocessor"
+    subset = task_config.get("subset", None) if task_config else None
     
     # Set up properties that will be passed to any preprocessor
     properties = {"metric": metric}
@@ -40,10 +85,10 @@ def _load_dataset(repo=None, filters=None, metric=None, split=None, dataset_info
         properties["system_prompts"] = system_prompts
     if length_filter:
         properties["length_filter"] = tuple(length_filter)  # Convert list to tuple
-    if dataset_info:
-        properties["dataset_info"] = dataset_info
-    if dataset_name:
-        properties["dataset_name"] = dataset_name
+    if task_config:
+        properties["task_config"] = task_config
+    if task_name:
+        properties["task_name"] = task_name
 
     # Special handling for local CallHome dataset
     if preprocessor_name.startswith("Callhome"):
@@ -92,17 +137,16 @@ def _load_dataset(repo=None, filters=None, metric=None, split=None, dataset_info
             logger.error(error_msg)
             raise ValueError(e)
 
-
     if num_samples is not None:
         dset = dset[:num_samples]
     else:
         dset = dset[:len(dset)]
-    PreprocessorClass = get_class_from_module('preprocessors', preprocessor_name)
-    if PreprocessorClass is None:
+    preprocessor_class = get_class_from_module('preprocessors', preprocessor_name)
+    if preprocessor_class is None:
         error_msg = f"Could not load preprocessor {preprocessor_name}"
         logger.error(error_msg)
         raise ValueError(error_msg)
-    processed = PreprocessorClass().process(dset, num_samples, properties)
+    processed = preprocessor_class().process(dset, num_samples, properties)
     dataset_size = len(processed)
     
     # Return both the processed dataset and its size

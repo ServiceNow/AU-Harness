@@ -1,0 +1,3 @@
+task_name: mnsc_asr_part4_test
+extends: ["./base.yaml#"]
+subset: ASR-PART4-Test

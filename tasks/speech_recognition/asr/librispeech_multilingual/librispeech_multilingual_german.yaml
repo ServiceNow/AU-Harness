@@ -1,0 +1,4 @@
+task_name: librispeech_multilingual_german
+extends: ["./base.yaml#"]
+subset: german
+language: de

@@ -1,0 +1,4 @@
+task_name: iemocap_emotion_recognition
+extends: ["./base.yaml#"]
+dataset_path: AudioLLMs/iemocap_emotion_recognition
+user_prompt: "You must select exactly one from the following options as the final answer: anger, happiness, excitement, sadness, frustration, fear, surprise, neutral."

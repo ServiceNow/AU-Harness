@@ -339,12 +339,12 @@ class CallhomePreprocessor(Preprocessor):
         props = self.extract_properties(properties)
         metric = props["metric"]
         user_prompt_add_ons = props["user_prompt_add_ons"]
-        dataset_name = props["dataset_name"]
+        task_name = props["task_name"]
         system_prompts = properties.get("system_prompts", []) if properties else []
         length_filter = props["length_filter"]
         
         # Get matching prompt add-ons for this dataset
-        matching_prompts = self.get_prompt_add_ons(user_prompt_add_ons, dataset_name) if dataset_name else []
+        matching_prompts = self.get_prompt_add_ons(user_prompt_add_ons, task_name) if task_name else []
 
         # Set base instruction depending on metric
         if metric and metric.lower() == "word_error_rate":

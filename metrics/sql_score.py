@@ -46,7 +46,7 @@ class SqlScore(Metrics):
         references: List[Tuple[List[str], List[Dict[str, Optional[Union[str, int]]]]]],
         *,
         instructions: Optional[List[str]] = None,
-        dataset_name: Optional[str] = None,
+        task_name: Optional[str] = None,
         model_name: Optional[str] = None,
         model_responses: Optional[List[ModelResponse]] = None,
     ) -> dict[str, dict[str, float] | float]:
@@ -74,20 +74,20 @@ class SqlScore(Metrics):
             self.metric_em: scores.get("per_record_em", []),
         }
 
-        # Write detailed record-level logs (if dataset_name and model_name provided)
-        if dataset_name and model_name:
+        # Write detailed record-level logs (if task_name and model_name provided)
+        if task_name and model_name:
             write_record_log(
                 self, 
                 refs=references, 
                 cands=candidates, 
                 scores=scores, 
-                dataset_name=dataset_name, 
+                task_name=task_name, 
                 model_name=model_name, 
                 explanations=None, 
                 instructions=instructions,
                 model_responses=model_responses
             )
-            append_final_score(self, scores, dataset_name, model_name, model_responses)
+            append_final_score(self, scores, task_name, model_name, model_responses)
         return self._clean_scores(scores)
 
     def _clean_scores(self, scores: dict) -> dict:

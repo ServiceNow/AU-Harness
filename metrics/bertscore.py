@@ -7,7 +7,7 @@ from metrics.word_error_rate_metrics import normalize_text
 from utils.custom_logging import write_record_log, append_final_score
 
 class BertScore(Metrics):
-    def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
+    def __call__(self, candidates, references, instructions=None, *, task_name: str | None = None, model_name: str | None = None, model_responses=None):
         # Store instructions and model_responses for potential later use
         self.instructions = instructions
         self.model_responses = model_responses if model_responses else []
@@ -21,12 +21,12 @@ class BertScore(Metrics):
         mean_score = sum(valid_scores) / len(valid_scores) if valid_scores else 0.0
         overall_score = {self.name: mean_score}
         
-        if dataset_name and model_name:
+        if task_name and model_name:
             # write_record_log will also write to run.log internally
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, 
+            write_record_log(self, references, candidates, scores, task_name, model_name, 
                            instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score with the aggregate score
-            append_final_score(self, overall_score, dataset_name, model_name, self.model_responses)
+            append_final_score(self, overall_score, task_name, model_name, self.model_responses)
         
         # Return both individual scores and the aggregate score
         return {**self.record_level_scores, **overall_score}
@@ -39,7 +39,7 @@ class BertScore(Metrics):
         self.model_responses = None
         self.record_level_scores = None
 
-    def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
+    def __call__(self, candidates, references, instructions=None, *, task_name: str | None = None, model_name: str | None = None, model_responses=None):
         # Store instructions and model_responses for potential later use
         self.instructions = instructions
         self.model_responses = model_responses if model_responses else []
@@ -53,12 +53,12 @@ class BertScore(Metrics):
         mean_score = sum(valid_scores) / len(valid_scores) if valid_scores else 0.0
         overall_score = {self.name: mean_score}
 
-        if dataset_name and model_name:
+        if task_name and model_name:
             # write_record_log will also write to run.log internally
-            write_record_log(self, normalized_references, normalized_candidates, scores, dataset_name, model_name,
+            write_record_log(self, normalized_references, normalized_candidates, scores, task_name, model_name,
                            instructions=self.instructions, model_responses=self.model_responses)
             # Directly call append_final_score with the aggregate score
-            append_final_score(self, overall_score, dataset_name, model_name)
+            append_final_score(self, overall_score, task_name, model_name)
 
         # Return both individual scores and the aggregate score
         return {**self.record_level_scores, **overall_score}

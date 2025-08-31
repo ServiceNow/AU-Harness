@@ -6,103 +6,66 @@ from utils.request_manager import CentralRequestController
 logger = logging.getLogger(__name__)
 
 
-def _get_temperature_override(model: str, task_type: str, temperature_overrides: list[dict]) -> float | None:
+def get_temperature_override(model: str, task_ancestry: list, temperature_overrides: list[dict]) -> float | None:
     """Check if there's a temperature override for this model and task combination.
     
     Args:
-        model: The model
-        task_type: The type of task being performed
+        model: The model name
+        task_ancestry: The ancestry path of the task (base_dir, intermediate dirs, task_name)
         temperature_overrides: List of override dictionaries from config.yaml
         
     Returns:
         The override temperature if found, None otherwise
     """
-    if not temperature_overrides:
+    if not temperature_overrides or not task_ancestry:
         return None
-        
+    
+    # Get the task name (last element in ancestry)
+    task_name = task_ancestry[-1] if task_ancestry else None
+    
+    # Store best match score and temperature for hierarchical matching
+    best_match_score = -1
+    best_match_temp = None
+    
     for override in temperature_overrides:
         # Get the temperature value if present
-        temp = override.get("temperature")
+        temp = override.get("temperature", None)
         if temp is None:
             continue
             
         # Check if this override applies to our model/task
-        override_model = override.get("model")
-        override_task = override.get("task")
-        # Case 1: Model+Task specific override
-        if override_model == model and override_task == task_type:
-            return float(temp)
-            
-        # Case 2: Model-only override
-        if override_model == model and not override_task:
-            return float(temp)
-            
-        # Case 3: Task-only override
-        if not override_model and override_task == task_type:
-            return float(temp)
-    
-    return None
-
-def _get_system_prompt(model: str, dataset_name: str, system_prompts: list) -> str | None:
-    """Get system prompt for this model and dataset combination.
-    
-    Args:
-        model: The model
-        dataset_name: The name of the dataset
-        system_prompts: List of system prompt configurations from filters
+        override_model = override.get("model", None)
+        override_task = override.get("task", None)
         
-    Returns:
-        Concatenated system prompts if found, None otherwise
-    """
-    if not system_prompts:
-        return None
-    
-    # Import here to avoid circular imports
-    from utils.util import find_runspec_files, _find_runspec_by_name, _get_task_type_datasets
-    
-    matched_prompts = []
-    
-    for prompt_config in system_prompts:
-        # Each config should be [prompt_key, [model_name, dataset_name]]
-        if not isinstance(prompt_config, list) or len(prompt_config) != 2:
+        # Skip if model doesn't match and override has model constraint
+        if override_model and override_model != model:
             continue
             
-        prompt_key, match_criteria = prompt_config
+        # Calculate match score for hierarchical task matching
+        match_score = 0
         
-        if not isinstance(match_criteria, list) or len(match_criteria) != 2:
-            continue
-            
-        criteria_model, criteria_dataset = match_criteria
+        # Case 1: Exact task name match (highest priority)
+        if override_task == task_name:
+            match_score = 100  # Highest priority
         
-        # Check if this prompt applies to our model first
-        if criteria_model != model:
-            continue
+        # Case 2: Match with any folder in the ancestry path (medium priority)
+        elif override_task and override_task in task_ancestry:
+            # Find where in the hierarchy this folder/task appears
+            # Items deeper in the hierarchy (closer to task) get higher scores
+            position = task_ancestry.index(override_task)
+            depth_score = position + 1  # Add 1 to avoid zero scores
+            match_score = 10 + depth_score * 5  # Base of 10 plus position bonus
         
-        # Now check dataset - need to flatten runspecs like temperature override does
-        runspec_files = find_runspec_files()
+        # Case 3: No task constraint but model matches
+        elif override_model == model and not override_task:
+            match_score = 5  # Lower priority than task-specific overrides
         
-        # Check if criteria_dataset is a runspec name (exact file match)
-        found_runspec, runspec_data, _ = _find_runspec_by_name(criteria_dataset, runspec_files)
-        
-        if found_runspec:
-            # If it's a runspec, check if our dataset is in it
-            if dataset_name in runspec_data:
-                matched_prompts.append(prompt_key)
-        else:
-            # Check if it's a task type (directory name like "paralinguistics")
-            task_type_datasets = _get_task_type_datasets(criteria_dataset, runspec_files)
-            
-            if dataset_name in task_type_datasets:
-                matched_prompts.append(prompt_key)
-            elif criteria_dataset == dataset_name:
-                # Direct dataset name comparison as fallback
-                matched_prompts.append(prompt_key)
+        # Update best match if we found a better one
+        if match_score > best_match_score:
+            best_match_score = match_score
+            best_match_temp = float(temp)
     
-    # Return concatenated prompts if any matches found
-    if matched_prompts:
-        return " ".join(matched_prompts)
-    
-    return None
+    return best_match_temp
 
 def register_models_with_controller(cfg_list: list[dict], judge_properties: dict = None) -> tuple[CentralRequestController, list[dict]]:
     """
@@ -119,8 +82,8 @@ def register_models_with_controller(cfg_list: list[dict], judge_properties: dict
     
     # Register all models with the controller
     for cfg in cfg_list:
-        model_name = cfg["info"].get("name")
-        batch_size = cfg["info"].get("batch_size", 1)
+        model_name = cfg.get("name")
+        batch_size = cfg.get("batch_size", 1)
         
         # Register model type with the controller
         if model_name:
@@ -150,7 +113,7 @@ def load_models(cfg_list: list[dict]) -> list[Model]:
     
     # Create model instances
     for cfg in cfg_list:
-        model_obj = Model(cfg["info"])
+        model_obj = Model(cfg)
         models.append(model_obj)
     
     if not models:

@@ -1,0 +1,4 @@
+task_name: fleurs_ny_mw
+extends: ["./base.yaml#"]
+subset: ny_mw
+language: ny

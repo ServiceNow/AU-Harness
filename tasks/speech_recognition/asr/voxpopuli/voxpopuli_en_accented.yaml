@@ -1,0 +1,5 @@
+task_name: voxpopuli_en_accented
+extends: ["./base.yaml#"]
+subset: en_accented
+language: en_accented
+accented: true

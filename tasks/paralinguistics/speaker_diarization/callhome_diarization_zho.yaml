@@ -1,0 +1,4 @@
+task_name: callhome_diarization_zho
+extends: ["./base.yaml#"]
+language: zh-CN
+dataset_path: private_datasets/CallHome_zho

@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 
 # Metric Loader
-def _load_metric(name: str, language: str = "en", judge_settings: dict = None):
+def load_metric(name: str, language: str = "en", judge_settings: dict = None):
 
     if name not in metric_map:
         raise ValueError(f"Unknown metric: {name}. Available metrics: {list(metric_map.keys())}")
@@ -33,5 +33,5 @@ def _load_metric(name: str, language: str = "en", judge_settings: dict = None):
 
         return metric
     except (ImportError, AttributeError) as e:
-        logger.error(f"[_load_metric] Failed to load metric {name}: {e}")
+        logger.error(f"[load_metric] Failed to load metric {name}: {e}")
         raise ValueError(f"Failed to load metric {name}: {e}")

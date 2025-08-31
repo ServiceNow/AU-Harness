@@ -1,0 +1,4 @@
+task_name: fleurs_sd_in
+extends: ["./base.yaml#"]
+subset: sd_in
+language: sd

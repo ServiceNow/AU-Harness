@@ -204,20 +204,20 @@ class DiarizationMetrics(Metrics):
             3. SpkCntMAE: Speaker Count Mean Absolute Error 
     """
 
-    def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None,
+    def __call__(self, candidates, references, instructions=None, *, task_name: str | None = None,
                  model_name: str | None = None, model_responses=None):
         # Store instructions and model_responses for potential later use
         self.instructions = instructions
         self.model_responses = model_responses if model_responses else []
         overall = self.get_score(candidates, references)
 
-        if dataset_name and model_name:
+        if task_name and model_name:
             # WDER & cpWER record scores are stored under 'wder_per_row' and 'cpwer_per_row'
             scores = self.record_level_scores.get("wder_per_row", [])
 
-            write_record_log(self, references, candidates, scores, dataset_name, model_name,
+            write_record_log(self, references, candidates, scores, task_name, model_name,
                              instructions=self.instructions, model_responses=self.model_responses)
-            append_final_score(self, overall, dataset_name, model_name, self.model_responses)
+            append_final_score(self, overall, task_name, model_name, self.model_responses)
         return overall
 
     def __init__(self, language="en"):

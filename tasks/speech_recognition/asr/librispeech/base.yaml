@@ -1,0 +1,7 @@
+# Defaults for all Librispeech datasets
+extends: ["../base.yaml#"]
+language: en
+split: test
+audio_column: context
+target_column: answer
+instruction_column: instruction

@@ -6,7 +6,7 @@ modalities and filtering options.
 """
 
 import logging
-from typing import List
+from typing import Dict, List, Any
 
 import numpy as np
 from tqdm import tqdm
@@ -17,50 +17,52 @@ logger = logging.getLogger(__name__)
 
 
 class GeneralPreprocessor(Preprocessor):
-    """Preprocessor for Audio benchmarks from "AudioLLMs" and more on HF."""
+    """Preprocessor for standard Audio benchmarks where output references are ALWAYS expected."""
 
     # Using the extract_audio_info method from the base class
-
-    def process(
-        self, dataset: dict, num_samples: int = None, properties: dict = None
-    ) -> List[dict]:
-        """Process the dataset and flatten audio/context structure (expects dict-of-lists).
+    def process(self, dataset: Dict[str, List[Any]], task_config: Dict[str, Any], 
+                run_config: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Run pre-processing on standard/ general Audio datasets.
         
         Args:
-            dataset: Dictionary containing audio data
-            properties: Optional dict of properties, may include 'length_filter' tuple 
-                       (min_seconds, max_seconds) to filter samples by audio length.
+            dataset: The task dataset to pre-process
+            task_config: Dictionary containing task configuration parameters
+            run_config: Dictionary containing run configuration parameters
+            
+        Returns:
+            List of dictionaries where each dictionary represents a pre-processed sample
         """
-
+        
         # Extract common properties using base class method
-        props = self.extract_properties(properties)
-        user_prompt_add_ons = props["user_prompt_add_ons"]
-        dataset_name = props["dataset_name"]
-        length_filter = props["length_filter"]
-        modality = props.get("dataset_info", {}).get("modality", "audio")
-        audio_column_name = props.get("dataset_info", {}).get("audio_column", None)
-        target_column_name = props.get("dataset_info", {}).get("target_column", None)
-        user_instruction_column_name = props.get("dataset_info", {}).get("instruction_column", None)
-        user_query_column_name = props.get("dataset_info", {}).get("textual_input_column", None)
-        choices_column_name = props.get("dataset_info", {}).get("choices_column", None)
+        modality = task_config.get('modality', 'audio')
+        audio_column_name = task_config.get('audio_column', None)
+        target_column_name = task_config.get('target_column', None)
+        choices_column_name = task_config.get('choices_column', None)
+        sample_instruction_column_name = task_config.get('instruction_column', None)
+        user_query_column_name = task_config.get('textual_input_column', None)
 
-        # Get matching prompt add-ons for this dataset
-        matching_prompts = self.get_prompt_add_ons(user_prompt_add_ons, dataset_name) if dataset_name else []
+        # Obtain task-specific prompt (if provided)
+        user_prompt = task_config.get('user_prompt', '')
 
-        # Get dataset keys and size
-        keys = list(dataset.keys())
-        dataset_size = len(dataset[keys[0]]) if keys else 0
-        self.log_dataset_info(keys, dataset_size)
+        # Obtain length filter (if exists)
+        filters = run_config.get('filter', None)
+        length_filter = None
+        if (filters):
+            length_filter = filters.get('length', None)
+        
+        # Get dataset info
+        dataset_keys = list(dataset.keys())
+        dataset_size = len(dataset[dataset_keys[0]]) if dataset_keys else 0
+        self.log_dataset_info(dataset_keys, dataset_size)
 
+        processed_data = []
+        indices = range(dataset_size)
         total_duration = 0
-        new_dataset = []
-        dataset_size = len(dataset[keys[0]]) if keys else 0
-        indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
 
         for i in tqdm(indices, desc="Processing samples"):
-            instruction = ""
+            instruction = user_prompt
             # Create record by accessing each feature by index
-            record = {k: dataset[k][i] for k in keys}
+            record = {k: dataset[k][i] for k in dataset_keys}
 
             # Extract audio information - if not found, extractor will try audio then context
             self.extract_audio_info(record, audio_column_name=audio_column_name)
@@ -75,26 +77,22 @@ class GeneralPreprocessor(Preprocessor):
             total_duration += audio_duration
 
             # Apply length filtering if specified
-            if not self.check_audio_length(record["array"], record["sampling_rate"], length_filter):
-                continue
+            if (length_filter):
+                if not self.check_audio_length(record["array"], record["sampling_rate"], length_filter):
+                    continue
 
+            # General processor requires reference. Otherwise, implement your own preprocessor.
             if target_column_name and target_column_name in record:
                 record["model_target"] = record.get(target_column_name, None)
             else:
-                possible_keys = ["reference", "answer", "text", "transcription", "sentence", "transcript",
-                                 "normalized_text", "label"]
-                record["model_target"] = next((record[k] for k in possible_keys if k in record), None)
-
-            if record["model_target"] is None:
                 raise ValueError("No valid target key found in record")
 
-            if user_instruction_column_name and user_instruction_column_name in record:
-                instruction = record.get(user_instruction_column_name, "")
-            else:
-                instruction = record.get("instruction") or record.get("question") or ""
+           
+            # Add sample-specific instructions if they exist in the dataset
+            if sample_instruction_column_name and sample_instruction_column_name in record:
+                instruction += record.get(sample_instruction_column_name, "")
+            
             # Append any user-specified prompt add-ons and choices
-            if matching_prompts:
-                instruction += " " + " ".join(matching_prompts)
             if choices_column_name and choices_column_name in record:
                 choices = record.get(choices_column_name, [])
                 if isinstance(choices, list):
@@ -102,13 +100,20 @@ class GeneralPreprocessor(Preprocessor):
                 else:
                     choices_text = str(choices)
                 instruction += "\n Choices: " + choices_text
+            
+            # Warning users if no instruction is provided. This can cause evaluated models to hallucinate.
             if not instruction:
-                logger.warning("Instruction is empty for sample %d, add prompt add-ons for instruction insertion", i)
+                logger.warning("Instruction is empty for sample %d, add user_prompt for instruction insertion", i)
             record["instruction"] = instruction.strip()
 
+            metric_name = task_config.get('metrics')
+            if ('judge' in metric_name):
+                judge_type = metric_name.split('_')[-1]
+                record['judge_type'] = judge_type
+            else:
+                record['judge_type'] = 'detailed'
+            processed_data.append(record)
 
-            record["judge_type"] = properties.get("judge_type", "detailed")
-            new_dataset.append(record)
+        self.log_dataset_info(dataset_keys, dataset_size, len(processed_data), total_duration)
 
-        self.log_dataset_info(keys, dataset_size, len(new_dataset), total_duration)
-        return new_dataset
+        return processed_data

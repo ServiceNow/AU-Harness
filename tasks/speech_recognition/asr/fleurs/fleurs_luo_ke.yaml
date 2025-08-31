@@ -1,0 +1,4 @@
+task_name: fleurs_luo_ke
+extends: ["./base.yaml#"]
+subset: luo_ke
+language: luo

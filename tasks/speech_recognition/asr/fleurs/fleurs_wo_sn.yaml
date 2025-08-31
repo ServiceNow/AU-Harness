@@ -1,0 +1,4 @@
+task_name: fleurs_wo_sn
+extends: ["./base.yaml#"]
+subset: wo_sn
+language: wo

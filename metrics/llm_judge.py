@@ -156,7 +156,7 @@ class _BaseLLMJudge(Metrics):
         self,
         candidates: list[str],
         references: list[str],
-        dataset_name: str | None = None,
+        task_name: str | None = None,
         model_name: str | None = None,
     ) -> list:
         """Run the LLM judge over *candidates* vs *references*.
@@ -253,8 +253,8 @@ class _BaseLLMJudge(Metrics):
 
         # Use tqdm to show progress
         desc = f"{self._prompt_key}"
-        if dataset_name and model_name:
-            desc = f"Evaluating {dataset_name} | {model_name} | {desc}"
+        if task_name and model_name:
+            desc = f"Evaluating {task_name} | {model_name} | {desc}"
         with tqdm(total=len(tasks), desc=desc) as progress_bar:
             for coro in asyncio.as_completed(tasks):
                 idx, result = await coro
@@ -292,25 +292,25 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):
         self.instructions = None
         self.model_responses = None
 
-    async def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
+    async def __call__(self, candidates, references, instructions=None, *, task_name: str | None = None, model_name: str | None = None, model_responses=None):
         """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
         self.instructions = instructions
         self.model_responses = model_responses if model_responses else []
-        overall = await super().get_score(candidates, references, dataset_name, model_name)
+        overall = await super().get_score(candidates, references, task_name, model_name)
         if self.name in overall:
             overall[self.name] *= 100
-        if dataset_name and model_name:
+        if task_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
             explanations = getattr(self, "explanations", None)
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations,
+            write_record_log(self, references, candidates, scores, task_name, model_name, explanations,
                            instructions=self.instructions, model_responses=self.model_responses)
-            append_final_score(self, overall, dataset_name, model_name, self.model_responses)
+            append_final_score(self, overall, task_name, model_name, self.model_responses)
         return overall
 
-    async def compute_record_level_scores(self, candidates: list, references: list, dataset_name: str | None = None, model_name: str | None = None):
+    async def compute_record_level_scores(self, candidates: list, references: list, task_name: str | None = None, model_name: str | None = None):
         """Compute record-level scores for binary evaluation."""
         # Here we can use self.instructions if needed
-        raw_scores = await self._judge_all(candidates, references, dataset_name, model_name)
+        raw_scores = await self._judge_all(candidates, references, task_name, model_name)
         # Expect {"score": number, "explanation": str}
         scores = [float(r.get("score", 0)) if isinstance(r, dict) else 0.0 for r in raw_scores]
         self.explanations = [r.get("explanation", "") if isinstance(r, dict) else "" for r in raw_scores]
@@ -331,25 +331,25 @@ class RedTeamingJudgeMetric(_BaseLLMJudge):
         self.instructions = None
         self.model_responses = None
 
-    async def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
+    async def __call__(self, candidates, references, instructions=None, *, task_name: str | None = None, model_name: str | None = None, model_responses=None):
         """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
         self.instructions = instructions
         self.model_responses = model_responses if model_responses else []
-        overall = await super().get_score(candidates, references, dataset_name, model_name)
+        overall = await super().get_score(candidates, references, task_name, model_name)
         if self.name in overall:
             overall[self.name] *= 100
-        if dataset_name and model_name:
+        if task_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
             explanations = getattr(self, "explanations", None)
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations,
+            write_record_log(self, references, candidates, scores, task_name, model_name, explanations,
                            instructions=self.instructions, model_responses=self.model_responses)
-            append_final_score(self, overall, dataset_name, model_name, self.model_responses)
+            append_final_score(self, overall, task_name, model_name, self.model_responses)
         return overall
 
-    async def compute_record_level_scores(self, candidates: list, references: list, dataset_name: str | None = None, model_name: str | None = None):
+    async def compute_record_level_scores(self, candidates: list, references: list, task_name: str | None = None, model_name: str | None = None):
         """Compute record-level scores for binary evaluation."""
         # Here we can use self.instructions if needed
-        raw_scores = await self._judge_all(candidates, references, dataset_name, model_name)
+        raw_scores = await self._judge_all(candidates, references, task_name, model_name)
         # Expect {"score": number, "explanation": str}
         scores = [float(r.get("score", 0)) if isinstance(r, dict) else 0.0 for r in raw_scores]
         self.explanations = [r.get("explanation", "") if isinstance(r, dict) else "" for r in raw_scores]
@@ -372,28 +372,28 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):
         self.model_responses = None
         self.explanations = None
 
-    async def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
+    async def __call__(self, candidates, references, instructions=None, *, task_name: str | None = None, model_name: str | None = None, model_responses=None):
         """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
         # Store instructions and model_responses for potential later use
         self.instructions = instructions
         self.model_responses = model_responses if model_responses else []
 
-        overall = await super().get_score(candidates, references, dataset_name, model_name)
+        overall = await super().get_score(candidates, references, task_name, model_name)
         if self.name in overall:
             # From 0-5 scale to 0-100 scale
             overall[self.name] *= 20
-        if dataset_name and model_name:
+        if task_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
             explanations = getattr(self, "explanations", None)
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations,
+            write_record_log(self, references, candidates, scores, task_name, model_name, explanations,
                           instructions=self.instructions, model_responses=self.model_responses)
-            append_final_score(self, overall, dataset_name, model_name, self.model_responses)
+            append_final_score(self, overall, task_name, model_name, self.model_responses)
         return overall
 
-    async def compute_record_level_scores(self, candidates: list, references: list, dataset_name: str | None = None, model_name: str | None = None):
+    async def compute_record_level_scores(self, candidates: list, references: list, task_name: str | None = None, model_name: str | None = None):
         """Compute record-level scores for detailed evaluation."""
         # Here we can use self.instructions if needed
-        raw_scores = await self._judge_all(candidates, references, dataset_name, model_name)
+        raw_scores = await self._judge_all(candidates, references, task_name, model_name)
         # Expect {"score": number, "explanation": str}
         scores = [float(r.get("score", 0)) if isinstance(r, dict) else 0.0 for r in raw_scores]
         self.explanations = [r.get("explanation", "") if isinstance(r, dict) else "" for r in raw_scores]
@@ -412,27 +412,27 @@ class CallHomeLLMJudgeMetric(_BaseLLMJudge):
         self.model_responses = None
         self.explanations = None
 
-    async def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None, model_name: str | None = None, model_responses=None):
+    async def __call__(self, candidates, references, instructions=None, *, task_name: str | None = None, model_name: str | None = None, model_responses=None):
         """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
         # Store instructions and model_responses for potential later use
         self.instructions = instructions
         self.model_responses = model_responses if model_responses else []
-        overall = await super().get_score(candidates, references, dataset_name, model_name)
+        overall = await super().get_score(candidates, references, task_name, model_name)
         if self.name in overall:
             overall[self.name] += 1
             overall[self.name] *= 10
-        if dataset_name and model_name:
+        if task_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
             explanations = getattr(self, "explanations", None)
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations,
+            write_record_log(self, references, candidates, scores, task_name, model_name, explanations,
                       instructions=self.instructions, model_responses=self.model_responses)
-            append_final_score(self, overall, dataset_name, model_name, self.model_responses)
+            append_final_score(self, overall, task_name, model_name, self.model_responses)
         return overall
 
-    async def compute_record_level_scores(self, candidates: list, references: list, dataset_name: str | None = None, model_name: str | None = None):
+    async def compute_record_level_scores(self, candidates: list, references: list, task_name: str | None = None, model_name: str | None = None):
         """Compute record-level scores for CallHome evaluation."""
         # Here we can use self.instructions if needed
-        raw_scores = await self._judge_all(candidates, references, dataset_name, model_name)
+        raw_scores = await self._judge_all(candidates, references, task_name, model_name)
         # Expect {"score": number, "explanation": str}
         scores = [float(r.get("score", 0)) if isinstance(r, dict) else 0.0 for r in raw_scores]
         self.explanations = [r.get("explanation", "") if isinstance(r, dict) else "" for r in raw_scores]
@@ -477,7 +477,7 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
         references: List[Tuple[str, str]],
         instructions=None,
         *,
-        dataset_name: Optional[str] = None,
+        task_name: Optional[str] = None,
         model_name: Optional[str] = None,
         model_responses=None
     ) -> dict:
@@ -487,7 +487,7 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
         Args:
             candidates (List[str]): List of model predictions.
             references (List[Tuple[str, str]]): List of (transcript, official_answer) pairs.
-            dataset_name (Optional[str]): Optional dataset name for logging purposes.
+            task_name (Optional[str]): Optional dataset name for logging purposes.
             model_name (Optional[str]): Optional model name for logging purposes.
 
         Returns:
@@ -497,7 +497,7 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
         self.instructions = instructions
         self.model_responses = model_responses if model_responses else []
 
-        scores = await self.compute_record_level_scores(candidates, references, dataset_name, model_name)
+        scores = await self.compute_record_level_scores(candidates, references, task_name, model_name)
         all_scores = scores[self.name]
 
         num_correct = sum(1 for s in all_scores if s == 1.0)
@@ -511,10 +511,10 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
             "num_failed": len(all_scores) - total,
         }
 
-        if dataset_name and model_name:
-            write_record_log(self, references, candidates, all_scores, dataset_name, model_name,
+        if task_name and model_name:
+            write_record_log(self, references, candidates, all_scores, task_name, model_name,
                        instructions=self.instructions, model_responses=self.model_responses)
-            append_final_score(self, overall, dataset_name, model_name, self.model_responses)
+            append_final_score(self, overall, task_name, model_name, self.model_responses)
 
         return overall
 
@@ -522,7 +522,7 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
         self,
         candidates: List[str],
         references: List[Tuple[str, str]],
-        dataset_name: str | None = None,
+        task_name: str | None = None,
         model_name: str | None = None
     ) -> dict:
         """
@@ -536,7 +536,7 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
             dict: A mapping from metric name to list of 1.0 (correct), 0.0 (incorrect), or None (failed).
         """
         # LLM input: (transcript, prediction, official_answer)
-        raw_responses = await self._judge_all(candidates, references, dataset_name, model_name)
+        raw_responses = await self._judge_all(candidates, references, task_name, model_name)
         scores = []
 
         for response in raw_responses:
@@ -554,20 +554,20 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
         self.explanations = raw_responses  # Save raw LLM responses for inspection/logging
         return {self.name: scores}
 
-    def _append_final_score(self, overall: dict, dataset_name: str, model_name: str) -> None:
+    def _append_final_score(self, overall: dict, task_name: str, model_name: str) -> None:
         """
         Appends the final score summary to a structured log file.
 
         Args:
             overall (dict): Final evaluation scores and metadata.
-            dataset_name (str): Dataset identifier.
+            task_name (str): Dataset identifier.
             model_name (str): Model identifier.
         """
 
         def _slug(text: str) -> str:
             return re.sub(r"[^A-Za-z0-9_]+", "_", text)
 
-        log_path = Path(".") / f"{_slug(dataset_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
+        log_path = Path(".") / f"{_slug(task_name)}_{_slug(self.name)}_{_slug(model_name)}.log"
         with open(log_path, "a", encoding="utf-8") as f:
             f.write(json.dumps({"final_score": overall}, ensure_ascii=False) + "\n")
 
@@ -668,7 +668,7 @@ class MtbenchLLMJudgeMetric(_BaseLLMJudge):
             self,
             candidates: list[str],
             references: list[str],
-            dataset_name: str | None = None,
+            task_name: str | None = None,
             model_name: str | None = None,
     ) -> list:
         """Run the LLM judge over *candidates* vs *references*.
@@ -840,8 +840,8 @@ class MtbenchLLMJudgeMetric(_BaseLLMJudge):
 
         # Use tqdm to show progress
         desc = f"{self._prompt_key}"
-        if dataset_name and model_name:
-            desc = f"Evaluating {dataset_name} | {model_name} | {desc}"
+        if task_name and model_name:
+            desc = f"Evaluating {task_name} | {model_name} | {desc}"
         with tqdm(total=len(tasks), desc=desc) as progress_bar:
             for coro in asyncio.as_completed(tasks):
                 idx, result = await coro
@@ -857,13 +857,13 @@ class MtbenchLLMJudgeMetric(_BaseLLMJudge):
 
         return results
 
-    async def get_score(self, candidates, references, dataset_name=None, model_name=None) -> dict:
+    async def get_score(self, candidates, references, task_name=None, model_name=None) -> dict:
         """Get overall score.
 
         Args:
             candidates: generated text list
             references: reference text list
-            dataset_name: optional dataset name for progress bar
+            task_name: optional dataset name for progress bar
             model_name: optional model name for progress bar
 
         Returns:
@@ -873,7 +873,7 @@ class MtbenchLLMJudgeMetric(_BaseLLMJudge):
         assert len(candidates) == len(references)
 
         if not self.record_level_scores:
-            self.record_level_scores = await self.compute_record_level_scores(candidates, references, dataset_name,
+            self.record_level_scores = await self.compute_record_level_scores(candidates, references, task_name,
                                                                               model_name)
 
         res = {}
@@ -884,27 +884,27 @@ class MtbenchLLMJudgeMetric(_BaseLLMJudge):
             res[name] = score
         return res
 
-    async def __call__(self, candidates, references, instructions=None, *, dataset_name: str | None = None,
+    async def __call__(self, candidates, references, instructions=None, *, task_name: str | None = None,
                        model_name: str | None = None, model_responses=None):
         """Return overall average dict and record-level details. Write per-record log if dataset/model provided."""
         # Store instructions and model_responses for potential later use
         self.instructions = instructions
         self.model_responses = model_responses if model_responses else []
 
-        overall = await self.get_score(candidates, references, dataset_name, model_name)
-        if dataset_name and model_name:
+        overall = await self.get_score(candidates, references, task_name, model_name)
+        if task_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
             explanations = getattr(self, "explanations", None)
-            write_record_log(self, references, candidates, scores, dataset_name, model_name, explanations,
+            write_record_log(self, references, candidates, scores, task_name, model_name, explanations,
                              instructions=self.instructions, model_responses=self.model_responses)
-            append_final_score(self, overall, dataset_name, model_name, self.model_responses)
+            append_final_score(self, overall, task_name, model_name, self.model_responses)
         return overall
 
-    async def compute_record_level_scores(self, candidates: list, references: list, dataset_name: str | None = None,
+    async def compute_record_level_scores(self, candidates: list, references: list, task_name: str | None = None,
                                           model_name: str | None = None):
         """Compute record-level scores for detailed evaluation."""
         # Here we can use self.instructions if needed
-        raw_scores = await self._judge_all(candidates, references, dataset_name, model_name)
+        raw_scores = await self._judge_all(candidates, references, task_name, model_name)
         # Expect {"score": number, "explanation": str}
         self.explanations = [""] * len(candidates)
         return {self.name: raw_scores}

@@ -1,0 +1,4 @@
+task_name: gigaspeech2_id_test
+extends: ["./base.yaml#"]
+subset: id-test
+language: id

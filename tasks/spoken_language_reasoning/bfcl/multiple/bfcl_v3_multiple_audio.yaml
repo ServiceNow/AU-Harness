@@ -1,0 +1,4 @@
+task_name: bfcl_v3_multiple_audio
+extends: ["./base.yaml#"]
+modality: audio
+with_prompt: false

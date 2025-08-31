@@ -1,0 +1,7 @@
+task_name: aishell_1_test
+extends: ["../base.yaml#"]
+dataset_path: AudioLLMs/aishell_1_zh_test
+language: zh
+audio_column: context
+target_column: answer
+instruction_column: instruction

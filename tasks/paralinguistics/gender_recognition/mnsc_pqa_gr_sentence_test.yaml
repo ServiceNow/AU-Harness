@@ -1,0 +1,5 @@
+task_name: mnsc_pqa_gr_sentence_test
+extends: ["./base.yaml#"]
+dataset_path: AudioLLMs/Multitask-National-Speech-Corpus-v1-extend
+subset: PQA-GR-Sentence-Test
+accented: true

@@ -1,0 +1,4 @@
+task_name: sd-qa_nga_text
+extends: ["./base.yaml#"]
+split: nga
+modality: text

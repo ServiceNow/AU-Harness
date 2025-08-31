@@ -1,0 +1,4 @@
+task_name: callhome_asr_jpn
+extends: ["./base.yaml#"]
+language: ja
+dataset_path: private_datasets/CallHome_jpn

@@ -1,0 +1,4 @@
+task_name: cn_college_listen_mcq_test
+extends: ["./base.yaml#"]
+dataset_path: AudioLLMs/cn_college_listen_mcq_test
+choices_column: choices

@@ -1,0 +1,4 @@
+task_name: fleurs_cmn_hans_cn
+extends: ["./base.yaml#"]
+subset: cmn_hans_cn
+language: cmn

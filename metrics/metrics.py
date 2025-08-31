@@ -24,13 +24,13 @@ class Metrics(ABC, MetricMetadata):
     def __init__(self, **data):
         super().__init__(**data)
 
-    async def get_score(self, candidates, references, dataset_name=None, model_name=None) -> dict:
+    async def get_score(self, candidates, references, task_name=None, model_name=None) -> dict:
         """Get overall score.
 
         Args:
             candidates: generated text list
             references: reference text list
-            dataset_name: optional dataset name for progress bar
+            task_name: optional dataset name for progress bar
             model_name: optional model name for progress bar
 
         Returns:
@@ -40,7 +40,7 @@ class Metrics(ABC, MetricMetadata):
         assert len(candidates) == len(references)
         
         if not self.record_level_scores:
-            self.record_level_scores = await self.compute_record_level_scores(candidates, references, dataset_name, model_name)
+            self.record_level_scores = await self.compute_record_level_scores(candidates, references, task_name, model_name)
 
         res = {}
         for name, score_list in self.record_level_scores.items():

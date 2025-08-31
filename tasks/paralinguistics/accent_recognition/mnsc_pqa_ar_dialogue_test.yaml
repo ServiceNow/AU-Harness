@@ -1,0 +1,4 @@
+task_name: mnsc_pqa_ar_dialogue_test
+extends: ["./base.yaml#"]
+dataset_path: AudioLLMs/Multitask-National-Speech-Corpus-v1-extend
+subset: PQA-AR-Dialogue-Test

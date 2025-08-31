@@ -1,0 +1,4 @@
+task_name: fleurs_gu_in
+extends: ["./base.yaml#"]
+subset: gu_in
+language: gu

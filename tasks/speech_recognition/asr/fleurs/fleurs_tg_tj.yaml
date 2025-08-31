@@ -1,0 +1,4 @@
+task_name: fleurs_tg_tj
+extends: ["./base.yaml#"]
+subset: tg_tj
+language: tg

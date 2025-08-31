@@ -1,0 +1,16 @@
+# Base configuration for Spider SQL tasks
+dataset_path: ServiceNow-AI/spider_audio
+subset: default
+split: validation
+language: en
+preprocessor: SpiderPreprocessor
+postprocessor: SpiderPostprocessor
+long_audio_processing_logic: truncate
+
+generation_kwargs:
+  temperature: 0.0
+  do_sample: false
+  max_gen_tokens: 64
+
+metrics:
+  - metric: sql_score

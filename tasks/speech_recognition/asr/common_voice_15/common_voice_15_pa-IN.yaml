@@ -1,0 +1,4 @@
+task_name: common_voice_15_pa-IN
+extends: ["./base.yaml#"]
+subset: pa-IN
+language: pa-IN

@@ -1,0 +1,5 @@
+# Defaults for all Common Voice 15 datasets
+extends: ["../base.yaml#"]
+dataset_path: mozilla-foundation/common_voice_15_0
+audio_column: audio
+target_column: sentence

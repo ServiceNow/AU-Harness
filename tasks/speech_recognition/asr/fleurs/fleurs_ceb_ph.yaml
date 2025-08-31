@@ -1,0 +1,4 @@
+task_name: fleurs_ceb_ph
+extends: ["./base.yaml#"]
+subset: ceb_ph
+language: ceb

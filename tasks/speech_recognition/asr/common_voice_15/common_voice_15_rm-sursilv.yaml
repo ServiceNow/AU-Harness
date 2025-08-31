@@ -1,0 +1,4 @@
+task_name: common_voice_15_rm-sursilv
+extends: ["./base.yaml#"]
+subset: rm-sursilv
+language: rm-sursilv

@@ -1,9 +1,0 @@
-{
-        "SLURP-intent": {
-        "hf_repo": "DynamicSuperb/SuperbIC_SLURP-Intent",
-        "subset": "default",
-        "language": "english",
-        "preprocessor": "GeneralPreprocessor",
-        "postprocessor": "GeneralPostprocessor"
-    }
-}

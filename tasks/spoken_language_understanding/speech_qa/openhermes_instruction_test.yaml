@@ -1,0 +1,3 @@
+task_name: openhermes_instruction_test
+extends: ["./base.yaml#"]
+dataset_path: AudioLLMs/openhermes_instruction_test

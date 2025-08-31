@@ -1,0 +1,3 @@
+# Base configuration for BFCL simple tasks
+extends: ["../base.yaml#"]
+subset: BFCL_v3_simple

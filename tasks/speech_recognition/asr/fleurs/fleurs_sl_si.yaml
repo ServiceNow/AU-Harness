@@ -1,0 +1,4 @@
+task_name: fleurs_sl_si
+extends: ["./base.yaml#"]
+subset: sl_si
+language: sl

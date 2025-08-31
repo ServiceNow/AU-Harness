@@ -5,28 +5,31 @@ translation tasks with support for both audio and text modalities.
 """
 
 import logging
+from typing import Dict, List, Any
 
 from tqdm import tqdm
+from jinja2 import Template
 
 from preprocessors.base import Preprocessor
 
 logger = logging.getLogger(__name__)
 from utils.constants import language_map  # Import language_map from constants
 
-
 class Covost2Preprocessor(Preprocessor):
     """Preprocessor for Covost2 dataset from fixie-ai/covost2."""
 
-    def process(self, dataset: dict, num_samples: int = None, properties: dict = None) -> list[dict]:
-        """Process the dataset and flatten audio/context structure (expects dict-of-lists).
+    def process(self, dataset: Dict[str, List[Any]], task_config: Dict[str, Any], 
+                run_config: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Run pre-processing on Covost2 type of datasets.
         
         Args:
-            dataset: Dictionary containing audio data
-            properties: Optional dict of properties, may include 'length_filter' tuple (min_seconds, max_seconds)
-                       to filter samples by audio length.
+            dataset: The task dataset to pre-process
+            task_config: Dictionary containing task configuration parameters
+            run_config: Dictionary containing run configuration parameters
+            
+        Returns:
+            List of dictionaries where each dictionary represents a pre-processed sample
         """
-
-        props = self.extract_properties(properties)
 
         # Get dataset info
         dataset_keys = list(dataset.keys())
@@ -34,8 +37,7 @@ class Covost2Preprocessor(Preprocessor):
         self.log_dataset_info(dataset_keys, dataset_size)
 
         processed_data = []
-        dataset_size = len(dataset.get("id", []))
-        indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
+        indices = range(dataset_size)
 
         for i in tqdm(indices, desc="Processing samples"):
             sample_id = dataset["id"][i]
@@ -54,24 +56,25 @@ class Covost2Preprocessor(Preprocessor):
 
             # Get the target language from dataset_info
             try:
-                target_language_code = props["dataset_info"].get("target_language")
+                target_language_code = task_config.get("target_language")
                 # Convert language code to full language name using the language_map
                 target_language_name = language_map.get(target_language_code, target_language_code)
                 target_language_name = target_language_name.capitalize()
             except KeyError as exc:
-                raise ValueError("Target language not found. Please specify target_language in dataset config") from exc
+                raise ValueError("Target language not found. Please specify target_language in the task config") from exc
             
 
             # Get the source language from dataset_info
             try:
-                source_language_code = props["dataset_info"].get("source_language")
+                source_language_code = task_config.get("source_language")
                 # Convert language code to full language name using the language_map
                 source_language_name = language_map.get(source_language_code, source_language_code)
                 source_language_name = source_language_name.capitalize()
             except KeyError as exc:
-                raise ValueError("Source language not found. Please specify source_language in dataset config") from exc
-            
-            instruction = f"Please translate the given speech from {source_language_name} to {target_language_name}. Return ONLY the translated text without any other prefix text such as the given speech is. Be brief. Do not provide explanations."
+                raise ValueError("Source language not found. Please specify source_language in the task config") from exc
+
+            task_instruction_prompt = task_config.get("user_prompt", "")
+
             # Create structured sample
             sample = {
                 "id": sample_id,
@@ -79,7 +82,9 @@ class Covost2Preprocessor(Preprocessor):
                 "sampling_rate": sampling_rate,
                 "model_target": translation.strip(),
                 "source_sentence": source_sentence.strip(),
-                "instruction": instruction,
+                "instruction": task_instruction_prompt,
+                "source_language_name": source_language_name,
+                "target_language_name": target_language_name
             }
             processed_data.append(sample)
 

@@ -5,7 +5,7 @@ Speech Query Question Answering (SQQA) tasks with audio processing capabilities.
 """
 
 import logging
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Any
 
 import numpy as np
 from tqdm import tqdm
@@ -21,55 +21,64 @@ class BigBenchAudioPreprocessor(Preprocessor):
     Speech Query Question Answering (SQQA) tasks.
     """
 
-    def process(
-            self,
-            dataset: Dict[str, List[Any]],
-            num_samples: Optional[int] = None,
-            properties: Optional[Dict[str, Any]] = None
-    ) -> List[Dict[str, Any]]:
+    def process(self, dataset: Dict[str, List[Any]], task_config: Dict[str, Any], 
+                run_config: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
         Process the BigBenchAudio dataset to ensure consistent audio format and structured data.
 
         Parameters:
         - dataset (Dict[str, List[Any]])
             Expected keys: 'id', 'audio', 'category', 'official_answer', 'transcript'.
-        - num_samples (Optional[int]): Not used. Reserved for future functionality 
-          (e.g., truncating dataset).
-        - properties (Optional[Dict[str, Any]]): Not used. Reserved for additional 
-          metadata or preprocessing options.
-
+        - task_config: Dictionary containing task configuration parameters
+        - run_config: Dictionary containing run configuration parameters
+            
         Returns:
         - List[Dict[str, Any]]: A list of dictionaries where each dictionary represents a sample,
           including the audio array resampled to 16kHz, metadata, and target label.
         """
 
-
-        # Extract properties using the base class method
-        props = self.extract_properties(properties)
-        dataset_info = props.get("dataset_info")
-        modality = dataset_info.get("modality", 'audio')
-        logger.info(f"Processing modality: {modality}")
-
+        # Get dataset info
         dataset_keys = list(dataset.keys())
         dataset_size = len(dataset.get("id", []))
+        self.log_dataset_info(dataset_keys, dataset_size)
 
         processed_data = []
-        dataset_size = len(dataset.get("id", []))
-        indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
+        indices = range(dataset_size)
+
+        # Extract relevant information from task_config
+        modality = task_config.get('modality', 'audio')
+        target_column_name = task_config.get('target_column', None)
+        sample_instruction_column_name = task_config.get('instruction_column', None)
+        user_prompt = task_config.get('user_prompt', '')
+
+        filters = run_config.get('filter', None)
+        length_filter = None
+        if (filters):
+            length_filter = filters.get('length', None)
+
+        if (not target_column_name):
+            raise ValueError("[_big_bench_audio_preprocessor_] Target column name is missing. Preprocessing needs reference answers. Aborting!")
 
         for i in tqdm(indices, desc="Processing samples"):
             # Create record by accessing each feature by index
             sample_id = dataset["id"][i]
 
+            # Ensure official answer exists. If not, skip!
+            if not dataset[target_column_name][i]:
+                logger.warning("[%d] Missing official answer. Skipping sample.", i)
+                continue
+
+            model_target = dataset[target_column_name][i].strip()
+            audio_content_in_text = dataset[sample_instruction_column_name][i].strip()
             if modality == "text":
                 audio_data = {
                     "array": np.array([]),  # Placeholder, not used in text-only evals
                     "sampling_rate": 16000
                 }
+                instruction = user_prompt + audio_content_in_text
             else:
                 audio_data = dataset["audio"][i]
-            
-            if modality == "audio":
+
                 # Validate audio data structure
                 if not isinstance(audio_data, dict):
                     logger.warning(f"[{sample_id}] Invalid audio format. Skipping sample.")
@@ -85,26 +94,23 @@ class BigBenchAudioPreprocessor(Preprocessor):
 
                 # Use base class method to resample audio
                 audio_array, sr = self.resample_audio(audio_array, sr)
-
-            # Ensure official answer exists
-            if not dataset["official_answer"][i]:
-                logger.warning("[%d] Missing official answer. Skipping sample.", i)
-                continue
-
-            if modality == "text":
-                instruction = dataset["transcript"][i]
-            else:
+                
+                # Apply length filtering if specified
+                if (length_filter):
+                    if not self.check_audio_length(audio_array, sr, length_filter):
+                        continue
+              
                 # For audio modality, we can define a generic instruction
-                instruction = f"Answer the question provided in the audio."
+                instruction = user_prompt + f"Answer the question provided in the audio."
 
             # Create structured sample
             sample = {
                 "id": sample_id,
                 "category": dataset["category"][i],
-                "audio_content_in_text": dataset["transcript"][i],
+                "audio_content_in_text": audio_content_in_text,
                 "array": audio_array if modality == "audio" else audio_data["array"],
                 "sampling_rate": sr if modality == "audio" else audio_data["sampling_rate"],
-                "model_target": dataset["official_answer"][i].strip(),
+                "model_target": model_target,
                 "instruction": instruction,
             }
 
