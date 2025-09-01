@@ -1,7 +1,7 @@
 # Base configuration for Spider SQL tasks
 dataset_path: ServiceNow-AI/spider_audio
 subset: default
-split: validation
+split: train
 language: en
 audio_column: audio
 target_column: query
@@ -9,10 +9,10 @@ instruction_column: question
 preprocessor: SpiderPreprocessor
 postprocessor: SpiderPostprocessor
 long_audio_processing_logic: truncate
-user_prompt: |
-      "### Complete sqlite SQL query only and with no explanation, "
-      "and do not select extra columns that are not explicitly requested "
-      "in the query. Enclose the SQL query between ```sql and ```\n"
+user_prompt: >
+      ### Complete sqlite SQL query only and with no explanation,
+      and do not select extra columns that are not explicitly requested 
+      in the query. Enclose the SQL query between ```sql and ```\n
 generation_kwargs:
   temperature: 0.0
   do_sample: false

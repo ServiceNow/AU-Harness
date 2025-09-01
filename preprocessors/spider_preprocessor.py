@@ -7,7 +7,8 @@ audio2SQL tasks with support for both audio and text modalities.
 import json
 import logging
 import os
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Any
+from datasets import Dataset 
 
 import numpy as np
 from tqdm import tqdm
@@ -86,12 +87,12 @@ class SpiderPreprocessor(Preprocessor):
         return db_schemas
 
 
-    def process(self, dataset: Dict[str, List[Any]], task_config: Dict[str, Any], 
+    def process(self, dataset: Dataset, task_config: Dict[str, Any], 
                 run_config: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Run pre-processing on standard/ general Audio datasets.
         
         Args:
-            dataset: The task dataset to pre-process
+            dataset: The task dataset to pre-process (Dataset object)
             task_config: Dictionary containing task configuration parameters
             run_config: Dictionary containing run configuration parameters
             
@@ -99,20 +100,18 @@ class SpiderPreprocessor(Preprocessor):
             List of dictionaries where each dictionary represents a pre-processed sample
         """
 
-
         # Extract common properties using base class method
         modality = task_config.get('modality', 'audio')
         audio_column_name = task_config.get('audio_column', None)
         target_column_name = task_config.get('target_column', None)
         sample_instruction_column_name = task_config.get('instruction_column', None)
 
-
         # Obtain task-specific prompt (if provided)
         user_prompt = task_config.get('user_prompt', '')
 
         # Get dataset info using base class method
-        dataset_keys = list(dataset.keys())
-        dataset_size = len(dataset.get("question", []))
+        dataset_keys = list(dataset.features.keys())
+        dataset_size = len(dataset)
         self.log_dataset_info(dataset_keys, dataset_size)
 
         # Get dataset filters
@@ -128,6 +127,15 @@ class SpiderPreprocessor(Preprocessor):
             db_id = dataset["db_id"][i]
             question = dataset[sample_instruction_column_name][i]
             query = dataset[target_column_name][i]
+
+            # Construct basic instruction
+            user_text = (
+                user_prompt
+                + "### Sqlite SQL tables, with their properties: \n#\n"
+                + db_schemas[db_id]
+                + "\n#\n### "
+            )
+
             if modality == "text":
                 audio_data = {
                     "array": np.array([]),  # Placeholder, not used in text-only evals
@@ -152,28 +160,11 @@ class SpiderPreprocessor(Preprocessor):
                 # Use base class method to resample audio
                 audio_array, sr = self.resample_audio(audio_array, sr)
 
-
-            # prompt = (
-            #     "### Complete sqlite SQL query only and with no explanation, "
-            #     "and do not select extra columns that are not explicitly requested "
-            #     "in the query. Enclose the SQL query between ```sql and ```\n"
-            # )
-            if modality == "audio":
-                user_text = (
-                    user_prompt
-                    + "### Sqlite SQL tables, with their properties: \n#\n"
-                    + db_schemas[db_id]
-                    + "\n#\n### "
-                )
-            else:
-                user_text = (
-                    user_prompt
-                    + "### Sqlite SQL tables, with their properties: \n#\n"
-                    + db_schemas[db_id]
-                    + "\n#\n### "
-                    + question
-                    + "\n"
-                )
+                # Apply length filtering if specified
+                if (length_filter):
+                    if not self.check_audio_length(audio_array, sr, length_filter):
+                        continue
+                user_text += question + "\n"
 
             processed_data.append(
                 {

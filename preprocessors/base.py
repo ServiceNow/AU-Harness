@@ -138,11 +138,11 @@ class Preprocessor():
         length_filter = filters.get('length', None)
         num_samples_filter = filters.get('num_samples', None)
 
-        if not isinstance(length_filter, tuple) and not (len(length_filter) == 2) and not (length_filter[1] > length_filter[0]):
+        if length_filter and not isinstance(length_filter, tuple) and not (len(length_filter) == 2) and not (length_filter[1] > length_filter[0]):
             logger.warning("Length filter must be a tuple of (min_seconds, max_seconds)")
             length_filter = None
 
-        if not isinstance(num_samples_filter, int) and not (num_samples_filter < dataset_size):
+        if num_samples_filter and not isinstance(num_samples_filter, int) and not (num_samples_filter < dataset_size):
             logger.warning("Num samples filter must be an integer and less that dataset size")
             num_samples_filter = None
 
