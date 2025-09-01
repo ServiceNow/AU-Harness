@@ -1,6 +1,7 @@
 import logging
 from pathlib import Path
 from typing import Dict, List, Any, Optional
+from datasets import Dataset
 import yaml
 from scipy.signal import resample
 
@@ -18,7 +19,7 @@ class Preprocessor():
     and management of task-specific prompt add-ons.
     """
 
-    def process(self, dataset: Dict[str, List[Any]], task_config: Dict[str, Any], 
+    def process(self, dataset: Dataset, task_config: Dict[str, Any], 
                 run_config: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Base implementation of the process method to be overridden by subclasses.
         

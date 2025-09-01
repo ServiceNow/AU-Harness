@@ -7,6 +7,7 @@ Speech Query Question Answering (SQQA) tasks with audio processing capabilities.
 import logging
 from typing import Dict, List, Any
 
+from datasets import Dataset
 import numpy as np
 from tqdm import tqdm
 
@@ -21,14 +22,13 @@ class BigBenchAudioPreprocessor(Preprocessor):
     Speech Query Question Answering (SQQA) tasks.
     """
 
-    def process(self, dataset: Dict[str, List[Any]], task_config: Dict[str, Any], 
+    def process(self, dataset: Dataset, task_config: Dict[str, Any], 
                 run_config: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
         Process the BigBenchAudio dataset to ensure consistent audio format and structured data.
 
         Parameters:
-        - dataset (Dict[str, List[Any]])
-            Expected keys: 'id', 'audio', 'category', 'official_answer', 'transcript'.
+        - dataset: Dataset that needs to be pre-processed
         - task_config: Dictionary containing task configuration parameters
         - run_config: Dictionary containing run configuration parameters
             
@@ -38,15 +38,14 @@ class BigBenchAudioPreprocessor(Preprocessor):
         """
 
         # Get dataset info
-        dataset_keys = list(dataset.keys())
-        dataset_size = len(dataset.get("id", []))
+        dataset_keys = list(dataset.features.keys())
+        dataset_size = len(dataset)
         self.log_dataset_info(dataset_keys, dataset_size)
 
         # Get dataset filters
         length_filter, num_samples_filter = self.get_dataset_filters(run_config.get('filter', None), dataset_size)
 
         processed_data = []
-        indices = range(dataset_size)
         total_duration = 0
         sample_count = 0
 
@@ -64,17 +63,17 @@ class BigBenchAudioPreprocessor(Preprocessor):
         if (not target_column_name):
             raise ValueError("[_big_bench_audio_preprocessor_] Target column name is missing. Preprocessing needs reference answers. Aborting!")
 
-        for i in tqdm(indices, desc="Processing samples"):
+        for row in tqdm(dataset, desc="Processing samples"):
             # Create record by accessing each feature by index
-            sample_id = dataset["id"][i]
+            sample_id = row["id"]
 
             # Ensure official answer exists. If not, skip!
-            if not dataset[target_column_name][i]:
-                logger.warning("[%d] Missing official answer. Skipping sample.", i)
+            if not row[target_column_name]:
+                logger.warning("[%s] Missing official answer. Skipping sample.", sample_id)
                 continue
 
-            model_target = dataset[target_column_name][i].strip()
-            audio_content_in_text = dataset[sample_instruction_column_name][i].strip()
+            model_target = row[target_column_name].strip()
+            audio_content_in_text = row[sample_instruction_column_name].strip()
             if modality == "text":
                 audio_data = {
                     "array": np.array([]),  # Placeholder, not used in text-only evals
@@ -82,7 +81,7 @@ class BigBenchAudioPreprocessor(Preprocessor):
                 }
                 instruction = user_prompt + audio_content_in_text
             else:
-                audio_data = dataset["audio"][i]
+                audio_data = row["audio"]
 
                 # Validate audio data structure
                 if not isinstance(audio_data, dict):
@@ -119,7 +118,7 @@ class BigBenchAudioPreprocessor(Preprocessor):
             # Create structured sample
             sample = {
                 "id": sample_id,
-                "category": dataset["category"][i],
+                "category": row["category"],
                 "audio_content_in_text": audio_content_in_text,
                 "array": audio_array if modality == "audio" else audio_data["array"],
                 "sampling_rate": sr if modality == "audio" else audio_data["sampling_rate"],

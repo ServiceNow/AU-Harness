@@ -374,11 +374,11 @@ def _validate_prompt_overrides(prompt_overrides, task_configs, inference_models)
                 raise ValueError(f"Override {i} in '{key}' must have a 'prompt' key")
             
             # Task is a mandatory field for user_prompt. This can be a task name or a task group name
-            if ("task" not in override) and (key is "user_prompt"):
+            if ("task" not in override) and (key == "user_prompt"):
                 raise ValueError(f"Override {i} in '{key}' must have a 'task' key")
             
             # Model is a mandatory field for system_prompt.
-            if ("model" not in override) and (key is "system_prompt"):
+            if ("model" not in override) and (key == "system_prompt"):
                 raise ValueError(f"Override {i} in '{key}' must have a 'model' key")
             
             # Make sure only expected keys are present

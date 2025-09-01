@@ -10,7 +10,7 @@ from typing import Dict, List, Any
 
 import numpy as np
 from tqdm import tqdm
-
+from datasets import Dataset
 from preprocessors.base import Preprocessor
 
 logger = logging.getLogger(__name__)
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 class GeneralPreprocessor(Preprocessor):
     """Preprocessor for standard Audio benchmarks where output references are ALWAYS expected."""
 
-    def process(self, dataset: Dict[str, List[Any]], task_config: Dict[str, Any], 
+    def process(self, dataset: Dataset, task_config: Dict[str, Any], 
                 run_config: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Run pre-processing on standard/ general Audio datasets.
         
@@ -44,22 +44,21 @@ class GeneralPreprocessor(Preprocessor):
         user_prompt = task_config.get('user_prompt', '')
         
         # Get dataset info
-        dataset_keys = list(dataset.keys())
-        dataset_size = len(dataset[dataset_keys[0]]) if dataset_keys else 0
+        dataset_keys = list(dataset.features.keys())
+        dataset_size = len(dataset)
         self.log_dataset_info(dataset_keys, dataset_size)
 
         # Get dataset filters
         length_filter, num_samples_filter = self.get_dataset_filters(run_config.get('filter', None), dataset_size)
 
         processed_data = []
-        indices = range(dataset_size)
         total_duration = 0
         sample_count = 0
 
-        for i in tqdm(indices, desc="Processing samples"):
+        for i, row in enumerate(tqdm(dataset, desc="Processing samples")):
             instruction = user_prompt
             # Create record by accessing each feature by index
-            record = {k: dataset[k][i] for k in dataset_keys}
+            record = {k: row[k] for k in dataset_keys}
 
             # Extract audio information - if not found, extractor will try audio then context
             self.extract_audio_info(record, audio_column_name=audio_column_name)
