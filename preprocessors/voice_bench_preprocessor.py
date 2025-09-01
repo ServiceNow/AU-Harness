@@ -42,27 +42,22 @@ class VoiceBenchPreprocessor(Preprocessor):
         # Obtain task-specific prompt (if provided)
         user_prompt = task_config.get('user_prompt', '')
 
-        # Obtain length filter (if exists)
-        filters = run_config.get('filter', None)
-        length_filter = None
-        if (filters):
-            length_filter = filters.get('length', None)
-
         # Get dataset info
         dataset_keys = list(dataset.keys())
         dataset_size = len(dataset[dataset_keys[0]]) if dataset_keys else 0
         self.log_dataset_info(dataset_keys, dataset_size)
 
+        # Get dataset filters
+        length_filter, num_samples_filter = self.get_dataset_filters(run_config.get('filter', None), dataset_size)
+
         processed_data = []
         indices = range(dataset_size)
+        total_duration = 0
+        sample_count = 0
 
         for i in tqdm(indices, desc="Processing samples"):
-
             # Ensure prompt exists. Otherwise, move onto the next sample.
             prompt = dataset[sample_instruction_column_name][i]
-            if not prompt:
-                logger.warning("[%s] Missing prompt. Skipping sample.", key)
-                continue
 
             # Handle instruction for different modalities
             if modality == "text":
@@ -78,7 +73,7 @@ class VoiceBenchPreprocessor(Preprocessor):
 
                 # Validate audio data structure
                 if not isinstance(audio_data, dict):
-                    logger.warning("[%s] Invalid audio format. Skipping sample.", key)
+                    logger.warning("[%d] Invalid audio format. Skipping sample.", i)
                     continue
 
                 # Convert to NumPy array
@@ -86,16 +81,24 @@ class VoiceBenchPreprocessor(Preprocessor):
                 sr = audio_data.get("sampling_rate")
 
                 if sr is None:
-                    logger.warning("[%s] Sampling rate missing. Assuming 16kHz.", key)
+                    logger.warning("[%d] Sampling rate missing. Assuming 16kHz.", i)
                     sr = 16000
                 
                 # Use base class method to resample audio
                 audio_array, sr = self.resample_audio(audio_array, sr)
 
-                # Apply length filtering if specified
+
+                # Calculate audio duration in seconds
+                audio_duration = len(audio_array) / sr
+                total_duration += audio_duration
+
+                # Apply dataset filtering
                 if (length_filter):
                     if not self.check_audio_length(audio_array, sr, length_filter):
                         continue
+                if (num_samples_filter):
+                    if sample_count >= num_samples_filter:
+                        break
 
             # Create structured sample
             sample = {
@@ -123,6 +126,8 @@ class VoiceBenchPreprocessor(Preprocessor):
                 sample["model_target"] = ""
 
             processed_data.append(sample)
+            sample_count += 1
 
-        self.log_dataset_info(dataset_keys, dataset_size, len(processed_data))
+        self.log_dataset_info(dataset_keys, dataset_size, sample_count, total_duration)
+
         return processed_data

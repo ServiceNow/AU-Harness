@@ -118,6 +118,36 @@ class Preprocessor():
             return min_length <= audio_duration <= max_length
 
         return True
+    
+    def get_dataset_filters(self, filters: dict, dataset_size: int):
+        """
+        Process and validate dataset filters.
+        
+        Args:
+            filters (dict): Dictionary containing filter settings with keys like 'length' and 'num_samples'.
+            dataset_size (int): The total size of the dataset being filtered.
+            
+        Returns:
+            tuple: A tuple containing (length_filter, num_samples_filter) where:
+                - length_filter: Tuple of (min_length, max_length) in seconds or None if not applicable
+                - num_samples_filter: Number of samples to include or None if all samples should be included
+        """
+        if filters is None:
+            return None, None
+        
+        length_filter = filters.get('length', None)
+        num_samples_filter = filters.get('num_samples', None)
+
+        if length_filter and not isinstance(length_filter, tuple) and not (len(length_filter) == 2) and not (length_filter[1] > length_filter[0]):
+            logger.warning("Length filter must be a tuple of (min_seconds, max_seconds)")
+            length_filter = None
+
+        if num_samples_filter and not isinstance(num_samples_filter, int) and not (num_samples_filter < dataset_size):
+            logger.warning("Num samples filter must be an integer and less that dataset size")
+            num_samples_filter = None
+
+        return length_filter, num_samples_filter
+        
 
     def log_dataset_info(self, dataset_keys, original_size, processed_size=None, total_duration=None):
         """

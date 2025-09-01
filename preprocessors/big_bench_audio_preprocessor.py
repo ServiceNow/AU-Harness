@@ -42,8 +42,13 @@ class BigBenchAudioPreprocessor(Preprocessor):
         dataset_size = len(dataset.get("id", []))
         self.log_dataset_info(dataset_keys, dataset_size)
 
+        # Get dataset filters
+        length_filter, num_samples_filter = self.get_dataset_filters(run_config.get('filter', None), dataset_size)
+
         processed_data = []
         indices = range(dataset_size)
+        total_duration = 0
+        sample_count = 0
 
         # Extract relevant information from task_config
         modality = task_config.get('modality', 'audio')
@@ -94,13 +99,21 @@ class BigBenchAudioPreprocessor(Preprocessor):
 
                 # Use base class method to resample audio
                 audio_array, sr = self.resample_audio(audio_array, sr)
-                
+
+                # Calculate audio duration in seconds
+                audio_duration = len(audio_array) / sr
+                total_duration += audio_duration
+
                 # Apply length filtering if specified
                 if (length_filter):
                     if not self.check_audio_length(audio_array, sr, length_filter):
                         continue
-              
+                if (num_samples_filter):
+                    if sample_count >= num_samples_filter:
+                        break
+                
                 # For audio modality, we can define a generic instruction
+                # TODO: An override will need to pass this added instruction too. Consider a cleaner way to handle this.
                 instruction = user_prompt + f"Answer the question provided in the audio."
 
             # Create structured sample
@@ -115,6 +128,7 @@ class BigBenchAudioPreprocessor(Preprocessor):
             }
 
             processed_data.append(sample)
+            sample_count += 1
 
-        self.log_dataset_info(dataset_keys, dataset_size, len(processed_data))
+        self.log_dataset_info(dataset_keys, dataset_size, sample_count, total_duration)
         return processed_data

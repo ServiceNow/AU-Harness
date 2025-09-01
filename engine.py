@@ -35,8 +35,7 @@ class Engine:
         self.run_config = run_config
 
         # Load dataset
-        num_samples = run_config.get("num_samples", None)
-        self.dataset = self.get_dataset(self.task_config, num_samples, self.task_name)
+        self.dataset = self.get_dataset(self.task_config, self.task_name)
 
         # Pre-process dataset
         self.dataset = self.preprocess_dataset(self.dataset, self.task_config, run_config)
@@ -56,15 +55,13 @@ class Engine:
         # Group models by their model attribute for sharding
         self.model_groups = self.get_model_groups(models)
         
-    def get_dataset(self, task_config, num_samples, task_name):
+    def get_dataset(self, task_config, task_name):
         """
         Load the dataset based on the task configuration parameters.
         
         Args:
             task_config: Dictionary containing task configuration parameters,
                          including dataset_path, split, and subset
-            num_samples: Maximum number of samples to load from the dataset, 
-                         or None to load the entire dataset
             task_name: Name of the task being evaluated
             
         Returns:
@@ -73,7 +70,7 @@ class Engine:
         dataset_path = task_config.get("dataset_path", None)
         split = task_config.get("split", None)
         subset = task_config.get("subset", None)
-        return load_dataset_with_args(dataset_path, split, subset, num_samples, task_name)
+        return load_dataset_with_args(dataset_path, split, subset, task_name)
     
     def preprocess_dataset(self, dataset, task_config, run_config):
         """
