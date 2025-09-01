@@ -116,13 +116,15 @@ class SpiderPreprocessor(Preprocessor):
 
         # Get dataset filters
         length_filter, num_samples_filter = self.get_dataset_filters(run_config.get('filter', None), dataset_size)
-        indices = range(dataset_size if num_samples_filter is None else min(dataset_size, num_samples_filter))
+        indices = range(dataset_size)
 
         tables = self._load_jsonl(os.path.join(SPIDER_DATA_DIR, "tables.jsonl"))
-
         db_schemas = self._prepare_db_schemas(tables)
-
+        
         processed_data: List[Dict[str, Any]] = []
+        sample_count = 0
+        total_duration = 0
+        
         for i in tqdm(indices, desc="Processing samples"):
             db_id = dataset["db_id"][i]
             question = dataset[sample_instruction_column_name][i]
@@ -164,7 +166,16 @@ class SpiderPreprocessor(Preprocessor):
                 if (length_filter):
                     if not self.check_audio_length(audio_array, sr, length_filter):
                         continue
+                
                 user_text += question + "\n"
+
+                # Calculate audio duration in seconds
+                audio_duration = len(audio_array) / sr
+                total_duration += audio_duration
+
+            # Stop processing if num_samples filtering is set and more than num_samples_filter samples are processed
+            if (num_samples_filter and sample_count >= num_samples_filter):
+                break
 
             processed_data.append(
                 {
@@ -177,6 +188,7 @@ class SpiderPreprocessor(Preprocessor):
                     "question": question,
                 }
             )
+            sample_count += 1
 
-        self.log_dataset_info(dataset_keys, dataset_size, len(processed_data))
+        self.log_dataset_info(dataset_keys, dataset_size, sample_count, total_duration)
         return processed_data
