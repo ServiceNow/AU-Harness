@@ -86,34 +86,38 @@ class SpiderPreprocessor(Preprocessor):
         return db_schemas
 
 
-    def process(
-        self,
-        dataset: Dict[str, List[Any]],
-        num_samples: Optional[int] = None,
-        properties: Optional[Dict[str, Any]] = None
-    ) -> List[Dict[str, Any]]:
-        """
-        Process the Spider dataset.
-
+    def process(self, dataset: Dict[str, List[Any]], task_config: Dict[str, Any], 
+                run_config: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Run pre-processing on standard/ general Audio datasets.
+        
         Args:
-            dataset: Dictionary containing audio data
-            num_samples: Optional number of samples to process
-            properties: Optional dict of properties
-
+            dataset: The task dataset to pre-process
+            task_config: Dictionary containing task configuration parameters
+            run_config: Dictionary containing run configuration parameters
+            
         Returns:
-            A list of dictionaries where each dictionary represents a sample
+            List of dictionaries where each dictionary represents a pre-processed sample
         """
 
 
-        # Extract properties using the base class method
-        props = self.extract_properties(properties)
-        modality = props.get("modality", "audio")
+        # Extract common properties using base class method
+        modality = task_config.get('modality', 'audio')
+        audio_column_name = task_config.get('audio_column', None)
+        target_column_name = task_config.get('target_column', None)
+        sample_instruction_column_name = task_config.get('instruction_column', None)
+
+
+        # Obtain task-specific prompt (if provided)
+        user_prompt = task_config.get('user_prompt', '')
 
         # Get dataset info using base class method
         dataset_keys = list(dataset.keys())
         dataset_size = len(dataset.get("question", []))
         self.log_dataset_info(dataset_keys, dataset_size)
-        indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
+
+        # Get dataset filters
+        length_filter, num_samples_filter = self.get_dataset_filters(run_config.get('filter', None), dataset_size)
+        indices = range(dataset_size if num_samples_filter is None else min(dataset_size, num_samples_filter))
 
         tables = self._load_jsonl(os.path.join(SPIDER_DATA_DIR, "tables.jsonl"))
 
@@ -122,15 +126,15 @@ class SpiderPreprocessor(Preprocessor):
         processed_data: List[Dict[str, Any]] = []
         for i in tqdm(indices, desc="Processing samples"):
             db_id = dataset["db_id"][i]
-            question = dataset["question"][i]
-            query = dataset["query"][i]
+            question = dataset[sample_instruction_column_name][i]
+            query = dataset[target_column_name][i]
             if modality == "text":
                 audio_data = {
                     "array": np.array([]),  # Placeholder, not used in text-only evals
                     "sampling_rate": 16000
                 }
             else:
-                audio_data = dataset["audio"][i]
+                audio_data = dataset[audio_column_name][i]
 
                 # Validate audio data structure
                 if not isinstance(audio_data, dict):
@@ -149,21 +153,21 @@ class SpiderPreprocessor(Preprocessor):
                 audio_array, sr = self.resample_audio(audio_array, sr)
 
 
-            prompt = (
-                "### Complete sqlite SQL query only and with no explanation, "
-                "and do not select extra columns that are not explicitly requested "
-                "in the query. Enclose the SQL query between ```sql and ```\n"
-            )
+            # prompt = (
+            #     "### Complete sqlite SQL query only and with no explanation, "
+            #     "and do not select extra columns that are not explicitly requested "
+            #     "in the query. Enclose the SQL query between ```sql and ```\n"
+            # )
             if modality == "audio":
                 user_text = (
-                    prompt
+                    user_prompt
                     + "### Sqlite SQL tables, with their properties: \n#\n"
                     + db_schemas[db_id]
                     + "\n#\n### "
                 )
             else:
                 user_text = (
-                    prompt
+                    user_prompt
                     + "### Sqlite SQL tables, with their properties: \n#\n"
                     + db_schemas[db_id]
                     + "\n#\n### "
