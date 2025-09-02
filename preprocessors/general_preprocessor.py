@@ -10,7 +10,7 @@ from typing import Dict, List, Any
 
 import numpy as np
 from tqdm import tqdm
-
+from datasets import Dataset
 from preprocessors.base import Preprocessor
 
 logger = logging.getLogger(__name__)
@@ -19,8 +19,7 @@ logger = logging.getLogger(__name__)
 class GeneralPreprocessor(Preprocessor):
     """Preprocessor for standard Audio benchmarks where output references are ALWAYS expected."""
 
-    # Using the extract_audio_info method from the base class
-    def process(self, dataset: Dict[str, List[Any]], task_config: Dict[str, Any], 
+    def process(self, dataset: Dataset, task_config: Dict[str, Any], 
                 run_config: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Run pre-processing on standard/ general Audio datasets.
         
@@ -43,26 +42,23 @@ class GeneralPreprocessor(Preprocessor):
 
         # Obtain task-specific prompt (if provided)
         user_prompt = task_config.get('user_prompt', '')
-
-        # Obtain length filter (if exists)
-        filters = run_config.get('filter', None)
-        length_filter = None
-        if (filters):
-            length_filter = filters.get('length', None)
         
         # Get dataset info
-        dataset_keys = list(dataset.keys())
-        dataset_size = len(dataset[dataset_keys[0]]) if dataset_keys else 0
+        dataset_keys = list(dataset.features.keys())
+        dataset_size = len(dataset)
         self.log_dataset_info(dataset_keys, dataset_size)
 
-        processed_data = []
-        indices = range(dataset_size)
-        total_duration = 0
+        # Get dataset filters
+        length_filter, num_samples_filter = self.get_dataset_filters(run_config.get('filter', None), dataset_size)
 
-        for i in tqdm(indices, desc="Processing samples"):
+        processed_data = []
+        total_duration = 0
+        sample_count = 0
+
+        for i, row in enumerate(tqdm(dataset, desc="Processing samples")):
             instruction = user_prompt
             # Create record by accessing each feature by index
-            record = {k: dataset[k][i] for k in dataset_keys}
+            record = {k: row[k] for k in dataset_keys}
 
             # Extract audio information - if not found, extractor will try audio then context
             self.extract_audio_info(record, audio_column_name=audio_column_name)
@@ -76,10 +72,13 @@ class GeneralPreprocessor(Preprocessor):
             audio_duration = len(record["array"]) / record["sampling_rate"]
             total_duration += audio_duration
 
-            # Apply length filtering if specified
+            # Apply dataset filtering
             if (length_filter):
                 if not self.check_audio_length(record["array"], record["sampling_rate"], length_filter):
                     continue
+            if (num_samples_filter):
+                if sample_count >= num_samples_filter:
+                    break
 
             # General processor requires reference. Otherwise, implement your own preprocessor.
             if target_column_name and target_column_name in record:
@@ -87,7 +86,6 @@ class GeneralPreprocessor(Preprocessor):
             else:
                 raise ValueError("No valid target key found in record")
 
-           
             # Add sample-specific instructions if they exist in the dataset
             if sample_instruction_column_name and sample_instruction_column_name in record:
                 instruction += record.get(sample_instruction_column_name, "")
@@ -113,7 +111,8 @@ class GeneralPreprocessor(Preprocessor):
             else:
                 record['judge_type'] = 'detailed'
             processed_data.append(record)
+            sample_count += 1
 
-        self.log_dataset_info(dataset_keys, dataset_size, len(processed_data), total_duration)
+        self.log_dataset_info(dataset_keys, dataset_size, sample_count, total_duration)
 
         return processed_data
