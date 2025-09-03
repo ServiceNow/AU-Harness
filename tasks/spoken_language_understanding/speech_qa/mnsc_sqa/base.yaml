@@ -1,3 +1,4 @@
 extends: ["../base.yaml#"]
 dataset_path: AudioLLMs/Multitask-National-Speech-Corpus-v1-extend
+split: train
 accented: true

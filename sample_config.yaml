@@ -21,11 +21,9 @@ aggregate:
   - ["llm_judge_binary", ["emotion_recognition"]]
   - ["llm_judge_binary", ["voxceleb_gender_test", "iemocap_gender_recognition"]]
 
-filters:
+filter:
   num_samples: 100 # number of samples to run(remove for all)
   length_filter: [0.0, 30.0] #optional - filters for only audio samples in this length(seconds) - only supported for general and callhome preprocessors
-  accented: false #optional - filters for only audio samples in this length(seconds)
-  language: "en" #optional - filters for only audio samples in this language
 
 judge_properties:
   judge_concurrency: 8 #judge call(optional)
@@ -37,37 +35,14 @@ judge_properties:
   judge_temperature: 0.1 # optional
   judge_prompt_model_override: "gpt-4o-mini-enhanced" # optional
 
-prompt_overrides:
-  user_prompt: # You can override the default user prompt for a specific task and a specific model
-    - task: "translation"
-      model: "phi4"
-      prompt: |
-        Please translate the given speech from {{ source_language }} to {{ target_language }}.
-  system_prompt: # You can override the default system prompt for a specific model across all tasks
-    - model: "gpt-4o-mini-audio-preview"
-      prompt: |
-        You are a translation expert.
-
 logging:
   log_file: "audiobench.log"  # Path to the main log file
 
-#override the requester temperature values by task or model
-temperature_overrides:
-  # model and task override
-  - model: "gpt-4o-mini-audio-preview" # model.model
-    task: "emotion_recognition" # task_type
-    temperature: 0.9 # temperature
-  # model only override
-  - model: "gpt-4o-mini-audio-preview"
-    temperature: 0.3
-  # task only override
-  - task: "ASR"
-    temperature: 0.5
 
 models:
   - name: "gpt-4o-mini-audio-preview-1" # mandatory - must be unique
     inference_type: "openai" # mandatory - you can use vllm(vllm), openai(openai), (chat completion) or audio transcription endpoint(transcription)
-    url: "${ENDPOINT_URL}" - # mandatory - endpoint url
+    url: "${ENDPOINT_URL}"  # mandatory - endpoint url
     delay: 100
     retry_attempts: 8
     timeout: 30
@@ -76,9 +51,10 @@ models:
     api_version: "${API_VERSION}"
     batch_size: 300 # Optional - batch eval size
     chunk_size: 30 # Optional - max audio length in seconds fed to model
+
   - name: "gpt-4o-mini-audio-preview-2" # mandatory - must be unique
     inference_type: "openai" # mandatory - you can use vllm(vllm), openai(openai), (chat completion) or audio transcription endpoint(transcription)
-    url: "${ENDPOINT_URL}" - # mandatory - endpoint url
+    url: "${ENDPOINT_URL}"  # mandatory - endpoint url
     delay: 100
     retry_attempts: 8
     timeout: 30
@@ -87,9 +63,10 @@ models:
     api_version: "${API_VERSION}"
     batch_size: 100 # Optional - batch eval size
     chunk_size: 30 # Optional - max audio length in seconds fed to model
+
   - name: "qwen-2.5-omni" 
     inference_type: "vllm" # mandatory - you can use vllm(vllm), openai(openai), (chat completion) or audio transcription endpoint(transcription)
-    url: "${ENDPOINT_URL}" - # mandatory - endpoint url
+    url: "${ENDPOINT_URL}" # mandatory - endpoint url
     delay: 100
     retry_attempts: 8
     timeout: 30
@@ -97,9 +74,10 @@ models:
     auth_token: "${AUTH_TOKEN}" 
     batch_size: 200 # Optional - batch eval size
     chunk_size: 40 # Optional - max audio length in seconds fed to model
+
   - name: "whisper-large-3" 
     inference_type: "vllm" # mandatory - you can use vllm(vllm), openai(openai), (chat completion) or audio transcription endpoint(transcription)
-    url: "${ENDPOINT_URL}" - # mandatory - endpoint url
+    url: "${ENDPOINT_URL}" # mandatory - endpoint url
     delay: 100
     retry_attempts: 8
     timeout: 30

@@ -1,7 +1,7 @@
 # 📏 Metrics Overview
 
 This document provides a summary and detailed explanation of all evaluation metrics used in the framework. <br />
-For more detailed documentation regarding which metrics can be used for which tasks and task categories, refer to [Runspecs Overview](../runspecs/README.md).
+For more detailed documentation regarding which metrics can be used for which tasks and task categories, refer to [Task Config Overview](../tasks/README.md).
 
 ---
 
@@ -15,6 +15,7 @@ For more detailed documentation regarding which metrics can be used for which ta
 | `llm_judge_detailed` (&uarr;)      | Detailed scoring across multiple dimensions      | llm_judge_detailed            |
 | `llm_judge_big_bench_audio` (&uarr;) | LLM-based evaluations for BigBench-like tasks           | llm_judge_big_bench_audio                                      |
 | `llm_judge_redteaming` (&uarr;)      | LLM-based evaluations for red-teaming/ safety      | llm_judge_redteaming            |
+| `mt_bench_llm_judge` (&uarr;)    | LLM-based evaluation for Multi-turn systems (i.e. MT-Bench)                           | mt_bench_llm_judge                            |
 | `bleu` (&uarr;)                    | N-gram overlap score                             | bleu                    |
 | `bertscore` (&uarr;)               | Semantic similarity using BERT embeddings        | bertscore                       |
 | `comet` (&uarr;)               | Semantic similarity measure for translation tasks        | comet                       |
@@ -71,8 +72,8 @@ For more detailed documentation regarding which metrics can be used for which ta
 ### `llm_judge_big_bench_audio`
 - **Type**: LLM-based QA judgment metric
 - **Description**: Evaluates performance on BigBench-like audio QA tasks.
-- **Used In**: `sqqa`
 - **Scoring**: Scoring `correct` or `incorrect` based on different aspects of QA tasks. Higher is better
+- **Used In**: `sqqa`
 
 ---
 
@@ -81,6 +82,14 @@ For more detailed documentation regarding which metrics can be used for which ta
 - **Description**: Evaluates performance on the safety-related aspects for LALMs.
 - **Scoring**: Scoring `1` for refusing to answer the given audio (correct), `0` for anwering the given audio (incorrect). Higher is better.
 - **Used In**: `safety`
+
+---
+
+### `mt_bench_llm_judge`
+- **Type**: LLM-based judgement metric for Multi-turn systems. 
+- **Description**: Evaluates performance at multiple-turn conversation systems
+- **Scoring**: Scoring between `0` and `10` for each sample. Higher is better.
+- **Used In**: `mtbench`
 
 ---
 
@@ -120,7 +129,7 @@ For more detailed documentation regarding which metrics can be used for which ta
 - **Type**: Function calling metric
 - **Description**: Evaluate the function calling capabilities. 
 - **Scoring**: Score between `0` and `1`, higher is better.
-- **Used In**: Audio Function calling (`bfcl`)
+- **Used In**: Speech Function calling (`bfcl`)
 
 ---
 
@@ -128,7 +137,7 @@ For more detailed documentation regarding which metrics can be used for which ta
 - **Type**: Coding correctness metric
 - **Description**: Evaluate the correctness of the generated SQL. 
 - **Scoring**: Score between `0` and `1`, higher is better.
-- **Used In**: Audio SQL coding (`speech_to_sql`)
+- **Used In**: Speech-to-SQL-coding (`speech_to_sql`)
 
 ---
 
