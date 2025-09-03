@@ -81,7 +81,7 @@ metrics:
 
 - [**asr**](./tasks/speech_recognition/asr/) - Automatic speech recognition
   - *Datasets: librispeech, voxpopuli, common voice, and more*
-- [**code_switching_asr**](./tasks/speech_recognition/code_switching_asr/) - Handle multilingual speech within single utterances
+- [**code_switching_asr**](./tasks/speech_recognition/code_switching_asr/) - Transcribe utterances with mixed-language speech.
 - [**long_form_asr**](./tasks/speech_recognition/long_form_asr/) - Transcribe extended audio content
 
 </details>
@@ -92,8 +92,8 @@ metrics:
 - [**emotion_recognition**](./tasks/paralinguistics/emotion_recognition/) - Detect emotional states from speech
 - [**accent_recognition**](./tasks/paralinguistics/accent_recognition/) - Identify speaker accents and dialects
 - [**gender_recognition**](./tasks/paralinguistics/gender_recognition/) - Classify speaker gender from voice
-- [**speaker_recognition**](./tasks/paralinguistics/speaker_recognition/) - Identify individual speakers
-- [**speaker_diarization**](./tasks/paralinguistics/speaker_diarization/) - Segment audio by speaker turns
+- [**speaker_recognition**](./tasks/paralinguistics/speaker_recognition/) - Identify speaker(s) present in the audio.
+- [**speaker_diarization**](./tasks/paralinguistics/speaker_diarization/) - Segment speech into audio segments attributed to different speakers
 
 </details>
 
@@ -101,27 +101,28 @@ metrics:
 <summary><b>🔊 <a href="./tasks/audio_understanding/README.md"> Audio Understanding </a></b> <i>(2 tasks)</i></summary>
 
 - [**music_understanding**](./tasks/audio_understanding/music_understanding/) - Analyze and understand musical content
-- [**scene_understanding**](./tasks/audio_understanding/scene_understanding/) - Identify and classify audio scenes
+- [**scene_understanding**](./tasks/audio_understanding/scene_understanding/) - Identify and classify audio scenes based on the ambient sound information.
 
 </details>
 
 <details>
-<summary><b>🧠 <a href="./tasks/spoken_language_understanding/README.md"> Spoken Language Understanding </a> </b> <i>(4 tasks)</i></summary>
+<summary><b>🧠 <a href="./tasks/spoken_language_understanding/README.md"> Spoken Language Understanding </a> </b> <i>(5 tasks)</i></summary>
 
 - [**intent_classification**](./tasks/spoken_language_understanding/intent_classification/) - Classify user intents from spoken inputs
 - [**speech_qa**](./tasks/spoken_language_understanding/speech_qa/) - Answer questions based on spoken content
-- [**sqqa**](./tasks/spoken_language_understanding/sqqa/) - Spoken question-answering with context
+- [**sqqa**](./tasks/spoken_language_understanding/sqqa/) - Spoken query question-answering with context
 - [**spoken_dialogue_summarization**](./tasks/spoken_language_understanding/spoken_dialogue_summarization/) - Summarize spoken conversations
+- [**translation**](./tasks/spoken_language_understanding/translation/) - Translate given speech into the target language. 
 
 </details>
 
 <details>
 <summary><b>🧩 <a href="./tasks/spoken_language_reasoning/README.md"> Spoken Language Reasoning </a></b> <i>(4 tasks)</i></summary>
 
-- [**ifeval**](./tasks/spoken_language_reasoning/ifeval/) - Instruction-following evaluation
-- [**bfcl**](./tasks/spoken_language_reasoning/bfcl) - Berkeley function calling leaderboard
-- [**mtbench**](./tasks/spoken_language_reasoning/mtbench/) - Multi-turn benchmark evaluation
-- [**speech_to_sql**](./tasks/spoken_language_reasoning/mtbench/) - Convert spoken queries to SQL
+- [**ifeval**](./tasks/spoken_language_reasoning/ifeval/) - Speech Instruction-following capability evaluation
+- [**bfcl**](./tasks/spoken_language_reasoning/bfcl) - Speech Function Calling capability evaluation
+- [**mtbench**](./tasks/spoken_language_reasoning/mtbench/) - Complex multi-turn Instruction-following capability evaluation
+- [**speech_to_sql**](./tasks/spoken_language_reasoning/mtbench/) - Speech-to-Coding capability
 
 </details>
 
