@@ -1,4 +1,4 @@
 task_name: callhome_diarization_jpn
 extends: ["./base.yaml#"]
 language: ja
-dataset_path: private_datasets/CallHome_jpn
+dataset_path: private_datasets/CallHome_jpn/hf_dataset

@@ -1,4 +1,0 @@
-task_name: callhome_zho
-extends: ["./base.yaml#"]
-language: zh
-dataset_path: private_datasets/CallHome_zho

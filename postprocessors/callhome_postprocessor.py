@@ -122,9 +122,12 @@ class CallhomePostprocessor(Postprocessor):
 
             self.validate_output(output)
             return output
+        
+        instructions = self.extract_instructions(dataset)
 
         # For other metrics, use standard output format
         return self.create_output(
             model_targets=model_targets,
-            processed_predictions=processed_predictions
+            processed_predictions=processed_predictions,
+            instructions=instructions,
         )

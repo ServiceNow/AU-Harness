@@ -152,8 +152,6 @@ class WERMetrics(Metrics):
             for conv_id in id_to_wers:
                 # Using ratio of sums for conversation WER
                 conv_wer = id_to_incorrect[conv_id] / id_to_total[conv_id] if id_to_total[conv_id] > 0 else 0
-                # Cap at 1.0
-                conv_wer = min(conv_wer, 1.0)
                 conversation_wer[conv_id] = conv_wer
 
             result["conversation_wer"] = conversation_wer
@@ -183,8 +181,6 @@ class WERMetrics(Metrics):
             for bucket_label in bucket_labels:
                 if bucket_to_total[bucket_label] > 0:
                     bucket_wer = bucket_to_incorrect[bucket_label] / bucket_to_total[bucket_label]
-                    # Cap at 1.0
-                    bucket_wer = min(bucket_wer, 1.0)
                     length_wer[bucket_label] = bucket_wer
                 else:
                     length_wer[bucket_label] = 0.0

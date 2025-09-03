@@ -413,7 +413,7 @@ class Engine:
                             )
                         else:
                             result = await asyncio.to_thread(
-                                metric, outs, model_targets, source_sentences, ids, lengths,
+                                metric, outs, model_targets, ids, lengths,
                                 instructions=instructions, task_name=self.task_name, model_name=model_name, model_responses=model_responses
                             )
                     else:

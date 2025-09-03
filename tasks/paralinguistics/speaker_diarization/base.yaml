@@ -1,16 +1,18 @@
 # Base configuration for speaker diarization tasks
 preprocessor: CallhomePreprocessor
 postprocessor: CallhomePostprocessor
-user_prompt: "Transcribe this turn based two speaker audio. There may be speaker overlap, and a speaker may go twice.
-        You should return the output as \nA: words\nB: more words\nA: even more words\n
-        you MUST return in this exact format, or the answer is considered invalid
-        A is the first speaker, so always start with 'A:'"
+user_prompt: |
+  Transcribe this turn based two speaker audio. There may be speaker overlap, and a speaker may go twice.
+  You should return the output as \nA: words\nB: more words\nA: even more words\n
+  You MUST return in this exact format, or the answer is considered invalid
+  A is the first speaker, so always start with 'A:'
 long_audio_processing_logic: chunk
+split: train
 
 generation_kwargs:
   temperature: 0.0001
   do_sample: false
-  max_gen_tokens: 64
+  max_gen_tokens: 1024
 
 metrics:
   - metric: diarization_metrics
