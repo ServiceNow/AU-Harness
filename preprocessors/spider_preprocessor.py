@@ -143,6 +143,8 @@ class SpiderPreprocessor(Preprocessor):
                     "array": np.array([]),  # Placeholder, not used in text-only evals
                     "sampling_rate": 16000
                 }
+                user_text += question + "\n"
+
             else:
                 audio_data = dataset[audio_column_name][i]
 
@@ -167,7 +169,6 @@ class SpiderPreprocessor(Preprocessor):
                     if not self.check_audio_length(audio_array, sr, length_filter):
                         continue
                 
-                user_text += question + "\n"
 
                 # Calculate audio duration in seconds
                 audio_duration = len(audio_array) / sr

@@ -1,7 +1,7 @@
 # Base configuration for Spider SQL tasks
 dataset_path: ServiceNow-AI/spider_audio
 subset: default
-split: train
+split: validation
 language: en
 audio_column: audio
 target_column: query
