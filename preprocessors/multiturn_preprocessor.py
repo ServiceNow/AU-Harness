@@ -1,4 +1,7 @@
 import logging
+from typing import Dict, List, Any
+
+from datasets import Dataset
 
 import numpy as np
 from tqdm import tqdm
@@ -11,52 +14,52 @@ logger = logging.getLogger(__name__)
 class MultiturnPreprocessor(Preprocessor):
     """Preprocessor for Audio benchmarks from "AudioLLMs" and more on HF."""
 
-    # Using the extract_audio_info method from the base class
-
-    def process(self, dataset: dict, num_samples: int = None, properties: dict = None) -> list[dict]:
-        """Process the dataset and flatten audio/context structure (expects dict-of-lists).
-
+    def process(self, dataset: Dataset, task_config: Dict[str, Any], 
+                run_config: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Run pre-processing on Covost2 type of datasets.
+        
         Args:
-            dataset: Dictionary containing audio data
-            properties: Optional dict of properties, may include 'length_filter' tuple (min_seconds, max_seconds)
-                       to filter samples by audio length.
+            dataset: The task dataset to pre-process
+            task_config: Dictionary containing task configuration parameters
+            run_config: Dictionary containing run configuration parameters
+            
+        Returns:
+            List of dictionaries where each dictionary represents a pre-processed sample
         """
 
-        # Extract common properties using base class method
-        props = self.extract_properties(properties)
-        length_filter = props["length_filter"]
-        user_prompt_add_ons = props["user_prompt_add_ons"]
-        modality = props.get("dataset_info", {}).get("modality", "audio")
-        audio_column_name = props.get("dataset_info", {}).get("audio_column", None)
-        target_column_name = props.get("dataset_info", {}).get("target_column", None)
-        user_query_column_name = props.get("dataset_info", {}).get("textual_input_column", None)
-        id_column = props.get("dataset_info", {}).get("id_column", None)
+        # Extract common properties from task_config
+        modality = task_config.get('modality', 'audio')
+        audio_column_name = task_config.get('audio_column', None)
+        target_column_name = task_config.get('target_column', None)
+        user_query_column_name = task_config.get('textual_input_column', None)
+        id_column = task_config.get('id_column', None)
+
+        # Obtain task-specific prompt (if provided)
+        user_prompt = task_config.get('user_prompt', '')
 
         if user_query_column_name is None:
             raise ValueError("user_query_column_name must be defined")
+        
+        # Get dataset info
+        dataset_keys = list(dataset.features.keys())
+        if id_column is None or id_column not in dataset_keys:
+            raise ValueError("Dataset must contain a column with id, pass it via dataset_info using \"id_column\"")
+        dataset_size = len(dataset)
+        self.log_dataset_info(dataset_keys, dataset_size)
 
-        # Get dataset keys and size
-        keys = list(dataset.keys())
-        if id_column is None or id_column not in keys:
-            ValueError("Dataset must contain a column with id, pass it via dataset_info using \"id_column\"")
-        dataset_size = len(dataset[keys[0]]) if keys else 0
-        self.log_dataset_info(keys, dataset_size)
+        # Get dataset filters
+        length_filter, num_samples_filter = self.get_dataset_filters(run_config.get('filter', None), dataset_size)
 
+        # Preparing aggregating information
+        indices = range(dataset_size)
         new_dataset = []
-        dataset_size = len(dataset[keys[0]]) if keys else 0
+        sample_count = 0
+        total_duration = 0
 
-        # keys = list(dataset[0].keys())
-        # dataset_size = len(dataset) if keys else 0
-        # self.log_dataset_info(keys, dataset_size)
-        #
-        # new_dataset = []
-        # dataset_size = len(dataset) if keys else 0
-
-        indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
         for i in tqdm(indices, desc="Processing samples"):
             instruction = []
             # Create record by accessing each feature by index
-            record = {k: dataset[k][i] for k in keys}
+            record = {k: dataset[k][i] for k in dataset_keys}
 
             textual_inputs = record.get(user_query_column_name)
             if not textual_inputs:
@@ -80,16 +83,34 @@ class MultiturnPreprocessor(Preprocessor):
                     audio_data = [audio_data]
 
                 # Check if ALL audios pass the length filter
-                if not all(
-                        self.check_audio_length(audio["array"], audio["sampling_rate"], length_filter)
-                        for audio in audio_data if len(audio["array"]) > 0
-                ):
-                    logger.warning(
-                        f"Audio in item {i} filtered because of length "
-                        f"Supported: {length_filter[0]}–{length_filter[1]} sec."
-                    )
-                    continue
+                if (length_filter):
+                    def _check_multiple_audios_for_length_filter(audio_data, length_filter):
+                        keep_sample = True
+                        audio_duration = 0.0
+                        for audio in audio_data:
+                            if (len(audio['array']) <=0):
+                                keep_sample = False
+                            else:
+                                keep_sample = keep_sample and self.check_audio_length(audio['array'], audio['sampling_rate'], length_filter)
+                                audio_duration += len(audio['array']) / audio['sampling_rate']
+                        return keep_sample, audio_duration
+                    
+                    keep_sample, audio_duration = _check_multiple_audios_for_length_filter(audio_data, length_filter)
+                    if not (keep_sample):
+                        logger.warning(
+                            f"Audio in item {i} filtered because of length "
+                            f"Supported: {length_filter[0]}–{length_filter[1]} sec."
+                        )
+                        continue
+                    
+                    total_duration += audio_duration
+                else:
+                    audio_duration = [len(audio['array'])/ audio['sampling_rate'] for audio in audio_data if len(audio['array']> 0)]
+                    total_duration += sum(audio_duration)
 
+            # Stop processing if num_samples filtering is set and more than num_samples_filter samples are processed
+            if (num_samples_filter and sample_count >= num_samples_filter):
+                break
 
             audio_arrays = [i["array"] for i in audio_data]
             sampling_rate = audio_data[0]["sampling_rate"]
@@ -103,6 +124,9 @@ class MultiturnPreprocessor(Preprocessor):
             record['process_turn'] = 0
             record['total_turns'] = max(len(audio_data), len(instruction))
             record['is_multiturn'] = True
-            new_dataset.append(record)
 
+            new_dataset.append(record)
+            sample_count += 1
+        
+        self.log_dataset_info(dataset_keys, dataset_size, sample_count, total_duration)
         return new_dataset

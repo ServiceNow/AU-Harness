@@ -284,9 +284,10 @@ class Model(ABC):
         if self.user_prompt_override:
             instruction = self.user_prompt_override
         
-        # Reender the user prompt/instruction template
-        instruction = Template(instruction).render(message)
-
+        if (is_multiturn == False):
+            # Reender the user prompt/instruction template
+            instruction = Template(instruction).render(message)
+        
         tools = copy.deepcopy(message.get('tools', None))
 
         # For tasks that are not ASR, translation, diarization, we want to truncate the audio to model's max supported length
