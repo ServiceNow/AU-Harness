@@ -3,6 +3,3 @@ extends: ["../base.yaml#"]
 preprocessor: CallhomePreprocessor
 postprocessor: CallhomePostprocessor
 split: train
-
-user_prompt: >
-  Transcribe the text verbatim. Do not include any extra text or formatting. Include EVERY word.
