@@ -63,7 +63,7 @@ metrics:
    - Modularized functions allow for easy extension and customization
 
 4. 🎯 **Wide Task Coverage**:
-   - We support 18 unique tasks over 5 different categories
+   - We support 21 unique tasks over 6 different categories
    - Over 50 unique datasets, with 380+ unique subsets
    - 9 different metrics for broader evaluation coverage
 
