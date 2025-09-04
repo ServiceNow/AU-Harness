@@ -75,7 +75,7 @@ class MultiturnPreprocessor(Preprocessor):
                 }]
                 instruction = textual_inputs
             else:
-                audio_data = row[audio_column_name]
+                audio_data = record[audio_column_name]
                 if isinstance(audio_data, list) and len(audio_data) == 2:
                     if isinstance(audio_data[0], dict) and isinstance(audio_data[1], dict):
                         pass
