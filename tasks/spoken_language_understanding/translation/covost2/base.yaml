@@ -13,8 +13,8 @@ long_audio_processing_logic: chunk
 
 generation_kwargs:
   temperature: 0.2
-  do_sample: false
-  max_gen_tokens: 64
+  #do_sample: false
+  max_completion_tokens: 1024
 
 metrics:
   - metric: bleu

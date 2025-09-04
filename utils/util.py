@@ -454,7 +454,7 @@ def calculate_aggregates(aggregates, all_scores, model_configs, task_configs):
     groups = get_groups(task_configs)
 
     # Get all tasks. These are generally YAML files
-    tasks = get_tasks(task_configs)
+    all_tasks = get_tasks(task_configs)
 
     for agg_item in aggregates:
         # Skip invalid aggregates
@@ -481,7 +481,7 @@ def calculate_aggregates(aggregates, all_scores, model_configs, task_configs):
             if task in groups.keys():
                 # Add all the tasks belonging to the group
                 processed_tasks.extend([x['task_name'] for x in task_configs[groups[task]]])
-            elif task in tasks.keys():
+            elif task in all_tasks.keys():
                 processed_tasks.append(task)
             else:
                 raise ValueError(f"Invalid task name: {task}")
@@ -511,8 +511,8 @@ def calculate_aggregates(aggregates, all_scores, model_configs, task_configs):
                             dataset_size = 1  # Default size if not specified
                             
                             # Check if this specific metric exists
-                            if metric_key in metrics_dict:
-                                value = metrics_dict[metric_key]
+                            if metric_key in metrics_dict[metric_name]:
+                                value = metrics_dict[metric_name][metric_key]
                                 if isinstance(value, (int, float)):
                                     values.append(value)
                                     dataset_sizes.append(dataset_size)
@@ -583,7 +583,7 @@ def get_prompt_override(model: str, task_ancestry: list, prompt_overrides: dict,
             continue
 
         # Calculate match score for hierarchical task matching
-        match_score = 0
+        match_score = -1
         
         # Case 1: Exact task name match (highest priority)
         if override_task == task_name:

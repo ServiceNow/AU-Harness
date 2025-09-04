@@ -22,7 +22,7 @@ from jinja2 import Template
 from models.model_response import ErrorTracker, ModelResponse
 from models.request_resp_handler import RequestRespHandler
 from utils import constants
-from utils.constants import task_temp_map, mtbench_temp_map
+from utils.constants import mtbench_temp_map
 from utils.multimodal import encode_audio_array_base64, audio_array_to_wav_file
 
 logger = logging.getLogger(__name__)
@@ -53,8 +53,11 @@ class Model(ABC):
         self.retry_attempts = model_info.get("retry_attempts", 8)
         # chunk_size in seconds (default 30)
         self.chunk_size = model_info.get("chunk_size", 30)
-        # temperature for LLM requests (default 0.7)
-        self.temperature = temperature
+        # Default generation params. Can be overridden by task specific params
+        self.generation_params = {
+            "temperature": constants.DEFAULT_TEMPERATURE,
+            "max_completion_tokens": constants.DEFAULT_MAX_COMPLETION_TOKENS
+        }
         # system prompt for LLM requests
         self.system_prompt = None
         # User prompt override
@@ -66,7 +69,7 @@ class Model(ABC):
             self.inference_type,
             self.model_info,
             timeout=self.timeout,
-            temperature=self.temperature
+            generation_params=self.generation_params
         )
         # prevent data races when updating self.errors asynchronously
         self.errors_lock = asyncio.Lock()
@@ -80,23 +83,14 @@ class Model(ABC):
         """
         return self._name
 
-    def set_temp(self, temperature: float) -> None:
-        """Set temperature for the model and request handler.
+    def set_generation_params(self, generation_params: dict) -> None:
+        """Set generation params for the model and request handler.
 
         Args:
-            temperature: Temperature value to set.
+            generation_params: Generation params to set.
         """
-        self.temperature = temperature
-        self.req_resp_hndlr.temperature = temperature
-
-    def set_temp_task_type(self, task_type: str) -> None:
-        """Set temperature based on task type using task_temp_map.
-        
-        Args:
-            task_type: The type of task being performed.
-        """
-        if task_type in task_temp_map:
-            self.set_temp(task_temp_map[task_type])
+        self.generation_params = generation_params
+        self.req_resp_hndlr.generation_params = generation_params
 
     def set_system_prompt(self, system_prompt: str) -> None:
         """Set system prompt for the model.
@@ -285,7 +279,8 @@ class Model(ABC):
             instruction = self.user_prompt_override
         
         # Reender the user prompt/instruction template
-        instruction = Template(instruction).render(message)
+        if not is_multiturn:
+            instruction = Template(instruction).render(message)
 
         tools = copy.deepcopy(message.get('tools', None))
 
@@ -454,7 +449,9 @@ class Model(ABC):
         # get category for mtbench and set temperature based on mtbench_temp_map
         category = message.get("category", None)
         if category is not None and category in mtbench_temp_map.keys():
-            self.req_resp_hndlr.temperature = mtbench_temp_map[category]
+            generation_params = self.req_resp_hndlr.generation_params
+            generation_params['temperature'] = mtbench_temp_map[category]
+            self.req_resp_hndlr.generation_params = generation_params
 
         # Normalize inputs to lists
         if not isinstance(instructions, list):

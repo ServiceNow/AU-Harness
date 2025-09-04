@@ -15,7 +15,7 @@ from metrics.llm_judge import _BaseLLMJudge
 from postprocessors.base import Postprocessor
 from utils.data_utils import load_dataset_with_args
 from utils.metric_utils import load_metric
-from utils.model_utils import get_temperature_override
+from utils.model_utils import get_generation_params_override
 from utils.util import get_class_from_module, get_system_prompt_override, get_instruction_prompt_override
 
 logger = logging.getLogger(__name__)
@@ -41,7 +41,7 @@ class Engine:
         self.dataset = self.preprocess_dataset(self.dataset, self.task_config, run_config)
 
         # Temperature overrides
-        self.temperature_overrides = self.run_config.get("temperature_overrides", None)
+        self.generation_params_override = self.run_config.get("generation_params_override", None)
 
         # Prompt overrides
         self.prompt_overrides = self.run_config.get("prompt_overrides", None)
@@ -152,16 +152,16 @@ class Engine:
     async def _infer_single_model(self, model: Model, samples=None) -> list[str]:
         samples = samples if samples is not None else self.dataset  # Use provided samples or full dataset
         
-        # Check for temperature override for this specific model and task combination
-        override_temp = get_temperature_override(model.model, self.task_ancestry, self.temperature_overrides)
+        # Check for generation params override for this specific model and task combination
+        override_generation_params = get_generation_params_override(model.model, self.task_ancestry, self.generation_params_override)
 
-        if override_temp is not None:
-            # Use the override temperature directly
-            model.set_temp(override_temp)
+        if override_generation_params is not None:
+            # Use the override generation params directly
+            model.set_generation_params(override_generation_params)
         else:
-            # Use the standard task-based temperature setting
-            model.set_temp(self.task_config.get("generation_kwargs", {}).get("temperature", 0.0))
-        
+            # Use the standard task-based generation params setting
+            model.set_generation_params(self.task_config.get("generation_kwargs", {"temperature": 0.7, "max_completions_tokens": 4096}))
+
         # Check for system prompt for this specific model and task combination from run_config
         system_prompt_override = get_system_prompt_override(model.model, 
                                                             self.task_ancestry, 

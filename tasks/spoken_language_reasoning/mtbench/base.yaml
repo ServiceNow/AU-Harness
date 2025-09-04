@@ -8,11 +8,12 @@ target_column: reference
 textual_input_column: turns
 id_column: question_id
 long_audio_processing_logic: truncate
+split: test
 
+# Temperature is ignored for this task as each sub-task uses it's hard-coded temperature
 generation_kwargs:
-  temperature: 0.0
-  do_sample: false
-  max_gen_tokens: 64
+  temperature: 0.673
+  max_completion_tokens: 1024
 
 metrics:
   - metric: mt_bench_llm_judge

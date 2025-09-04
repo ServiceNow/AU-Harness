@@ -225,7 +225,7 @@ class CallhomePreprocessor(Preprocessor):
                     if not self.check_audio_length(audio_array, sr, length_filter):
                         continue
                 if (num_samples_filter):
-                    if sample_count >= num_samples_filter:
+                    if sample_count > num_samples_filter:
                         break
                 
                 # Calculate audio duration in seconds

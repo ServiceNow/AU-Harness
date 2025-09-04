@@ -6,18 +6,18 @@ from utils.request_manager import CentralRequestController
 logger = logging.getLogger(__name__)
 
 
-def get_temperature_override(model: str, task_ancestry: list, temperature_overrides: list[dict]) -> float | None:
+def get_generation_params_override(model: str, task_ancestry: list, generation_params_override: list[dict]) -> dict | None:
     """Check if there's a temperature override for this model and task combination.
     
     Args:
         model: The model name
         task_ancestry: The ancestry path of the task (base_dir, intermediate dirs, task_name)
-        temperature_overrides: List of override dictionaries from config.yaml
+        generation_params_override: List of override dictionaries from config.yaml
         
     Returns:
-        The override temperature if found, None otherwise
+        The override generation params if found, None otherwise
     """
-    if not temperature_overrides or not task_ancestry:
+    if not generation_params_override or not task_ancestry:
         return None
     
     # Get the task name (last element in ancestry)
@@ -25,12 +25,12 @@ def get_temperature_override(model: str, task_ancestry: list, temperature_overri
     
     # Store best match score and temperature for hierarchical matching
     best_match_score = -1
-    best_match_temp = None
+    best_match_generation_params = None
     
-    for override in temperature_overrides:
+    for override in generation_params_override:
         # Get the temperature value if present
-        temp = override.get("temperature", None)
-        if temp is None:
+        generation_params = override.get("generation_params", None)
+        if generation_params is None:
             continue
             
         # Check if this override applies to our model/task
@@ -42,7 +42,7 @@ def get_temperature_override(model: str, task_ancestry: list, temperature_overri
             continue
             
         # Calculate match score for hierarchical task matching
-        match_score = 0
+        match_score = -1
         
         # Case 1: Exact task name match (highest priority)
         if override_task == task_name:
@@ -63,9 +63,9 @@ def get_temperature_override(model: str, task_ancestry: list, temperature_overri
         # Update best match if we found a better one
         if match_score > best_match_score:
             best_match_score = match_score
-            best_match_temp = float(temp)
+            best_match_generation_params = generation_params
     
-    return best_match_temp
+    return best_match_generation_params
 
 def register_models_with_controller(cfg_list: list[dict], judge_properties: dict = None) -> tuple[CentralRequestController, list[dict]]:
     """

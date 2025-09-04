@@ -55,11 +55,6 @@ class BigBenchAudioPreprocessor(Preprocessor):
         sample_instruction_column_name = task_config.get('instruction_column', None)
         user_prompt = task_config.get('user_prompt', '')
 
-        filters = run_config.get('filter', None)
-        length_filter = None
-        if (filters):
-            length_filter = filters.get('length', None)
-
         if (not target_column_name):
             raise ValueError("[_big_bench_audio_preprocessor_] Target column name is missing. Preprocessing needs reference answers. Aborting!")
 

@@ -48,6 +48,10 @@ ROUND_DIGITS = 3
 VLLM_MAX_TOKEN_RETRY_BUFFER = 50
 INVERTED_METRIC_INDICATOR = '↓'
 
+# Default generation params
+DEFAULT_TEMPERATURE = 0.7
+DEFAULT_MAX_COMPLETION_TOKENS = 4096 
+
 # Dictionary mapping metric names to their implementation details (module, class)
 metric_map = {
     'bertscore': ("metrics.bertscore", "BertScore"),

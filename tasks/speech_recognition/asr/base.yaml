@@ -2,14 +2,13 @@
 preprocessor: GeneralPreprocessor
 postprocessor: GeneralPostprocessor
 split: test
-user_prompt: |
+user_prompt: >
   Please transcribe the given speech. Return ONLY the transcribed speech in text format. Do not add any prefix text like 'The transcribed speech is:' to the beginning of the transcript.
 long_audio_processing_logic: chunk
 
 generation_kwargs:
-  temperature: 0.1
-  do_sample: false
-  max_gen_tokens: 64
+  temperature: 0.0001
+  max_completion_tokens: 64
 
 metrics:
   - metric: word_error_rate

@@ -2,6 +2,7 @@
 import logging
 import re
 import time
+import inspect
 
 import httpx
 from openai import AsyncAzureOpenAI, AsyncOpenAI
@@ -14,7 +15,7 @@ logger = logging.getLogger(__name__)  # handlers configured in utils/logging.py
 class RequestRespHandler:
     """Class responsible for creating request and processing response for each type of inference server."""
 
-    def __init__(self, inference_type: str, model_info: dict, timeout: int = 30, temperature: float = 0.7):
+    def __init__(self, inference_type: str, model_info: dict, generation_params: dict, timeout: int = 30):
         self.inference_type = inference_type
         self.model_info = model_info
         self.api = model_info.get("url")
@@ -22,8 +23,8 @@ class RequestRespHandler:
         self.api_version = model_info.get("api_version", "")
         self.client = None
         self.timeout = timeout
-        # Use provided temperature parameter (overrides model_info)
-        self.temperature = temperature
+        # Use provided generation params
+        self.generation_params = generation_params
         # current retry attempt (set by caller). Default 1.
         self.current_attempt: int = 1
         # Remove Bearer if present for vllm/openai
@@ -153,6 +154,31 @@ class RequestRespHandler:
                 )
             )
 
+    def validated_safe_generation_params(self, generation_params):
+        """Validate and sanitize generation parameters for the OpenAI API client.
+        
+        This function filters out invalid parameters that are not accepted by the OpenAI API client,
+        logs a warning for any ignored parameters, and ensures that required parameters like
+        temperature and max_completion_tokens have default values if not provided.
+        
+        Args:
+            generation_params (dict): Dictionary of generation parameters to validate
+            
+        Returns:
+            dict: Sanitized dictionary containing only valid parameters with default values added as needed
+        """
+        valid_params = inspect.signature(self.client.chat.completions.create).parameters
+        safe_params = {k: v for k, v in generation_params.items() if k in valid_params}
+
+        if safe_params != generation_params:
+            ignored_params = {k: v for k, v in generation_params.items() if k not in safe_params}
+            logger.warning("Ignoring invalid generation parameters %s and setting required params to defaults", list(ignored_params.keys()))
+
+        safe_params['temperature'] = safe_params.get('temperature', constants.DEFAULT_TEMPERATURE)
+        safe_params['max_completion_tokens'] = safe_params.get('max_completion_tokens', constants.DEFAULT_MAX_COMPLETION_TOKENS)
+
+        return safe_params
+        
     async def request_server(self, msg_body, tools=None, error_tracker: ErrorTracker = None) -> ModelResponse:
         """Send a request to the inference server and return a `Model Response`.
 
@@ -170,8 +196,9 @@ class RequestRespHandler:
         try:
             if self.inference_type == constants.OPENAI_CHAT_COMPLETION or self.inference_type == constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION:
                 # openai chat completions, vllm chat completions
+                self.generation_params = self.validated_safe_generation_params(self.generation_params)
                 prediction = await self.client.chat.completions.create(
-                    model=model_name, messages=msg_body, tools=tools, temperature=self.temperature
+                    model=model_name, messages=msg_body, tools=tools, **self.generation_params
                 )
                 raw_response: str = self._extract_response_data(prediction)
                 llm_response: str = raw_response['choices'][0]['message']['content'] or " "
