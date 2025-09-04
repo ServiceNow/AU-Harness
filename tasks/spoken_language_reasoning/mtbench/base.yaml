@@ -12,7 +12,7 @@ split: test
 
 # Temperature is ignored for this task as each sub-task uses it's hard-coded temperature
 generation_kwargs:
-  temperature: 0.673
+  temperature: 0.0
   max_completion_tokens: 1024
 
 metrics:
