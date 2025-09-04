@@ -4,7 +4,8 @@ import ast
 import json
 import logging
 import re
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Any
+from datasets import Dataset 
 
 import numpy as np
 from tqdm import tqdm
@@ -20,59 +21,56 @@ class BfclPreprocessor(Preprocessor):
     instruction following evaluation of audio LLMs.
     """
 
-    def process(
-            self,
-            dataset: Dict[str, List[Any]],
-            num_samples: Optional[int] = None,
-            properties: Optional[Dict[str, Any]] = None
-    ) -> List[Dict[str, Any]]:
-        """
-        Process the BFCL dataset.
-
+    def process(self, dataset: Dataset, task_config: Dict[str, Any], 
+                run_config: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Run pre-processing on standard/ general Audio datasets.
+        
         Args:
-            dataset: Dictionary containing audio data
-            num_samples: Optional number of samples to process
-            properties: Optional dict of properties
-
+            dataset: The task dataset to pre-process (Dataset object)
+            task_config: Dictionary containing task configuration parameters
+            run_config: Dictionary containing run configuration parameters
+            
         Returns:
-            A list of dictionaries where each dictionary represents a sample
+            List of dictionaries where each dictionary represents a pre-processed sample
         """
 
-        # Extract properties using the base class method
-        props = self.extract_properties(properties)
-        length_filter = props["length_filter"]
-        modality = props.get("dataset_info", {}).get("modality", "audio")
-        prompt_mode = props.get("dataset_info", {}).get("with_prompt", False)
+        # Extract common properties using base class method
+        modality = task_config.get('modality', 'audio')
+        audio_column_name = task_config.get('audio_column', None)
+        target_column_name = task_config.get('target_column', None)
+        sample_instruction_column_name = task_config.get('instruction_column', None)
+
+        # Obtain task-specific prompt (if provided)
+        user_prompt = task_config.get('user_prompt', '')
 
         # Get dataset info using base class method
-        dataset_keys = list(dataset.keys())
-        dataset_size = len(dataset.get("id", []))
+        dataset_keys = list(dataset.features.keys())
+        dataset_size = len(dataset)
         self.log_dataset_info(dataset_keys, dataset_size)
-        SYSTEM_PROMPT = "You are an expert in composing functions. You are given a question and a set of possible functions. Based on the question, you will need to make one or more function/tool calls to achieve the purpose.\nIf none of the functions can be used, point it out. If the given question lacks the parameters required by the function, also point it out.\nYou should only return the function calls in your response.\n\nIf you decide to invoke any of the function(s), you MUST put it in the format of \n\n```json\n[{\"func_name1\":{\"params_name1\":params_value1, \"params_name2\":params_value2...}}, {\"func_name2\":{\"params_name1\":params_value1, \"params_name2\":params_value2, \"params_name3\":params_value3...}}]\n``` \n\nYou SHOULD NOT include any other text in the response. If no relevant function matches then return empty list in json like ```json\n [] \n ```. Make sure an appropriate json is always there in the response. \n\nAt each turn, you should try your best to complete the tasks requested by the user within the current turn. Continue to output functions to call until you have fulfilled the user's request to the best of your ability. Once you have no more functions to call, the system will consider the current turn complete and proceed to the next turn or task.\n\n"
+
+        # Get dataset filters
+        length_filter, num_samples_filter = self.get_dataset_filters(run_config.get('filter', None), dataset_size)
+
+        indices = range(dataset_size)
         processed_data = []
-        dataset_size = len(dataset.get("id", []))
-        indices = range(dataset_size if num_samples is None else min(dataset_size, num_samples))
-        system_prompt = ''
+        sample_count = 0
+        total_duration = 0
+        
         for i in tqdm(indices, desc="Processing samples"):
-            instruction = ''
+            ######## RULE TO PARSE BFCL INSTRUCTIONS #################################################
+            ### Without prompt: 
+            #   Audio Modality: instruction = ''
+            #   Text Modality: insttruction = prompt (from dataset)
+            ### With prompt: 
+            #   + Audio Modality: instruction = user_prompt + function + prompt (from dataset)
+            #   + Text Modality: instruction = user_prompt + user_prompt + function + prompt (from dataset) 
+            #################### END RULE ############################################################
+
             id = dataset["id"][i]
-
-            if modality == "text":
-                audio_data = {
-                    "array": np.array([]),  # Placeholder, not used in text-only evals
-                    "sampling_rate": 16000
-                }
-            else:
-                audio_data = dataset["audio"][i]
-                if isinstance(audio_data, list) and len(audio_data) == 1:
-                    audio_data = audio_data[0]
-                elif isinstance(audio_data, list) and len(audio_data) > 1:
-                    logger.warning(f"[{id}] Support single audio only right now!")
-                    continue
-                elif isinstance(audio_data, dict):
-                    audio_data = audio_data
-
-            prompt = dataset["question"][i]
+            prompt = dataset[sample_instruction_column_name][i]
+            # Default without prompt
+            instruction = '' if modality =='audio' else prompt
+            
             if isinstance(prompt, str):
                 prompt = ast.literal_eval(prompt)
 
@@ -81,8 +79,29 @@ class BfclPreprocessor(Preprocessor):
             else:
                 logger.warning(f"[{id}] Support only single turn")
                 continue
+
+            # Ensure prompt exists. Otherwise, skip this example.
+            if not prompt:
+                logger.warning(f"[{id}] Missing prompt. Skipping sample.")
+                continue
+            
+            if modality == "text":
+                audio_data = {
+                    "array": np.array([]),  # Placeholder, not used in text-only evals
+                    "sampling_rate": 16000
+                }
+            else:
+                audio_data = dataset[audio_column_name][i]
+                if isinstance(audio_data, list) and len(audio_data) == 1:
+                    audio_data = audio_data[0]
+                elif isinstance(audio_data, list) and len(audio_data) > 1:
+                    logger.warning(f"[{id}] Support single audio only right now!")
+                    continue
+                elif isinstance(audio_data, dict):
+                    audio_data = audio_data
+
             function = dataset["tools"][i]
-            reference = dataset["reference"][i]
+            reference = dataset[target_column_name][i]
 
             if isinstance(reference, str):
                 reference = json.loads(reference)
@@ -128,55 +147,40 @@ class BfclPreprocessor(Preprocessor):
 
             if modality == "audio":
                 if sr is None:
-                    logger.warning(f"[{id}] Sampling rate missing. Assuming 16kHz.")
-                    sr = 16000
-
-                # Use base class method to resample audio
-                audio_array, sr = self.resample_audio(audio_array, sr)
-
-            # Ensure prompt exists
-            if not prompt:
-                logger.warning(f"[{id}] Missing prompt. Skipping sample.")
-                continue
-
-            if modality == "audio":
-                if sr is None:
                     logger.warning("[%s] Sampling rate missing. Assuming 16kHz.", id)
                     sr = 16000
 
                 # Use base class method to resample audio
                 audio_array, sr = self.resample_audio(audio_array, sr)
+                if (length_filter and not self.check_audio_length(audio_array, sr, length_filter)):
+                    logger.warning(
+                        f"Audio in item {id} filtered because of length "
+                        f"Supported: {length_filter[0]}–{length_filter[1]} sec."
+                    )
+                    continue
 
-            if modality == "audio" and not self.check_audio_length(audio_array, sr, length_filter):
-                logger.warning(
-                    f"Audio in item {id} filtered because of length "
-                    f"Supported: {length_filter[0]}–{length_filter[1]} sec."
-                )
-                continue
+                # Calculate audio duration in seconds
+                audio_duration = len(audio_array) / sr
+                total_duration += audio_duration
+                
+            # If prompt is provided, either modality will require function appended to instruction and setting function = None
+            if (user_prompt != ''):
+                instruction = user_prompt + 'Here is a list of functions in JSON format that you can invoke.\n{functions}\n'.format(
+                    functions=json.dumps(function, indent=4))
+                function = None
 
+                # If modality is text, adding the sample-specific prompt 
+                if (modality == 'text'):
+                    instruction += '\n\n' + prompt
 
             # In prompt mode we get tool calls from llm response,
             # This doesn't evals the model on tool calling via capability sense,
             # but still allow to check ability to choose function
-            if modality == "audio":
-                if prompt_mode:
-                    system_prompt = SYSTEM_PROMPT
-                    system_prompt += 'Here is a list of functions in JSON format that you can invoke.\n{functions}\n'.format(
-                        functions=json.dumps(function, indent=4))
-                    instruction = system_prompt
-                    system_prompt = ''
-                    function = None
-
-            if modality == "text":
-                if prompt_mode:
-                    system_prompt = SYSTEM_PROMPT
-                    system_prompt += 'Here is a list of functions in JSON format that you can invoke.\n{functions}\n'.format(
-                        functions=json.dumps(function, indent=4))
-                    instruction = system_prompt + '\n\n' + prompt
-                else:
-                    instruction = prompt
 
 
+            # Stop processing if num_samples filtering is set and more than num_samples_filter samples are processed
+            if (num_samples_filter and sample_count >= num_samples_filter):
+                break
             # Create structured sample
             sample = {
                 "id": id,
@@ -190,7 +194,8 @@ class BfclPreprocessor(Preprocessor):
             }
 
             processed_data.append(sample)
+            sample_count += 1
 
-        self.log_dataset_info(dataset_keys, dataset_size, len(processed_data))
+        self.log_dataset_info(dataset_keys, dataset_size, sample_count, total_duration)
 
         return processed_data

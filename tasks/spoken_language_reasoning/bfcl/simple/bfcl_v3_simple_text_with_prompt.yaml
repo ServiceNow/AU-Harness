@@ -1,4 +1,0 @@
-task_name: bfcl_v3_simple_text_with_prompt
-extends: ["./base.yaml#"]
-modality: text
-with_prompt: true
