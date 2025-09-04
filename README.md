@@ -11,7 +11,7 @@
 [![Version](https://img.shields.io/badge/version-0.1.0-orange.svg)](https://github.com/ServiceNow/HEAR-Kit)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/ServiceNow/HEAR-Kit/pulls)
 
-**🎯 50+ Datasets • 🚀 420+ Subsets • 📊 9 Metrics • 🔊 18 Audio Tasks**
+**🎯 50+ Datasets • 🚀 380+ Subsets • 📊 9 Metrics • 🔊 21 Audio Tasks**
 
 </div>
 
@@ -64,7 +64,7 @@ metrics:
 
 4. 🎯 **Wide Task Coverage**:
    - We support 18 unique tasks over 5 different categories
-   - Over 50 unique datasets, with 420+ unique subsets
+   - Over 50 unique datasets, with 380+ unique subsets
    - 9 different metrics for broader evaluation coverage
 
 
