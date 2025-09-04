@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Dict, List, Any
 
 import soundfile as sf
+import numpy as np
 from scipy.signal import resample
 from tqdm import tqdm
 from datasets import Dataset
@@ -101,6 +102,9 @@ class CallhomePreprocessor(Preprocessor):
             return None
 
         audio_array, sr = sf.read(audio_path)
+        if (audio_array.ndim > 1):
+            audio_array = np.mean(audio_array, axis=1)
+        
         target_sr = 16000
         if sr != target_sr:
             num_samples = int(round(audio_array.shape[0] * target_sr / sr))
@@ -171,7 +175,7 @@ class CallhomePreprocessor(Preprocessor):
         self.log_dataset_info(dataset_keys, dataset_size)
 
         # Get dataset filters
-        length_filter, num_samples_filter = self.get_dataset_filters(run_config.get('filters', None), dataset_size)
+        length_filter, num_samples_filter = self.get_dataset_filters(run_config.get('filter', None), dataset_size)
         task_instruction_prompt = task_config.get("user_prompt", "")
 
         processed_data = []
