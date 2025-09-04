@@ -1,0 +1,3 @@
+task_name: bfcl_audio_simple_no_prompt
+extends: ["./base.yaml#"]
+subset: BFCL_v3_simple

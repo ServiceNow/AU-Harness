@@ -1,3 +1,0 @@
-# Base configuration for BFCL multiple tasks
-extends: ["../base.yaml#"]
-subset: BFCL_v3_multiple

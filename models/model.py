@@ -278,7 +278,7 @@ class Model(ABC):
         if self.user_prompt_override:
             instruction = self.user_prompt_override
         
-        # Reender the user prompt/instruction template
+        # Render the user prompt/instruction template
         if not is_multiturn:
             instruction = Template(instruction).render(message)
 

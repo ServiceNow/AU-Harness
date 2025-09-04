@@ -1,6 +1,10 @@
 # Base configuration for all BFCL tasks
 dataset_path: ServiceNow-AI/BFCL_v3_audio
 language: en
+split: test
+audio_column: audio
+target_column: reference
+instruction_column: question
 preprocessor: BfclPreprocessor
 postprocessor: BfclPostprocessor
 long_audio_processing_logic: truncate
@@ -8,7 +12,7 @@ long_audio_processing_logic: truncate
 generation_kwargs:
   temperature: 0.0
   do_sample: false
-  max_gen_tokens: 64
+  max_gen_tokens: 1024
 
 metrics:
   - metric: bfcl_match_score
