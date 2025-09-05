@@ -1,0 +1,8 @@
+task_name: gigaspeech_test
+extends: ["../base.yaml#"]
+dataset_path: AudioLLMs/gigaspeech_test
+language: en
+split: test
+audio_column: context
+target_column: answer
+instruction_column: instruction

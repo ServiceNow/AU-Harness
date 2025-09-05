@@ -1,0 +1,4 @@
+task_name: sd-qa_kenya_text
+extends: ["./base.yaml#"]
+split: kenya
+modality: text

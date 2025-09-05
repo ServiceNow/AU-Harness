@@ -1,0 +1,33 @@
+# env
+lite
+env
+env_py312
+
+# config files
+config.yaml
+
+# log files
+*.log
+*.csv
+*.out
+*.csv
+final_scores.json
+
+# callhome local files
+*.cha
+*.wav
+
+# python cache files
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.DS_Store
+
+# local configs
+.venv/
+.vscode/
+
+data/spider/
+test/
+
+CLAUDE.md

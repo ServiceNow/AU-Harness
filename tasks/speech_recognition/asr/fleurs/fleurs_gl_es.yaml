@@ -1,0 +1,4 @@
+task_name: fleurs_gl_es
+extends: ["./base.yaml#"]
+subset: gl_es
+language: gl

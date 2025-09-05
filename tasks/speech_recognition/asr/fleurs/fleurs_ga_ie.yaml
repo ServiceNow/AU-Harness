@@ -1,0 +1,4 @@
+task_name: fleurs_ga_ie
+extends: ["./base.yaml#"]
+subset: ga_ie
+language: ga

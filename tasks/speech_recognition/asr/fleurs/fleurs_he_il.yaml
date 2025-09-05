@@ -1,0 +1,4 @@
+task_name: fleurs_he_il
+extends: ["./base.yaml#"]
+subset: he_il
+language: he

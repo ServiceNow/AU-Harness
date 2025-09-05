@@ -1,0 +1,4 @@
+task_name: common_voice_15_az
+extends: ["./base.yaml#"]
+subset: az
+language: az

@@ -1,0 +1,4 @@
+task_name: earnings22
+extends: ["./base.yaml#"]
+dataset_path: AudioLLMs/earnings22_test
+language: en

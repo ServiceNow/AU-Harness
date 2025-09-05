@@ -1,0 +1,4 @@
+task_name: fleurs_cy_gb
+extends: ["./base.yaml#"]
+subset: cy_gb
+language: cy

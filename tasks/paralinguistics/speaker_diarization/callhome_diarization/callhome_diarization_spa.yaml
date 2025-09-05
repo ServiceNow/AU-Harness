@@ -1,0 +1,4 @@
+task_name: callhome_diarization_spa
+extends: ["./base.yaml#"]
+language: es
+dataset_path: private_datasets/CallHome_spa/hf_dataset

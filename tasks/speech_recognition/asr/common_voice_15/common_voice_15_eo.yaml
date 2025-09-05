@@ -1,0 +1,4 @@
+task_name: common_voice_15_eo
+extends: ["./base.yaml#"]
+subset: eo
+language: eo

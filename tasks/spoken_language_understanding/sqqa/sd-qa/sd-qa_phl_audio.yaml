@@ -1,0 +1,4 @@
+task_name: sd-qa_phl_audio
+extends: ["./base.yaml#"]
+split: phl
+modality: audio

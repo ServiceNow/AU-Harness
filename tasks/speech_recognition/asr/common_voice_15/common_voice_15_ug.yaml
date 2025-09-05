@@ -1,0 +1,4 @@
+task_name: common_voice_15_ug
+extends: ["./base.yaml#"]
+subset: ug
+language: ug

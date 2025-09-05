@@ -1,0 +1,4 @@
+task_name: sd-qa_zaf_audio
+extends: ["./base.yaml#"]
+split: zaf
+modality: audio

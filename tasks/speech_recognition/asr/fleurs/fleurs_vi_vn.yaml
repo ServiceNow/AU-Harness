@@ -1,0 +1,4 @@
+task_name: fleurs_vi_vn
+extends: ["./base.yaml#"]
+subset: vi_vn
+language: vi

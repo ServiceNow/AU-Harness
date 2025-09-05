@@ -1,0 +1,23 @@
+task_metric: # task/group and metric
+  - ["covost2", "bleu"]
+
+filter:
+  num_samples: 100 # number of samples to run (remove for all)
+
+models:
+  - name: <MODEL_NAME> 
+    inference_type: "vllm"
+    url: <ENDPOINT_URL>
+    delay: 180
+    retry_attempts: 5
+    timeout: 300
+    model: <MODEL_NAME>
+    auth_token: <AUTH_TOKEN>
+    batch_size: 5
+    chunk_size: 30
+
+# Optional: Aggregate multiple task-metric pairs into a single score
+# aggregate has x two-item lists, each as a two-item list of strings ["metric_name", ["task1", "task2", ..., "taskN"]]
+# Instead of listing task names, you can also list groups. A group is a nested folder in the tasks directory.
+aggregate:
+  - ["bleu", ["covost2"]]

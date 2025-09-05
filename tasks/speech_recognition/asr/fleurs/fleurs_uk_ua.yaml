@@ -1,0 +1,4 @@
+task_name: fleurs_uk_ua
+extends: ["./base.yaml#"]
+subset: uk_ua
+language: uk

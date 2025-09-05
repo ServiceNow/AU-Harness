@@ -1,0 +1,6 @@
+# Defaults for all Voxpopuli datasets
+extends: ["../base.yaml#"]
+dataset_path: facebook/voxpopuli
+audio_column: audio
+target_column: normalized_text
+split: test

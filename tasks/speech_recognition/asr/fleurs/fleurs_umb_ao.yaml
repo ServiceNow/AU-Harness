@@ -1,0 +1,4 @@
+task_name: fleurs_umb_ao
+extends: ["./base.yaml#"]
+subset: umb_ao
+language: umb

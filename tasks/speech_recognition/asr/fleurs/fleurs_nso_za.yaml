@@ -1,0 +1,4 @@
+task_name: fleurs_nso_za
+extends: ["./base.yaml#"]
+subset: nso_za
+language: nso

@@ -1,0 +1,9 @@
+# Defaults for all MNSC datasets
+extends: ["../base.yaml#"]
+dataset_path: AudioLLMs/Multitask-National-Speech-Corpus-v1-extend
+language: en
+split: test
+accented: true
+audio_column: context
+target_column: answer
+instruction_column: instruction

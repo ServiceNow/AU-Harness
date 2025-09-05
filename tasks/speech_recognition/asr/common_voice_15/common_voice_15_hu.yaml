@@ -1,0 +1,4 @@
+task_name: common_voice_15_hu
+extends: ["./base.yaml#"]
+subset: hu
+language: hu

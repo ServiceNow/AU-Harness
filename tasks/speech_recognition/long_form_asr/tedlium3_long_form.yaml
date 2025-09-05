@@ -1,0 +1,4 @@
+task_name: tedlium3_long_form
+extends: ["./base.yaml#"]
+dataset_path: AudioLLMs/tedlium3_long_form_test
+language: en

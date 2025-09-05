@@ -1,0 +1,4 @@
+task_name: covost2_id_en
+extends: ["./base.yaml#"]
+subset: id_en
+source_language: id

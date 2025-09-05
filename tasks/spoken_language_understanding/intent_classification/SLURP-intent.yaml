@@ -1,0 +1,18 @@
+task_name: SLURP-intent
+dataset_path: DynamicSuperb/SuperbIC_SLURP-Intent
+subset: default
+split: test
+language: english
+preprocessor: GeneralPreprocessor
+postprocessor: GeneralPostprocessor
+audio_column: audio
+target_column: label
+instruction_column: instruction
+long_audio_processing_logic: truncate
+
+generation_kwargs:
+  temperature: 0.0001
+  max_completion_tokens: 64
+
+metrics:
+  - metric: llm_judge_binary

@@ -1,0 +1,4 @@
+task_name: earnings21
+extends: ["./base.yaml#"]
+dataset_path: AudioLLMs/earnings21_test
+language: en

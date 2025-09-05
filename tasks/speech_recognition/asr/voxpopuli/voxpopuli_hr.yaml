@@ -1,0 +1,4 @@
+task_name: voxpopuli_hr
+extends: ["./base.yaml#"]
+subset: hr
+language: hr

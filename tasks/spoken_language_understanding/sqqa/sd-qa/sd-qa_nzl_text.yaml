@@ -1,0 +1,4 @@
+task_name: sd-qa_nzl_text  
+extends: ["./base.yaml#"]
+split: nzl
+modality: text

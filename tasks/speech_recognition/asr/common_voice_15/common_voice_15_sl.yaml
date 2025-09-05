@@ -1,0 +1,4 @@
+task_name: common_voice_15_sl
+extends: ["./base.yaml#"]
+subset: sl
+language: sl

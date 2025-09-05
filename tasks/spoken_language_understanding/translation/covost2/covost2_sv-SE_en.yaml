@@ -1,0 +1,4 @@
+task_name: covost2_sv-SE_en
+extends: ["./base.yaml#"]
+subset: sv-SE_en
+source_language: sv-SE

@@ -1,0 +1,4 @@
+task_name: fleurs_kam_ke
+extends: ["./base.yaml#"]
+subset: kam_ke
+language: kam

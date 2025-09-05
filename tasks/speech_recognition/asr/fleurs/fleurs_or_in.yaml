@@ -1,0 +1,4 @@
+task_name: fleurs_or_in
+extends: ["./base.yaml#"]
+subset: or_in
+language: or

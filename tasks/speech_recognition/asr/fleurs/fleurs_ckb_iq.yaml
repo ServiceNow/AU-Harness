@@ -1,0 +1,4 @@
+task_name: fleurs_ckb_iq
+extends: ["./base.yaml#"]
+subset: ckb_iq
+language: ckb

@@ -1,0 +1,7 @@
+# Defaults for all Gigaspeech2 datasets
+extends: ["../base.yaml#"]
+dataset_path: AudioLLMs/gigaspeech2-test
+audio_column: context
+target_column: answer
+instruction_column: instruction
+split: test

@@ -1,0 +1,5 @@
+task_name: spgispeech_test
+extends: ["../base.yaml#"]
+dataset_path: kensho/spgispeech
+subset: test
+language: en

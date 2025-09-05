@@ -1,0 +1,15 @@
+task_metric: # task/group and metric
+  - ["mtbench_audio", "mt_bench_llm_judge"]
+  - ["mtbench_text", "mt_bench_llm_judge"]
+
+models:
+  - name: <MODEL_NAME> 
+    inference_type: "vllm"
+    url: <ENDPOINT_URL>
+    delay: 180
+    retry_attempts: 5
+    timeout: 300
+    model: <MODEL_NAME>
+    auth_token: <AUTH_TOKEN>
+    batch_size: 5
+    chunk_size: 30

@@ -1,0 +1,4 @@
+task_name: common_voice_15_cv
+extends: ["./base.yaml#"]
+subset: cv
+language: cv

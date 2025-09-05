@@ -1,0 +1,4 @@
+task_name: common_voice_15_ne-NP
+extends: ["./base.yaml#"]
+subset: ne-NP
+language: ne-NP

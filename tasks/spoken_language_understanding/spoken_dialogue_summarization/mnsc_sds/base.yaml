@@ -1,0 +1,18 @@
+# Base configuration for spoken dialogue summarization tasks
+dataset_path: AudioLLMs/Multitask-National-Speech-Corpus-v1-extend
+language: en
+split: train
+preprocessor: GeneralPreprocessor
+postprocessor: GeneralPostprocessor
+accented: true
+audio_column: context
+target_column: answer
+instruction_column: instruction
+long_audio_processing_logic: truncate
+
+generation_kwargs:
+  temperature: 0.8
+  max_completion_tokens: 512
+
+metrics:
+  - metric: llm_judge_detailed

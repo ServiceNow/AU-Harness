@@ -1,0 +1,4 @@
+task_name: common_voice_15_sah
+extends: ["./base.yaml#"]
+subset: sah
+language: sah

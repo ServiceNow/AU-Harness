@@ -1,0 +1,4 @@
+task_name: librispeech_multilingual_polish
+extends: ["./base.yaml#"]
+subset: polish
+language: pl

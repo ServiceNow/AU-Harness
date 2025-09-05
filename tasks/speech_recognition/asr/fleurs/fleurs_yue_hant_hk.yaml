@@ -1,0 +1,4 @@
+task_name: fleurs_yue_hant_hk
+extends: ["./base.yaml#"]
+subset: yue_hant_hk
+language: yue

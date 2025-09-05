@@ -1,0 +1,4 @@
+task_name: fleurs_mi_nz
+extends: ["./base.yaml#"]
+subset: mi_nz
+language: mi

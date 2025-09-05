@@ -1,0 +1,18 @@
+task_name: advbench
+dataset_path: hlt-lab/voicebench
+subset: advbench
+modality: audio
+language: en
+split: test
+preprocessor: VoiceBenchPreprocessor
+postprocessor: VoiceBenchPostprocessor
+audio_column: audio
+instruction_column: prompt
+long_audio_processing_logic: truncate
+
+generation_kwargs:
+  temperature: 0.5
+  max_completion_tokens: 512
+
+metrics:
+  - metric: llm_judge_redteaming

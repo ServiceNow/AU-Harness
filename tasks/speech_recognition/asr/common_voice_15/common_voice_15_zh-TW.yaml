@@ -1,0 +1,4 @@
+task_name: common_voice_15_zh-TW
+extends: ["./base.yaml#"]
+subset: zh-TW
+language: zh-TW

@@ -1,0 +1,4 @@
+task_name: covost2_fa_en
+extends: ["./base.yaml#"]
+subset: fa_en
+source_language: fa

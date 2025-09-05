@@ -1,0 +1,4 @@
+task_name: voxpopuli_hu
+extends: ["./base.yaml#"]
+subset: hu
+language: hu

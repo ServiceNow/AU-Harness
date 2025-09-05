@@ -1,0 +1,4 @@
+task_name: librispeech_multilingual_dutch
+extends: ["./base.yaml#"]
+subset: nl
+language: nl

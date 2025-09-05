@@ -1,0 +1,17 @@
+# Base configuration for MMSU tasks
+dataset_path: hlt-lab/voicebench
+subset: mmsu
+language: en
+preprocessor: GeneralPreprocessor
+postprocessor: GeneralPostprocessor
+audio_column: audio
+target_column: reference
+instruction_column: prompt
+long_audio_processing_logic: truncate
+
+generation_kwargs:
+  temperature: 0.5
+  max_completion_tokens: 512
+
+metrics:
+  - metric: llm_judge_binary

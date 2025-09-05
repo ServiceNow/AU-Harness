@@ -1,0 +1,3 @@
+task_name: audiocaps_qa_test
+extends: ["./base.yaml#"]
+dataset_path: AudioLLMs/audiocaps_qa_test

@@ -1,0 +1,5 @@
+# Defaults for all Fleurs datasets
+extends: ["../base.yaml#"]
+dataset_path: google/fleurs
+audio_column: audio
+target_column: transcription

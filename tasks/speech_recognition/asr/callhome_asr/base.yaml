@@ -1,0 +1,5 @@
+# Defaults for all Callhome datasets
+extends: ["../base.yaml#"]
+preprocessor: CallhomePreprocessor
+postprocessor: CallhomePostprocessor
+split: train

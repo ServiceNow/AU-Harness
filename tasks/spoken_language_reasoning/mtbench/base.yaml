@@ -1,0 +1,19 @@
+# Base configuration for MT-Bench tasks
+preprocessor: MultiturnPreprocessor
+postprocessor: MultiturnPostprocessor
+dataset_path: ServiceNow-AI/mt-bench_audio
+language: en
+split: test
+audio_column: audio
+target_column: reference
+textual_input_column: turns
+id_column: question_id
+long_audio_processing_logic: truncate
+
+# Temperature is ignored for this task as each sub-task uses it's hard-coded temperature
+generation_kwargs:
+  temperature: 0.0
+  max_completion_tokens: 1024
+
+metrics:
+  - metric: mt_bench_llm_judge

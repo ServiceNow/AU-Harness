@@ -1,0 +1,8 @@
+task_name: tedlium3_test
+extends: ["../base.yaml#"]
+dataset_path: AudioLLMs/tedlium3_test
+language: en
+split: test
+audio_column: context
+target_column: answer
+instruction_column: instruction

@@ -1,0 +1,4 @@
+task_name: fleurs_lg_ug
+extends: ["./base.yaml#"]
+subset: lg_ug
+language: lg

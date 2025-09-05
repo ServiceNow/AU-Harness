@@ -1,0 +1,4 @@
+task_name: common_voice_15_da
+extends: ["./base.yaml#"]
+subset: da
+language: da

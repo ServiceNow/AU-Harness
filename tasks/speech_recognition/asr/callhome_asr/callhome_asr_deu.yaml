@@ -1,0 +1,4 @@
+task_name: callhome_asr_deu
+extends: ["./base.yaml#"]
+language: de
+dataset_path: private_datasets/CallHome_deu/hf_dataset

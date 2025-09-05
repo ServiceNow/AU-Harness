@@ -1,0 +1,4 @@
+task_name: fleurs_oc_fr
+extends: ["./base.yaml#"]
+subset: oc_fr
+language: oc

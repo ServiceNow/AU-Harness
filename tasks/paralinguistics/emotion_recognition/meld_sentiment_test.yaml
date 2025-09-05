@@ -1,0 +1,4 @@
+task_name: meld_sentiment_test
+extends: ["./base.yaml#"]
+dataset_path: AudioLLMs/meld_sentiment_test
+user_prompt: "Choose from the following options: positive, negative, neutral"

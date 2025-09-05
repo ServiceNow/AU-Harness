@@ -1,0 +1,21 @@
+# Base configuration for translation tasks
+dataset_path: fixie-ai/covost2
+split: test
+preprocessor: Covost2Preprocessor
+postprocessor: Covost2Postprocessor
+audio_column: audio
+target_column: translation
+instruction_column: null
+target_language: en
+user_prompt: |
+  Please translate the given speech from {{source_language_name}} to {{target_language_name}}. Return ONLY the translated text without any other prefix text such as the given speech is. Be brief. Do not provide explanations.
+long_audio_processing_logic: chunk
+
+generation_kwargs:
+  temperature: 0.2
+  #do_sample: false
+  max_completion_tokens: 1024
+
+metrics:
+  - metric: bleu
+  - metric: meteor

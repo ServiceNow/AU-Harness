@@ -1,0 +1,4 @@
+task_name: dream_tts_mcq_test
+extends: ["./base.yaml#"]
+dataset_path: AudioLLMs/dream_tts_mcq_test
+choices_column: choices

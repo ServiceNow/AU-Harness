@@ -1,0 +1,4 @@
+task_name: fleurs_pa_in
+extends: ["./base.yaml#"]
+subset: pa_in
+language: pa

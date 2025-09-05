@@ -1,0 +1,4 @@
+task_name: common_voice_15_ka
+extends: ["./base.yaml#"]
+subset: ka
+language: ka

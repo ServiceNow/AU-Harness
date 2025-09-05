@@ -1,0 +1,17 @@
+# Defaults for all Code Switching ASR datasets
+preprocessor: GeneralPreprocessor
+postprocessor: GeneralPostprocessor
+split: test
+audio_column: context
+target_column: answer
+instruction_column: instruction
+user_prompt: |
+  Please transcribe the given speech. Return ONLY the transcribed speech in text format. Do not add any prefix text like 'The transcribed speech is:' to the beginning of the transcript.
+long_audio_processing_logic: chunk
+
+generation_kwargs:
+  temperature: 0.1
+  max_completion_tokens: 512
+
+metrics:
+  - metric: word_error_rate

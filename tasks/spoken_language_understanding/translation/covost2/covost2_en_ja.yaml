@@ -1,0 +1,5 @@
+task_name: covost2_en_ja
+extends: ["./base.yaml#"]
+subset: en_ja
+source_language: en
+target_language: ja

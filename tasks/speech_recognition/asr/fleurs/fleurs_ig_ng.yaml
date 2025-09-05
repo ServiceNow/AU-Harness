@@ -1,0 +1,4 @@
+task_name: fleurs_ig_ng
+extends: ["./base.yaml#"]
+subset: ig_ng
+language: ig

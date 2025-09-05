@@ -1,0 +1,4 @@
+task_name: sd-qa_ind_s_text
+extends: ["./base.yaml#"]
+split: ind_s
+modality: text

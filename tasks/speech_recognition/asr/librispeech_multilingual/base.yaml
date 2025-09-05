@@ -1,0 +1,4 @@
+# Defaults for all Multilingual Librispeech datasets
+extends: ["../base.yaml#"]
+dataset_path: facebook/multilingual_librispeech
+split: test

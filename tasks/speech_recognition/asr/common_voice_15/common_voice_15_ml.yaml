@@ -1,0 +1,4 @@
+task_name: common_voice_15_ml
+extends: ["./base.yaml#"]
+subset: ml
+language: ml

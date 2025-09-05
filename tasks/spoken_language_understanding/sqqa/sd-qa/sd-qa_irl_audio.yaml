@@ -1,0 +1,4 @@
+task_name: sd-qa_irl_audio
+extends: ["./base.yaml#"]
+split: irl
+modality: audio

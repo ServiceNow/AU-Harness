@@ -1,0 +1,4 @@
+task_name: common_voice_15_ca
+extends: ["./base.yaml#"]
+subset: ca
+language: ca

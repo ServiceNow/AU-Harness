@@ -1,0 +1,4 @@
+task_name: librispeech_multilingual_french
+extends: ["./base.yaml#"]
+subset: french
+language: fr
