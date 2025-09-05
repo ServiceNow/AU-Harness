@@ -15,8 +15,7 @@ user_prompt: >
       in the query. Enclose the SQL query between ```sql and ```\n
 generation_kwargs:
   temperature: 0.0
-  do_sample: false
-  max_gen_tokens: 64
+  max_completion_tokens: 1024
 
 metrics:
   - metric: sql_score
