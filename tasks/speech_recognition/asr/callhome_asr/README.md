@@ -1,4 +1,4 @@
-#### CallHome
+# CallHome
 
 To run the CallHome dataset for ASR and Speaker Diarization, follow these steps:
 
@@ -23,7 +23,7 @@ Paste these wav files into the audio folder of the specific language path in pri
 Run the following commands to create a local HF dataset
 ```python
 cd tools
-python callhome_dataset_creator.py --data_dir /private_datasets/{specific_langauge_folder}
+python callhome_dataset_creator.py --data_dir /private_datasets/{specific_language_folder}
 ```
 This creates a hf_dataset folder in the same path as data_dir
 

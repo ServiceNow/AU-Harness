@@ -14,6 +14,9 @@ dataset_metric:
   - ["librispeech_test_clean", "word_error_rate"]
 ```
 
+## CalllHome Dataset
+CallHome dataset can be used for ASR evaluation. Follow the steps presented in [asr/callhome_asr](./asr/callhome_asr/README.md) for further instructions on the dataset preparation.
+
 ## 📊 Supported Datasets for Speech Recognition
 
 | Dataset Name                   | Language Coverage       | config | Description                                                                                       | License              |
