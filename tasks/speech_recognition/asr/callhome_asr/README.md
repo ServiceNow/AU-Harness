@@ -19,10 +19,18 @@ document.querySelectorAll('a[href*="?f=save"]').forEach((link, i) => {
 
 Paste these wav files into the audio folder of the specific language path in private_datasets
 
-Run the specific dataset or all datasets across word_error_rate(utterance by utterance), llm_judge_binary (holistic view of 30 second turn by turn transcription), or speaker diarization
+##### Create a local HF dataset
+Run the following commands to create a local HF dataset
+```python
+cd tools
+python callhome_dataset_creator.py --data_dir /private_datasets/{specific_langauge_folder}
+```
+This creates a hf_dataset folder in the same path as data_dir
+
+Run the specific dataset or all datasets across word_error_rate(utterance by utterance), llm_judge_binary (holistic view of 30 second turn by turn transcription), or speaker diarization.
 
 ```yaml
 dataset_metric:
-  - ["callhome_eng", "word_error_rate"]
-  - ["callhome_spa, "speaker_diarization"] 
+  - [callhome_asr, word_error_rate]
+  - [callhome_diarization, speaker_diarization] 
 ```

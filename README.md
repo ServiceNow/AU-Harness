@@ -212,18 +212,58 @@ dataset_metric:
 
 #### Sampling and Filtering
 ```yaml
-num_samples: 300 # optional - number of samples to run(remove for all)
 filter:
+  num_samples: 300 # optional - number of samples to run(remove for all)
   length_filter: [1.0, 30.0] # optional - filters for only audio samples in this length(seconds)
 ```
 
 #### Result Aggregation
 ```yaml
-# Optional - allows for custom score aggregation at the end
-# Follow the format of [x, [y1, y2]] where x is a valid metric, and each y is a valid, matching dataset 
+# Optional - allows for custom score aggregation at the end. Currently only simple average is supported
+# Follow the format of [x, [y1, y2]] where x is a valid metric, and each y is a valid task or a group (of tasks)
 aggregate:
   - ["llm_judge_binary", ["emotion_recognition"]]
   - ["llm_judge_detailed", ["alpaca_audio_test", "openhermes_instruction_test"]]
+  - ["word_error_rate", ["librispeech"]]
+```
+
+#### Generation parameters override
+```yaml
+# Generation parameters are generally defined for each task in their task configs
+# This can be overriden for specific models and tasks using the following format.
+generation_params_override:
+  # Task override - Apply for this task for all models
+  - task: <TASK1>
+    generation_params:
+      temperature: <temperature>
+      max_gen_tokens: <max_gen_tokens>
+  # Model override - Apply for this model for all tasks
+  - model: <MODEL1>
+    generation_params:
+      temperature: <temperature>
+      max_gen_tokens: <max_gen_tokens>
+  # Model and Task override - Apply for this model and task
+  - model: <MODEL1>
+    task: <TASK1>
+    generation_params:
+      temperature: <temperature>
+      max_gen_tokens: <max_gen_tokens>
+```
+
+#### System and User prompt override
+```yaml
+# System prompts and user prompts (high level task instructions) can be overriden from the run config
+prompt_overrides:
+  # User prompt override mandatorily requires a task name because these are generally task specific
+  user_prompt:
+    - task: "task_name"
+      model: "model_name" (optional)
+      prompt: "prompt_text"
+  # System prompt override mandatorily requires a model name because these are generally model specific
+  system_prompt:
+    - model: "model_name"
+      task: "task_name" (optional)
+      prompt: "prompt_text"
 ```
 
 #### Model Configuration
@@ -301,8 +341,7 @@ long_audio_processing_logic: truncate //
 
 generation_kwargs:  // Additional kwargs to constrain model decoding behaviors
   temperature: 0.0001 
-  do_sample: false
-  max_gen_tokens: 64
+  max_completion_tokens: 64
 
 metrics:
   - metric: llm_judge_binary // Metric from the allowed pre-defined metrics
@@ -330,7 +369,7 @@ long_audio_processing_logic: truncate
 generation_kwargs:
   temperature: 0.0001
   do_sample: false
-  max_gen_tokens: 64
+  max_completion_tokens: 64
 
 metrics:
   - metric: llm_judge_binary
