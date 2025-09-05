@@ -11,8 +11,7 @@ long_audio_processing_logic: truncate
 
 generation_kwargs:
   temperature: 0.5
-  do_sample: false
-  max_gen_tokens: 64
+  max_completion_tokens: 512
 
 metrics:
   - metric: llm_judge_binary
