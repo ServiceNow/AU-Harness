@@ -23,40 +23,18 @@ HEAR-Kit is a standardized, efficient and highly customizable open-source framew
 ## ❓ Why HEAR-Kit?
 
 1. 🚀 **Blazing Fast**:
-   - Any amount of models are run against any amount of datasets and metrics, each with their own separate Engines, allowing for parallelization of the entire evaluation pipeline
+   - Multiple models can be evaluated simultaneously across multiple tasks, datasets and metrics using independent Engines, enabling full parallelization of the evaluation pipeline
    - Model inference and evaluation is batched, with the only bottleneck being user-set batch size
-   - Dataset Sharing is implemented for linearly scalable inference throughput
+   - Dataset Sharding is implemented for linearly scalable inference throughput
 
 <p align='center'>
   <img src="assets/images/eval_kit_comparison.png" alt="Evaluation Kit Comparison" width="80%", height="auto"/>
 </p>
 
 2. 🔧 **Immensely Customizable**:
-   - Dataset and Samples can be customized by accents, language, length, and more
-   - Models can be customized by temperature, request parameters, and batch size
+   - Dataset and Samples can be customized and filtred by accents, language, length, and more
+   - Models and tasks can be customized by temperature, request parameters, prompts and batch size
    - Score reporting can be customized through the aggregation parameter
-```yaml
-dataset_path: fixie-ai/covost2
-split: test
-preprocessor: Covost2Preprocessor
-postprocessor: Covost2Postprocessor
-audio_column: audio
-target_column: translation
-instruction_column: null
-target_language: en
-user_prompt: |
-  Please translate the given speech from {{source_language_name}} to {{target_language_name}}. Return ONLY the translated text without any other prefix text such as the given speech is. Be brief. Do not provide explanations.
-long_audio_processing_logic: chunk
-
-generation_kwargs:
-  temperature: 0.2
-  do_sample: false
-  max_gen_tokens: 64
-
-metrics:
-  - metric: bleu
-  - metric: meteor
-  ```
 
 3. 📦 **Super Modular**:
    - Streamlined evaluation processes allow for better understanding of the codebase
@@ -168,8 +146,8 @@ Get up and running in under a minute:
 
 ```bash
 # Clone and install
-git clone https://github.com/ServiceNow/LALMEval.git
-cd LALMEval
+git clone https://github.com/ServiceNow/HEAR-Kit.git
+cd HEAR-Kit
 pip install -r requirements.txt
 
 # Run your first evaluation
@@ -177,7 +155,7 @@ cp sample_config.yaml config.yaml
 bash evaluate.sh
 ```
 
-Results will be generated in `logs/` with detailed metrics and analysis.
+Results will be generated in `run_logs/` with detailed metrics and analysis.
 
 ## 💻 Usage
 
@@ -211,8 +189,8 @@ The `config.yaml` file supports the following customization options. Sample runn
 ```yaml
 dataset_metric:
   - ["librispeech_test_other", "word_error_rate"] #evaluate by dataset
-  - ["emotion_recognition", "llm_judge_binary"] # evaluate by task type
-  - ["spoken_language_understanding", "llm_judge_binary"] # evaluate by task category
+  - ["emotion_recognition", "llm_judge_binary"] # evaluate by task group
+  - ["spoken_language_understanding", "all"] # evaluate all metrics of all tasks in group
 ```
 
 #### Sampling and Filtering
@@ -261,14 +239,14 @@ generation_params_override:
 prompt_overrides:
   # User prompt override mandatorily requires a task name because these are generally task specific
   user_prompt:
-    - task: "task_name"
-      model: "model_name" (optional)
-      prompt: "prompt_text"
+    - task: <task_name>
+      model: <model_name> # (optional)
+      prompt: <prompt_text>
   # System prompt override mandatorily requires a model name because these are generally model specific
   system_prompt:
-    - model: "model_name"
-      task: "task_name" (optional)
-      prompt: "prompt_text"
+    - model: <model_name>
+      task: <task_name> # (optional)
+      prompt: <prompt_text>
 ```
 
 #### Model Configuration
@@ -324,32 +302,32 @@ judge_properties:
 ### 📝 Task Configuration Options
 #### Adding Datasets
 
-HEAR-Kit supports adding custom datasets through `task_config` YAML files. These files define the dataset properties and how they should be processed.
+HEAR-Kit supports adding custom tasks through `task_config` YAML files. These files define the task properties and how they should be processed.
 
 #### Creating a TaskConfig File
 
-Create a YAML file in the `tasks` directory under the appropriate task category. Each dataset should be defined with the following properties, down to the most specific subset:
+Create a YAML file in the `tasks` directory under the appropriate task groups. Each task should be defined with the following properties, down to the most specific subset:
 
 ```yaml
-task_name: "unique_task_name"
-dataset_path: "huggingface_repo or local_dataset_path" // Mandatory
-subset: "subset" // Optional (recommended)
-split: "usa" // Mandatory
-lange: "english" // Mandatory
-modality: "audio", // Optional 
-preprocessor: "PreprocessorClass", // Mandatory
-postprocessor: "PostprocessorClass" //Mandatory
-audio_column: "audio", // Optional
-target_column: "reference", // Optional (recommended)
-instruction_column: "instruction" // Optional (recommended)
-long_audio_processing_logic: truncate //
+task_name: <unique_task_name>
+dataset_path: <huggingface_repo or local_dataset_path> # mandatory
+subset: <subset> # Optional (recommended)
+split: <split> # mandatory
+lange: <language> # mandatory
+modality: <modality> # Optional 
+preprocessor: <PreprocessorClass> # mandatory
+postprocessor: <PostprocessorClass> # mandatory
+audio_column: <audio_column> # Optional
+target_column: <target_column> # Optional (recommended)
+instruction_column: <instruction_column> # Optional (recommended)
+long_audio_processing_logic: <truncate/chunk> # mandatory
 
-generation_kwargs:  // Additional kwargs to constrain model decoding behaviors
+generation_kwargs:  # mandatory - Additional kwargs to constrain model decoding behaviors
   temperature: 0.0001 
   max_completion_tokens: 64
 
 metrics:
-  - metric: llm_judge_binary // Metric from the allowed pre-defined metrics
+  - metric: <metric_name> # mandatory - Metric from the allowed pre-defined metrics
 ```
 
 **Important Note:** It is HIGHLY Recommended to add a "user_prompt" field tailored specifically to the datasets you are running for the best results, especially for complex tasks.
@@ -373,7 +351,6 @@ long_audio_processing_logic: truncate
 
 generation_kwargs:
   temperature: 0.0001
-  do_sample: false
   max_completion_tokens: 64
 
 metrics:
@@ -391,27 +368,30 @@ dataset_metric:
 ```
 
 #### Using Your Own Model
+The recommended way is to launch [VLLM](https://github.com/vllm-project/vllm) end-points and use the corresponding URLs in the run configs.
 
-To deploy your own models, look at [/models/inference_boilerplate/](./models/inference_boilerplate/) for more instructions.
+If your model is not yet supported on VLLM, we have an experimental FastAPI based inference server support in the [models/inference_boilerplate/](./models/inference_boilerplate/) directory. You can use this to deploy your own models.
 
 ### 📈 Analyzing Results
 
 Once your run finishes, you can inspect the outputs in a few ways:
 
-- **Full logs**  
-  View the complete log at  
+- **Full logs**
+  View the complete log at
   `default.log` (or whatever you set as `log_file`) in the project root.
 
-- **Per-record details**  
+- **Per-record details**
   `/run_logs/{dataset}_{metric}_{model}.csv`
 
-- **All record-level entries for the entire run**  
+- **All record-level entries for the entire run**
   `/run_logs/{run.json}`
 
-- **Final aggregated scores**  
+- **Final aggregated scores**
   `/run_logs/final_scores.json`
 
+## 📝 Acknowledgement
 
+HEAR-Kit incorporates some of the design elements and reusable components from ServiceNow's comprehensive internal benchmarking platform, namely CLAE. We'd like to thank the CLAE team for their invaluable feedback and suggestions.
 
 ## 📝 Citation
 
