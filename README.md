@@ -196,6 +196,11 @@ pip install -r requirements.txt
 4. Run the end-to-end evaluation:
 ```bash
 bash evaluate.sh
+
+```
+**NOTE:** If you would like to run evaluation with your own customized config, use the command below. Sample customized running configurations are provided in [run_configs](./run_configs/) 
+```
+bash evaluate.sh --config /path/to/your/config.yaml
 ```
 
 ### 🧩 Running Configuration Options
