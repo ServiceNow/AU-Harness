@@ -1,0 +1,20 @@
+# .github/workflows/branch-name-check.yml
+name: Branch name check
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+jobs:
+  branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate branch name
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          # Allowed: <type>/<kebab-case-description>
+          # types: feat|fix|docs|test|refactor|perf|ci|build|style|chore|revert|release|hotfix
+          if [[ ! "$BRANCH_NAME" =~ ^(feat|fix|docs|test|refactor|perf|ci|build|style|chore|revert|release|hotfix)/[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
+            echo "❌ Invalid branch name: $BRANCH_NAME"
+            echo "Use <type>/<kebab-case-description>, e.g., feat/metric-wer"
+            exit 1
+          fi
+          echo "✅ Branch name looks good: $BRANCH_NAME"
