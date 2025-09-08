@@ -77,7 +77,7 @@ If you are a maintainer with write access, you may create branches directly on t
 
 3. **Commit changes with clear messages**:
     ```bash
-    git commit -m "fix(docs): correct typo in README"
+    git commit -m "fix: correct typo in README"
     ```
 
 4. **Push your branch to your fork**:
