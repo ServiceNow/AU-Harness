@@ -2,6 +2,14 @@ task_metric: # task/group and metric
   - ["mtbench_audio", "mt_bench_llm_judge"]
   - ["mtbench_text", "mt_bench_llm_judge"]
 
+judge_settings:
+  judge_concurrency: 20 # optional - default is 1
+  judge_model: <JUDGE_MODEL_NAME>  # mandatory
+  judge_type: <JUDGE_MODEL_TYPE> # mandatory (vllm or openai)
+  judge_api_version: <JUDGE_MODEL_VERSION> # optional(needed for openai)
+  judge_api_endpoint: <JUDGE_MODEL_ENDPOINT> # mandatory
+  judge_api_key: <JUDGE_MODEL_KEY> # mandatory
+
 models:
   - name: <MODEL_NAME> 
     inference_type: "vllm"

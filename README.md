@@ -287,8 +287,10 @@ models:
 | "transcription"  | AsyncOpenAI (Transcriptions)         |
 
 #### Judge Configuration
+LLM-Judge setup is required to run any tasks requiring LLM-judge metrics. For specific task-metric pair compatibility, visit [Task Documentation](./tasks/README.md) and [Metric Documentation](./metrics/README.md).
+Sample LLM-judge configuration is noted below. We provide [sample run_config](./run_configs/mtbench.yaml) that requires LLM-judge setup accordingly.
 ```yaml
-judge_properties:
+judge_settings:
   judge_concurrency: 300 # optional - default is 1
   judge_model: "gpt-4o-mini" # mandatory
   judge_type: "openai" # mandatory (vllm or openai)
@@ -296,7 +298,6 @@ judge_properties:
   judge_api_endpoint: ${API_ENDPOINT} # mandatory
   judge_api_key: ${API_KEY} # mandatory
   judge_temperature: 0.1 # optional
-  judge_prompt_model_override: "Qwen3-32b" # optional
 ```
 
 ### 📝 Task Configuration Options
