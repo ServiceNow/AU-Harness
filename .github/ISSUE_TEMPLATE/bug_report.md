@@ -1,3 +1,10 @@
+---
+name: "🐛 Bug Report"
+about: Report a reproducible bug or regression
+title: "[Bug]: "
+labels: bug
+---
+
 ## 📌 Description
 <!-- A clear and concise description of what the bug is. -->
 

@@ -1,3 +1,10 @@
+---
+name: "📋 Task / Chore"
+about: Internal improvements, refactors, or maintenance work
+title: "[Task]: "
+labels: chore
+---
+
 ## 📝 Description
 <!-- Clearly describe the task or chore. -->
 
