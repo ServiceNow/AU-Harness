@@ -1,0 +1,11 @@
+# .github/ISSUE_TEMPLATE/config.yml
+
+blank_issues_enabled: false  # Prevents users from creating empty issues
+
+contact_links:
+  - name: 📖 Documentation
+    url: https://github.com/ServiceNow/HEAR-Kit/blob/main/README.md
+    about: Please check the documentation first before filing an issue.
+  - name: 🛠️ Security Bug Report
+    url: mailto:akshay.kalkunte@servicenow.com
+    about: Please report security vulnerabilities directly and privately.
