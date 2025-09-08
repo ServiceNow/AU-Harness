@@ -41,6 +41,7 @@ joblib==1.5.1            # scikit-learn
 soundfile==0.13.1        # librosa dependency, explicitly required
 
 word-levenshtein         # alignment tool for diarization metrics
+sqlparse                 # for speech-to-sql metrics
 
 langdetect==1.0.9
 ruamel.yaml==0.18.15

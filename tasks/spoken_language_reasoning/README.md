@@ -11,6 +11,15 @@ dataset_metric:
   # Individual dataset
   - ["mtbench_audio", "mt_bench_llm_judge"]
 ```
+## SPEECH_TO_SQL
+Before running evaluations for **SPEECH_TO_SQL** task, it is required to follow the installation steps using the script in `data/scripts/download_spider.sh`. The `data/spider` directory would be installed accordingly.
+
+ More specifically, execute the below before running the evaluation.
+
+```bash
+cd HEAR-Kit/
+bash data/scripts/downnload_spider.sh
+```
 
 ## 📊 Supported Datasets for Spoken Language Reasoning
 
