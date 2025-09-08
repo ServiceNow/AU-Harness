@@ -12,9 +12,11 @@ dataset_metric:
   - ["mtbench_audio", "mt_bench_llm_judge"]
 ```
 ## SPEECH_TO_SQL
-Before running evaluations for **SPEECH_TO_SQL** task, it is required to follow the installation steps using the script in `data/scripts/download_spider.sh`. The `data/spider` directory would be installed accordingly.
+Before running evaluations for **SPEECH_TO_SQL** task, it is required to follow the installation steps using the script in [`data/scripts/download_spider.sh`](../../data/scripts/download_spider.sh). The `data/spider/` directory and its subsidiary files would be created if the installation completes successfully. Failure to install these will result in the inability to run evaluations of 
+  - `[spider_audio, sql_score]`
+  - `[spider_text, sql_score]`
 
- More specifically, execute the below before running the evaluation.
+ More specifically, execute the below before running the evaluation for `speech_to_sql`.
 
 ```bash
 cd HEAR-Kit/
