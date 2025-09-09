@@ -19,7 +19,7 @@ Before running evaluations for **SPEECH_TO_SQL** task, it is required to follow 
  More specifically, execute the below before running the evaluation for `speech_to_sql`.
 
 ```bash
-cd HEAR-Kit/
+cd LALMEval/
 bash data/scripts/downnload_spider.sh
 ```
 
