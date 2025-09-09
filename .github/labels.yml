@@ -1,0 +1,35 @@
+# .github/labels.yml
+# Define and standardize your repository labels
+
+labels:
+  - name: "bug"
+    color: "d73a4a"
+    description: "Something isn't working"
+
+  - name: "enhancement"
+    color: "a2eeef"
+    description: "New feature request or improvement"
+
+  - name: "chore"
+    color: "cfd3d7"
+    description: "Refactoring, maintenance, or non-feature tasks"
+
+  - name: "documentation"
+    color: "0075ca"
+    description: "Improvements or additions to documentation"
+
+  - name: "help wanted"
+    color: "008672"
+    description: "Extra attention is needed"
+
+  - name: "good first issue"
+    color: "7057ff"
+    description: "Good for newcomers"
+
+  - name: "question"
+    color: "d876e3"
+    description: "Further information is requested"
+
+  - name: "wontfix"
+    color: "ffffff"
+    description: "This will not be worked on"
