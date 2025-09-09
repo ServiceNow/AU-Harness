@@ -1,15 +1,15 @@
 <div align="center" style="margin-bottom: 1em;">
 
-**LALMEval: An Open-Source Toolkit for Holistic Evaluation of Large Audio Language Models**
+**HEAR-Kit: Holistic Evaluation of AudioLLM Responses**
 
 *Comprehensive • Fast • Reproducible*
 
-<img src="assets/images/ver-1-bg.png" alt="LALMEval Brand Logo" width="200">
+<img src="assets/images/ver-1-bg.png" alt="HEAR-Kit Brand Logo" width="200">
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Version](https://img.shields.io/badge/version-0.1.0-orange.svg)](https://github.com/ServiceNow/LALMEval)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/ServiceNow/LALMEval/pulls)
+[![Version](https://img.shields.io/badge/version-0.1.0-orange.svg)](https://github.com/ServiceNow/HEAR-Kit)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/ServiceNow/HEAR-Kit/pulls)
 
 **🎯 50+ Datasets • 🚀 380+ Subsets • 📊 9 Metrics • 🔊 21 Audio Tasks**
 
@@ -17,10 +17,10 @@
 
 ## 📋 Overview
 
-LALMEval is a standardized, efficient and highly customizable open-source framework for evaluating audio-based language models on Audio-to-Text tasks. Built for researchers and developers, LALMEval provides a comprehensive suite of tools to benchmark and compare the performance of various audio processing models across a wide range of tasks.
+HEAR-Kit is a standardized, efficient and highly customizable open-source framework for evaluating audio-based language models on Audio-to-Text tasks. Built for researchers and developers, HEAR-Kit provides a comprehensive suite of tools to benchmark and compare the performance of various audio processing models across a wide range of tasks.
 
 
-## ❓ Why LALMEval?
+## ❓ Why HEAR-Kit?
 
 1. 🚀 **Blazing Fast**:
    - Multiple models can be evaluated simultaneously across multiple tasks, datasets and metrics using independent Engines, enabling full parallelization of the evaluation pipeline
@@ -49,7 +49,7 @@ LALMEval is a standardized, efficient and highly customizable open-source framew
 ## 📊 Task Taxonomy & Structure
 
 <div align="center" style="margin: 30px 0;">
-  <img src="assets/images/taxonomy.png" alt="LALMEval Task Taxonomy" style="width: 60%; max-width: 600px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+  <img src="assets/images/taxonomy.png" alt="HEAR-Kit Task Taxonomy" style="width: 60%; max-width: 600px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
 </div>
 
 ### 📁 Task Organization
@@ -119,7 +119,7 @@ LALMEval is a standardized, efficient and highly customizable open-source framew
 <p align='center'>
   <img src="assets/images/overview.png" alt="Taxonomy Figure" width="80%", height="auto"/>
 </p>
-The evaluation flow in LALMEval follows a highly concurrent architecture:
+The evaluation flow in HEAR-Kit follows a highly concurrent architecture:
 
 1. **Configuration & Initialization**: The system parses `config.yaml` to load models, datasets, metrics, and other evaluation parameters.
 
@@ -146,8 +146,8 @@ Get up and running in under a minute:
 
 ```bash
 # Clone and install
-git clone https://github.com/ServiceNow/LALMEval.git
-cd LALMEval
+git clone https://github.com/ServiceNow/HEAR-Kit.git
+cd HEAR-Kit
 pip install -r requirements.txt
 
 # Run your first evaluation
@@ -159,9 +159,9 @@ Results will be generated in `run_logs/` with detailed metrics and analysis.
 
 ## 💻 Usage
 
-LALMEval requires setting up a running configuration file (`config.yaml`) to define your evaluation parameters. This file controls which models, datasets, and metrics are used in your evaluation.
+HEAR-Kit requires setting up a running configuration file (`config.yaml`) to define your evaluation parameters. This file controls which models, datasets, and metrics are used in your evaluation.
 
-To get started with LALMEval:
+To get started with HEAR-Kit:
 
 1. Clone this repository
 2. Setup your environment:
@@ -302,7 +302,7 @@ judge_properties:
 ### 📝 Task Configuration Options
 #### Adding Datasets
 
-LALMEval supports adding custom tasks through `task_config` YAML files. These files define the task properties and how they should be processed.
+HEAR-Kit supports adding custom tasks through `task_config` YAML files. These files define the task properties and how they should be processed.
 
 #### Creating a TaskConfig File
 
@@ -397,22 +397,22 @@ where
   - `created_timestamp`: automatically recorded timestamp used as a unique_ID for each run
 ## 📝 Acknowledgement
 
-LALMEval incorporates some of the design elements and reusable components from ServiceNow's comprehensive internal benchmarking platform, namely CLAE. We'd like to thank the CLAE team for their invaluable feedback and suggestions.
+HEAR-Kit incorporates some of the design elements and reusable components from ServiceNow's comprehensive internal benchmarking platform, namely CLAE. We'd like to thank the CLAE team for their invaluable feedback and suggestions.
 
 ## 📝 Citation
 
-If you use LALMEval in your research, please cite our work:
+If you use HEAR-Kit in your research, please cite our work:
 
 ```bibtex
-@software{LALMEval2025,
-  title = {LALMEval: An Open-Source Toolkit for Holistic Evaluation of Large Audio Language Models},
+@software{HEAR-Kit2025,
+  title = {HEAR-Kit: A Comprehensive Audio Multimodal LLM Evaluation Toolkit},
   author = {ServiceNow},
   year = {2025},
-  url = {https://github.com/ServiceNow/LALMEval},
+  url = {https://github.com/ServiceNow/HEAR-Kit},
   version = {0.1.0}
 }
 ```
 
 ## 📄 License
 
-LALMEval is licensed under the Apache 2.0 License.
+HEAR-Kit is licensed under the Apache 2.0 License.
