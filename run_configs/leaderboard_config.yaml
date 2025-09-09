@@ -1,0 +1,52 @@
+task_metric: #tuple of task, metric(can run by task or dataset)
+  ##================ LEADERBOARD =========================###
+#   ## ASR
+  - ["librispeech_test_clean", "word_error_rate"]
+  # ##Paralinguistics
+  - ['meld_emotion_test', 'llm_judge_binary']
+  - ["iemocap_gender_recognition", "llm_judge_binary"]
+  - ['voxceleb_accent_test', 'llm_judge_binary']
+  - ['mmau_mini', 'llm_judge_binary']
+  - ['callhome_diarization_eng', 'diarization_metrics']
+
+
+  ## Audio Understanding
+  - ["mu_chomusic_test", "llm_judge_binary"]
+  - ["audiocaps_qa_test", "llm_judge_detailed"]
+
+  ## SLU
+  - ["public_sg_speech_qa_test", "llm_judge_detailed"]
+  - ["big_bench_audio_audio_query", "llm_judge_big_bench_audio"]
+  - ["covost2_zh-CN_en", "bleu"]
+  - ["mnsc_sds_part3_test", "llm_judge_detailed"]
+  - ["SLURP-intent", "llm_judge_binary"]
+
+  # SLR
+  - ["voicebench_ifeval_audio", "instruction_following"]
+  - ['bfcl_audio', 'bfcl_match_score']
+  - ["spider_audio", "sql_score"]
+  - ['mtbench_audio', 'mt_bench_llm_judge']
+
+#   ## Safety
+  - ["advbench", "llm_judge_redteaming"]
+  - ["asvspoof", "llm_judge_binary"]  
+
+judge_settings:
+  judge_concurrency: 20 # optional - default is 1
+  judge_model: <JUDGE_MODEL_NAME>  # mandatory
+  judge_type: <JUDGE_MODEL_TYPE> # mandatory (vllm or openai)
+  judge_api_version: <JUDGE_MODEL_VERSION> # optional(needed for openai)
+  judge_api_endpoint: <JUDGE_MODEL_ENDPOINT> # mandatory
+  judge_api_key: <JUDGE_MODEL_KEY> # mandatory
+
+models:  
+  - name: <MODEL_NAME> 
+    inference_type: "vllm"
+    url: <ENDPOINT_URL>
+    delay: 180
+    retry_attempts: 5
+    timeout: 300
+    model: <MODEL_NAME>
+    auth_token: <AUTH_TOKEN>
+    batch_size: 5
+    chunk_size: 30
