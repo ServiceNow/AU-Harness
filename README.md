@@ -1,6 +1,6 @@
 <div align="center" style="margin-bottom: 1em;">
 
-**LALM-Eval: Holistic Evaluation of AudioLLM Responses**
+**LALM-Eval: An Open-Source Toolkit for Holistic Evaluation of Large Audio Language Models**
 
 *Comprehensive • Fast • Reproducible*
 
@@ -399,7 +399,7 @@ If you use LALM-Eval in your research, please cite our work:
 
 ```bibtex
 @software{LALM-Eval2025,
-  title = {LALM-Eval: A Comprehensive Audio Multimodal LLM Evaluation Toolkit},
+  title = {LALM-Eval: An Open-Source Toolkit for Holistic Evaluation of Large Audio Language Models},
   author = {ServiceNow},
   year = {2025},
   url = {https://github.com/ServiceNow/LALM-Eval},
