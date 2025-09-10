@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for considering contributing to HEAR-Kit!  
+Thank you for considering contributing to LALM-Eval!  
 We welcome contributions of all kinds — new metrics, dataset and task integrations, bug fixes, documentation improvements, and more.  
 
 Please follow the guidelines below to keep the project consistent and easy to maintain.
