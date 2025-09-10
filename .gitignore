@@ -16,6 +16,7 @@ final_scores.json
 # callhome local files
 *.cha
 *.wav
+*.parquet
 
 # python cache files
 __pycache__/

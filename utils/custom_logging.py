@@ -12,6 +12,7 @@ import logging
 import csv
 import re
 import json
+import datetime
 from pathlib import Path
 from itertools import zip_longest
 
@@ -22,6 +23,7 @@ _DEFAULT_NAME = "default.log"
 class LoggingState:
     """Class to manage logging configuration state."""
     CONFIGURED = False
+    LOGGING_TIMESTAMP = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S_%f")
 
 
 def _install_handlers(log_path: Path):
@@ -52,10 +54,9 @@ def configure(log_file: str):
     """Configure root logger. Always uses default.log in the project root."""
     if LoggingState.CONFIGURED:
         return
-    if log_file:
-        path = Path(log_file)
-    else:
-        path = Path(_DEFAULT_NAME)
+    log_path = log_file or _DEFAULT_NAME
+    path = Path(f"{LoggingState.LOGGING_TIMESTAMP}_{log_path}")
+
     _install_handlers(path)
 
     # Disable httpx INFO logs by setting its logger to WARNING level
@@ -90,8 +91,11 @@ def write_record_log(
 
     log_dir = Path("run_logs")
     log_dir.mkdir(exist_ok=True)
+    
+    timestamp_log_dir = log_dir / f"{LoggingState.LOGGING_TIMESTAMP}"
+    timestamp_log_dir.mkdir(exist_ok=True)
 
-    log_subdir = log_dir / f"{_slug(task_name)}"
+    log_subdir = timestamp_log_dir / f"{_slug(task_name)}"
     log_subdir.mkdir(exist_ok=True)
     log_path = log_subdir / f"{_slug(task_name)}_{_slug(self.name)}_{_slug(model_name)}.csv"
 
@@ -200,8 +204,11 @@ def write_to_run_json(
         model_name: Name of the model
         explanations: Optional list of explanations for each score
     """
-    run_path = Path("run_logs") / "run.log"
-    run_path.parent.mkdir(exist_ok=True)
+    run_directory = Path("run_logs")
+    run_directory.mkdir(exist_ok=True)
+    run_timestamp_directory = run_directory / f"{LoggingState.LOGGING_TIMESTAMP}"
+    run_timestamp_directory.mkdir(exist_ok=True)
+    run_path = run_timestamp_directory / "run.log"
 
     # Use provided explanations or an empty list
     if explanations is None:
@@ -252,7 +259,9 @@ def append_final_score(self, overall, task_name, model_name, model_responses=Non
     """
     log_dir = Path("run_logs")
     log_dir.mkdir(exist_ok=True)
-    json_path = log_dir / "final_scores.json"
+    timestamp_log_dir = log_dir / f"{LoggingState.LOGGING_TIMESTAMP}"
+    timestamp_log_dir.mkdir(exist_ok = True)
+    json_path = timestamp_log_dir / "final_scores.json"
     
     # Calculate additional statistics from model_responses
     total_samples = 0

@@ -356,6 +356,10 @@ generation_kwargs:
 metrics:
   - metric: llm_judge_binary
 ```
+#### Tasks requiring additional setups
+Two specific datasets require additional customized setups before execution. Follow the provided instructions accordingly:
+- `CallHome` (for ASR and Speaker Diarization Task): Follow the instructions provided in [tasks/speech_recognition/asr/callhome_asr](./tasks/speech_recognition/asr/callhome_asr/README.md)
+- `Speech_to_SQL` (for Speech-to-Coding Task): Follow the instructions provided in [tasks/spoken_language_reasoning](./tasks/spoken_language_reasoning/README.md)
 
 ### ⚙️ Customizations
 #### Using Your Dataset
@@ -378,17 +382,19 @@ Once your run finishes, you can inspect the outputs in a few ways:
 
 - **Full logs**
   View the complete log at
-  `default.log` (or whatever you set as `log_file`) in the project root.
+  `{created_timestamp}_default.log` (or `{created_timestamp}_{log_file}` where `log_file` is what you set) in the project root.
 
 - **Per-record details**
-  `/run_logs/{dataset}_{metric}_{model}.csv`
-
-- **All record-level entries for the entire run**
-  `/run_logs/{run.json}`
+  `/run_logs/{created_timestamp}/{task}/{task}_{metric}_{model}.csv`
 
 - **Final aggregated scores**
-  `/run_logs/final_scores.json`
+  `/run_logs/{created_timestamp}/final_scores.json`
 
+where 
+  - `task`: name of the task that is run for evaluation
+  - `metric`: pre-defined metric name used for evaluating the given task
+  - `model`: name of the model being evaluated
+  - `created_timestamp`: automatically recorded timestamp used as a unique_ID for each run
 ## 📝 Acknowledgement
 
 LALM-Eval incorporates some of the design elements and reusable components from ServiceNow's comprehensive internal benchmarking platform, namely CLAE. We'd like to thank the CLAE team for their invaluable feedback and suggestions.
