@@ -100,7 +100,7 @@ LALM-Eval is a standardized, efficient and highly customizable open-source frame
 - [**ifeval**](./tasks/spoken_language_reasoning/ifeval/) - Speech Instruction-following capability evaluation
 - [**bfcl**](./tasks/spoken_language_reasoning/bfcl) - Speech Function Calling capability evaluation
 - [**mtbench**](./tasks/spoken_language_reasoning/mtbench/) - Complex multi-turn Instruction-following capability evaluation
-- [**speech_to_sql**](./tasks/spoken_language_reasoning/mtbench/) - Speech-to-Coding capability
+- [**speech_to_sql**](./tasks/spoken_language_reasoning/speech_to_sql/) - Speech-to-Coding capability
 
 </details>
 
