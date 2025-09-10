@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="LALM-Eval">
+  <meta name="keywords" content="LALM-Eval">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LALM-Eval</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1.9.1/css/academicons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" type="image/png" href="./static/images/lalm-eval-logo.png">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+  <script type="module" src="https://gradio.s3-us-west-2.amazonaws.com/4.16.0/gradio.js"></script>
+  
+  <style>
+    /* Clean modern styles inspired by WebMMU */
+    .venue-badge {
+      text-align: center;
+      margin-bottom: 2rem;
+      animation: fadeIn 0.8s ease-in;
+    }
+    
+    .venue-badge .badge-text {
+      display: inline-block;
+      background: linear-gradient(135deg, #1BC5BD 0%, #4E9BE2 50%, #F64E87 100%);
+      color: white;
+      padding: 0.75rem 2rem;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(27, 197, 189, 0.3);
+      letter-spacing: 0.5px;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Cleaner header styling */
+    .hero.custom-hero {
+      background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
+      padding: 3rem 0;
+    }
+    
+    .header-container {
+      margin-bottom: 1.25rem;
+    }
+    
+    .main-title {
+      font-size: 2.5rem !important;
+      line-height: 1.3 !important;
+      font-weight: 700;
+    }
+    
+    /* Clean button styling */
+    .publication-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin: 1rem 0 0.75rem 0;
+    }
+    
+    .publication-links .button {
+      background: #4A90E2;
+      border: 2px solid #4A90E2;
+      color: white;
+      transition: all 0.3s ease;
+      padding: 0.75rem 1.5rem;
+      font-weight: 500;
+      box-shadow: 0 2px 8px rgba(74, 144, 226, 0.3);
+    }
+    
+    .publication-links .button:hover {
+      background: #3A7BC8;
+      color: white;
+      border-color: #3A7BC8;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(74, 144, 226, 0.4);
+    }
+    
+    .publication-links .button .icon {
+      color: white;
+    }
+    
+    .publication-links .button:hover .icon {
+      color: white;
+    }
+    
+    /* Clean section styling */
+    section {
+      padding: 3rem 0;
+    }
+    
+    .box {
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .box:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      transform: translateY(-4px);
+    }
+    
+    /* Optimize spacing */
+    .container.is-max-desktop {
+      max-width: 1200px;
+      padding: 0 1.5rem;
+    }
+    
+    h2.title {
+      margin-bottom: 1.5rem;
+      font-size: 2rem;
+    }
+    
+    .section-intro {
+      color: #718096;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="hero custom-hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column">
+            <!-- Improved horizontal header layout with logo on left -->
+            <div class="header-container">
+              <div class="logo-title-wrapper">
+                <div class="logo-wrapper">
+                  <img src="static/images/lalm-eval-logo.png" alt="LALM-Eval Logo" class="main-logo">
+                </div>
+                <div class="title-container">
+                  <h1 class="title main-title main-gradient">LALM-Eval: An Open-Source Toolkit for Holistic Evaluation of Large Audio Language Models</h1>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Moved Links Section above authors -->
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="#" target="_blank" class="external-link button is-normal is-rounded">
+                  <span class="icon"><img src="static/images/arxiv-logomark-small.svg" alt="arXiv" style="height: 1em;"></span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#" target="_blank" class="external-link button is-normal is-rounded">
+                  <span class="icon"><img src="static/images/pdf-svgrepo-com.svg" alt="PDF" style="height: 1em;"></span>
+                  <span>PDF</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/ServiceNow/LALM-Eval" target="_blank" class="external-link button is-normal is-rounded">
+                  <span class="icon"><img src="static/images/github-mark.svg" alt="GitHub" style="height: 1em;"></span>
+                  <span>Github</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://huggingface.co/collections/ServiceNow-AI/lalm-eval-datasets-688baf68cf412e1b03b8215c" target="_blank" class="external-link button is-normal is-rounded">
+                  <span class="icon"><img src="static/images/huggingface_logo-noborder.svg" alt="Hugging Face" style="height: 1em;"></span>
+                  <span>Datasets Collection</span>
+                </a>
+              </span>
+            </div>
+
+            <!-- Authors Section with all authors visible -->
+            <div class="authors-container">
+              <div class="authors-list">
+                <span class="author-item"><a href="https://scholar.google.com/citations?hl=en&user=5nyG9uAAAAAJ">Sidharth Surapaneni<sup>2,3</sup></a>,</span>
+                <span class="author-item"><a href="https://scholar.google.com/citations?user=YKcLxDQAAAAJ&hl=en&oi=sra">Hoang Nguyen<sup>1</sup></a>,</span>
+                <span class="author-item"><a href="https://scholar.google.com/citations?user=1Tms710AAAAJ&hl=en&oi=ao">Jash Mehta<sup>1</sup></a>,</span>
+                <span class="author-item"><a href="https://scholar.google.com/citations?user=yp1T9P0AAAAJ&hl=en&oi=ao">Aman Tiwari<sup>1</sup></a>,</span>
+                <span class="author-item"><a href="#">Oluwanifemi Bamgbose<sup>1</sup></a>,</span>
+                <span class="author-item"><a href="https://scholar.google.com/citations?user=-GV1fg4AAAAJ&hl=en">Akshay Kalkunte<sup>1</sup></a>,</span>
+                <span class="author-item"><a href="https://sairajeswar.com/">Sai Rajeswar<sup>1</sup></a>,</span>
+                <span class="author-item"><a href="https://scholar.google.com/citations?user=wwVSfRsAAAAJ&hl=en">Sathwik Tejaswi Madhusudhan<sup>1</sup></a>,</span>
+              </div>
+            </div>
+
+            <!-- Simplified Affiliations Section -->
+            <div class="affiliations-container">
+              <div class="affiliations-list">
+                <span class="affiliation-item"><sup>1</sup>ServiceNow,</span>
+                <span class="affiliation-item"><sup>2</sup>University of Texas at Austin,</span>
+                <span class="affiliation-item"><sup>3</sup>Work done during internship at ServiceNow,</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="content">
+        <!-- Updated TLDR Box -->
+        <div class="tldr-container">
+          <h3 class="tldr-title"><i class="fas fa-lightbulb"></i> TL;DR</h3>
+          <div class="tldr-content">
+            <p>LALM-Eval is a standardized, efficient and highly customizable open-source framework for evaluating audio-based language models on Audio-to-Text tasks. Built for researchers and developers, it provides a comprehensive suite of tools to benchmark and compare the performance of various audio processing models.</p>
+            <ul class="tldr-list">
+              <li>
+                <i class="fas fa-check-circle"></i>
+                <div class="tldr-item-content">
+                  <strong>Blazing Fast</strong> — Multiple models evaluated simultaneously across multiple tasks, datasets and metrics using independent Engines, enabling full parallelization. Achieves a speedup of up to 127%
+                  over existing toolkits.
+                </div>
+              </li>
+              <li>
+                <i class="fas fa-check-circle"></i>
+                <div class="tldr-item-content">
+                  <strong>Immensely Customizable</strong> — Options to filter datasets by accents, language, length, and customize models, tasks, and score reporting.
+                </div>
+              </li>
+              <li>
+                <i class="fas fa-check-circle"></i>
+                <div class="tldr-item-content">
+                  <strong>Super Modular</strong> — Streamlined evaluation processes and modularized functions for easy extension.
+                </div>
+              </li>
+              <li>
+                <i class="fas fa-check-circle"></i>
+                <div class="tldr-item-content">
+                  <strong>Wide Task Coverage</strong> — Supporting 21 unique tasks across 6 categories, 50+ datasets with 380+ unique subsets, and 9 different metrics.
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <h2 class="title is-3 main-gradient">What is LALM-Eval?</h2>
+        <p>
+          Large Audio Language Models (LALMs) are rapidly advancing, but evaluating
+          them remains challenging due to inefficient toolkits that limit fair comparison and
+          systematic assessment. Current frameworks suffer from three critical issues: <em class="highlight-text">slow
+          processing</em> that bottlenecks large-scale studies, <em class="highlight-text">inconsistent prompting</em> that hurts
+          reproducibility, and <em class="highlight-text">narrow task coverage</em> that misses important audio reasoning
+          capabilities.
+        </p>
+        
+        <div style="height: 20px;"></div>
+        
+        <p>
+          To address these challenges, we present LALM-Eval, a comprehensive evaluation framework that transforms how audio language models are benchmarked through three core contributions:
+        </p>
+        <ul style="margin-left: 1.5rem; margin-top: 1rem; margin-bottom: 1.5rem;">
+          <li style="margin-bottom: 0.8rem;"><strong style="color: #1BC5BD;">High-Performance Evaluation Engine:</strong> Our architecture leverages vLLM batching, dataset sharding, and parallel task execution to scale evaluations to multi-node infrastructures without sacrificing fidelity.</li>
+          <li style="margin-bottom: 0.8rem;"><strong style="color: #1BC5BD;">Unified Configuration System:</strong> Standardizes prompting, generation parameterization, metrics and reporting across benchmarks, enabling fair, reproducible comparisons and easy task integration.</li>
+          <li style="margin-bottom: 0.8rem;"><strong style="color: #1BC5BD;">Expanded Reasoning Assessment:</strong> Introduces 3 new spoken language reasoning tasks for audio conditioned reasoning and an LLM-Adaptive Diarization task to assess temporal grounding.</li> 
+        </ul>
+
+        <div style="height: 10px;"></div>
+        
+        <!-- Image Gallery Section - First Row -->
+        <div class="image-gallery">
+          <!-- Taxonomy Image -->
+          <div class="gallery-item">
+            <div class="image-container">
+              <img src="static/images/taxonomy.png" alt="LALM-Eval Task Taxonomy" class="gallery-image">
+            </div>
+            <div class="image-caption">
+              <h4>Task Taxonomy</h4>
+              <p>Organization of 21 tasks across 6 categories</p>
+            </div>
+          </div>
+        </div>
+        
+        <div style="height: 0px;"></div>
+        
+        <!-- Performance Comparison Image (Full Width) -->
+        <div class="image-gallery">
+          <div class="gallery-item" style="max-width: 100%; overflow: hidden;">
+            <div class="image-container" style="text-align: center;">
+              <img src="static/images/eval_kit_comparison.png" alt="Evaluation Kit Performance Comparison" class="gallery-image" style="width: 100%; margin: 0;">
+            </div>
+            <div class="image-caption">
+              <h4>Performance Comparison</h4>
+              <p>Up to 127% speedup compared to existing evaluation frameworks</p>
+            </div>
+        </div>
+        </div>
+
+        <div style="height: 100px;"></div>
+
+        <!-- Model Leaderboard Section -->
+        <section class="section" style="padding:0;margin:0;">
+          <div style="width:100vw;max-width:100vw;margin-left:calc(-50vw + 50%);margin-right:calc(-50vw + 50%);padding:0;">
+            <h2 class="title is-3 main-gradient" style="margin-left:8px;margin-top:8px;">Leaderboard</h2>
+            <div style="display:flex;justify-content:center;align-items:center;margin:12px 0 18px 0;">
+              <span style="display:inline-flex;align-items:center;background:linear-gradient(90deg,#e8f0fe 60%,#f7fafc 100%);color:#3b4a5a;border-radius:24px;padding:8px 20px;font-size:1.05rem;font-style:italic;box-shadow:0 2px 8px rgba(27,197,189,0.08);gap:0.7em;">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="vertical-align:middle;"><circle cx="10" cy="10" r="10" fill="#4E9BE2"/><text x="10" y="15" text-anchor="middle" font-size="14" fill="#fff" font-family="Arial" font-weight="bold">i</text></svg>
+                More models will be added soon.
+              </span>
+            </div>
+            <div class="table-wrapper" style="width:100vw;max-width:100vw;overflow-x:auto;padding-left:16px;padding-right:16px;background:#fcfcfd;margin:0;">
+              <div class="table-scroll" style="width:100vw;max-width:100vw;overflow-x:auto;padding:0;margin:0;position:relative;">
+                <style>
+                  /* Fix for sticky first column: parent must be relative, table must be block */
+                  .table-scroll {
+                    position: relative !important;
+                    overflow-x: auto !important;
+                  }
+                  .table-scroll::after {
+                    content: '';
+                    display: block;
+                    width: 16px;
+                    min-width: 16px;
+                    height: 1px;
+                    float: right;
+                  }
+                  .task-table {
+                    min-width: max-content;
+                    border-spacing: 0;
+                  }
+                  /* Remove special styling for last column */
+                  /* Purge any rules for th:last-child or td:last-child here */
+                  /* Sticky table headers for leaderboard */
+                  .task-table thead th {
+                    position: sticky;
+                    top: 0;
+                    background: linear-gradient(to right, #2d3748, #1a202c);
+                    color: white;
+                    z-index: 10;
+                    padding: 12px 8px;
+                    font-size: 0.9rem;
+                  }
+                  
+                  /* Style for task names in header */
+                  .task-table thead th br {
+                    margin-bottom: 4px;
+                  }
+                  
+                  .task-table thead th sub {
+                    font-size: 0.75rem;
+                    opacity: 0.85;
+                  }
+                  /* Sticky first column for both header and body */
+                  .task-table th:first-child {
+                    position: sticky;
+                    left: 0;
+                    background: linear-gradient(to right, #2d3748, #1a202c) !important;
+                    color: white !important;
+                    z-index: 12 !important;
+                    min-width: 200px !important;
+                    width: 200px !important;
+                    box-shadow: 2px 0 4px -2px rgba(0,0,0,0.03);
+                  }
+                  .task-table td:first-child {
+                    position: sticky;
+                    left: 0;
+                    background: #f7fafc !important;
+                    color: #222 !important;
+                    z-index: 11 !important;
+                    min-width: 200px !important;
+                    width: 200px !important;
+                    box-shadow: 2px 0 4px -2px rgba(0,0,0,0.03);
+                  }
+                  .task-table {
+                    border-spacing: 0;
+                    table-layout: fixed;
+                    width: 100%;
+                  }
+                  
+                  /* Set equal width for all table columns except first column (Model name) */
+                  .task-table th:not(:first-child),
+                  .task-table td:not(:first-child) {
+                    width: 120px;
+                    min-width: 120px;
+                    max-width: 120px;
+                    text-align: center;
+                    padding: 8px 12px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                  }
+                  
+                  /* Add padding to first column for better readability */
+                  .task-table th:first-child,
+                  .task-table td:first-child {
+                    padding: 8px 16px;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                  }
+                  
+                  /* Ensure consistent cell styling */
+                  .task-table td {
+                    vertical-align: middle;
+                  }
+                  
+                  /* Ensure consistent row heights */
+                  .task-table tr {
+                    height: 48px;
+                    line-height: 1.4;
+                  }
+                </style>
+                <table class="task-table">
+                  <thead>
+                    <tr>
+                      <th>Model</th>
+                      <th>Librispeech<br><sub>WER</sub></th>
+                      <th>MELD<br><sub>llm_judge_binary</sub></th>
+                      <th>IEMOCAP<br><sub>llm_judge_binary</sub></th>
+                      <th>VoxCeleb<br><sub>llm_judge_binary</sub></th>
+                      <th>mmau_mini<br><sub>llm_judge_binary</sub></th>
+                      <th>CallHome<br><sub>WDER</sub></th>
+                      <th>public_sg_speech_qa_test<br><sub>llm_judge_detailed</sub></th>
+                      <th>BigBench Audio<br><sub>llm_judge_big_bench_audio</sub></th>
+                      <th>Covost2 (zh-CN-&gt;EN)<br><sub>BLEU</sub></th>
+                      <th>mnsc_sds (P3)<br><sub>llm_judge_detailed</sub></th>
+                      <th>SLURP<br><sub>llm_judge_binary</sub></th>
+                      <th>audiocaps_qa<br><sub>llm_judge_detailed</sub></th>
+                      <th>mu_chomusic_test<br><sub>llm_judge_binary</sub></th>
+                      <th>IFEval<br><sub>instruction_following_score</sub></th>
+                      <th>MTBench<br><sub>llm_judge_mt_bench</sub></th>
+                      <th>Spider<br><sub>sql_score (EM)</sub></th>
+                      <th>BFCL<br><sub>bfcl_match_score</sub></th>
+                      <th>advbench<br><sub>redteaming_judge</sub></th>
+                      <th>avspoof<br><sub>llm_judge_binary</sub></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Voxtral-Mini-3B</td>
+                      <td>2.10</td>
+                      <td>28.4</td>
+                      <td>54.9</td>
+                      <td>13</td>
+                      <td>45.8</td>
+                      <td>35.38</td>
+                      <td>62.12</td>
+                      <td>43.5</td>
+                      <td>15.27</td>
+                      <td>52.2</td>
+                      <td>42.5</td>
+                      <td>14.96</td>
+                      <td>45.4</td>
+                      <td>38.06</td>
+                      <td>64.12</td>
+                      <td>30.17</td>
+                      <td>78.5</td>
+                      <td>78.5</td>
+                      <td>91.5</td>
+                    </tr>
+                    <tr>
+                      <td>Qwen-2.5-Omni-7B</td>
+                      <td>1.74</td>
+                      <td>49.8</td>
+                      <td>85.8</td>
+                      <td>28.7</td>
+                      <td>62.3</td>
+                      <td>35.4</td>
+                      <td>69.4</td>
+                      <td>53.8</td>
+                      <td>28.41</td>
+                      <td>52</td>
+                      <td>57</td>
+                      <td>38.4</td>
+                      <td>59.3</td>
+                      <td>50.83</td>
+                      <td>62.88</td>
+                      <td>38.46</td>
+                      <td>68</td>
+                      <td>98.3</td>
+                      <td>30</td>
+                    </tr>
+                    <tr>
+                      <td>GPT-4o</td>
+                      <td>6.25</td>
+                      <td>20.2</td>
+                      <td>0*</td>
+                      <td>0*</td>
+                      <td>42</td>
+                      <td>37.14</td>
+                      <td>70.2</td>
+                      <td>65</td>
+                      <td>21.68</td>
+                      <td>61.2</td>
+                      <td>48</td>
+                      <td>15.08</td>
+                      <td>50.2</td>
+                      <td>72.15</td>
+                      <td>62.44</td>
+                      <td>45.15</td>
+                      <td>86.65</td>
+                      <td>88.1</td>
+                      <td>0*</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div style="font-size: 0.9em; color: #888; margin-top: 0.5em;">* Reported performance is impacted by content filtering system from Azure OpenAI</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div style="height: 60px;"></div>
+
+          <style>
+            /* Consolidated and optimized table styling */
+            .table-wrapper {
+              position: relative;
+              overflow: hidden;
+              max-width: 100%;
+              margin: 2rem 0;
+              border-radius: 12px;
+              box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            }
+
+            .table-scroll-container {
+              overflow-x: auto;
+              max-width: 100%;
+              position: relative;
+              display: block;
+              padding: 0.5rem;
+            }
+
+            /* Clean table design */
+            .task-table {
+              width: 100%;
+              border-collapse: collapse;
+              font-size: 0.85rem;
+              background: white;
+            }
+
+            /* Clean header styling */
+            .task-table thead th {
+              padding: 1rem 0.5rem;
+              font-size: 0.8rem;
+              min-width: 70px;
+              text-align: center;
+              white-space: normal;
+              vertical-align: middle;
+              background: linear-gradient(180deg, #fafbfc 0%, #f8f9fa 100%);
+              border-bottom: 2px solid #e2e8f0;
+              font-weight: 600;
+              color: #2d3748;
+            }
+
+            /* First column styling */
+            .task-table th:first-child,
+            .task-table td:first-child {
+              min-width: 150px;
+              padding-left: 1rem;
+              text-align: left;
+              white-space: normal;
+              font-weight: 500;
+            }
+
+            /* Clean data cell styling */
+            .task-table td {
+              padding: 0.75rem 0.5rem;
+              font-size: 0.8rem;
+              text-align: center;
+              border-bottom: 1px solid #f0f4f8;
+              color: #4a5568;
+            }
+
+            /* Numeric cells */
+            .task-table td:not(:first-child) {
+              font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+            }
+
+            /* Column sizing */
+            .task-table th:not(:first-child),
+            .task-table td:not(:first-child) {
+              min-width: 70px;
+            }
+
+            /* Subscripts in headers */
+            .task-table thead th sub {
+              font-size: 0.65em;
+              display: block;
+              line-height: 1.1;
+              margin-top: 2px;
+              opacity: 0.7;
+            }
+
+            /* Task name styling */
+            .task-name {
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            }
+
+            .task-name i {
+              font-size: 0.9rem;
+              width: 1.2rem;
+              flex-shrink: 0;
+              color: #1BC5BD;
+            }
+            
+            /* Highlight BigDocs rows */
+            .bigdocs-row {
+              background: linear-gradient(90deg, rgba(27, 197, 189, 0.08) 0%, rgba(78, 155, 226, 0.08) 50%, rgba(246, 78, 135, 0.08) 100%);
+              font-weight: 600;
+            }
+            
+            .bigdocs-row td {
+              border-bottom: 2px solid rgba(27, 197, 189, 0.3);
+            }
+            
+            /* Hover effects for table rows */
+            .task-table tbody tr:hover {
+              background-color: rgba(27, 197, 189, 0.05);
+              transition: background-color 0.3s ease;
+            }
+            
+
+            .task-name span {
+              line-height: 1.1 !important;
+              font-size: 0.8rem !important;
+            }
+
+            /* Enable sticky first column with proper styling */
+            .task-table thead th:first-child {
+              z-index: 101 !important;
+              background: linear-gradient(to right, #2d3748, #1a202c) !important;
+            }
+
+            .task-table tbody td:first-child {
+              background-color: #ffffff !important;
+            }
+
+            .task-table tbody tr:nth-child(even) td:first-child {
+              background-color: rgba(247, 250, 252, 1) !important;
+            }
+
+            /* Maximize container width */
+            .container.is-max-desktop {
+              max-width: 98% !important;
+              width: 98% !important;
+            }
+
+            /* Adjust hover effect to be less disruptive */
+            .task-table tbody tr:hover {
+              transform: translateX(2px) !important;
+            }
+
+            /* Ensure the table doesn't overflow mobile devices */
+            @media (max-width: 768px) {
+              .container.is-max-desktop {
+                max-width: 100% !important;
+                padding: 0 !important;
+              }
+              
+              .table-wrapper {
+                margin: 2rem -0.5rem !important;
+              }
+              
+              .task-table thead th {
+                font-size: 0.7rem !important;
+                padding: 0.6rem 0.2rem !important;
+              }
+              
+              .task-table td {
+                font-size: 0.7rem !important;
+              }
+            }
+          </style>
+
+        </div>
+
+        <div style="height: 60px;"></div>
+
+          <style>
+            .table-wrapper {
+              position: relative;
+              overflow: hidden;
+            }
+
+            .table-scroll {
+              overflow-x: auto;
+              margin-left: 200px;  /* Width of first fixed column */
+              margin-right: 100px; /* Width of last fixed column */
+            }
+
+            .small-font-table {
+              position: relative;
+            }
+
+            /* Style for fixed columns */
+            .fixed-column {
+              position: absolute;
+              width: 200px; /* Width of first column */
+              left: 0;
+              top: auto;
+              background: white;
+              border-right: 2px solid #e2e8f0;
+            }
+
+            .fixed-column-right {
+              position: absolute;
+              width: 100px; /* Width of last column */
+              right: 0;
+              top: auto;
+              background: white;
+              border-left: 2px solid #e2e8f0;
+            }
+          .fixed-column {
+            position: absolute;
+            width: 200px; /* Width of first column */
+            left: 0;
+            top: auto;
+            background: white;
+            border-right: 2px solid #e2e8f0;
+          }
+
+          .fixed-column-right {
+            position: absolute;
+            width: 100px; /* Width of last column */
+            right: 0;
+            top: auto;
+            background: white;
+            border-left: 2px solid #e2e8f0;
+          }
+
+          /* Remove shadows to indicate scrolling */
+          .table-wrapper::before,
+          .table-wrapper::after {
+            display: none;
+          }
+
+          /* Clean, modern hero */
+          .custom-hero {
+            background: #ffffff;
+            color: #333;
+            padding: 2rem 1.5rem 1rem;
+            border-bottom: 1px solid #eaeaea;
+          }
+
+          /* Gradient style for title */
+          .main-gradient {
+            background: linear-gradient(45deg, #1BC5BD, #4E9BE2, #F64E87);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+          }
+          
+          /* Updated header layout styles */
+          .header-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
+            width: 100%;
+          }
+          
+          .logo-title-wrapper {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 20px;
+            justify-content: center;
+          }
+          
+          .logo-wrapper {
+            display: flex;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+          }
+          
+          .logo-wrapper:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 10px rgba(27, 197, 189, 0.3));
+          }
+          
+          .main-logo {
+            width: 100px;
+            height: auto;
+            object-fit: contain;
+            transition: all 0.3s ease;
+          }
+          
+          .title-container {
+            text-align: center;
+            max-width: 900px;
+            position: relative;
+            flex: 1;
+          }
+          
+          .main-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.8px;
+            transition: all 0.3s ease;
+            cursor: default;
+            line-height: 1.15;
+          }
+          
+          .main-title:hover {
+            transform: translateY(-2px);
+            text-shadow: 
+              2px 2px 4px rgba(27, 197, 189, 0.2),
+              -2px -2px 4px rgba(246, 78, 135, 0.2);
+            background: linear-gradient(45deg, 
+              #1BC5BD 0%, 
+              #4E9BE2 50%, 
+              #F64E87 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 3s linear infinite;
+          }
+          
+          @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+          
+          /* Responsive adjustments */
+          @media (max-width: 768px) {
+            .logo-title-wrapper {
+              flex-direction: column;
+              gap: 16px;
+            }
+            
+            .title-container {
+              text-align: center;
+              max-width: 100%;
+            }
+            
+            .main-logo {
+              width: 80px;
+            }
+            
+            .main-title {
+              font-size: 1.8rem;
+            }
+            
+            .main-gradient {
+              text-align: center;
+            }
+          }
+          
+          /* Modern Authors Section */
+          .authors-container {
+            margin: 1.5rem auto;
+            max-width: 960px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.95) 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.04);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+          }
+          
+          .authors-list {
+            text-align: center;
+            line-height: 1.9;
+            padding: 0.25rem;
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          }
+          
+          .author-item {
+            display: inline-block;
+            margin: 0.15rem 0.08rem;
+            border-radius: 6px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .author-item a {
+            color: #1a202c;
+            text-decoration: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: inline-block;
+            background: linear-gradient(135deg, transparent 0%, rgba(27, 197, 189, 0.05) 100%);
+            border: 1px solid transparent;
+          }
+          
+          .author-item a:hover {
+            background: linear-gradient(135deg, rgba(27, 197, 189, 0.12) 0%, rgba(78, 155, 226, 0.08) 100%);
+            color: #0f172a;
+            transform: translateY(-2px) scale(1.02);
+            border: 1px solid rgba(27, 197, 189, 0.2);
+            box-shadow: 0 4px 16px rgba(27, 197, 189, 0.2), 0 2px 8px rgba(0, 0, 0, 0.08);
+          }
+          
+          .author-item a sup {
+            color: #1BC5BD;
+            font-weight: 600;
+            font-size: 0.75em;
+            margin-left: 2px;
+            transition: all 0.3s ease;
+          }
+          
+          .author-item a:hover sup {
+            color: #F64E87;
+            transform: scale(1.1);
+          }
+          
+          /* Updated affiliations styling - more compact */
+          .affiliations-container {
+            margin: 1rem auto;  /* Reduced from 1.5rem */
+            max-width: 900px;
+            padding: 1rem;  /* Reduced from 1.5rem */
+            background: #f8f9fa;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+          }
+          
+          .affiliations-list {
+            text-align: center;
+            line-height: 1.6;  /* Reduced from 2 */
+            color: #2d3748;
+            font-size: 1rem;  /* Reduced from 1.1rem */
+          }
+          
+          .affiliation-item {
+            display: inline-block;
+            margin: 0.2rem 0.5rem;  /* Reduced margins */
+            padding: 0.2rem 0.4rem;  /* Reduced padding */
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            cursor: default;
+          }
+          
+          .affiliation-item:hover {
+            background: rgba(27, 197, 189, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(27, 197, 189, 0.1);
+          }
+          
+          .affiliation-item sup {
+            color: #1BC5BD;
+            font-weight: 600;
+            font-size: 0.8em;  /* Slightly smaller superscript */
+            margin-right: 0.2rem;
+            transition: all 0.2s ease;
+          }
+          
+          .affiliation-item:hover sup {
+            color: #F64E87;
+            transform: scale(1.1);
+          }
+
+          /* Responsive adjustments */
+          @media (max-width: 768px) {
+            .affiliations-list {
+              font-size: 0.9rem;  /* Even smaller on mobile */
+            }
+            
+            .affiliation-item {
+              margin: 0.15rem 0.3rem;
+            }
+          }
+          
+          /* Links section improvements */
+          .publication-links {
+            margin: 1.5rem auto;
+            text-align: center;
+          }
+          
+          .link-block {
+            margin: 0 0.3rem 0.5rem;
+            display: inline-block;
+          }
+          
+          .link-block .button {
+            background: white;
+            color: #4a5568;
+            border: 1px solid #edf2f7;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+          }
+          
+          .link-block .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-color: #1bc5bd;
+            color: #1bc5bd;
+          }
+          
+          /* Consistent styling for content sections */
+          .section {
+            padding: 2rem 1.5rem;
+          }
+          
+          .content p, .content ul {
+            color: #4a5568;
+            line-height: 1.7;
+          }
+
+          /* Add styling for the new section introductions */
+          .section-intro {
+            color: #4a5568;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            max-width: 900px;
+            text-align: justify;
+          }
+
+          /* Ensure consistent gradient styling for all titles */
+          .title.main-gradient {
+            background: linear-gradient(45deg, #1BC5BD, #4E9BE2, #F64E87);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            margin-bottom: 1rem;
+            position: relative;
+          }
+
+          .title.main-gradient::after {
+            content: '';
+            display: block;
+            height: 2px;
+            width: 50px;
+            background: linear-gradient(45deg, #1BC5BD, #4E9BE2);
+            margin-top: 0.5rem;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+          }
+
+          .title.main-gradient:hover::after {
+            width: 100px;
+          }
+
+          /* Add some spacing between sections */
+          .content > h2.title {
+            margin-top: 3rem;
+          }
+
+          /* Task table styling improvements */
+          .task-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            margin: 2rem 0;
+          }
+
+          /* Header styling */
+          .task-table thead th,
+          .fixed-column table thead th,
+          .fixed-column-right table thead th,
+          .small-font-table thead th {
+            background: linear-gradient(to right, #2d3748, #1a202c);
+            color: white !important;
+            font-weight: 700;
+            padding: 1.2rem 1.5rem; /* Increased padding */
+            text-align: left;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            position: relative;
+            white-space: nowrap;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            min-width: 120px; /* Added minimum width */
+          }
+
+          /* Add specific styling for header text wrapping */
+          .task-table thead th span {
+            display: inline-block;
+            white-space: normal; /* Allow text to wrap */
+            line-height: 1.2; /* Reduced line height */
+          }
+
+          /* Style for subscript text in headers */
+          .task-table thead th sub {
+            font-size: 0.7em;
+            margin-left: 2px;
+            color: rgba(255, 255, 255, 0.9);
+          }
+
+          /* Ensure table cells have consistent width */
+          .task-table td {
+            min-width: 120px; /* Match header minimum width */
+          }
+
+          /* First column can be wider */
+          .task-table th:first-child,
+          .task-table td:first-child {
+            min-width: 200px;
+          }
+
+          /* Row styling */
+          .task-table tbody tr {
+            transition: all 0.2s ease;
+          }
+
+          .task-table tbody tr:hover {
+            background: linear-gradient(to right, rgba(27, 197, 189, 0.05), rgba(78, 155, 226, 0.05));
+            transform: translateX(4px);
+            box-shadow: -4px 0 0 #1BC5BD;
+          }
+
+          /* Task name styling */
+          .task-name {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+          }
+
+          .task-name i {
+            width: 1.5rem;
+            height: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1BC5BD;  /* Accent color */
+            font-size: 1rem;
+            opacity: 0.9;
+          }
+
+          .task-name span {
+            font-weight: 500;
+            color: #2d3748;
+          }
+
+          /* Zebra striping */
+          .task-table tbody tr:nth-child(even) {
+            background-color: rgba(247, 250, 252, 0.5);
+          }
+
+          /* Column styling */
+          .task-table td:not(:first-child),
+          .task-table th:not(:first-child) {
+            text-align: center;
+          }
+
+          /* Add subtle border between columns */
+          .task-table td,
+          .task-table th {
+            border-right: 1px solid rgba(0, 0, 0, 0.03);
+          }
+
+          .task-table td:last-child,
+          .task-table th:last-child {
+            border-right: none;
+          }
+
+          /* Fixed columns styling */
+          .fixed-column,
+          .fixed-column-right {
+            background: white;
+          }
+
+          .fixed-column table thead th,
+          .fixed-column-right table thead th {
+            background: linear-gradient(to right, #2d3748, #1a202c);
+            color: white;
+            padding: 1.2rem 1.5rem; /* Increased padding */
+            font-size: 0.9rem;
+          }
+
+          /* Highlight rows with BigDocs */
+          .bigdocs-row {
+            background: rgba(27, 197, 189, 0.02) !important;
+          }
+
+          .bigdocs-row:hover {
+            background: linear-gradient(to right, rgba(27, 197, 189, 0.08), rgba(78, 155, 226, 0.08)) !important;
+          }
+
+          /* Responsive adjustments */
+          @media (max-width: 768px) {
+            .task-table {
+              font-size: 0.85rem;
+            }
+            
+            .task-table td,
+            .task-table th {
+              padding: 0.5rem 0.75rem;
+            }
+          }
+        </style>
+
+        <!-- Citation Section -->
+        <h2 class="title is-3 main-gradient">Citation</h2>
+        <p class="section-intro">
+          If you find this work useful for your research, please consider citing our paper:
+        </p>
+        <div class="citation-container">
+          <pre class="citation-text"><code>@misc{LALM-Eval,
+    title={LALM-Eval: An Open-Source Toolkit for Holistic Evaluation of Large Audio Language Models}, 
+    author={Sidharth Surapaneni and Hoang Nguyen and Jash Mehta and Aman Tiwari and Oluwanifemi Bamgbose and Akshay Kalkunte and Sai Rajeswar and Sathwik Tejaswi Madhusudhan},
+    year={2025},
+    url={https://github.com/ServiceNow/LALM-Eval},
+    version={0.1.0}
+}</code></pre>
+
+        </div>
+
+        <style>
+
+          /* Improved TL;DR container styling with hover effects */
+          .tldr-container {
+            background: #f8fafc;
+            border-left: 4px solid #1BC5BD;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+          }
+          
+          .tldr-container:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(27, 197, 189, 0.12);
+            background: linear-gradient(to right, #f8fafc, #f0f9f9);
+            border-left: 4px solid #4E9BE2;
+          }
+          
+          .tldr-title {
+            color: #1BC5BD;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+          }
+          
+          .tldr-container:hover .tldr-title {
+            color: #4E9BE2;
+            transform: translateX(3px);
+          }
+          
+          .tldr-title i {
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+          }
+          
+          .tldr-container:hover .tldr-title i {
+            transform: rotate(10deg) scale(1.1);
+            color: #F64E87;
+          }
+          
+          .tldr-content {
+            color: #4a5568;
+            line-height: 1.6;
+          }
+          
+          .tldr-list {
+            margin-top: 0.8rem;
+            padding-left: 0.5rem;
+          }
+          
+          .tldr-list li {
+            margin-bottom: 0.8rem;
+            list-style-type: none;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            transition: all 0.3s ease;
+            padding-left: 0.25rem;
+          }
+          
+          .tldr-list li:hover {
+            transform: translateX(5px);
+          }
+          
+          .tldr-list i {
+            color: #1BC5BD;
+            font-size: 1.1rem;
+            margin-top: 2px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+          }
+          
+          .tldr-list li:hover i {
+            color: #F64E87;
+            transform: rotate(360deg) scale(1.1);
+          }
+          
+          .tldr-item-content {
+            flex: 1;
+            line-height: 1.5;
+          }
+          
+          .tldr-item-content strong {
+            color: #1BC5BD;
+            font-weight: 600;
+          }
+          
+          /* Styling for highlighted text */
+          .highlight-text {
+            color: #F64E87;
+            font-weight: 500;
+            font-style: italic;
+          }
+          
+          /* Image Gallery Styling */
+          .image-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin: 20px 0 40px;
+          }
+          
+          .gallery-item {
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+          }
+          
+          .gallery-item-large {
+            flex: 1.5;
+            min-width: 400px;
+            max-width: 700px;
+          }
+          
+          /* Special styling for comparison image */
+          .comparison-image {
+            margin: 20px !important;
+            transition: all 0.3s ease;
+            transform-origin: center center;
+          }
+          
+          .comparison-image:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+          }
+          
+          .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+          }
+          
+          .image-container {
+            overflow: hidden;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #eaeaea;
+            border-radius: 12px;
+          }
+          
+          .comparison-image .image-container {
+            overflow: hidden;
+          }
+          
+          .gallery-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+          }
+          
+          .gallery-item:hover .gallery-image {
+            transform: scale(1.03);
+          }
+          
+          .comparison-image:hover .gallery-image {
+            transform: scale(1.03);
+          }
+          
+          .image-caption {
+            padding: 15px 20px;
+            background: white;
+          }
+          
+          .image-caption h4 {
+            margin: 0 0 8px;
+            color: #1BC5BD;
+            font-size: 1.2rem;
+            font-weight: 600;
+          }
+          
+          .image-caption p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.4;
+          }
+
+          /* Enhanced title hover effects for ALL titles with main-gradient class */
+          .title.is-3.main-gradient,
+          .title.is-4.main-gradient {
+            background: linear-gradient(45deg, #1BC5BD, #4E9BE2, #F64E87);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            margin-bottom: 1rem;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.4s ease;
+          }
+
+          .title.is-3.main-gradient::after,
+          .title.is-4.main-gradient::after {
+            content: '';
+            display: block;
+            height: 2px;
+            width: 50px;
+            background: linear-gradient(45deg, #1BC5BD, #4E9BE2);
+            margin-top: 0.5rem;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+          }
+
+          /* Explicitly define hover states for all titles */
+          .title.is-3.main-gradient:hover,
+          .title.is-4.main-gradient:hover {
+            transform: translateY(-3px);
+            text-shadow: 
+              2px 2px 4px rgba(27, 197, 189, 0.2),
+              -2px -2px 4px rgba(246, 78, 135, 0.2);
+            background: linear-gradient(45deg, 
+              #1BC5BD 0%, 
+              #4E9BE2 50%, 
+              #F64E87 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 3s linear infinite;
+          }
+
+          .title.is-3.main-gradient:hover::after,
+          .title.is-4.main-gradient:hover::after {
+            width: 100px;
+            background: linear-gradient(45deg, #F64E87, #4E9BE2);
+          }
+
+          /* Make sure the animation keyframes are defined */
+          @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+          
+          /* Box hover effects for the limitations and task categories sections */
+          .box {
+            transition: all 0.3s ease;
+            border-top: 3px solid transparent;
+          }
+          
+          .box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(27, 197, 189, 0.1);
+            border-top: 3px solid #1BC5BD;
+          }
+          
+          .box:nth-child(3n+2):hover {
+            border-top: 3px solid #4E9BE2;
+          }
+          
+          .box:nth-child(3n+3):hover {
+            border-top: 3px solid #F64E87;
+          }
+          
+          .box .title.is-5 {
+            transition: all 0.3s ease;
+          }
+          
+          .box:hover .title.is-5 {
+            color: #1BC5BD;
+          }
+          
+          .box:nth-child(3n+2):hover .title.is-5 {
+            color: #4E9BE2;
+          }
+          
+          .box:nth-child(3n+3):hover .title.is-5 {
+            color: #F64E87;
+          }
+
+          /* Results cards styling - horizontal layout with proper design */
+          .results-grid {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+          }
+          
+          .result-card {
+            flex: 1;
+            min-width: 280px;
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            border-bottom: 3px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+          }
+          
+          .result-card:first-child {
+            border-bottom: 3px solid #1BC5BD;
+          }
+          
+          .result-card:last-child {
+            border-bottom: 3px solid #F64E87;
+          }
+          
+          .result-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(27, 197, 189, 0.1);
+          }
+          
+          .result-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #f5f9ff, #f0f9f9);
+            transition: all 0.3s ease;
+          }
+          
+          .result-card:first-child .result-icon {
+            background: linear-gradient(45deg, rgba(27, 197, 189, 0.1), rgba(78, 155, 226, 0.1));
+          }
+          
+          .result-card:last-child .result-icon {
+            background: linear-gradient(45deg, rgba(78, 155, 226, 0.1), rgba(246, 78, 135, 0.1));
+          }
+          
+          .result-card:hover .result-icon {
+            transform: scale(1.1) rotate(5deg);
+          }
+          
+          .result-icon i {
+            font-size: 28px;
+            color: #1BC5BD;
+            transition: all 0.3s ease;
+          }
+          
+          .result-card:last-child .result-icon i {
+            color: #F64E87;
+          }
+          
+          .result-card:hover .result-icon i {
+            transform: scale(1.2);
+          }
+          
+          .result-card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #2d3748;
+            transition: all 0.3s ease;
+            background: linear-gradient(45deg, #1BC5BD, #4E9BE2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+          }
+          
+          .result-card:last-child h3 {
+            background: linear-gradient(45deg, #4E9BE2, #F64E87);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+          }
+          
+          .result-card p {
+            color: #4a5568;
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 0;
+          }
+          
+          /* Add flourish behind the icons */
+          .result-icon::before {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(27, 197, 189, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            transition: all 0.5s ease;
+          }
+          
+          .result-card:last-child .result-icon::before {
+            background: radial-gradient(circle, rgba(246, 78, 135, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
+          }
+          
+          .result-card:hover .result-icon::before {
+            transform: scale(1.5);
+            opacity: 0.8;
+          }
+          
+          /* Responsive adjustments */
+          @media (max-width: 768px) {
+            .results-grid {
+              flex-direction: column;
+            }
+            
+            .result-card {
+              width: 100%;
+              margin-bottom: 20px;
+            }
+          }
+        </style>
+
+        <style>
+          /* Additional responsive and clean styling */
+          .task-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 0.8rem; /* Slightly larger base font */
+          }
+
+          /* Responsive table headers */
+          .task-table thead th:not(:first-child) {
+            padding: 0.8rem 0.4rem;
+            font-size: 0.75rem;
+            min-width: 65px;
+            text-align: center;
+            white-space: normal;
+          }
+
+          /* Ensure first column readability */
+          .task-table th:first-child,
+          .task-table td:first-child {
+            min-width: 150px;
+            padding-left: 1rem;
+            position: sticky;
+            left: 0;
+            background: white;
+            z-index: 1;
+          }
+
+          /* Clean numeric cells */
+          .task-table td:not(:first-child) {
+            padding: 0.6rem 0.4rem;
+            font-size: 0.8rem;
+            font-family: 'SF Mono', monospace;
+            min-width: 65px;
+            letter-spacing: -0.3px;
+          }
+
+          /* Highlight average score column */
+          /* No special styling for the last column, consistent with other columns */
+          .task-table th:not(:first-child),
+          .task-table td:not(:first-child) {
+            min-width: 70px;
+          }
+
+          /* Clean table wrapper */
+          .table-wrapper {
+            margin: 2rem auto;
+            max-width: 100%;
+          }
+
+          /* Optimal container sizing */
+          .container.is-max-desktop {
+            max-width: 1200px;
+            width: 100%;
+            padding: 0 1.5rem;
+          }
+
+          /* Make benchmark name subscripts easier to read */
+          .task-table thead th sub {
+            font-size: 0.65em !important;
+            display: block !important;
+            line-height: 1.1 !important;
+            margin-top: 2px !important;
+          }
+
+          /* Mobile optimizations maintain readability */
+          @media (max-width: 768px) {
+            .task-table thead th:not(:first-child),
+            .task-table td:not(:first-child) {
+              padding: 0.3rem 0.2rem !important;
+              min-width: 50px !important;
+              width: 50px !important;
+              max-width: 50px !important;
+              font-size: 0.7rem !important;
+            }
+          }
+        </style>
