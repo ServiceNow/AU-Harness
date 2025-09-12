@@ -1,6 +1,6 @@
 <div align="center" style="margin-bottom: 1em;">
 
-**AU-Harness: An Open-Source Toolkit for Holistic Evaluation of Audio LLMs**
+# AU-Harness: An Open-Source Toolkit for Holistic Evaluation of Audio LLMs
 
 *Comprehensive • Fast • Reproducible*
 
