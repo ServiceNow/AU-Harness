@@ -31,6 +31,9 @@ task_metric: #tuple of task, metric(can run by task or dataset)
   - ["advbench", "llm_judge_redteaming"]
   - ["asvspoof", "llm_judge_binary"]  
 
+aggregate:
+  - ['bfcl_match_score', ['bfcl_audio']]
+
 judge_settings:
   judge_concurrency: 20 # optional - default is 1
   judge_model: <JUDGE_MODEL_NAME>  # mandatory
