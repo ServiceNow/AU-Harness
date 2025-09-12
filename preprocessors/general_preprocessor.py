@@ -1,4 +1,4 @@
-"""General preprocessor module for LALMEval framework.
+"""General preprocessor module for AU-Harness framework.
 
 This module provides a general-purpose preprocessor for audio benchmarks
 from AudioLLMs and other HuggingFace datasets, with support for various

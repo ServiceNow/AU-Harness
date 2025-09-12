@@ -1,4 +1,4 @@
-"""Request management system for LALMEval framework."""
+"""Request management system for AU-Harness framework."""
 
 import asyncio
 import logging

@@ -1,4 +1,4 @@
-"""Metrics base class for LALMEval framework.
+"""Metrics base class for AU-Harness framework.
 
 This module provides the base Metrics class that defines the interface
 for all evaluation metrics in the framework.

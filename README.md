@@ -1,15 +1,17 @@
 <div align="center" style="margin-bottom: 1em;">
 
-**LALM-Eval: An Open-Source Toolkit for Holistic Evaluation of Large Audio Language Models**
+**AU-Harness: An Open-Source Toolkit for Holistic Evaluation of Audio LLMs**
 
 *Comprehensive • Fast • Reproducible*
 
-<img src="assets/images/ver-1-bg.png" alt="LALM-Eval Brand Logo" width="200">
+<img src="assets/images/ver-1-bg.png" alt="AU-Harness Brand Logo" width="200">
 
+[![arXiv](https://img.shields.io/badge/arxiv-2509.08031-red)](https://arxiv.org/abs/2509.08031)
+[![Website](https://img.shields.io/badge/🌐_Website-au--harness.github.io-lightgray.svg?color=blue)](https://au-harness.github.io/)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Version](https://img.shields.io/badge/version-0.1.0-orange.svg)](https://github.com/ServiceNow/LALM-Eval)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/ServiceNow/LALM-Eval/pulls)
+[![Version](https://img.shields.io/badge/version-0.1.0-orange.svg)](https://github.com/ServiceNow/AU-Harness)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/ServiceNow/AU-Harness/pulls)
 
 **🎯 50+ Datasets • 🚀 380+ Subsets • 📊 9 Metrics • 🔊 21 Audio Tasks**
 
@@ -17,10 +19,10 @@
 
 ## 📋 Overview
 
-LALM-Eval is a standardized, efficient and highly customizable open-source framework for evaluating audio-based language models on Audio-to-Text tasks. Built for researchers and developers, LALM-Eval provides a comprehensive suite of tools to benchmark and compare the performance of various audio processing models across a wide range of tasks.
+AU-Harness is a standardized, efficient and highly customizable open-source framework for evaluating audio-based language models on Audio-to-Text tasks. Built for researchers and developers, AU-Harness provides a comprehensive suite of tools to benchmark and compare the performance of various audio processing models across a wide range of tasks.
 
 
-## ❓ Why LALM-Eval?
+## ❓ Why AU-Harness?
 
 1. 🚀 **Blazing Fast**:
    - Multiple models can be evaluated simultaneously across multiple tasks, datasets and metrics using independent Engines, enabling full parallelization of the evaluation pipeline
@@ -49,7 +51,7 @@ LALM-Eval is a standardized, efficient and highly customizable open-source frame
 ## 📊 Task Taxonomy & Structure
 
 <div align="center" style="margin: 30px 0;">
-  <img src="assets/images/taxonomy.png" alt="LALM-Eval Task Taxonomy" style="width: 60%; max-width: 600px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+  <img src="assets/images/taxonomy.png" alt="AU-Harness Task Taxonomy" style="width: 60%; max-width: 600px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
 </div>
 
 ### 📁 Task Organization
@@ -119,7 +121,7 @@ LALM-Eval is a standardized, efficient and highly customizable open-source frame
 <p align='center'>
   <img src="assets/images/overview.png" alt="Taxonomy Figure" width="80%", height="auto"/>
 </p>
-The evaluation flow in LALM-Eval follows a highly concurrent architecture:
+The evaluation flow in AU-Harness follows a highly concurrent architecture:
 
 1. **Configuration & Initialization**: The system parses `config.yaml` to load models, datasets, metrics, and other evaluation parameters.
 
@@ -146,8 +148,8 @@ Get up and running in under a minute:
 
 ```bash
 # Clone and install
-git clone https://github.com/ServiceNow/LALM-Eval.git
-cd LALM-Eval
+git clone https://github.com/ServiceNow/AU-Harness.git
+cd AU-Harness
 pip install -r requirements.txt
 
 # Run your first evaluation
@@ -159,9 +161,9 @@ Results will be generated in `run_logs/` with detailed metrics and analysis.
 
 ## 💻 Usage
 
-LALM-Eval requires setting up a running configuration file (`config.yaml`) to define your evaluation parameters. This file controls which models, datasets, and metrics are used in your evaluation.
+AU-Harness requires setting up a running configuration file (`config.yaml`) to define your evaluation parameters. This file controls which models, datasets, and metrics are used in your evaluation.
 
-To get started with LALM-Eval:
+To get started with AU-Harness:
 
 1. Clone this repository
 2. Setup your environment:
@@ -303,7 +305,7 @@ judge_settings:
 ### 📝 Task Configuration Options
 #### Adding Datasets
 
-LALM-Eval supports adding custom tasks through `task_config` YAML files. These files define the task properties and how they should be processed.
+AU-Harness supports adding custom tasks through `task_config` YAML files. These files define the task properties and how they should be processed.
 
 #### Creating a TaskConfig File
 
@@ -398,22 +400,21 @@ where
   - `created_timestamp`: automatically recorded timestamp used as a unique_ID for each run
 ## 📝 Acknowledgement
 
-LALM-Eval incorporates some of the design elements and reusable components from ServiceNow's comprehensive internal benchmarking platform, namely CLAE. We'd like to thank the CLAE team for their invaluable feedback and suggestions.
+AU-Harness incorporates some of the design elements and reusable components from ServiceNow's comprehensive internal benchmarking platform, namely CLAE. We'd like to thank the CLAE team for their invaluable feedback and suggestions.
 
 ## 📝 Citation
 
-If you use LALM-Eval in your research, please cite our work:
+If you use AU-Harness in your research, please cite our work:
 
 ```bibtex
-@software{LALM-Eval2025,
-  title = {LALM-Eval: An Open-Source Toolkit for Holistic Evaluation of Large Audio Language Models},
-  author = {ServiceNow},
-  year = {2025},
-  url = {https://github.com/ServiceNow/LALM-Eval},
-  version = {0.1.0}
+@article{surapaneni2025auharness,
+  title={AU-Harness: An Open-Source Toolkit for Holistic Evaluation of Audio LLMs},
+  author={Sidharth Surapaneni and Hoang Nguyen and Jash Mehta and Aman Tiwari and Oluwanifemi Bamgbose and Akshay Kalkunte and Sai Rajeswar and Sathwik Tejaswi Madhusudhan},
+  journal={arXiv preprint arXiv:2509.08031},
+  year={2025}
 }
 ```
 
 ## 📄 License
 
-LALM-Eval is licensed under the Apache 2.0 License.
+AU-Harness is licensed under the Apache 2.0 License.

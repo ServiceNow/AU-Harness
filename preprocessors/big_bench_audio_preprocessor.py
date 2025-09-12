@@ -1,4 +1,4 @@
-"""BigBench Audio preprocessor module for LALMEval framework.
+"""BigBench Audio preprocessor module for AU-Harness framework.
 
 This module provides a preprocessor for the BigBenchAudio dataset, designed for
 Speech Query Question Answering (SQQA) tasks with audio processing capabilities.

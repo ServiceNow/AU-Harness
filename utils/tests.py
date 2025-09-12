@@ -1,4 +1,4 @@
-"""Test functions for LALMEval utility modules."""
+"""Test functions for AU-Harness utility modules."""
 
 import base64
 import os

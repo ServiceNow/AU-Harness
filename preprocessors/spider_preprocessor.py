@@ -1,4 +1,4 @@
-"""Spider preprocessor module for LALMEval framework.
+"""Spider preprocessor module for AU-Harness framework.
 
 This module provides a preprocessor for the Spider dataset, designed for
 audio2SQL tasks with support for both audio and text modalities.
