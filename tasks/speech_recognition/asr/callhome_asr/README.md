@@ -22,8 +22,8 @@ Paste these wav files into the audio folder of the specific language path in pri
 ##### Create a local HF dataset
 Run the following commands to create a local HF dataset
 ```python
-cd tools
-python callhome_dataset_creator.py --data_dir /private_datasets/{specific_language_folder}
+cd AU-Harness/
+python data/scripts/prepare_callhome_dataset.py --data_dir /private_datasets/{specific_language_folder}
 ```
 This creates a hf_dataset folder in the same path as data_dir
 
