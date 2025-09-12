@@ -3,6 +3,7 @@ from typing import List, Tuple, Dict, Optional, Union
 
 from metrics.metrics import Metrics
 from models.model_response import ModelResponse
+from utils import util
 from utils.custom_logging import write_record_log, append_final_score
 
 #### Constants ####
@@ -42,7 +43,7 @@ class BFCLMatchScore(Metrics):
         # Compute record-level scores for strict outputs (binary: all instructions followed or not)
         record_scores = self.compute_record_level_scores(candidates, references)
         # Average final score over all components
-        results = {"final": sum(record_scores) / len(candidates) if candidates else 0.0}
+        results = {"final": util.smart_round((sum(record_scores) * 100.0) / len(candidates), 2) if candidates else 0.0}
 
         # Write detailed record-level logs (if task_name and model_name provided)
         if task_name and model_name:            

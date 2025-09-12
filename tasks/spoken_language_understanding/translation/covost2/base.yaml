@@ -19,3 +19,5 @@ generation_kwargs:
 metrics:
   - metric: bleu
   - metric: meteor
+  - metric: bertscore
+  - metric: comet

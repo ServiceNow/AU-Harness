@@ -14,7 +14,7 @@ from tqdm import tqdm
 
 from metrics.metrics import Metrics
 from utils.custom_logging import write_record_log, append_final_score
-from utils import constants
+from utils import constants, util
 
 logger = logging.getLogger(__name__)
 
@@ -131,8 +131,8 @@ class WERMetrics(Metrics):
 
         # Initialize the result with both WER metrics
         result = {
-            "average_sample_wer": avg_sample_wer,
-            "overall_wer": overall_wer
+            "average_sample_wer": util.smart_round(avg_sample_wer * 100.0, 2),
+            "overall_wer": util.smart_round(overall_wer * 100.0, 2)
         }
 
         if ids and len(ids) == len(scores["wer_per_row"]):

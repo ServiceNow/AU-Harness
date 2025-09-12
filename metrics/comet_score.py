@@ -9,6 +9,7 @@ from metrics.metrics import Metrics
 from utils.custom_logging import write_record_log, append_final_score
 from metrics.word_error_rate_metrics import normalize_text
 from comet import download_model, load_from_checkpoint
+from utils import util
 
 
 class CometScore(Metrics):
@@ -25,7 +26,7 @@ class CometScore(Metrics):
         scores = self.record_level_scores.get(self.name, [])
         valid_scores = [score for score in scores if score is not None]
         mean_score = sum(valid_scores) / len(valid_scores) if valid_scores else 0.0
-        overall_score = {self.name: mean_score}
+        overall_score = {self.name: util.smart_round(mean_score * 100.0, 2)} # scale score to the range of [0,100]
 
         if task_name and model_name:
             # write_record_log will also write to run.log internally

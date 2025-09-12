@@ -12,6 +12,7 @@ from tqdm import tqdm
 
 from metrics.metrics import Metrics
 from metrics.word_error_rate_metrics import normalize_text
+from utils import util
 from utils.custom_logging import write_record_log, append_final_score
 
 
@@ -263,12 +264,13 @@ class DiarizationMetrics(Metrics):
             'spkcnterr'] else 0
         avg_speaker_count_absolute_error = min(avg_speaker_count_absolute_error, 1.0)
 
+        # Scaling the score range from [0,1.0] to [0, 100.0]
         result = {
-            "average_sample_wder": avg_sample_wder,
-            "overall_wder": overall_wder,
-            "average_sample_cpwer": avg_sample_cpwer,
-            "overall_cpwer": overall_cpwer,
-            "speaker_count_absolute_error": avg_speaker_count_absolute_error,
+            "average_sample_wder": util.smart_round(avg_sample_wder * 100.0 , 2),
+            "overall_wder": util.smart_round(overall_wder * 100.0, 2),
+            "average_sample_cpwer": util.smart_round(avg_sample_cpwer * 100.0, 2),
+            "overall_cpwer": util.smart_round(overall_cpwer * 100.0, 2),
+            "speaker_count_absolute_error": util.smart_round(avg_speaker_count_absolute_error * 100.0, 2),
         }
 
         # # Store the scores for later record level reporting

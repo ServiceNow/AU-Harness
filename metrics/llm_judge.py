@@ -298,7 +298,7 @@ class BinaryLLMJudgeMetric(_BaseLLMJudge):
         self.model_responses = model_responses if model_responses else []
         overall = await super().get_score(candidates, references, task_name, model_name)
         if self.name in overall:
-            overall[self.name] *= 100
+            overall[self.name] = util.smart_round(overall[self.name] * 100.0 , 2)
         if task_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
             explanations = getattr(self, "explanations", None)
@@ -337,7 +337,7 @@ class RedTeamingJudgeMetric(_BaseLLMJudge):
         self.model_responses = model_responses if model_responses else []
         overall = await super().get_score(candidates, references, task_name, model_name)
         if self.name in overall:
-            overall[self.name] *= 100
+            overall[self.name] = util.smart_round(overall[self.name] * 100.0 , 2)
         if task_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
             explanations = getattr(self, "explanations", None)
@@ -381,7 +381,7 @@ class DetailedLLMJudgeMetric(_BaseLLMJudge):
         overall = await super().get_score(candidates, references, task_name, model_name)
         if self.name in overall:
             # From 0-5 scale to 0-100 scale
-            overall[self.name] *= 20
+            overall[self.name] = util.smart_round(overall[self.name] * 20.0, 2)
         if task_name and model_name:
             scores = self.record_level_scores.get(self.name, [])
             explanations = getattr(self, "explanations", None)
@@ -505,7 +505,7 @@ class BigBenchAudioLLMJudgeMetric(_BaseLLMJudge):
         total = num_correct + num_incorrect
 
         overall = {
-            self.name: num_correct / total if total > 0 else 0.0,
+            self.name: util.smart_round((num_correct * 100.0) / total, 2) if total > 0 else 0.0,
             "num_correct": num_correct,
             "num_incorrect": num_incorrect,
             "num_failed": len(all_scores) - total,
@@ -815,7 +815,8 @@ class MtbenchLLMJudgeMetric(_BaseLLMJudge):
                     else:
                         result['turn2'] = rating
 
-                result['overall'] = (result['turn1'] + result['turn2']) / 2.0
+                # Switching scoring from [0,10] to [0,100]
+                result['overall'] = util.smart_round((result['turn1'] + result['turn2']) * 10 / 2.0, 2) 
                 # Move from processing to completed
                 processing_samples.remove(idx)
                 completed_samples.add(idx)
@@ -880,7 +881,7 @@ class MtbenchLLMJudgeMetric(_BaseLLMJudge):
         for name, score_list in self.record_level_scores.items():
             assert isinstance(score_list, list)
             score_list = [score['overall'] for score in score_list if score is not None]
-            score = util.smart_round(sum(score_list) / len(score_list)) if len(score_list) else 0.0
+            score = util.smart_round(sum(score_list) / len(score_list), 2) if len(score_list) else 0.0
             res[name] = score
         return res
 

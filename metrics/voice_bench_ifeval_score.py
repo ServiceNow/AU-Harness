@@ -5,6 +5,7 @@ import numpy as np
 from models.model_response import ModelResponse
 from metrics.metrics import Metrics
 from utils.custom_logging import write_record_log, append_final_score
+from utils import util
 from .instruction_following_eval import instructions_registry
 
 
@@ -34,14 +35,14 @@ class InstructionFollowingScore(Metrics):
         loose_report = self._compute_accuracy_report(loose_outputs)
 
         results = {
-            "strict-prompt": strict_report["prompt"],
-            "strict-instruction": strict_report["instruction"],
-            "loose-prompt": loose_report["prompt"],
-            "loose-instruction": loose_report["instruction"],
+            "strict-prompt": util.smart_round(strict_report["prompt"] * 100.0 , 2),
+            "strict-instruction": util.smart_round(strict_report["instruction"] * 100.0, 2),
+            "loose-prompt": util.smart_round(loose_report["prompt"] * 100.0 , 2),
+            "loose-instruction": util.smart_round(loose_report["instruction"] * 100.0, 2),
         }
 
         # Average final score over all components
-        results["final"] = float(np.mean(list(results.values())))
+        results["final"] = util.smart_round(float(np.mean(list(results.values()))), 2)
 
         # Compute record-level scores for strict outputs (binary: all instructions followed or not)
         record_scores = [float(all(out["follow_instruction_list"])) for out in strict_outputs]

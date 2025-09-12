@@ -3,6 +3,8 @@
 This document provides a summary and detailed explanation of all evaluation metrics used in the framework. <br />
 For more detailed documentation regarding which metrics can be used for which tasks and task categories, refer to [Task Config Overview](../tasks/README.md).
 
+**NOTE** For consistency across metrics, the final reported score of each supported metric is standardized within the range of **[0.0, 100.0]** with **2-decimal precision**.
+
 ---
 
 ## 📊 Metric Overview Table
@@ -34,7 +36,7 @@ For more detailed documentation regarding which metrics can be used for which ta
 - **Reported Value**: 
     - `average_sample_wer`: Averaging WER of each sample across the evaluated dataset samples
     - `overall_wer`: (Total deletions, insertions and substitutions) / Total words
-- **Scoring**: Scoring between 0.0 and 1.0 (lower is better)
+- **Scoring (record-level)**: Scoring between 0.0 and 1.0 (lower is better)
 - **Used In**: `asr`, `long_form_asr`, `code_switching_asr`
 
 ---
@@ -48,7 +50,7 @@ For more detailed documentation regarding which metrics can be used for which ta
     - `avg_sample_cpwer`: Averaging cpWER of each sample across the evaluated dataset samples
     - `overall_cpwer`: Overall Errors / Overall Total Counts
     - `avg_speaker_count_absolute_error`:  Mean absolute errors (MAE) of the predicted number of speakers
-- **Scoring**: Scoring between 0.0 and 1.0 (lower is better)
+- **Scoring (record-level)** Scoring between 0.0 and 1.0 (lower is better)
 - **Used In**: `speaker_diarization`
 
 ---
@@ -56,7 +58,7 @@ For more detailed documentation regarding which metrics can be used for which ta
 ### `llm_judge_binary`
 - **Type**: Binary classification metric
 - **Description**: Judges whether a model output is correct or not using an LLM.
-- **Scoring**: `1` for correct, `0` for incorrect. Higher is better.
+- **Scoring (record-level)** `1` for correct, `0` for incorrect. Higher is better.
 - **Used In**: `emotion_recognition`, `accent_recognition`, `gender_recognition`, `intent_classification`,`spoofing`
 
 ---
@@ -64,7 +66,7 @@ For more detailed documentation regarding which metrics can be used for which ta
 ### `llm_judge_detailed`
 - **Type**: Multi-dimensional judgment metric
 - **Description**: Uses an LLM to assess output quality based on attributes like fluency, relevance, and completenes (with or without ground truth reference)
-- **Scoring**: Scoring between `0` and `5` for each sample. Higher is better.
+- **Scoring (record-level)** Scoring between `0` and `5` for each sample. Higher is better.
 - **Used In**: `spoken_dialogue_summrization`, `scene_understanding`
 
 ---
@@ -72,7 +74,7 @@ For more detailed documentation regarding which metrics can be used for which ta
 ### `llm_judge_big_bench_audio`
 - **Type**: LLM-based QA judgment metric
 - **Description**: Evaluates performance on BigBench-like audio QA tasks.
-- **Scoring**: Scoring `correct` or `incorrect` based on different aspects of QA tasks. Higher is better
+- **Scoring (record-level)** Scoring `correct` or `incorrect` based on different aspects of QA tasks. Higher is better
 - **Used In**: `sqqa`
 
 ---
@@ -80,7 +82,7 @@ For more detailed documentation regarding which metrics can be used for which ta
 ### `llm_judge_redteaming`
 - **Type**: LLM-based judgement metric for red-teaming/ safety.
 - **Description**: Evaluates performance on the safety-related aspects for LALMs.
-- **Scoring**: Scoring `1` for refusing to answer the given audio (correct), `0` for anwering the given audio (incorrect). Higher is better.
+- **Scoring (record-level)** Scoring `1` for refusing to answer the given audio (correct), `0` for anwering the given audio (incorrect). Higher is better.
 - **Used In**: `safety`
 
 ---
@@ -88,7 +90,7 @@ For more detailed documentation regarding which metrics can be used for which ta
 ### `mt_bench_llm_judge`
 - **Type**: LLM-based judgement metric for Multi-turn systems. 
 - **Description**: Evaluates performance at multiple-turn conversation systems
-- **Scoring**: Scoring between `0` and `10` for each sample. Higher is better.
+- **Scoring (record-level)** Scoring between `0` and `10` for each sample. Higher is better.
 - **Used In**: `mtbench`
 
 ---
@@ -96,7 +98,7 @@ For more detailed documentation regarding which metrics can be used for which ta
 ### `bleu`
 - **Type**: N-gram precision metric
 - **Description**: Measures how many n-grams in the prediction match the reference.
-- **Scoring**: Score between `0` and `1`, higher is better.
+- **Scoring (record-level)** Score between `0` and `100`, higher is better.
 - **Used In**: `translation` 
 
 ---
@@ -104,7 +106,7 @@ For more detailed documentation regarding which metrics can be used for which ta
 ### `bertscore`
 - **Type**: Semantic similarity
 - **Description**: Uses contextual BERT embeddings to match tokens semantically.
-- **Scoring**: Outputs F1 (between `0` and `1`), higher is better.
+- **Scoring (record-level)** Outputs F1 (between `0` and `1`), higher is better.
 - **Used In**: `translation`
 
 ---
@@ -112,7 +114,7 @@ For more detailed documentation regarding which metrics can be used for which ta
 ### `comet`
 - **Type**: Semantic similarity for translation tasks
 - **Description**: Uses contextual embeddings to compute semantic similarity between source and target language pair
-- **Scoring**: Score between `0` and `1`, higher is better.
+- **Scoring (record-level)** Score between `0` and `1`, higher is better.
 - **Used In**: `translation`
 
 ---
@@ -120,7 +122,7 @@ For more detailed documentation regarding which metrics can be used for which ta
 ### `meteor`
 - **Type**: Alignment metric
 - **Description**: Improves on BLEU by considering synonyms, stemming, and paraphrase.
-- **Scoring**: Score between `0` and `1`, higher is better.
+- **Scoring (record-level)** Score between `0` and `1`, higher is better.
 - **Used In**: `translation`
 
 ---
@@ -128,7 +130,7 @@ For more detailed documentation regarding which metrics can be used for which ta
 ### `bfcl_match_score`
 - **Type**: Function calling metric
 - **Description**: Evaluate the function calling capabilities. 
-- **Scoring**: Score between `0` and `1`, higher is better.
+- **Scoring (record-level)** Score between `0` and `1`, higher is better.
 - **Used In**: Speech Function calling (`bfcl`)
 
 ---
@@ -136,7 +138,7 @@ For more detailed documentation regarding which metrics can be used for which ta
 ### `sql_score`
 - **Type**: Coding correctness metric
 - **Description**: Evaluate the correctness of the generated SQL. 
-- **Scoring**: Score between `0` and `1`, higher is better.
+- **Scoring (record-level)** Score between `0` and `1`, higher is better.
 - **Used In**: Speech-to-SQL-coding (`speech_to_sql`)
 
 ---
@@ -144,5 +146,5 @@ For more detailed documentation regarding which metrics can be used for which ta
 ### `instruction_following`
 - **Type**: Instruction following evaluation metric
 - **Description**: Measure the instruction following capabilities of LALMs by averaging accuracy across (1) strict-prompt, (2) strict-instruction, (3)loose-prompt and (4) loose-instruction. 
-- **Scoring**: Score between `0` and `1`, higher is better.
+- **Scoring (record-level)** Score between `0` and `1`, higher is better.
 - **Used In**: Audio Instruction Following (`ifeval`)

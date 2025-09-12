@@ -9,6 +9,7 @@ from typing import Tuple
 
 from metrics.metrics import Metrics
 from metrics.word_error_rate_metrics import normalize_text
+from utils import util
 from utils.custom_logging import write_record_log, append_final_score
 
 
@@ -62,8 +63,8 @@ class BleuMetrics(Metrics):
         norm_references = [normalize_text(r) for r in references]
         norm_candidates = [normalize_text(c) for c in candidates]
         bs = sacrebleu.corpus_bleu(norm_candidates, [norm_references], tokenize=tokenizer)
-
-        return {self.name: bs.score}
+        # Score range is already in the range of [0, 100.0]. Only rounding to 2 decimal precision.
+        return {self.name: util.smart_round(bs.score, 2)}
 
     # ---------------------------------------------------
     # Internal helper
