@@ -1,4 +1,4 @@
-"""Covost2 preprocessor module for LALMEval framework.
+"""Covost2 preprocessor module for AU-Harness framework.
 
 This module provides a preprocessor for the Covost2 dataset, designed for
 translation tasks with support for both audio and text modalities.

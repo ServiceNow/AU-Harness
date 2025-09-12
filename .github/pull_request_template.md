@@ -12,6 +12,7 @@
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] Documentation update
 - [ ] Refactor / Code cleanup
+- [ ] Maintenance / Chore / Task
 - [ ] Other (please describe):
 
 ## ✅ How Has This Been Tested?

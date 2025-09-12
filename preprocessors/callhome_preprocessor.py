@@ -1,4 +1,4 @@
-"""Callhome preprocessor module for LALMEval framework.
+"""Callhome preprocessor module for AU-Harness framework.
 
 This module provides a preprocessor for the Callhome dataset, designed for
 speaker diarization tasks with support for both audio and text modalities.

@@ -1,4 +1,4 @@
-"""Constants and mappings for LALMEval framework.
+"""Constants and mappings for AU-Harness framework.
 
 This module contains configuration constants, mappings between different
 components (metrics, models, tasks), and normalization settings used
