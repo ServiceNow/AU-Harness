@@ -13,6 +13,7 @@ import pandas as pd
 from metrics.metrics import Metrics
 from metrics.text2sql.evaluation import evaluate
 from models.model_response import ModelResponse
+from utils import util
 from utils.custom_logging import write_record_log, append_final_score
 
 # Constants for file paths and data selection
@@ -74,6 +75,9 @@ class SqlScore(Metrics):
             self.metric_em: scores.get("per_record_em", []),
         }
 
+        #  Cleaning up the scores into the flattened format
+        cleaned_scores = self._clean_scores(scores)
+
         # Write detailed record-level logs (if task_name and model_name provided)
         if task_name and model_name:
             write_record_log(
@@ -87,8 +91,8 @@ class SqlScore(Metrics):
                 instructions=instructions,
                 model_responses=model_responses
             )
-            append_final_score(self, scores, task_name, model_name, model_responses)
-        return self._clean_scores(scores)
+            append_final_score(self, cleaned_scores, task_name, model_name, model_responses)
+        return cleaned_scores
 
     def _clean_scores(self, scores: dict) -> dict:
         """
@@ -106,8 +110,9 @@ class SqlScore(Metrics):
         ):
             if level == "all":
                 level = "overall"
-            flattened_scores[f"{level}_exec_accuracy"] = round(ex, 4)
-            flattened_scores[f"{level}_exact_set_match"] = round(em, 4)
+            # Scaling range from [0,1.0] to [0, 100.0]
+            flattened_scores[f"{level}_exec_accuracy"] = util.smart_round(ex * 100.0, 2)
+            flattened_scores[f"{level}_exact_set_match"] = util.smart_round(em * 100.0, 2)
         return flattened_scores
 
     def get_all_score_df(
