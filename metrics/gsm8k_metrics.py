@@ -34,13 +34,19 @@ class Gsm8kExactMatch(Metrics):
         """
         self.instructions = instructions
         self.model_responses = model_responses if model_responses else []
+
+        self.boxed_pattern = re.compile(r"\\boxed\{([^}]+)\}")
+        self.cleanup_pattern = re.compile(r"[,$\\]")
+        self.trailing_period_pattern = re.compile(r"\.$")
+        self.number_pattern = re.compile(r"(\-?[0-9\.]+)")
+        self.marker_pattern = re.compile(r"#### (\-?[0-9\.]+)")
         
+        scores, normalized_candidates, normalized_references = self.compute_record_level_scores(candidates, references)        
         overall = self.get_score(candidates, references)
         
         if task_name and model_name:
-            scores = self.record_level_scores.get(self.name, [])
-            scores, normalized_candidates, normalized_references = self.compute_record_level_scores(candidates, references) 
-            write_record_log(self, normalized_references, normalized_candidates, scores, task_name, model_name,
+            score_list = scores.get(self.name, [])
+            write_record_log(self, normalized_references, normalized_candidates, score_list, task_name, model_name,
                            instructions=self.instructions, model_responses=self.model_responses)
             append_final_score(self, overall, task_name, model_name, self.model_responses)
         return overall
@@ -51,43 +57,41 @@ class Gsm8kExactMatch(Metrics):
         self.instructions = None
         self.model_responses = []
 
+    def _clean_text(self, text: str) -> str:
+        """Remove currency symbols, backslashes, and trailing periods."""
+        text = self.cleanup_pattern.sub("", text)
+        return self.trailing_period_pattern.sub("", text)
+
+    def _extract_number(self, text: str) -> str:
+        """Extract numerical value from cleaned text."""
+        match = self.number_pattern.search(text)
+        return match.group(1) if match else text.strip()
+
     def _preprocess_answer(self, text: str) -> str:
-        """Extract and clean numerical answer from text.
-        
-        Looks for \\boxed{} patterns and extracts numerical values.
-        """
+        """Extract and clean numerical answer from text."""
         if not isinstance(text, str):
             text = str(text)
         
-        boxed_matches = list(re.finditer(r"\\boxed\{([^}]+)\}", text))
+        boxed_matches = list(self.boxed_pattern.finditer(text))
         if boxed_matches:
-            boxed_match = boxed_matches[-1]
-            boxed_content = boxed_match.group(1)
-            boxed_content = re.sub(r"[,$\\]", "", boxed_content)
-            boxed_content = re.sub(r"\.$", "", boxed_content)
+            boxed_content = boxed_matches[-1].group(1)
+            cleaned_content = self._clean_text(boxed_content)
+            return self._extract_number(cleaned_content)
         
-            match = re.search(r"(\-?[0-9\.]+)", boxed_content)
-            return match.group(1) if match else boxed_content.strip()
         return text
 
     def _process_reference(self, text: str) -> str:
-        """Extract numerical answer from reference text.
-        
-        Looks for #### markers and extracts following numerical values.
-        """
+        """Extract numerical answer from reference text."""
         if not isinstance(text, str):
             text = str(text)
         
-        text = re.sub(r"[,$\\]", "", text)
+        text = self._clean_text(text)
         
         last_marker_pos = text.rfind("#### ")
         if last_marker_pos != -1:
             text = text[last_marker_pos:]
         
-        text = re.sub(r"\.$", "", text)
-        
-        match = re.search(r"#### (\-?[0-9\.]+)", text)
-        
+        match = self.marker_pattern.search(text)
         return match.group(1) if match else text.strip()
 
     def get_score(self, candidates: list, references: list) -> dict[str, float]:
@@ -100,12 +104,13 @@ class Gsm8kExactMatch(Metrics):
         Returns:
             Dictionary with accuracy percentage under metric name
         """
-        norm_references = [self._process_reference(r) for r in references]
-        norm_candidates = [self._preprocess_answer(c) for c in candidates]
-        correct = sum(1 for c, r in zip(norm_candidates, norm_references) if c == r)
-        total = len(candidates)
-        accuracy = (correct / total) * 100.0 if total > 0 else 0.0
-        
+
+        if not self.record_level_scores:
+            self.record_level_scores, _, _ = self.compute_record_level_scores(candidates, references)
+
+        scores = self.record_level_scores.get(self.name, [])
+        accuracy = (sum(scores) / len(scores) * 100.0 if scores else 0.0)
+                
         return {self.name: util.smart_round(accuracy, 2)}
 
     def compute_record_level_scores(self, candidates: list, references: list) -> Tuple[dict[str, list | None], list, list]:
@@ -122,15 +127,11 @@ class Gsm8kExactMatch(Metrics):
         normalized_candidates, normalized_references = [], []
         
         for c, r in tqdm(zip(candidates, references), desc="GSM8k Correctness", total=len(candidates)):
-            # Preprocess both candidate and reference
             norm_reference = self._process_reference(r)
             norm_candidate = self._preprocess_answer(c)
-            
-            # Check exact match (1.0 for correct, 0.0 for incorrect)
-            score = 1.0 if norm_candidate == norm_reference else 0.0
-            scores.append(score)
-            
+            scores.append(int(norm_candidate == norm_reference))
             normalized_candidates.append(norm_candidate)
             normalized_references.append(norm_reference)
-            
-        return {self.name: scores}, normalized_candidates, normalized_references
+        
+        self.record_level_scores = {self.name: scores}
+        return self.record_level_scores, normalized_candidates, normalized_references
