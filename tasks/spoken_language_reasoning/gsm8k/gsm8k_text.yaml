@@ -1,0 +1,9 @@
+task_name: gsm8k_text
+dataset_path: openai/gsm8k
+subset: main
+split: test
+extends: ["./base.yaml#"]
+modality: text
+textual_input_column: question
+textual_prefix_instruction: >
+  Solve the following math problem step by step. Put your final answer inside \boxed{}.

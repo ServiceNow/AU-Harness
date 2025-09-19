@@ -1,0 +1,5 @@
+task_name: gsm8k_audio
+dataset_path: mistralai/gsm8k_speech
+extends: ["./base.yaml#"]
+modality: audio
+audio_column: audio
