@@ -39,11 +39,10 @@ class GeneralPreprocessor(Preprocessor):
         choices_column_name = task_config.get('choices_column', None)
         sample_instruction_column_name = task_config.get('instruction_column', None)
         user_query_column_name = task_config.get('textual_input_column', None)
-        textual_prefix_instruction = task_config.get("textual_prefix_instruction", None)
 
         # Obtain task-specific prompt (if provided)
         user_prompt = task_config.get('user_prompt', '')
-        
+                
         # Get dataset info
         dataset_keys = list(dataset.features.keys())
         dataset_size = len(dataset)
@@ -64,7 +63,7 @@ class GeneralPreprocessor(Preprocessor):
             if modality == "text":
                 record["array"] = np.array([])  # Placeholder, not used in text-only evals
                 record["sampling_rate"] = 16000
-                instruction = '\n'.join(filter(None, [textual_prefix_instruction, record.get(user_query_column_name, "")]))
+                instruction += record.get(user_query_column_name, "")
             else:
                 # Extract audio information - if not found, extractor will try audio then context
                 self.extract_audio_info(record, audio_column_name=audio_column_name)
