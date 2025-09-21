@@ -1,8 +1,9 @@
-"""General preprocessor module for AU-Harness framework.
+"""Reasoning-based preprocessor module for AU-Harness framework.
 
-This module provides a general-purpose preprocessor for audio benchmarks
-from AudioLLMs and other HuggingFace datasets, with support for various
-modalities and filtering options.
+This module provides a preprocessor for audio benchmarks
+from AudioLLMs and other HuggingFace datasets, with focus on support of MMAR/MMAU-PRO
+where local audio files need to be downloaded, unzipped and loaded from LOCAL_DATA_DIR
+when preprocessing. LOCAL_DATA_DIR needs to be set from environment (.env).
 """
 
 import logging
