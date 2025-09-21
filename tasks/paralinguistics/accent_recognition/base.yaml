@@ -11,7 +11,7 @@ prompt: Please listen to the following audio clip and analyze the speaker's voic
 long_audio_processing_logic: truncate
 
 generation_kwargs:
-  temperature: 0.0001
+  temperature: 0.5
   max_completion_tokens: 64
 
 metrics:
