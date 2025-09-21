@@ -1,4 +1,4 @@
-# Base configuration for VoiceBench IFEval tasks
+# Base configuration for MMAU-PRO tasks
 dataset_path: gamma-lab-umd/MMAU-Pro
 language: en
 split: test

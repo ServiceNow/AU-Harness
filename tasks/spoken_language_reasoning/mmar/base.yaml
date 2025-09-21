@@ -1,4 +1,4 @@
-# Base configuration for VoiceBench IFEval tasks
+# Base configuration for MMAR tasks
 dataset_path: BoJack/MMAR
 language: en
 split: test
