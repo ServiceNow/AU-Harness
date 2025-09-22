@@ -25,6 +25,7 @@ For more detailed documentation regarding which metrics can be used for which ta
 | `bfcl_match_score` (&uarr;)        | Structured logic form comparison                 | bfcl_match_score                          |
 | `sql_score` (&uarr;)               | SQL correctness and execution match              | text2sql_score                                 |
 | `instruction_following` (&uarr;)   | LLM-judged instruction following capability                 | final              |
+| `gsm8k_exact_match` (&uarr;)   | Exact-match accuracy of the final numerical answer.             | gsm8k_exact_match              |
 
 --- 
 
@@ -148,3 +149,11 @@ For more detailed documentation regarding which metrics can be used for which ta
 - **Description**: Measure the instruction following capabilities of LALMs by averaging accuracy across (1) strict-prompt, (2) strict-instruction, (3)loose-prompt and (4) loose-instruction. 
 - **Scoring (record-level)** Score between `0` and `1`, higher is better.
 - **Used In**: Audio Instruction Following (`ifeval`)
+
+---
+
+### `gsm8k_exact_match`
+- **Type**: Math correctness metric
+- **Description**: Measure the exact-match accuracy of the final numerical answer (expected within `\boxed{}`) with the reference numerical answer.
+- **Scoring (record-level)** Score between `0` and `1`, higher is better.
+- **Used In**: Math (`gsm8k`)
