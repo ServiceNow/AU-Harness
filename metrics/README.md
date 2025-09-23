@@ -155,5 +155,5 @@ For more detailed documentation regarding which metrics can be used for which ta
 ### `gsm8k_exact_match`
 - **Type**: Math correctness metric
 - **Description**: Measure the exact-match accuracy of the final numerical answer (expected within `\boxed{}`) with the reference numerical answer.
-- **Scoring (record-level)** Score between `0` and `1`, higher is better.
+- **Scoring (record-level)** Score between `0` and `100`, higher is better.
 - **Used In**: Math (`gsm8k`)
