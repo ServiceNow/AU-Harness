@@ -1,0 +1,7 @@
+task_name: gsm8k_text
+dataset_path: openai/gsm8k
+subset: main
+split: test
+extends: ["./base.yaml#"]
+modality: text
+textual_input_column: question
