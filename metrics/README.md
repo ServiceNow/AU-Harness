@@ -25,6 +25,7 @@ For more detailed documentation regarding which metrics can be used for which ta
 | `bfcl_match_score` (&uarr;)        | Structured logic form comparison                 | bfcl_match_score                          |
 | `sql_score` (&uarr;)               | SQL correctness and execution match              | text2sql_score                                 |
 | `instruction_following` (&uarr;)   | LLM-judged instruction following capability                 | final              |
+| `multiple_choice_accuracy` (&uarr;)   | Accuracy of prediction the correct option letter in multiple choice tasks     | multiple_choice_accuracy              |
 
 --- 
 
@@ -147,4 +148,12 @@ For more detailed documentation regarding which metrics can be used for which ta
 - **Type**: Instruction following evaluation metric
 - **Description**: Measure the instruction following capabilities of LALMs by averaging accuracy across (1) strict-prompt, (2) strict-instruction, (3)loose-prompt and (4) loose-instruction. 
 - **Scoring (record-level)** Score between `0` and `1`, higher is better.
+- **Used In**: Audio Instruction Following (`ifeval`)
+
+---
+
+### `multiple_choice_accuracy`
+- **Type**: Multiple choice accuracy metric
+- **Description**: Measure the accuracy of prediction the correct option letter in multiple choice tasks. The correct option is expected in the format `Answer: A`
+- **Scoring (record-level)** Score between `0` and `100`, higher is better.
 - **Used In**: Audio Instruction Following (`ifeval`)
