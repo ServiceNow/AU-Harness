@@ -69,6 +69,7 @@ metric_map = {
     'sql_score': ("metrics.sql_score", "SqlScore"),
     "word_error_rate": ("metrics.word_error_rate_metrics", "WERMetrics"),
     "comet": ("metrics.comet_score", "CometScore"),
+    "multiple_choice_accuracy": ("metrics.multiple_choice_metrics", "MultipleChoiceMetrics"),
     "mt_bench_llm_judge": ("metrics.llm_judge", "MtbenchLLMJudgeMetric"),
 
 }
@@ -135,6 +136,8 @@ allowed_task_metrics = {
     'ifeval': ['instruction_following'],
     'speech_to_sql': ['sql_score'],
     'gsm8k': ['gsm8k_exact_match'],
+    'gpqa_diamond': ['multiple_choice_accuracy'],
+    'mmlu': ['multiple_choice_accuracy'],
     
     # Safety and Security
     'safety': ['llm_judge_redteaming'],
