@@ -42,7 +42,7 @@ class GeneralPreprocessor(Preprocessor):
 
         # Obtain task-specific prompt (if provided)
         user_prompt = task_config.get('user_prompt', '')
-        
+                
         # Get dataset info
         dataset_keys = list(dataset.features.keys())
         dataset_size = len(dataset)
@@ -60,13 +60,13 @@ class GeneralPreprocessor(Preprocessor):
             # Create record by accessing each feature by index
             record = {k: row[k] for k in dataset_keys}
 
-            # Extract audio information - if not found, extractor will try audio then context
-            self.extract_audio_info(record, audio_column_name=audio_column_name)
-
             if modality == "text":
                 record["array"] = np.array([])  # Placeholder, not used in text-only evals
                 record["sampling_rate"] = 16000
-                instruction = record.get(user_query_column_name, "")
+                instruction += record.get(user_query_column_name, "")
+            else:
+                # Extract audio information - if not found, extractor will try audio then context
+                self.extract_audio_info(record, audio_column_name=audio_column_name)
 
             # Calculate audio duration in seconds
             audio_duration = len(record["array"]) / record["sampling_rate"]

@@ -59,6 +59,7 @@ metric_map = {
     'bfcl_match_score': ("metrics.bfcl_metric", "BFCLMatchScore"),
     "bleu": ("metrics.bleu_metrics", "BleuMetrics"),
     'diarization_metrics': ("metrics.diarization_metrics", "DiarizationMetrics"),
+    'gsm8k_exact_match': ("metrics.gsm8k_metrics", "Gsm8kExactMatch"),
     'instruction_following': ("metrics.voice_bench_ifeval_score", "InstructionFollowingScore"),
     "llm_judge_big_bench_audio": ("metrics.llm_judge", "BigBenchAudioLLMJudgeMetric"),
     "llm_judge_binary": ("metrics.llm_judge", "BinaryLLMJudgeMetric"),
@@ -134,6 +135,7 @@ allowed_task_metrics = {
     'bfcl': ['bfcl_match_score'],
     'ifeval': ['instruction_following'],
     'speech_to_sql': ['sql_score'],
+    'gsm8k': ['gsm8k_exact_match'],
     
     # Safety and Security
     'safety': ['llm_judge_redteaming'],
