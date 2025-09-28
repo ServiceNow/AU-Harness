@@ -103,6 +103,7 @@ AU-Harness is a standardized, efficient and highly customizable open-source fram
 - [**bfcl**](./tasks/spoken_language_reasoning/bfcl) - Speech Function Calling capability evaluation
 - [**mtbench**](./tasks/spoken_language_reasoning/mtbench/) - Complex multi-turn Instruction-following capability evaluation
 - [**speech_to_sql**](./tasks/spoken_language_reasoning/speech_to_sql/) - Speech-to-Coding capability
+- [**ifbench**](./tasks/spoken_language_reasoning/ifbench/) - Speech Instruction-following capability evaluation
 
 </details>
 

@@ -46,6 +46,7 @@ For more detailed documentation regarding individual metrics, refer to [Metrics 
 | `spoken_language_reasoning`     | `bfcl`                             | `bfcl_match_score`                               |
 | `spoken_language_reasoning`     | `speech_to_sql`                    | `sql_score`                                      |
 | `spoken_language_reasoning`     | `ifeval`                           | `instruction_following`                          |
+| `spoken_language_reasoning`     | `ifbench`                          | `instruction_following`                          |
 | `spoken_language_reasoning`     | `mtbench`                           | `mt_bench_llm_judge`                            |
 | `safety_and_security`           | `safety`                           | `detailed_judge_prompt`                          |
 | `safety_and_security`           | `spoofing`                         | `detailed_judge_prompt`, `llm_judge_binary`      |

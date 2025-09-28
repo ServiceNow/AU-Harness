@@ -52,3 +52,12 @@ immutabledict==4.2.1
 
 # Debugging
 debugpy==1.8.0           # VSCode debugging support
+
+
+
+## IFBench
+absl-py
+spacy
+emoji
+syllapy
+unicodedata2

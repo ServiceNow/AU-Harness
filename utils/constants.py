@@ -59,6 +59,7 @@ metric_map = {
     "bleu": ("metrics.bleu_metrics", "BleuMetrics"),
     'diarization_metrics': ("metrics.diarization_metrics", "DiarizationMetrics"),
     'instruction_following': ("metrics.voice_bench_ifeval_score", "InstructionFollowingScore"),
+    "ifbench_instruction_following": ("metrics.ifbench_ifeval_score", "IFBenchInstructionFollowingScore"),
     "llm_judge_big_bench_audio": ("metrics.llm_judge", "BigBenchAudioLLMJudgeMetric"),
     "llm_judge_binary": ("metrics.llm_judge", "BinaryLLMJudgeMetric"),
     "llm_judge_callhome": ("metrics.llm_judge", "CallHomeLLMJudgeMetric"),
@@ -132,6 +133,7 @@ allowed_task_metrics = {
     # Spoken Language Reasoning
     'bfcl': ['bfcl_match_score'],
     'ifeval': ['instruction_following'],
+    'ifbench': ['ifbench_instruction_following'],
     'speech_to_sql': ['sql_score'],
     
     # Safety and Security
@@ -154,6 +156,7 @@ metric_output = {
     "bfcl_match_score": ["final"],
     "sql_score": ["sql_score"],  # need to find real metric
     "instruction_following": ["strict_instruction", "loose_instruction", "final"],
+    "ifbench_instruction_following": ["strict-prompt", "strict-instruction", "loose-prompt", "loose-instruction", "final"],
     "diarization_metrics": ["average_sample_wder", "overall_wder", "average_sample_cpwer", "overall_cpwer", "speaker_count_absolute_error"],
     "comet": ["comet"]
 }

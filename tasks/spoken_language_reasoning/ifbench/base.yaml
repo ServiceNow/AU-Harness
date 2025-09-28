@@ -1,0 +1,17 @@
+# Base configuration for IFBench tasks
+dataset_path: ServiceNow-AI/ifbench_audio
+subset: default
+language: en
+split: train
+preprocessor: IfbenchPreprocessor
+postprocessor: IfbenchPostprocessor
+audio_column: audio
+instruction_column: prompt
+long_audio_processing_logic: truncate
+
+generation_kwargs:
+  temperature: 0.1
+  max_completion_tokens: 4096
+
+metrics:
+  - metric: ifbench_instruction_following

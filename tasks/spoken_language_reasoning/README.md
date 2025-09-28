@@ -29,5 +29,6 @@ bash data/scripts/downnload_spider.sh
 |-------------------------------|------------------|----- | ---------------------------------------------------------------------------------------------------|----------------------|
 | **MTBench**               | Speech Instruction Following          | [spoken_language_reasoning/mtbench](./mtbench/base.yaml)| Speech-based multi-turn complex instruction following dataset      |    Apache-2.0     |
 | **IFEVAL**               | Speech Instruction Following          | [spoken_language_reasoning/ifeval](./ifeval/base.yaml)| Speech-based complex instruction following dataset    |    Apache-2.0     |
+| **IFBench**               | Speech Instruction Following          | [spoken_language_reasoning/ifbench](./ifbench/base.yaml)| Speech-based complex instruction following dataset    |    Apache-2.0     |
 | **BFCL**               | Speech Function Calling          | [spoken_language_reasoning/bfcl](./bfcl/base.yaml)| Speech-based complex function calling dataset with audio input       |    Apache-2.0    |
 | **SPEECH_TO_SQL**               | Speech-to-Coding         | [spoken_language_reasoning/speech_to_sql](./speech_to_sql/base.yaml)| Speech-based dataset involving following instructions to produce executable code        |    Apache-2.0     |
