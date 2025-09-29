@@ -1,0 +1,36 @@
+# Base dependencies
+fastapi
+uvicorn
+pydantic
+
+# Core ML libraries
+# torch and torchvision are already in the base image
+transformers
+accelerate
+bitsandbytes
+sentencepiece
+
+# Utilities
+requests
+huggingface-hub
+numpy
+protobuf
+
+# Audio processing
+soundfile
+librosa
+pydub
+
+# Other dependencies
+ftfy
+pillow
+loguru
+
+# Evaluation-specific dependencies
+word2number
+Levenshtein
+datasets
+
+# For bfloat16 support
+# triton
+timm
