@@ -1,0 +1,6 @@
+task_name: libritts_test
+extends: ["../base.yaml#"]
+dataset_path: "mythicinfinity/libritts"
+subset: "clean"
+split: "test.clean"
+language: "en"

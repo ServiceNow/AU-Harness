@@ -278,6 +278,17 @@ models:
     auth_token: ${AUTH_TOKEN} # Mandatory
     batch_size: 150 # Mandatory
     chunk_size: 30  # Optional - Max audio length in seconds
+
+  - name: "Sonic-v3"
+    inference_type: "cartesia_tts"
+    model: "sonic-3" 
+    auth_token: "${AUTH_TOKEN}"
+    delay: 100
+    retry_attempts: 8
+    timeout: 30
+    batch_size: 8
+    chunk_size: 30
+    voice_id: "6ccbfb76-1fc6-48f7-b71d-91ac6298247b" # For any caretsia_tts or ElevenLabs_tts inference type, voice_id is needed
 ```
 
 **Note**: Batch-size proportional dataset sharding is implemented when multiple endpoints of the same model are provided. Be sure to have unique 'name' attributes for each unique endpoint, as shown above
@@ -289,6 +300,9 @@ models:
 | "openai"         | AsyncAzureOpenAI (Chat Completions)  |
 | "vllm"           | AsyncOpenAI (Chat Completions)       |
 | "transcription"  | AsyncOpenAI (Transcriptions)         |
+| "cartesia_tts"   | AsyncCartesia (Text-to-Speech)       |
+| "deepgram_tts"   | Deepgram (Text-to-Speech)            |
+| "elevenlabs_tts" | AsyncElevenLabs (Text-to-Speech)     |
 
 #### Judge Configuration
 LLM-Judge setup is required to run any tasks requiring LLM-judge metrics. For specific task-metric pair compatibility, visit [Task Documentation](./tasks/README.md) and [Metric Documentation](./metrics/README.md).

@@ -177,6 +177,7 @@ class Model(ABC):
         """
         # Create a new error tracker instance for this specific call
         call_errors = ErrorTracker()
+
         result = None
         try:
             async for attempt in AsyncRetrying(
@@ -187,11 +188,15 @@ class Model(ABC):
             ):
                 with attempt:
                     try:
-                        # All data prep is now in _generate_text
-                        # Set attempt number for downstream logging
+                        # All data prep is now in _generate_text or _generate_audio
                         self.req_resp_hndlr.current_attempt = attempt.retry_state.attempt_number
-                        # Pass the error tracker to _generate_text
-                        result: ModelResponse = await self._generate_text(message, run_params, call_errors)
+
+                        # Route to appropriate generator based on inference type
+                        if self.inference_type in (constants.CARTESIA_TTS, constants.ELEVENLABS_TTS, constants.DEEPGRAM_TTS):
+                            result: ModelResponse = await self._generate_audio(message, run_params, call_errors)
+                        else:
+                            result: ModelResponse = await self._generate_text(message, run_params, call_errors)
+
                         # Ensure the result has our error tracker
                         if not result.error_tracker:
                             result.error_tracker = call_errors
@@ -254,6 +259,50 @@ class Model(ABC):
             await self._mark_errors(result, call_errors)
         return result
 
+    async def _generate_audio(self, message: dict, run_params: dict,
+                             error_tracker: ErrorTracker) -> ModelResponse:
+        """Generate audio from text using TTS provider.
+
+        Args:
+            message: Input message containing ground_truth_text
+            run_params: Runtime parameters for the inference request
+            error_tracker: Error tracker for this call
+
+        Returns:
+            ModelResponse: Response object containing audio file path and metadata
+        """
+        text = message.get("ground_truth_text", "")
+
+        if not text:
+            logger.error("[Model.generate_audio] No ground_truth_text found in message")
+            return ModelResponse(
+                input_prompt="",
+                llm_response="",
+                raw_response="Missing ground_truth_text",
+                response_code=500,
+                performance=None,
+                wait_time=0,
+                error_tracker=error_tracker
+            )
+
+        try:
+            # Pass text to request handler
+            result = await self.req_resp_hndlr.request_server(
+                {"text": text},
+                error_tracker=error_tracker
+            )
+            return result
+        except Exception as e:
+            logger.error("[Model.generate_audio] TTS generation failed: %s", e)
+            return ModelResponse(
+                input_prompt=text,
+                llm_response="",
+                raw_response=str(e),
+                response_code=500,
+                performance=None,
+                wait_time=0,
+                error_tracker=error_tracker
+            )
 
     async def _generate_text(self, message: dict, run_params: dict, error_tracker: ErrorTracker = None) -> ModelResponse:
         """

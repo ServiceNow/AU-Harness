@@ -1,0 +1,11 @@
+# Base configuration for TTS (Text-to-Speech) tasks
+preprocessor: TtsPreprocessor
+postprocessor: TtsPostprocessor
+split: test
+long_audio_processing_logic: truncate
+
+generation_kwargs:
+  temperature: 0.2
+
+metrics:
+  - metric: utmos

@@ -18,6 +18,7 @@ sacrebleu==2.5.1
 nltk==3.9.1
 bert-score
 unbabel-comet
+torch
 
 # Misc utilities
 PyYAML==6.0.2
@@ -29,7 +30,7 @@ setuptools==80.9.0
 pillow==11.1.0
 logger==1.4
 Jinja2==3.1.5
-librosa==0.10.0
+librosa==0.10.2
 jiwer==4.0.0
 num2words==0.5.14
 jaconv==0.4.0
@@ -52,3 +53,9 @@ immutabledict==4.2.1
 
 # Debugging
 debugpy==1.8.0           # VSCode debugging support
+
+# TTS support
+cartesia==2.0.15          
+elevenlabs==2.22.0        
+deepgram-sdk==5.3.0
+utmosv2 @ git+https://github.com/sarulab-speech/UTMOSv2.git
