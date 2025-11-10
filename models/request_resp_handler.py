@@ -358,7 +358,7 @@ class RequestRespHandler:
                 # msg_body is a file path, need to open it as file object
                 with open(msg_body, "rb") as audio_file:
                     prediction = await self.client.audio.transcriptions.create(
-                        model=model_name, file=audio_file, language="vi"
+                        model=model_name, file=audio_file
                     )
                 user_prompt = str(msg_body)
                 raw_response: str = self._extract_response_data(prediction)
