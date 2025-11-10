@@ -18,11 +18,11 @@ class Performance(BaseModel):
     """Python object for wrapping performance info from a model."""
 
     latency: float
-    prompt_tokens: float
-    response_tokens: float
+    prompt_tokens: float | None
+    response_tokens: float | None
     reasoning_tokens: float | None
     time_per_token: float | None
-    relative_output_tokens: float
+    relative_output_tokens: float | None
 
 
 class ErrorTracker(BaseModel):

@@ -1,4 +1,4 @@
 task_name: gigaspeech2_th_test
-extends: ["../base.yaml#"]
+extends: ["./base.yaml#"]
 subset: th-test
 language: th

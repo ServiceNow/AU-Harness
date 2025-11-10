@@ -22,6 +22,9 @@ from metrics.wer.whisper_normalizer.english import EnglishTextNormalizer
 INFERENCE_SERVER_VLLM_CHAT_COMPLETION = 'vllm'
 OPENAI_CHAT_COMPLETION = 'openai'
 TRANSCRIPTION = 'transcription'
+CARTESIA_TTS = 'cartesia_tts'
+ELEVENLABS_TTS = 'elevenlabs_tts'
+DEEPGRAM_TTS = 'deepgram_tts'
 
 # WER/CER metrics constants
 # Define WER/CER related constants
@@ -70,6 +73,7 @@ metric_map = {
     "word_error_rate": ("metrics.word_error_rate_metrics", "WERMetrics"),
     "comet": ("metrics.comet_score", "CometScore"),
     "mt_bench_llm_judge": ("metrics.llm_judge", "MtbenchLLMJudgeMetric"),
+    'utmos': ("metrics.utmos", "UTMOSMetric"),
 
 }
 
@@ -140,6 +144,9 @@ allowed_task_metrics = {
     'safety': ['llm_judge_redteaming'],
     'spoofing': ['llm_judge_detailed', 'llm_judge_binary'],
     'mtbench': ['mt_bench_llm_judge'],
+
+    # Text-to-Speech
+    'tts': ['utmos'],
 }
 
 metric_output = {
@@ -157,7 +164,8 @@ metric_output = {
     "sql_score": ["sql_score"],  # need to find real metric
     "instruction_following": ["strict_instruction", "loose_instruction", "final"],
     "diarization_metrics": ["average_sample_wder", "overall_wder", "average_sample_cpwer", "overall_cpwer", "speaker_count_absolute_error"],
-    "comet": ["comet"]
+    "comet": ["comet"],
+    "utmos": ["utmos"]
 }
 
 # Dictionary mapping language names to their standard codes

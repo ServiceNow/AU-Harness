@@ -3,9 +3,15 @@ import logging
 import re
 import time
 import inspect
-
+import tempfile
+import numpy as np
+import soundfile as sf
+import os
 import httpx
 from openai import AsyncAzureOpenAI, AsyncOpenAI
+from cartesia import AsyncCartesia
+from elevenlabs.client import AsyncElevenLabs
+from deepgram import AsyncDeepgramClient
 from models.model_response import ModelResponse, ErrorTracker
 from utils import constants
 
@@ -153,6 +159,17 @@ class RequestRespHandler:
                     http_client=httpx.AsyncClient(verify=verify_ssl),
                 )
             )
+        elif self.inference_type == constants.CARTESIA_TTS:
+            # Cartesia TTS client
+            self.client = AsyncCartesia(api_key=self.auth)
+
+        elif self.inference_type == constants.ELEVENLABS_TTS:
+            # ElevenLabs TTS client
+            self.client = AsyncElevenLabs(api_key=self.auth)
+
+        elif self.inference_type == constants.DEEPGRAM_TTS:
+            # Deepgram TTS async client
+            self.client = AsyncDeepgramClient(api_key=self.auth)
 
     def validated_safe_generation_params(self, generation_params):
         """Validate and sanitize generation parameters for the OpenAI API client.
@@ -178,7 +195,122 @@ class RequestRespHandler:
         safe_params['max_completion_tokens'] = safe_params.get('max_completion_tokens', constants.DEFAULT_MAX_COMPLETION_TOKENS)
 
         return safe_params
-        
+
+    async def request_tts_server(self, text: str, model_name: str, voice_id: str,
+                                 start_time: float, error_tracker: ErrorTracker) -> ModelResponse:
+        """Helper function for TTS request processing.
+
+        Args:
+            text: Text to convert to speech
+            model_name: TTS model name
+            voice_id: Voice ID for TTS
+            start_time: Request start time for performance tracking
+            error_tracker: Error tracker for this call
+
+        Returns:
+            ModelResponse: Response object with audio file path
+        """
+        if self.inference_type == constants.CARTESIA_TTS:
+            # Cartesia TTS generation
+            bytes_iter = self.client.tts.bytes(
+                model_id=model_name,
+                transcript=text,
+                voice={"mode": "id", "id": voice_id},
+                output_format={
+                    "container": "wav",
+                    "sample_rate": 16000,
+                    "encoding": "pcm_s16le",
+                }
+            )
+
+            # Save to temp file
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".wav", mode='wb') as f:
+                async for chunk in bytes_iter:
+                    f.write(chunk)
+                audio_path = f.name
+
+            elapsed_time = time.time() - start_time
+
+            # Get file size for response
+            audio_bytes_len = os.path.getsize(audio_path)
+
+            return ModelResponse(
+                input_prompt=text,
+                llm_response=audio_path,
+                raw_response={"audio_bytes": audio_bytes_len, "audio_path": audio_path},
+                response_code=200,
+                performance=None,
+                wait_time=elapsed_time,
+                error_tracker=error_tracker,
+            )
+
+        elif self.inference_type == constants.ELEVENLABS_TTS:
+            # ElevenLabs TTS generation
+            audio = self.client.text_to_speech.convert(
+                text=text,
+                voice_id=voice_id,
+                model_id=model_name,
+                output_format="pcm_16000"
+            )
+
+            # Collect PCM chunks
+            pcm_chunks = []
+            async for chunk in audio:
+                if isinstance(chunk, bytes):
+                    pcm_chunks.append(chunk)
+
+            pcm_data = b''.join(pcm_chunks)
+
+            # Convert PCM to WAV with headers using soundfile
+            audio_array = np.frombuffer(pcm_data, dtype=np.int16)
+
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as f:
+                sf.write(f.name, audio_array, 16000, format='WAV')
+                audio_path = f.name
+
+            elapsed_time = time.time() - start_time
+            return ModelResponse(
+                input_prompt=text,
+                llm_response=audio_path,
+                raw_response={"audio_bytes": len(pcm_data), "audio_path": audio_path},
+                response_code=200,
+                performance=None,
+                wait_time=elapsed_time,
+                error_tracker=error_tracker,
+            )
+
+        elif self.inference_type == constants.DEEPGRAM_TTS:
+            # Deepgram TTS generation
+            response = self.client.speak.v1.audio.generate(
+                text=text,
+                model=model_name,
+            )
+
+            # response is an async generator, collect chunks
+            audio_chunks = []
+            async for chunk in response:
+                if isinstance(chunk, bytes):
+                    audio_chunks.append(chunk)
+
+            audio_data = b''.join(audio_chunks)
+
+            # Write to temporary WAV file
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".wav", mode='wb') as f:
+                f.write(audio_data)
+                audio_path = f.name
+
+            elapsed_time = time.time() - start_time
+
+            return ModelResponse(
+                input_prompt=text,
+                llm_response=audio_path,
+                raw_response={"audio_bytes": len(audio_data), "audio_path": audio_path},
+                response_code=200,
+                performance=None,
+                wait_time=elapsed_time,
+                error_tracker=error_tracker,
+            )
+
     async def request_server(self, msg_body, tools=None, error_tracker: ErrorTracker = None) -> ModelResponse:
         """Send a request to the inference server and return a `Model Response`.
 
@@ -192,9 +324,17 @@ class RequestRespHandler:
 
         start_time = time.time()
         # Re-create a fresh client for this request to avoid closed-loop issues
-        self.set_client(verify_ssl=True, timeout=self.timeout)
+        # Skip for TTS clients - they should be reused to avoid file descriptor leaks
+        if self.inference_type not in (constants.CARTESIA_TTS, constants.ELEVENLABS_TTS, constants.DEEPGRAM_TTS):
+            self.set_client(verify_ssl=True, timeout=self.timeout)
+
         try:
-            if self.inference_type == constants.OPENAI_CHAT_COMPLETION or self.inference_type == constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION:
+            # Handle TTS requests
+            if self.inference_type in (constants.CARTESIA_TTS, constants.ELEVENLABS_TTS, constants.DEEPGRAM_TTS):
+                text = msg_body.get("text")
+                voice_id = self.model_info.get("voice_id")
+                return await self.request_tts_server(text, model_name, voice_id, start_time, error_tracker)
+            elif self.inference_type == constants.OPENAI_CHAT_COMPLETION or self.inference_type == constants.INFERENCE_SERVER_VLLM_CHAT_COMPLETION:
                 # openai chat completions, vllm chat completions
                 self.generation_params = self.validated_safe_generation_params(self.generation_params)
                 prediction = await self.client.chat.completions.create(

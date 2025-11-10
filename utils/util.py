@@ -219,10 +219,22 @@ def _validate_models(config: Dict) -> None:
         ValueError: If the models section is invalid
     """
     def validate_required_fields(info: Dict, index: int) -> None:
-        required_fields = ['name', 'model', 'inference_type', 'url']
+        # Base required fields for all models
+        required_fields = ['name', 'model', 'inference_type']
+
+        # URL is only required for non-TTS inference types
+        inference_type = info.get('inference_type')
+        if inference_type not in ['cartesia_tts', 'elevenlabs_tts', 'deepgram_tts']:
+            required_fields.append('url')
+
         for field in required_fields:
             if not info.get(field) or not isinstance(info[field], str) or not info[field].strip():
                 raise ValueError(f"Model {index}: '{field}' must be a non-empty string")
+
+        # Require voice_id for TTS inference types
+        if inference_type in ['cartesia_tts', 'elevenlabs_tts']:
+            if not info.get('voice_id') or not isinstance(info['voice_id'], str):
+                raise ValueError(f"Model {index}: 'voice_id' is required for TTS inference types")
     def validate_optional_fields(info: Dict, index: int) -> None:
         optional_fields = {
             'delay': int, 'retry_attempts': int, 'timeout': int,

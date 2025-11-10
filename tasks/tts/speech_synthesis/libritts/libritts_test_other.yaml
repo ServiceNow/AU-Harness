@@ -1,0 +1,11 @@
+task_name: libritts_test_other
+dataset_path: "mythicinfinity/libritts"
+subset: "other"
+split: "test.other"
+preprocessor: TtsPreprocessor
+postprocessor: TtsPostprocessor
+language: "en"
+generation_kwargs:
+  temperature: 0.3
+metrics:
+  - metric: nisqa_mos

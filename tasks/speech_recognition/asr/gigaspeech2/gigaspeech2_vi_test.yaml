@@ -1,4 +1,4 @@
 task_name: gigaspeech2_vi_test
-extends: ["../base.yaml#"]
+extends: ["./base.yaml#"]
 subset: vi-test
 language: vi

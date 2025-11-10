@@ -26,6 +26,7 @@ For more detailed documentation regarding which metrics can be used for which ta
 | `sql_score` (&uarr;)               | SQL correctness and execution match              | text2sql_score                                 |
 | `instruction_following` (&uarr;)   | LLM-judged instruction following capability                 | final              |
 | `gsm8k_exact_match` (&uarr;)   | Exact-match accuracy of the final numerical answer.             | gsm8k_exact_match              |
+| `utmos` (&uarr;)   | UTMOSv2-based audio quality evaluation for TTS             | utmos              |
 
 --- 
 
@@ -157,3 +158,11 @@ For more detailed documentation regarding which metrics can be used for which ta
 - **Description**: Measure the exact-match accuracy of the final numerical answer (expected within `\boxed{}`) with the reference numerical answer.
 - **Scoring (record-level)** Score between `0` and `100`, higher is better.
 - **Used In**: Math (`gsm8k`)
+
+---
+
+### `utmos`
+- **Type**: TTS audio quality metric
+- **Description**: Evaluates the quality of TTS-generated audio using the UTMOSv2 (Universal Text-to-Speech Mean Opinion Score v2) model, which predicts the naturalness and quality of synthesized speech.
+- **Scoring (record-level)** Score between `0` and `5` (MOS scale), higher is better.
+- **Used In**: Text-to-Speech (`tts`)

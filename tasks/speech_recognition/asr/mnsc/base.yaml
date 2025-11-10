@@ -2,7 +2,7 @@
 extends: ["../base.yaml#"]
 dataset_path: AudioLLMs/Multitask-National-Speech-Corpus-v1-extend
 language: en
-split: test
+split: train
 accented: true
 audio_column: context
 target_column: answer
