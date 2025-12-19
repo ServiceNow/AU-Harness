@@ -25,7 +25,7 @@ filter:
   num_samples: 100 # number of samples to run(remove for all)
   length_filter: [0.0, 30.0] #optional - filters for only audio samples in this length(seconds) - only supported for general and callhome preprocessors
 
-judge_properties:
+judge_settings:
   judge_concurrency: 8 #judge call(optional)
   judge_model: "gpt-4o-mini" #optional
   judge_type: "openai" # mandatory (vllm or openai)
