@@ -117,6 +117,7 @@ class MmarPreprocessor(Preprocessor):
             # Append any user-specified prompt add-ons and choices
             if choices_column_name and choices_column_name in record:
                 choices = record.get(choices_column_name, [])
+                instruction += "Select one option from the provided choices as the final answer:"
                 if isinstance(choices, list):
                     choices_text = " ".join(choices)
                 else:
