@@ -1,5 +1,5 @@
 task_name: noise_detection
-dataset_path: NoiseDetection_LJSpeech_MUSAN-Gaussian
+dataset_path: DynamicSuperb/NoiseDetection_VCTK-MUSAN-Gaussian
 modality: audio
 language: en
 split: test
