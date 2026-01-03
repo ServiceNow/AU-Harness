@@ -85,12 +85,12 @@ def validate_config(config: dict, task_configs: dict[Path, list[dict]]) -> Dict:
                 raise ValueError("'filters' must be a dictionary")
             _validate_filter_values(config['filters'])
         
-        # Validate judge_properties as a dictionary
-        logger.info("---------Validating judge properties---------")
-        if 'judge_properties' in config:
-            if not isinstance(config['judge_properties'], dict):
-                raise ValueError("'judge_properties' must be a dictionary")
-            _validate_judge_properties(config['judge_properties'])
+        # Validate judge_settings as a dictionary
+        logger.info("---------Validating judge settings---------")
+        if 'judge_settings' in config:
+            if not isinstance(config['judge_settings'], dict):
+                raise ValueError("'judge_settings' must be a dictionary")
+            _validate_judge_settings(config['judge_settings'])
 
         # Delegate validation for complex sections
         logger.info("---------Validating models---------")
@@ -175,11 +175,11 @@ def _validate_filter_values(filters: Dict) -> None:
         raise ValueError("'language' must be a string")
 
 
-def _validate_judge_properties(judge_props: Dict) -> None:
-    """Validate the values in the judge_properties dictionary.
-    
+def _validate_judge_settings(judge_props: Dict) -> None:
+    """Validate the values in the judge_settings dictionary.
+
     Args:
-        judge_props: Dictionary of judge properties to validate
+        judge_props: Dictionary of judge settings to validate
     
     Raises:
         ValueError: If any judge property is invalid
