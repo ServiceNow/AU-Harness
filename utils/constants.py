@@ -68,6 +68,9 @@ metric_map = {
     "llm_judge_redteaming": ("metrics.llm_judge", "RedTeamingJudgeMetric"),
     "meteor": ("metrics.meteor_score", "MeteorScore"),
     'sql_score': ("metrics.sql_score", "SqlScore"),
+    "joint_goal_accuracy": ("metrics.dialogue_metrics", "JointGoalAccuracy"),
+    "slot_accuracy": ("metrics.dialogue_metrics", "SlotAccuracy"),
+    "slot_f1": ("metrics.dialogue_metrics", "SlotF1"),
     "word_error_rate": ("metrics.word_error_rate_metrics", "WERMetrics"),
     "comet": ("metrics.comet_score", "CometScore"),
     "mt_bench_llm_judge": ("metrics.llm_judge", "MtbenchLLMJudgeMetric"),
@@ -130,6 +133,7 @@ allowed_task_metrics = {
     'spoken_dialogue_summarization': ['llm_judge_detailed'],
     'intent_classification': ['llm_judge_binary'],
     'music_understanding': ['llm_judge_binary'],
+    'spoken_dialogue': ['joint_goal_accuracy', 'slot_accuracy', 'slot_f1', 'bleu'],
 
     # Spoken Language Reasoning
     'bfcl': ['bfcl_match_score'],
@@ -158,7 +162,10 @@ metric_output = {
     "sql_score": ["sql_score"],  # need to find real metric
     "instruction_following": ["strict_instruction", "loose_instruction", "final"],
     "diarization_metrics": ["average_sample_wder", "overall_wder", "average_sample_cpwer", "overall_cpwer", "speaker_count_absolute_error"],
-    "comet": ["comet"]
+    "comet": ["comet"],
+    "joint_goal_accuracy": ["joint_goal_accuracy"],
+    "slot_accuracy": ["slot_accuracy"],
+    "slot_f1": ["slot_f1"]
 }
 
 # Dictionary mapping language names to their standard codes
