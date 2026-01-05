@@ -8,6 +8,7 @@ postprocessor: GeneralPostprocessor
 audio_column: audio
 target_column: label
 instruction_column: instruction
+user_prompt: "You are an expert at stuttering detection. Look for clear, obvious stuttering. Stuttering is obviously repeating a word or part of a word. The audio clip will ALWAYS be given after the following instructions, always attempt to answer."
 long_audio_processing_logic: truncate
 
 generation_kwargs:
