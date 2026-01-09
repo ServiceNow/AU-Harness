@@ -1,98 +1,95 @@
-# Launching vLLM endpoints
+# Launching vLLM Endpoints
 
-This folder contains a Kubernetes deployment example (`k8.yaml`) and guidance
-for launching vLLM endpoints that can serve LALMs. 
+This folder contains a Kubernetes deployment example ([k8.yaml](k8.yaml)) and guidance for launching vLLM endpoints that can serve Large Audio-Language Models (LALMs).
 
+## Deployment Approaches
 
-You can use any one of the two recommended approaches below:
-- Local: run a vLLM server on your workstation or VM (good for development).
-- Kubernetes: deploy the provided `k8.yaml` to a GPU-capable cluster.
+You can use either of the following approaches:
 
+- **Local**: Run a vLLM server on your workstation or VM (ideal for development)
+- **Kubernetes**: Deploy the provided [k8.yaml](k8.yaml) to a GPU-capable cluster
 
-Keep these high-level notes in mind:
-- Do NOT commit real secrets (Hugging Face tokens) into source control. Use
-	Kubernetes Secrets or environment variables stored securely.
-- The `k8.yaml` file uses a placeholder image (`<YOUR_VLLM_IMAGE_WITH_AUDIO_DEPENDANCIES_INSTALLED>`).
-	Replace that with an image that has required audio dependencies (ffmpeg, soundfile, librosa, torchaudio,
-	any model-specific libs) before applying.
-- The example exposes ports 8000..8007. If you only need a single instance,
-	reducing the number of containers/ports in the Pod is fine.
+## Important Notes
+
+- **Security**: Do NOT commit real secrets (Hugging Face tokens) into source control. Use Kubernetes Secrets or environment variables stored securely.
+- **Image Configuration**: The [k8.yaml](k8.yaml) file uses a placeholder image (`<YOUR_VLLM_IMAGE_WITH_AUDIO_DEPENDANCIES_INSTALLED>`). Replace this with an image that has required audio dependencies (ffmpeg, soundfile, librosa, torchaudio, and any model-specific libraries) before applying.
+- **Port Configuration**: The example exposes ports 8000-8007. If you only need a single instance, reduce the number of containers/ports in the Pod accordingly.
 
 
 
-**Useful links**
+## Useful Resources
 
-- vLLM docs (overview & quickstart): https://docs.vllm.ai/en/latest/getting_started/quickstart/
-- vLLM CLI `serve` docs: https://docs.vllm.ai/en/latest/cli/serve/
-- vLLM Kubernetes / deployment docs: https://docs.vllm.ai/en/latest/deployment/k8s/
-- vLLM audio / multimodal docs and examples:
-	- Audio assets API: https://docs.vllm.ai/en/latest/api/vllm/assets/audio/
-	- Audio example (offline / language + audio): https://docs.vllm.ai/en/latest/examples/offline_inference/audio_language/
+### vLLM Documentation
+- [Overview & Quickstart](https://docs.vllm.ai/en/latest/getting_started/quickstart/)
+- [CLI `serve` Documentation](https://docs.vllm.ai/en/latest/cli/serve/)
+- [Kubernetes Deployment Guide](https://docs.vllm.ai/en/latest/deployment/k8s/)
 
-These audio-specific links describe how vLLM handles audio assets, required
-dependencies and example code for audio-language workflows.
+### Audio & Multimodal Support
+- [Audio Assets API](https://docs.vllm.ai/en/latest/api/vllm/assets/audio/)
+- [Audio-Language Offline Inference Example](https://docs.vllm.ai/en/latest/examples/offline_inference/audio_language/)
 
-
-
+These audio-specific resources describe how vLLM handles audio assets, required dependencies, and example code for audio-language workflows.
 
 
+---
 
-## **A. Local (development)**
+## A. Local Development Setup
 
-1) Prerequisites
+### 1. Prerequisites
 
-- GPU node or a machine with a compatible PyTorch/CUDA setup (or CPU only for small models).
-- Python 3.10+ and a virtual environment is recommended.
-- A Hugging Face token with access to the model, set in `HUGGING_FACE_HUB_TOKEN`.
+- GPU node or a machine with a compatible PyTorch/CUDA setup (or CPU-only for small models)
+- Python 3.10+ (virtual environment recommended)
+- Hugging Face token with model access, set in `HUGGING_FACE_HUB_TOKEN`
 
-2) Install vLLM (recommended minimal steps)
+### 2. Installation
+
+Install vLLM and required audio dependencies:
 
 ```bash
-# create & activate a venv (example using uv as in vLLM docs, or use python -m venv)
+# Create and activate a virtual environment
 python -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip
-# install vllm and choose a torch backend if needed
-pip install vllm --upgrade
 
-# macOS (Homebrew):
+# Install vLLM
+pip install vllm --upgrade
+```
+
+**macOS (Homebrew):**
+```bash
 brew install ffmpeg libsndfile
 pip install soundfile librosa torchaudio
+```
 
-# Ubuntu/Debian:
+**Ubuntu/Debian:**
+```bash
 sudo apt-get update && sudo apt-get install -y ffmpeg libsndfile1
 pip install soundfile librosa torchaudio
 ```
 
-3) Start the server
+### 3. Start the Server
 
-The vLLM CLI provides a `serve` entrypoint that starts an OpenAI-compatible HTTP
-server. Example:
+The vLLM CLI provides a `serve` entrypoint that starts an OpenAI-compatible HTTP server:
 
 ```bash
-# serve a HF model on localhost:8000
+# Export your Hugging Face token
 export HUGGING_FACE_HUB_TOKEN="<YOUR_HF_TOKEN>"
-vllm serve microsoft/Phi-4-multimodal-instruct --port 8000 --host 0.0.0.0
+
+# Start the vLLM server
+vllm serve Qwen/Qwen3-Omni-30B-A3B-Thinking --port 8000 --host 0.0.0.0
 ```
 
-Notes:
-- Use `--api-key` or set `VLLM_API_KEY` if you want the server to require an API key.
-- Many LALMs need additional Python packages or system
-	libraries. Commonly required packages: `soundfile`, `librosa`, `torchaudio`,
-	and system `ffmpeg`/`libsndfile`. The exact requirements depend on the model
-	and any tokenizer/preprocessor it uses. Check the model's Hugging Face page
-	and the vLLM audio docs linked above.
-- If you plan to use GPU acceleration, ensure a compatible PyTorch/CUDA
-	combination is installed in the environment (or use vLLM Docker images with
-	prebuilt CUDA support). If you run into missing symbols, check CUDA/PyTorch
-	compatibility and rebuild or pick a different image.
+**Additional Notes:**
+- Use `--api-key` or set `VLLM_API_KEY` if you want the server to require an API key
+- Many LALMs need additional Python packages or system libraries. Commonly required: `soundfile`, `librosa`, `torchaudio`, and system `ffmpeg`/`libsndfile`. Check the model's Hugging Face page and vLLM audio documentation for specific requirements
+- For GPU acceleration, ensure a compatible PyTorch/CUDA combination is installed (or use vLLM Docker images with prebuilt CUDA support)
 
-4) Point `run_configs` to the local endpoint
+### 4. Configure Your Run Config
 
-Update your run config to use the local server URL (example YAML snippet):
+Update your run config to point to the local server:
 
 ```yaml
-# example run_configs entry
+# Example run_configs entry
 # For OpenAI-compatible API calls use endpoints like /v1/completions or /v1/chat/completions
 url: "http://localhost:8000/v1/completions"
 ```
@@ -101,66 +98,72 @@ url: "http://localhost:8000/v1/completions"
 
 
 
-## **B. Kubernetes — use the provided `k8.yaml`**
+---
 
-What the example does:
+## B. Kubernetes Deployment
 
-- Launches a single Pod template containing multiple vLLM containers (ports 8000..8007).
-- Each container is configured with the same model and listens on a distinct port.
-- A `Service` of type `NodePort` exposes the Pod ports on the cluster nodes.
+### Overview
 
-Pre-apply checklist (LALMs)
+The provided [k8.yaml](k8.yaml) configuration:
 
-1. Replace the placeholder image in `k8.yaml`:
+- Launches a single Pod template containing multiple vLLM containers (ports 8000-8007)
+- Each container runs the same model and listens on a distinct port
+- Exposes the Pod ports on cluster nodes via a `NodePort` Service
 
-	 - Find and replace `<YOUR_VLLM_IMAGE_WITH_AUDIO_DEPENDANCIES_INSTALLED>` with an image
-		 that includes:
-		 - vLLM installed
-		 - Python audio libs used by your model: `soundfile`, `librosa`, `torchaudio`, etc.
-		 - System binaries: `ffmpeg` and `libsndfile` (or equivalents).
+### Pre-Deployment Checklist
 
-2. Secrets: create a Kubernetes Secret for your Hugging Face token, e.g.:
+#### 1. Update Container Image
+
+Replace the placeholder image `<YOUR_VLLM_IMAGE_WITH_AUDIO_DEPENDANCIES_INSTALLED>` in [k8.yaml](k8.yaml) with an image that includes:
+- vLLM installed
+- Python audio libraries: `soundfile`, `librosa`, `torchaudio`, etc.
+- System binaries: `ffmpeg` and `libsndfile`
+
+#### 2. Configure Secrets
+
+Create a Kubernetes Secret for your Hugging Face token:
 
 ```bash
 kubectl -n <namespace> create secret generic hf-token \
-	--from-literal=HUGGING_FACE_HUB_TOKEN='<YOUR_HF_TOKEN>'
+  --from-literal=HUGGING_FACE_HUB_TOKEN='<YOUR_HF_TOKEN>'
 ```
 
-Then update `k8.yaml` container env to use `valueFrom.secretKeyRef` instead of a plain `value`.
+Then update the container environment in [k8.yaml](k8.yaml) to use `valueFrom.secretKeyRef` instead of a plain `value`.
 
-3. Cluster requirements
+#### 3. Verify Cluster Requirements
 
-- GPU-enabled nodes and drivers (matching the image / CUDA version)
-- If using Run:AI or a custom scheduler, ensure `schedulerName` matches your cluster. Remove
-	or edit `schedulerName` if not applicable.
+- **GPU Support**: Ensure GPU-enabled nodes and drivers are available (matching the image/CUDA version)
+- **Scheduler**: If using Run:AI or a custom scheduler, verify `schedulerName` matches your cluster configuration. Remove or edit if not applicable.
 
-Apply the example
+### Deployment Steps
+
+Apply the configuration:
 
 ```bash
-# make any replacements (image, secret references), then:
+# Apply the Kubernetes manifest
 kubectl apply -f vllm_configs/k8.yaml
 
-# monitor rollout
-kubectl -n <namespace> rollout status deployment/infer-phi4-multimodal-instruct
-kubectl -n <namespace> get pods -l app=infer-phi4-multimodal-instruct
+# Monitor the rollout
+kubectl -n <namespace> rollout status deployment/infer-qwen3-omni
+kubectl -n <namespace> get pods -l app=infer-qwen3-omni
 ```
 
-Accessing the service
+### Accessing the Service
 
-- The `Service` in `k8.yaml` is `NodePort`. To see which node port range your cluster assigned,
-	run:
+The Service uses `NodePort` type. To find assigned node ports:
 
 ```bash
-kubectl -n <namespace> get svc infer-phi4-multimodal-instruct-service -o wide
+kubectl -n <namespace> get svc infer-qwen3-omni-service -o wide
 ```
 
-- You can then use `http://<node-ip>:<nodePort>` for the port you want (8000..8007 map to
-	cluster node ports). For production, consider exposing via `LoadBalancer` or an Ingress.
+Access the service using `http://<node-ip>:<nodePort>` for ports 8000-8007.
 
+For production environments, consider exposing via `LoadBalancer` or an Ingress controller.
 
+### Troubleshooting
 
-Troubleshooting:
-- Check container logs: `kubectl -n <namespace> logs <pod> -c deployment0` (replace container name).
-- If model fails to load: check `HUGGING_FACE_HUB_TOKEN`, image CUDA/PyTorch compatibility, and
-	that `--trust_remote_code` is set only when you trust the model repo.
+- **Check Logs**: `kubectl -n <namespace> logs <pod> -c deployment0` (replace with actual container name)
+- **Model Loading Issues**: Verify `HUGGING_FACE_HUB_TOKEN`, check CUDA/PyTorch compatibility, and ensure `--trust_remote_code` is only set for trusted model repositories
 
+> [!NOTE]
+> For models requiring LoRA adapters (e.g., Phi-4 Multimodal), ensure LoRA-related flags and paths are correctly configured in the command arguments. See [phi4_k8.yaml](phi4_k8.yaml) for an example.
