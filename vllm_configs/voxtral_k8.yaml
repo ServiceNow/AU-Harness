@@ -3,7 +3,7 @@
 #
 # This file defines a Kubernetes Deployment and Service to run
 # multiple vLLM containers (one per GPU/port) for serving the
-# `Qwen/Qwen3-Omni-30B-A3B-Thinking` model using a vLLM-based
+# `mistralai/Voxtral-Small-24B-2507` model using a vLLM-based
 # serving image. The Deployment creates 8 containers (deployment0
 # .. deployment7) within a single Pod template; each container
 # listens on its own port (8000..8007). The Service exposes
@@ -28,19 +28,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: infer-qwen3-omni
+  name: infer-voxtral-small-24b
   namespace: default
 spec:
   replicas: 1 # Number of Pod replicas. Each Pod contains multiple containers (one per port/GPU).
   selector:
     matchLabels:
-      app: infer-qwen3-omni
+      app: infer-voxtral-small-24b
   template:
     metadata:
       annotations:
         sidecar.istio.io/inject: "false"
       labels:
-        app: infer-qwen3-omni
+        app: infer-voxtral-small-24b
     spec:
       volumes:
       - name: dshm
@@ -57,24 +57,27 @@ spec:
         args: 
           [
             "--model", 
-            "Qwen/Qwen3-Omni-30B-A3B-Thinking", 
+            "mistralai/Voxtral-Small-24B-2507", 
+            "--tokenizer-mode",
+            "mistral",
+            "--config-format",
+            "mistral",
+            "--load-format",
+            "mistral",
             "--served-model-name",
-            "infer-qwen3-omni",
+            "infer-voxtral-small-24b",
             "--trust-remote-code",
             "--dtype",
             "auto",
             "--disable-log-requests",
             "--port",
             "8000",
-            "--tokenizer-mode",
-            "auto",
             "--max-model-len",
             "32768",
             "--tensor-parallel-size", 
             "1",
             "--gpu-memory-utilization",
             "0.9",
-            "--trust_remote_code"
           ]
         readinessProbe:
           httpGet:
@@ -110,24 +113,27 @@ spec:
         args: 
           [
             "--model", 
-            "Qwen/Qwen3-Omni-30B-A3B-Thinking", 
+            "mistralai/Voxtral-Small-24B-2507", 
+            "--tokenizer-mode",
+            "mistral",
+            "--config-format",
+            "mistral",
+            "--load-format",
+            "mistral",
             "--served-model-name",
-            "infer-qwen3-omni",
+            "infer-voxtral-small-24b",
             "--trust-remote-code",
             "--dtype",
             "auto",
             "--disable-log-requests",
             "--port",
             "8001",
-            "--tokenizer-mode",
-            "auto",
             "--max-model-len",
             "32768",
             "--tensor-parallel-size", 
             "1",
             "--gpu-memory-utilization",
             "0.9",
-            "--trust_remote_code"
           ]
         readinessProbe:
           httpGet:
@@ -160,24 +166,27 @@ spec:
         args: 
           [
             "--model", 
-            "Qwen/Qwen3-Omni-30B-A3B-Thinking", 
+            "mistralai/Voxtral-Small-24B-2507",
+            "--tokenizer-mode",
+            "mistral",
+            "--config-format",
+            "mistral",
+            "--load-format",
+            "mistral",
             "--served-model-name",
-            "infer-qwen3-omni",
+            "infer-voxtral-small-24b",
             "--trust-remote-code",
             "--dtype",
             "auto",
             "--disable-log-requests",
             "--port",
             "8002",
-            "--tokenizer-mode",
-            "auto",
             "--max-model-len",
             "32768",
             "--tensor-parallel-size", 
             "1",
             "--gpu-memory-utilization",
             "0.9",
-            "--trust_remote_code"
           ]
         readinessProbe:
           httpGet:
@@ -210,24 +219,27 @@ spec:
         args: 
           [
             "--model", 
-            "Qwen/Qwen3-Omni-30B-A3B-Thinking", 
+            "mistralai/Voxtral-Small-24B-2507", 
+            "--tokenizer-mode",
+            "mistral",
+            "--config-format",
+            "mistral",
+            "--load-format",
+            "mistral",
             "--served-model-name",
-            "infer-qwen3-omni",
+            "infer-voxtral-small-24b",
             "--trust-remote-code",
             "--dtype",
             "auto",
             "--disable-log-requests",
             "--port",
             "8003",
-            "--tokenizer-mode",
-            "auto",
             "--max-model-len",
             "32768",
             "--tensor-parallel-size", 
             "1",
             "--gpu-memory-utilization",
             "0.9",
-            "--trust_remote_code"
           ]
         readinessProbe:
           httpGet:
@@ -261,28 +273,29 @@ spec:
         args: 
           [
             "--model", 
-            "Qwen/Qwen3-Omni-30B-A3B-Thinking", 
+            "mistralai/Voxtral-Small-24B-2507",
+            "--tokenizer-mode",
+            "mistral",
+            "--config-format",
+            "mistral",
+            "--load-format",
+            "mistral",
             "--served-model-name",
-            "infer-qwen3-omni",
+            "infer-voxtral-small-24b",
             "--trust-remote-code",
             "--dtype",
             "auto",
             "--disable-log-requests",
             "--port",
             "8004",
-            "--tokenizer-mode",
-            "auto",
             "--max-model-len",
             "32768",
-            "--tokenizer-mode",
-            "auto",
             "--max-model-len",
             "32768",
             "--tensor-parallel-size", 
             "1",
             "--gpu-memory-utilization",
             "0.9",
-            "--trust_remote_code"
           ]
         readinessProbe:
           httpGet:
@@ -316,24 +329,27 @@ spec:
         args: 
           [
             "--model", 
-            "Qwen/Qwen3-Omni-30B-A3B-Thinking", 
+            "mistralai/Voxtral-Small-24B-2507",
+            "--tokenizer-mode",
+            "mistral",
+            "--config-format",
+            "mistral",
+            "--load-format",
+            "mistral",
             "--served-model-name",
-            "infer-qwen3-omni",
+            "infer-voxtral-small-24b",
             "--trust-remote-code",
             "--dtype",
             "auto",
             "--disable-log-requests",
             "--port",
             "8005",
-            "--tokenizer-mode",
-            "auto",
             "--max-model-len",
             "32768",
             "--tensor-parallel-size", 
             "1",
             "--gpu-memory-utilization",
             "0.9",
-            "--trust_remote_code"
           ]
         readinessProbe:
           httpGet:
@@ -367,24 +383,27 @@ spec:
         args: 
           [
             "--model", 
-            "Qwen/Qwen3-Omni-30B-A3B-Thinking", 
+            "mistralai/Voxtral-Small-24B-2507",
+            "--tokenizer-mode",
+            "mistral",
+            "--config-format",
+            "mistral",
+            "--load-format",
+            "mistral",
             "--served-model-name",
-            "infer-qwen3-omni",
+            "infer-voxtral-small-24b",
             "--trust-remote-code",
             "--dtype",
             "auto",
             "--disable-log-requests",
             "--port",
             "8006",
-            "--tokenizer-mode",
-            "auto",
             "--max-model-len",
             "32768",
             "--tensor-parallel-size", 
             "1",
             "--gpu-memory-utilization",
             "0.9",
-            "--trust_remote_code"
           ]
         readinessProbe:
           httpGet:
@@ -416,24 +435,27 @@ spec:
         args: 
           [
             "--model", 
-            "Qwen/Qwen3-Omni-30B-A3B-Thinking", 
+            "mistralai/Voxtral-Small-24B-2507",
+            "--tokenizer-mode",
+            "mistral",
+            "--config-format",
+            "mistral",
+            "--load-format",
+            "mistral",
             "--served-model-name",
-            "infer-qwen3-omni",
+            "infer-voxtral-small-24b",
             "--trust-remote-code",
             "--dtype",
             "auto",
             "--disable-log-requests",
             "--port",
             "8007",
-            "--tokenizer-mode",
-            "auto",
             "--max-model-len",
             "32768",
             "--tensor-parallel-size", 
             "1",
             "--gpu-memory-utilization",
             "0.9",
-            "--trust_remote_code"
           ]
         readinessProbe:
           httpGet:
@@ -468,7 +490,7 @@ spec:
               - key: app
                 operator: In
                 values:
-                - infer-qwen3-omni
+                - infer-voxtral-small-24b
             # Prevent multiple Pods of this app from being scheduled on the
             # same node where possible (spreads pods across nodes).
             topologyKey: kubernetes.io/hostname
@@ -478,42 +500,42 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: infer-qwen3-omni-service
+  name: infer-voxtral-small-24b-service
   namespace: default
 spec:
   type: NodePort
   ports:
-  - name: http-infer-qwen3-omni-0
+  - name: http-infer-voxtral-small-24b-0
     port: 8000
     protocol: TCP
     targetPort: 8000
-  - name: http-infer-qwen3-omni-1
+  - name: http-infer-voxtral-small-24b-1
     port: 8001
     protocol: TCP
     targetPort: 8001
-  - name: http-infer-qwen3-omni-2
+  - name: http-infer-voxtral-small-24b-2
     port: 8002
     protocol: TCP
     targetPort: 8002
-  - name: http-infer-qwen3-omni-3
+  - name: http-infer-voxtral-small-24b-3
     port: 8003
     protocol: TCP
     targetPort: 8003
-  - name: http-infer-qwen3-omni-4
+  - name: http-infer-voxtral-small-24b-4
     port: 8004
     protocol: TCP
     targetPort: 8004
-  - name: http-infer-qwen3-omni-5
+  - name: http-infer-voxtral-small-24b-5
     port: 8005
     protocol: TCP
     targetPort: 8005
-  - name: http-infer-qwen3-omni-6
+  - name: http-infer-voxtral-small-24b-6
     port: 8006
     protocol: TCP
     targetPort: 8006
-  - name: http-infer-qwen3-omni-7
+  - name: http-infer-voxtral-small-24b-7
     port: 8007
     protocol: TCP
     targetPort: 8007
   selector:
-    app: infer-qwen3-omni
+    app: infer-voxtral-small-24b
