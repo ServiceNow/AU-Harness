@@ -4,6 +4,9 @@ from datasets import load_dataset
 from utils.util import get_class_from_module
 import logging
 
+import datasets
+datasets.builder.has_sufficient_disk_space = lambda needed_bytes, directory='.': True
+
 logger = logging.getLogger(__name__)
 
 def _load_callhome_dataset(repo, preprocessor_name, num_samples, properties):

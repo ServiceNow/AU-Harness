@@ -155,6 +155,51 @@ class CallhomePreprocessor(Preprocessor):
                     lines.append(line_str)
             chunk_instructions.append("\n".join(lines))
 
+        def _collapse_transcripts_of_same_consecutive_speakers(transcripts):
+            """
+            Combine consecutive turns from the same speaker into a single turn.
+            
+            Args:
+                transcript: List of strings in format "Speaker: text" or a single string with newlines
+            
+            Returns:
+                List of strings with collapsed consecutive speaker turns
+            """
+            
+            if not transcripts:
+                return []
+            
+            collapsed = []
+            current_speaker = None
+            current_text = []
+            
+            for line in transcripts:
+                # Split on first colon to separate speaker from text
+                if ':' not in line:
+                    continue
+                    
+                speaker, text = line.split(':', 1)
+                speaker = speaker.strip()
+                text = text.strip()
+                
+                if speaker == current_speaker:
+                    # Same speaker, accumulate text
+                    current_text.append(text)
+                else:
+                    # Different speaker, save previous and start new
+                    if current_speaker is not None:
+                        collapsed.append(f"{current_speaker}: {' '.join(current_text)}")
+                    current_speaker = speaker
+                    current_text = [text]
+            
+            # Handling the last speaker
+            if current_speaker is not None:
+                collapsed.append(f"{current_speaker}: {' '.join(current_text)}")
+            
+            return collapsed
+        
+        transcript_lines = _collapse_transcripts_of_same_consecutive_speakers(transcript_lines)
+
         return transcript_lines, chunk_instructions
 
     def process(self, dataset: Dataset, task_config: Dict[str, Any], 

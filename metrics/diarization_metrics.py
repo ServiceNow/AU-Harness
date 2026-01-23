@@ -184,7 +184,11 @@ def prepare_speaker_info(input_info, lang_code):
             word_level_speaker: sequence of speaker labels aligned with words in utterances
             cleaned_transcript: Transcript after normalization process (similar to WER processing) on the token-level
     """
-    split_input_info = input_info.split(':')
+    try:
+        split_input_info = input_info.split(':')
+        assert len(split_input_info) >= 2
+    except:
+        raise ("Error in processing transcript. No split between speaker and content for the sample:", input_info)
     speaker = split_input_info[0].strip()  # [A: hello world]
     cleaned_transcript = normalize_text(' '.join(split_input_info[1:]).strip(), lang_code)
     word_level_cleaned_transcript = cleaned_transcript.strip().split(' ')
@@ -372,6 +376,7 @@ class DiarizationMetrics(Metrics):
             
             # Return None if there exists a misalignment between levenstein alignment and the provided transcripts.
             output_wer = compute_wer(flattened_cand_transcripts, flattened_ref_transcripts)
+            print ("WER (inside 1 sample)", output_wer)
             if (output_wer != None):
                 result, align = output_wer[0], output_wer[1]
 

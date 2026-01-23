@@ -1,12 +1,31 @@
 # Base configuration for speaker diarization tasks
 preprocessor: CallhomePreprocessor
 postprocessor: CallhomePostprocessor
+# user_prompt: >
+#   Transcribe this turn based two speaker audio. There may be speaker overlap, and a speaker may go twice.
+#   You should return the output as \nA: words\nB: more words\nA: even more words\n
+#   You MUST return in this exact format, or the answer is considered invalid
+#   A is the first speaker, so always start with 'A:'
+
 user_prompt: >
-  Transcribe this turn based two speaker audio. There may be speaker overlap, and a speaker may go twice.
-  You should return the output as \nA: words\nB: more words\nA: even more words\n
-  You MUST return in this exact format, or the answer is considered invalid
-  A is the first speaker, so always start with 'A:'
-long_audio_processing_logic: truncate
+  Transcribe this two-speaker audio into a diarized transcript.
+
+  Requirements:
+  - Label speakers as 'A' and 'B', where A is the first speaker to talk
+  - Always start with 'A:'
+  - Speakers alternate the turns
+  - Speakers may overlap or interrupt each other
+  - Each turn must be on a new line in the format: "Speaker: text"
+
+  Output format:
+  A: first utterance. Second utterance if consecutive
+  B: response
+  A: next utterances
+  B: next responses
+
+  CRITICAL: You must return ONLY the formatted transcript. Any other format is invalid.
+
+long_audio_processing_logic: chunk
 split: train
 
 generation_kwargs:

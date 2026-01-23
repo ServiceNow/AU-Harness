@@ -33,5 +33,6 @@ __pycache__/
 
 data/spider/
 test/
+private_datasets/
 
 CLAUDE.md
